@@ -9,13 +9,28 @@ server:
       enabled: true
       force: true
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 100MB
+      max-request-size: 100MB
   application:
     name: backend
+  data:
+    redis:
+      # Redis服务器地址
+      host: 127.0.0.1
+      # Redis服务器端口,默认为6379.若有改动按改动后的来
+      port: 6379
+      #Redis服务器连接密码，默认为空，若有设置按设置的来
+      password:
+      # Redis 默认数据库设置
+      database: 0
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 123456
-    url: jdbc:mysql://localhost:3306/xxx?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    password: root123456
+    url: jdbc:mysql://localhost:3306/errs?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
   #  配置时间
   jpa:
     properties:
@@ -25,6 +40,12 @@ spring:
   jackson:
     time-zone: Asia/Shanghai
     date-format: yyyy-MM-dd HH:mm:ss
+  mail:
+    default-encoding: UTF-8
+    host: smtp.163.com
+    username: cyke0315@163.com
+    password: YYf493Ag2DVktyRD
+    protocol: smtp
 
 # 映射器（Mapper）配置
 mybatis:
