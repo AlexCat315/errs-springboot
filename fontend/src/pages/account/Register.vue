@@ -66,17 +66,20 @@ function userRegister() {
 const isCode = ref(false)
 const codeMessage = ref('获取验证码')
 const validateCode = ref(0)
+const loading = ref(false)
 
 // 获取验证码
 function getCode() {
   if (form.email === '') {
     return ElMessage.warning('请输入邮箱')
   }
+  loading.value = true;
   // 发送验证码请求
   // 处理请求成功后的逻辑
   getEmailCode(form.email, () => {
     ElMessage.success('验证码发送成功');
     isCode.value = true;
+    loading.value = false;
     // 验证码发送成功，倒计时60秒
     validateCode.value = 60;
     const timer = setInterval(() => {
@@ -86,8 +89,11 @@ function getCode() {
         isCode.value = false;
       }
     }, 1000);
-
+  }, (data) => {
+    loading.value = false;
+    ElMessage.error(data);
   })
+
 }
 
 </script>
@@ -157,10 +163,16 @@ function getCode() {
                   </template>
                 </el-input>
               </el-form-item>
-              <el-button v-if="isCode === false" @click="getCode" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" plain>
+              <el-button v-if="isCode === false && loading === false" @click="getCode"
+                         style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" plain>
                 {{ codeMessage }}
               </el-button>
-              <el-button v-if="isCode === true" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" disabled>
+              <el-button v-if="loading === true" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef"
+                         loading>
+                {{ codeMessage }}
+              </el-button>
+              <el-button v-if="isCode === true && loading === false" style="width: 100px;height: 33px;margin-left: 60px"
+                         color="#626aef" disabled>
                 {{ validateCode }} 秒
               </el-button>
             </div>
@@ -168,7 +180,7 @@ function getCode() {
           </el-form>
         </div>
         <div style="margin-top: 40px;">
-          <el-button @click="userRegister" style="width: 200px;height: 40px" type="success" plain >立即注册</el-button>
+          <el-button @click="userRegister" style="width: 200px;height: 40px" type="success" plain>立即注册</el-button>
         </div>
 
         <div style="margin-top: 20px">

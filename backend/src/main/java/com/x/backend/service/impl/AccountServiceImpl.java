@@ -70,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
         Integer result = accountMapper.findByEmail(email);
         if (result == null || result < 1) {
-            throw new ForbiddenException("该邮箱已被注册");
+            throw new ForbiddenException("该邮箱未注册");
         }
     }
 
