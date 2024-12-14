@@ -11,4 +11,8 @@ public interface AccountService {
     void findByEmail(String email);
 
     void register(Account account);
+
+    void isEmailExists(String email);
+
+    void updatePassword(Account account);
 }

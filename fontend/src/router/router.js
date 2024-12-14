@@ -22,14 +22,21 @@ const router = createRouter({
             name: "register",
             component: () => import('../pages/account/Register.vue'),
         },
-
+        {
+            path: "/forgot-password",
+            name: "forgot-password",
+            component: () => import('../pages/account/ForgotPassword.vue'),
+        },
     ]
 });
 
+
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('token') !== null;
-    console.log(token);
-    if (!token && to.name !== 'login' && to.name!=='register') {
+    let token = localStorage.getItem('token') !== null;
+    if (!token) {
+      token = sessionStorage.getItem('token') !== null;
+    }
+    if (!token && to.name !== 'login' && to.name!=='register' && to.name!== 'forgot-password') {
         // 如果未登录，且目标不是登录页，跳转到登录页
         next({ name: 'login' });
     } else if (token && to.name === 'login') {

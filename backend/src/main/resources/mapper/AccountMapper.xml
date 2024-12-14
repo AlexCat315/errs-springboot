@@ -9,7 +9,7 @@
         select a_id,role
         from account
         where
-            username = #{username}
+            username = #{username} or email = #{username}
         and password = #{password}
     </select>
 </mapper>

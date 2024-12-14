@@ -3,6 +3,7 @@ package com.x.backend.service.impl;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.mapper.AccountMapper;
 import com.x.backend.pojo.dto.AccountDTO;
+import com.x.backend.pojo.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.entity.Account;
 import com.x.backend.service.AccountService;
 import jakarta.annotation.Resource;
@@ -60,6 +61,29 @@ public class AccountServiceImpl implements AccountService {
         Integer result = accountMapper.insert(account);
         if (result < 1) {
             throw new RuntimeException("服务器内部错误");
+        }
+    }
+
+    @Override
+    public void isEmailExists(String email) {
+        // 调mapper方法
+        // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
+        Integer result = accountMapper.findByEmail(email);
+        if (result == null || result < 1) {
+            throw new ForbiddenException("该邮箱已被注册");
+        }
+    }
+
+    @Override
+    public void updatePassword(Account account) {
+        // 调mapper方法
+        // 往数据库中更新密码
+        ForgotPasswordDTO forgotPasswordDTO = new ForgotPasswordDTO();
+        forgotPasswordDTO.setEmail(account.getEmail());
+        forgotPasswordDTO.setNewPassword(account.getPassword());
+        Integer result = accountMapper.updatePassword(forgotPasswordDTO);
+        if (result != 1) {
+            throw new ForbiddenException("密码更新失败");
         }
     }
 

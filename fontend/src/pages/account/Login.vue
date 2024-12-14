@@ -38,6 +38,11 @@ function userLogin() {
     console.log(error)
   }
 }
+
+function routerPushForgotPassword() {
+  router.push('/forgot-password')
+}
+
 </script>
 
 <template>
@@ -83,7 +88,7 @@ function userLogin() {
                 </el-form-item>
               </el-col>
               <el-col :span="12" style="text-align: right">
-                <el-link @click="router.push('/reset')">忘记密码</el-link>
+                <el-link @click="routerPushForgotPassword">忘记密码</el-link>
               </el-col>
             </el-row>
           </el-form>

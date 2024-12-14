@@ -21,8 +21,20 @@ function internalPost(url, data, header, success, failure, error = defaultError)
 }
 
 function accessHeader() {
+    if (localStorage.getItem('token') !== null) {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    }
+    if (sessionStorage.getItem('token') !== null) {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        }
+    }
     return {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
     }
 }
 

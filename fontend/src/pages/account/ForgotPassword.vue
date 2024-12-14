@@ -2,12 +2,12 @@
 import {reactive, ref} from "vue";
 import {Message, Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-import {getEmailCode, register} from "../../net/account/Register.js";
+
 import {ElMessage} from "element-plus";
+import {forgotPassword, getEmailCode} from "../../net/account/ForgotPassword.js";
 
 
 const form = reactive({
-  username: '',
   password: '',
   repeatPassword: '',
   email: '',
@@ -18,9 +18,6 @@ const form = reactive({
 const formRef = ref();
 
 const rule = {
-  username: [
-    {required: true, message: '请输入账号'}
-  ],
   password: [
     {required: true, message: '请输入密码'}
   ],
@@ -51,10 +48,10 @@ function userRegister() {
     formRef.value.validate();
     // 验证通过，执行登录操作
     if (validatePasswordKey.value === 1) {
-      register(form.username, form.password, form.repeatPassword, form.email, form.code, () => {
+      forgotPassword(form.password, form.repeatPassword, form.email, form.code, () => {
         // 处理登录成功后的逻辑
         router.push('/login')
-        ElMessage.success('注册成功')
+        ElMessage.success('密码重置成功')
       });
     }
   } catch (error) {
@@ -105,16 +102,16 @@ function getCode() {
     <div class="right-card">
       <div style="text-align: center;margin: 0 20px ">
         <div style="margin-top: 150px;font-size: 25px;font-weight: bold">
-          加入我们
+          重置密码
         </div>
-        <div style="font-size: 13px;color:#696A6E">请完善注册信息</div>
+        <div style="font-size: 13px;color:#696A6E">请填写信息</div>
         <div style="margin-top: 50px">
           <el-form ref="formRef" :model="form" :rules="rule">
-            <el-form-item prop="username">
-              <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户/邮箱">
+            <el-form-item prop="email">
+              <el-input v-model="form.email" maxlength="100" type="text" placeholder="邮箱">
                 <template #prefix>
                   <el-icon>
-                    <User/>
+                    <Message/>
                   </el-icon>
                 </template>
               </el-input>
@@ -137,15 +134,7 @@ function getCode() {
                 </template>
               </el-input>
             </el-form-item>
-            <el-form-item prop="email">
-              <el-input v-model="form.email" maxlength="100" type="text" placeholder="邮箱">
-                <template #prefix>
-                  <el-icon>
-                    <Message/>
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
+
 
             <div style="display: flex">
               <el-form-item prop="code">
@@ -168,7 +157,7 @@ function getCode() {
           </el-form>
         </div>
         <div style="margin-top: 40px;">
-          <el-button @click="userRegister" style="width: 200px;height: 40px" type="success" plain >立即注册</el-button>
+          <el-button @click="userRegister" style="width: 200px;height: 40px" type="success" plain>立即重置</el-button>
         </div>
 
         <div style="margin-top: 20px">

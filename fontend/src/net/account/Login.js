@@ -12,12 +12,20 @@ const defaultFailure = (message, code, url) => {
 }
 
 function internalPost(url, data, header, success, failure, error = defaultError) {
-    axios.post(url, data, {headers: header}).then(({data}) => {
-        console.warn(data)
+    axios.post(url, data, {headers: header, withCredentials: true}).then(({data}) => {
         if (data.code === 200) {
             success(data.data)
-            // 向localStorage中存储token
-            localStorage.setItem('token', data.data)
+            // 如果开头为localStorage 则将token存储到localStorage中
+            // 如果开头为sessionStorage 则将token存储到sessionStorage中
+            if (data.data.startsWith('localStorage_')) {
+                // 截取 token 部分，例如可能的格式是 localStorage_tokenValue
+                const token = data.data.substring('localStorage_'.length);
+                localStorage.setItem('token', token); // 存储 token 到 localStorage
+            } else if (data.data.startsWith('sessionStorage_')) {
+                // 截取 token 部分，例如可能的格式是 sessionStorage_tokenValue
+                const token = data.data.substring('sessionStorage_'.length);
+                sessionStorage.setItem('token', token); // 存储 token 到 sessionStorage
+            }
         } else {
             failure(data.message)
         }
@@ -30,7 +38,7 @@ function accessHeader() {
     }
 }
 
-export function  login(username, password, remember, success, failure = defaultFailure) {
+export function login(username, password, remember, success, failure = defaultFailure) {
     internalPost('/api/account/login', {
             username: username,
             password: password,

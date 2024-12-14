@@ -1,6 +1,7 @@
 package com.x.backend.mapper;
 
 import com.x.backend.pojo.dto.AccountDTO;
+import com.x.backend.pojo.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.entity.Account;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -26,4 +27,7 @@ public interface AccountMapper {
 
     @Insert("insert into account (email, password, username, role) values (#{email}, #{password}, #{username}, #{role})")
     Integer insert(Account account);
+
+    @Update("update account set password = #{newPassword} where email = #{email}")
+    Integer updatePassword(ForgotPasswordDTO forgotPasswordDTO);
 }
