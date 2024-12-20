@@ -64,7 +64,7 @@ public class AccountController {
         }
         String redisEmail = redisTemplate.opsForValue().get(email);
         Long expire = redisTemplate.getExpire(email, java.util.concurrent.TimeUnit.SECONDS);
-        if (redisEmail != null && expire != null && expire > 540) {
+        if (redisEmail != null  && expire > 540) {
             return ResultEntity.failure(-1, "该邮箱已请求过验证，请稍后再试");
         }
         // 向数据库查询该邮箱是否已经注册过
@@ -120,7 +120,7 @@ public class AccountController {
         }
         String redisEmail = redisTemplate.opsForValue().get(email);
         Long expire = redisTemplate.getExpire(email, java.util.concurrent.TimeUnit.SECONDS);
-        if (redisEmail != null && expire != null && expire > 540) {
+        if (redisEmail != null  && expire > 540) {
             return ResultEntity.failure(-1, "该邮箱已请求过验证，请稍后再试");
         }
         // 向数据库查询该邮箱是否已经注册过
