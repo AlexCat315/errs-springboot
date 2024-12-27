@@ -24,7 +24,7 @@ public class JWTUtils {
      * @param expireTime 过期时间（天）
      */
     public String createJWT(Account account, Integer expireTime) {
-        long EXPIRE_DAY = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * expireTime;
+        Long EXPIRE_DAY = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * expireTime;
 
         Map<String, Object> map = new HashMap<>() {
             {
@@ -50,6 +50,31 @@ public class JWTUtils {
             }
         } catch (RuntimeException e) {
 
+            throw new RuntimeException("JWT校验错误");
+        }
+        throw new RuntimeException("JWT校验错误");
+    }
+
+    public Long getExpireTime(String token) {
+        try {
+            if (token != null && !token.isEmpty()) {
+                JWTPayload jwtPayload = analysisJWT(token);
+                Object expireTime = jwtPayload.getClaim("expire_time");
+                return Long.parseLong(expireTime.toString());
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException("JWT校验错误");
+        }
+        throw new RuntimeException("JWT校验错误");
+    }
+    public String getRole(String token) {
+        try {
+            if (token != null && !token.isEmpty()) {
+                JWTPayload jwtPayload = analysisJWT(token);
+                Object role = jwtPayload.getClaim("role");
+                return role.toString();
+            }
+        } catch (RuntimeException e) {
             throw new RuntimeException("JWT校验错误");
         }
         throw new RuntimeException("JWT校验错误");

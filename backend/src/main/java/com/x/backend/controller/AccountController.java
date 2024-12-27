@@ -172,8 +172,9 @@ public class AccountController {
             String jwt = jwtUtils.getToken(token);
             Integer id = jwtUtils.getId(jwt);
             log.warn("logout user id: {}", id);
+            Long expireTime = jwtUtils.getExpireTime(token); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
-            redisTemplate.opsForValue().set("blacklist" + id, jwt, 7, TimeUnit.DAYS);
+            redisTemplate.opsForValue().set("blacklist" + id, jwt, expireTime, TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
             return ResultEntity.failure(-1, e.getMessage());
