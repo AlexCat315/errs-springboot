@@ -1,4 +1,4 @@
-import {defaultFailure, post} from "../Post.js";
+import {defaultFailure, post} from "../post.js";
 
 export function logoutJS(success, failure = defaultFailure ){
     post("api/account/logout",{

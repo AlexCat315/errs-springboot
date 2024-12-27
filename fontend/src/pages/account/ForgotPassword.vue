@@ -4,7 +4,7 @@ import {Message, Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 
 import {ElMessage} from "element-plus";
-import {forgotPassword, getEmailCode} from "../../net/account/ForgotPassword.js";
+import {forgotPassword, getEmailCode} from "../../net/account/forgot-password.js";
 
 
 const form = reactive({

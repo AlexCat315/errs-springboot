@@ -2,7 +2,7 @@
 import {reactive, ref} from "vue";
 import {Message, Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-import {getEmailCode, register} from "../../net/account/Register.js";
+import {getEmailCode, register} from "../../net/account/register.js";
 import {ElMessage} from "element-plus";
 
 

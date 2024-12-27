@@ -1,4 +1,4 @@
-import {defaultFailure, post} from "../Post.js";
+import {defaultFailure, post} from "../post.js";
 
 export function forgotPassword( password, repeatPassword, email, code, success, failure = defaultFailure) {
     post("/api/account/forgot-password", {

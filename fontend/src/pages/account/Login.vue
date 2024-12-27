@@ -2,7 +2,7 @@
 import {reactive, ref} from "vue";
 import {Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-import {login} from "../../net/account/Login.js";
+import {login} from "../../net/account/login.js";
 
 
 const form = reactive({
