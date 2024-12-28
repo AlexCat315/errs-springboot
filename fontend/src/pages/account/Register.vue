@@ -264,6 +264,4 @@ function getCode() {
 .content-message {
   font-family: 'LXGWMarkerGothic-Regular';
 }
-
-
 </style>
