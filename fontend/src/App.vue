@@ -12,6 +12,22 @@ provide('globalSelect', globalSelect);
   <router-view />
 </template>
 
-<style scoped>
-
+<style>
+body, #app {
+  margin: 0;
+  padding: 0;
+}
+:host {
+  margin: 0;
+  padding: 0;
+}
+/* 自定义字体 */
+@font-face {
+  font-family: 'yousu-title-black';
+  src: url('../src/assets/ttf/优设标题黑.ttf');
+}
+@font-face {
+  font-family: 'LXGWMarkerGothic-Regular';
+  src: url('../src/assets/ttf/LXGWMarkerGothic-Regular.ttf');
+}
 </style>
