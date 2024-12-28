@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 
 @RestController
-@RequestMapping(value = "/api/account")
+@RequestMapping(value = "/api/admin/account")
 public class AccountController {
 
     @Resource
