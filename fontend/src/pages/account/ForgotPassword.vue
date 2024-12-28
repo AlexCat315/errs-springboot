@@ -2,7 +2,7 @@
 import { reactive, ref } from "vue";
 import { Message, Unlock, ChatDotRound } from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-
+import CommonLayout from "./CommonLayout.vue";
 import { ElMessage } from "element-plus";
 import { forgotPassword, getEmailCode } from "../../net/account/forgot-password.js";
 
@@ -104,41 +104,8 @@ function getCode() {
 </script>
 
 <template>
-  <div style="
-      max-width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      font-family: system-ui;
-      position: relative;">
-    <!-- 背景图片 -->
-    <el-image style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;" fit="cover"
-      src="../src/resources/login/login.webp" />
-    <!-- 登录卡片 -->
-    <div>
-      <div class="login_name">文娱推荐与评分系统 (管理端)</div>
-
-      <el-card class="message-card">
-        <template #header>
-          <div class="card-header">
-            <span style="font-family: 'yousu-title-black';font-size: 25px;color: #696A6E;">消息通知</span>
-          </div>
-        </template>
-        <div class="block text-center">
-          <el-carousel height="200px" motion-blur>
-            <el-carousel-item>
-              <p class="content-message">文娱推荐与评分系统管理端使用指南</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">关于系统安全，请阅读《文娱推荐与评分系统安全说明书》</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">进一步加强安全防范意识，落实安全准则</p>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-      </el-card>
-    </div>
+<CommonLayout>
+  <template #right-card>
     <div class="right-card">
       <div style="text-align: center;margin: 0 20px ">
         <div style="margin-top: 150px;font-size: 25px;font-weight: bold">
@@ -187,12 +154,12 @@ function getCode() {
                 </el-input>
               </el-form-item>
               <el-button v-if="isCode === false && loading === false" @click="getCode"
-                style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" plain>
+                style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" >
                 {{ codeMessage }}
               </el-button>
               <el-button v-if="loading === true" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef"
                 loading>
-                {{ codeMessage }}
+                请稍后
               </el-button>
               <el-button v-if="isCode === true && loading === false" style="width: 100px;height: 33px;margin-left: 60px"
                 color="#626aef" disabled>
@@ -212,8 +179,8 @@ function getCode() {
         </div>
       </div>
     </div>
-  </div>
-
+  </template>
+</CommonLayout>
 </template>
 
 
@@ -270,23 +237,5 @@ function getCode() {
   font-family: 'LXGWMarkerGothic-Regular';
 }
 
-.demonstration {
-  color: var(--el-text-color-secondary);
-}
 
-.el-carousel__item h3 {
-  color: transparent;
-  opacity: 0.75;
-  line-height: 200px;
-  margin: 0;
-  text-align: center;
-}
-
-.el-carousel__item:nth-child(2n) {
-  background-color: transparent;
-}
-
-.el-carousel__item:nth-child(2n + 1) {
-  background-color: transparent;
-}
 </style>
