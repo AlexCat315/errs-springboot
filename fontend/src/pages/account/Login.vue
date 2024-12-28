@@ -3,6 +3,7 @@ import { reactive, ref } from "vue";
 import { Unlock, User } from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 import { login } from "../../net/account/login.js";
+import { ElMessage } from "element-plus";
 
 
 const form = reactive({
@@ -24,6 +25,11 @@ const rule = {
 }
 
 function userLogin() {
+  if (form.username === '' || form.password === ''
+  ) {
+    ElMessage.warning('账号或密码不能为空');
+    return;
+  }
   try {
     formRef.value.validate();
     // 验证通过，执行登录操作
@@ -66,13 +72,13 @@ function routerPushForgotPassword() {
         </template>
         <div class="block text-center">
           <el-carousel height="200px" motion-blur>
-            <el-carousel-item >
+            <el-carousel-item>
               <p class="content-message">文娱推荐与评分系统管理端使用指南</p>
             </el-carousel-item>
-            <el-carousel-item >
+            <el-carousel-item>
               <p class="content-message">关于系统安全，请阅读《文娱推荐与评分系统安全说明书》</p>
             </el-carousel-item>
-            <el-carousel-item >
+            <el-carousel-item>
               <p class="content-message">进一步加强安全防范意识，落实安全准则</p>
             </el-carousel-item>
           </el-carousel>
