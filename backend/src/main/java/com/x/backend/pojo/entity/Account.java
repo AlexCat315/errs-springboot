@@ -11,4 +11,5 @@ public class Account implements Serializable {
     private String password;
     private String email;
     private String Role;
+    private String vip;
 }

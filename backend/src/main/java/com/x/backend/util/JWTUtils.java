@@ -15,9 +15,7 @@ import java.util.Map;
 @Component
 public class JWTUtils {
 
-
     public static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
-
 
     /**
      * @param account    用户信息
@@ -31,6 +29,8 @@ public class JWTUtils {
                 put("uid", account.getAId());
                 put("role", account.getRole());
                 put("expire_time", EXPIRE_DAY);
+                put("vip", account.getVip());
+
             }
         };
         return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
@@ -41,6 +41,7 @@ public class JWTUtils {
         return jwt.getPayload();
     }
 
+    // 获取用户ID
     public Integer getId(String token) {
         try {
             if (token != null && !token.isEmpty()) {
@@ -55,6 +56,7 @@ public class JWTUtils {
         throw new RuntimeException("JWT校验错误");
     }
 
+    // 获取过期时间
     public Long getExpireTime(String token) {
         try {
             if (token != null && !token.isEmpty()) {
@@ -67,6 +69,8 @@ public class JWTUtils {
         }
         throw new RuntimeException("JWT校验错误");
     }
+
+    // 获取角色
     public String getRole(String token) {
         try {
             if (token != null && !token.isEmpty()) {
@@ -80,8 +84,23 @@ public class JWTUtils {
         throw new RuntimeException("JWT校验错误");
     }
 
+    // 获取VIP等级
+    public String getVip(String token) {
+        try {
+            if (token != null && !token.isEmpty()) {
+                JWTPayload jwtPayload = analysisJWT(token);
+                Object vip = jwtPayload.getClaim("vip");
+                return vip.toString();
+            }
+        } catch (RuntimeException e) {
+            throw new RuntimeException("JWT校验错误");
+        }
+        throw new RuntimeException("JWT校验错误");
+    }
+
+    // 获取有效 token 部分
     public String getToken(String token) {
-        if (token == null){
+        if (token == null) {
             throw new RuntimeException("JWT校验错误");
         }
         // 截取有效 token 部分
@@ -89,4 +108,3 @@ public class JWTUtils {
     }
 
 }
-
