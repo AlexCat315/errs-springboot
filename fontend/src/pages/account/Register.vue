@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from "vue";
-import { Message, Unlock, User } from '@element-plus/icons-vue'
+import { Message, Unlock, User, ChatDotRound,Promotion } from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 import { getEmailCode, register } from "../../net/account/register.js";
 import { ElMessage } from "element-plus";
@@ -11,7 +11,8 @@ const form = reactive({
   password: '',
   repeatPassword: '',
   email: '',
-  code: ''
+  code: '',
+  inviteCode: '',
 })
 
 // 获取表单组件的引用
@@ -32,6 +33,9 @@ const rule = {
   ],
   code: [
     { required: true, message: '请输入验证码' }
+  ],
+  inviteCode: [
+    { required: true, message: '请输入邀请码' }
   ]
 }
 
@@ -146,7 +150,7 @@ function getCode() {
 
     <div class="right-card">
       <div style="text-align: center;margin: 0 20px ">
-        <div style="margin-top: 150px;font-size: 25px;font-weight: bold">
+        <div style="margin-top: 50px;font-size: 25px;font-weight: bold">
           加入我们
         </div>
         <div style="font-size: 13px;color:#696A6E">请完善注册信息</div>
@@ -194,7 +198,7 @@ function getCode() {
                 <el-input style="width: 200px" v-model="form.code" maxlength="6" type="text" placeholder="验证码">
                   <template #prefix>
                     <el-icon>
-                      <Message />
+                      <ChatDotRound />
                     </el-icon>
                   </template>
                 </el-input>
@@ -212,6 +216,16 @@ function getCode() {
                 {{ validateCode }} 秒
               </el-button>
             </div>
+
+            <el-form-item prop="inviteCode">
+              <el-input v-model="form.inviteCode" maxlength="100" type="text" placeholder="邀请码（必填）">
+                <template #prefix>
+                  <el-icon>
+                    <Promotion />
+                  </el-icon>
+                </template>
+              </el-input>
+            </el-form-item>
 
           </el-form>
         </div>
