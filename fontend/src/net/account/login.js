@@ -39,7 +39,7 @@ function accessHeader() {
 }
 
 export function login(username, password, remember, success, failure = defaultFailure) {
-    internalPost('/api/account/login', {
+    internalPost('/api/admin/account/login', {
             username: username,
             password: password,
             rememberMe: remember
