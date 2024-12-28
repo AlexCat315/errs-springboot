@@ -27,11 +27,9 @@ function userLogin() {
   try {
     formRef.value.validate();
     // 验证通过，执行登录操作
-    login(form.username, form.password, form.remember, (data) => {
+    login(form.username, form.password, form.remember, () => {
       // 处理登录成功后的逻辑
       router.push('/index')
-
-
     });
   } catch (error) {
     // 验证不通过，可以在这里处理错误
