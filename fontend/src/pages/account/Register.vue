@@ -4,6 +4,7 @@ import { Message, Unlock, User, ChatDotRound, Promotion } from '@element-plus/ic
 import router from "../../router/router.js";
 import { getEmailCode, register } from "../../net/account/register.js";
 import { ElMessage } from "element-plus";
+import CommonLayout from "./CommonLayout.vue";
 
 
 const form = reactive({
@@ -113,134 +114,101 @@ function getCode() {
 </script>
 
 <template>
-  <div style="
-      max-width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      font-family: system-ui;
-      position: relative;">
-    <!-- 背景图片 -->
-    <el-image style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;" fit="cover"
-      src="../src/resources/login/login.webp" />
-    <!-- 登录卡片 -->
-    <div>
-      <div class="login_name">文娱推荐与评分系统 (管理端)</div>
-
-      <el-card class="message-card">
-        <template #header>
-          <div class="card-header">
-            <span style="font-family: 'yousu-title-black';font-size: 25px;color: #696A6E;">消息通知</span>
+  <CommonLayout>
+    <template #right-card>
+      <div class="right-card">
+        <div style="text-align: center;margin: 0 20px ">
+          <div style="margin-top: 50px;font-size: 25px;font-weight: bold">
+            加入我们
           </div>
-        </template>
-        <div class="block text-center">
-          <el-carousel height="200px" motion-blur>
-            <el-carousel-item>
-              <p class="content-message">文娱推荐与评分系统管理端使用指南</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">关于系统安全，请阅读《文娱推荐与评分系统安全说明书》</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">进一步加强安全防范意识，落实安全准则</p>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-      </el-card>
-    </div>
-
-    <div class="right-card">
-      <div style="text-align: center;margin: 0 20px ">
-        <div style="margin-top: 50px;font-size: 25px;font-weight: bold">
-          加入我们
-        </div>
-        <div style="font-size: 13px;color:#696A6E">请完善注册信息</div>
-        <div style="margin-top: 50px">
-          <el-form ref="formRef" :model="form" :rules="rule">
-            <el-form-item prop="username">
-              <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户/邮箱">
-                <template #prefix>
-                  <el-icon>
-                    <User />
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
-                <template #prefix>
-                  <el-icon>
-                    <Unlock />
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="password">
-              <el-input v-model="form.repeatPassword" maxlength="25" type="password" placeholder="确认密码">
-                <template #prefix>
-                  <el-icon>
-                    <Unlock />
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-            <el-form-item prop="email">
-              <el-input v-model="form.email" maxlength="100" type="text" placeholder="邮箱">
-                <template #prefix>
-                  <el-icon>
-                    <Message />
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
-
-            <div style="display: flex">
-              <el-form-item prop="code">
-                <el-input style="width: 200px" v-model="form.code" maxlength="6" type="text" placeholder="验证码">
+          <div style="font-size: 13px;color:#696A6E">请完善注册信息</div>
+          <div style="margin-top: 50px">
+            <el-form ref="formRef" :model="form" :rules="rule">
+              <el-form-item prop="username">
+                <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户/邮箱">
                   <template #prefix>
                     <el-icon>
-                      <ChatDotRound />
+                      <User />
                     </el-icon>
                   </template>
                 </el-input>
               </el-form-item>
-              <el-button v-if="isCode === false && loading === false" @click="getCode"
-                style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" plain>
-                {{ codeMessage }}
-              </el-button>
-              <el-button v-if="loading === true" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef"
-                loading>
-                {{ codeMessage }}
-              </el-button>
-              <el-button v-if="isCode === true && loading === false" style="width: 100px;height: 33px;margin-left: 60px"
-                color="#626aef" disabled>
-                {{ validateCode }} 秒
-              </el-button>
-            </div>
+              <el-form-item prop="password">
+                <el-input v-model="form.password" maxlength="25" type="password" placeholder="密码">
+                  <template #prefix>
+                    <el-icon>
+                      <Unlock />
+                    </el-icon>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input v-model="form.repeatPassword" maxlength="25" type="password" placeholder="确认密码">
+                  <template #prefix>
+                    <el-icon>
+                      <Unlock />
+                    </el-icon>
+                  </template>
+                </el-input>
+              </el-form-item>
+              <el-form-item prop="email">
+                <el-input v-model="form.email" maxlength="100" type="text" placeholder="邮箱">
+                  <template #prefix>
+                    <el-icon>
+                      <Message />
+                    </el-icon>
+                  </template>
+                </el-input>
+              </el-form-item>
 
-            <el-form-item prop="inviteCode">
-              <el-input v-model="form.inviteCode" maxlength="100" type="text" placeholder="邀请码（必填）">
-                <template #prefix>
-                  <el-icon>
-                    <Promotion />
-                  </el-icon>
-                </template>
-              </el-input>
-            </el-form-item>
+              <div style="display: flex">
+                <el-form-item prop="code">
+                  <el-input style="width: 200px" v-model="form.code" maxlength="6" type="text" placeholder="验证码">
+                    <template #prefix>
+                      <el-icon>
+                        <ChatDotRound />
+                      </el-icon>
+                    </template>
+                  </el-input>
+                </el-form-item>
+                <el-button v-if="isCode === false && loading === false" @click="getCode"
+                  style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" plain>
+                  {{ codeMessage }}
+                </el-button>
+                <el-button v-if="loading === true" style="width: 100px;height: 33px;margin-left: 60px" color="#626aef"
+                  loading>
+                  {{ codeMessage }}
+                </el-button>
+                <el-button v-if="isCode === true && loading === false"
+                  style="width: 100px;height: 33px;margin-left: 60px" color="#626aef" disabled>
+                  {{ validateCode }} 秒
+                </el-button>
+              </div>
 
-          </el-form>
-        </div>
-        <div style="margin-top: 40px;">
-          <el-button @click="userRegister" style="width: 200px;height: 40px" type="danger">立即注册</el-button>
-        </div>
+              <el-form-item prop="inviteCode">
+                <el-input v-model="form.inviteCode" maxlength="100" type="text" placeholder="邀请码（必填）">
+                  <template #prefix>
+                    <el-icon>
+                      <Promotion />
+                    </el-icon>
+                  </template>
+                </el-input>
+              </el-form-item>
 
-        <div style="margin-top: 20px">
-          <el-button style="width: 200px;height: 40px" type="success" @click="router.push('/login')">返回登录
-          </el-button>
+            </el-form>
+          </div>
+          <div style="margin-top: 40px;">
+            <el-button @click="userRegister" style="width: 200px;height: 40px" type="danger">立即注册</el-button>
+          </div>
+
+          <div style="margin-top: 20px">
+            <el-button style="width: 200px;height: 40px" type="success" @click="router.push('/login')">返回登录
+            </el-button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </CommonLayout>
 
 </template>
 
