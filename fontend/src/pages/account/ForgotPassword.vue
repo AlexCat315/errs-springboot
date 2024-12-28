@@ -1,6 +1,6 @@
 <script setup>
 import { reactive, ref } from "vue";
-import { Message, Unlock, User } from '@element-plus/icons-vue'
+import { Message, Unlock, ChatDotRound } from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 
 import { ElMessage } from "element-plus";
@@ -181,7 +181,7 @@ function getCode() {
                 <el-input style="width: 200px" v-model="form.code" maxlength="6" type="text" placeholder="验证码">
                   <template #prefix>
                     <el-icon>
-                      <Message />
+                      <ChatDotRound />
                     </el-icon>
                   </template>
                 </el-input>
