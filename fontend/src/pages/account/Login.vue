@@ -78,7 +78,6 @@ function routerPushForgotPassword() {
           </el-carousel>
         </div>
       </el-card>
-
     </div>
 
     <div class="right-card">
