@@ -4,7 +4,7 @@ import { Unlock, User } from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 import { login } from "../../net/account/login.js";
 import { ElMessage } from "element-plus";
-
+import CommonLayout from "./CommonLayout.vue";
 
 const form = reactive({
   username: '',
@@ -50,42 +50,8 @@ function routerPushForgotPassword() {
 </script>
 
 <template>
-  <div style="
-      max-width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      font-family: system-ui;
-      position: relative;">
-    <!-- 背景图片 -->
-    <el-image style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;" fit="cover"
-      src="../src/resources/login/login.webp" />
-    <!-- 登录卡片 -->
-    <div>
-      <div class="login_name">文娱推荐与评分系统 (管理端)</div>
-
-      <el-card class="message-card">
-        <template #header>
-          <div class="card-header">
-            <span style="font-family: 'yousu-title-black';font-size: 25px;color: #696A6E;">消息通知</span>
-          </div>
-        </template>
-        <div class="block text-center">
-          <el-carousel height="200px" motion-blur>
-            <el-carousel-item>
-              <p class="content-message">文娱推荐与评分系统管理端使用指南</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">关于系统安全，请阅读《文娱推荐与评分系统安全说明书》</p>
-            </el-carousel-item>
-            <el-carousel-item>
-              <p class="content-message">进一步加强安全防范意识，落实安全准则</p>
-            </el-carousel-item>
-          </el-carousel>
-        </div>
-      </el-card>
-    </div>
-
+ <CommonLayout>
+  <template #right-card>
     <div class="right-card">
       <div style="text-align: center; margin: 0 20px;">
         <div style="margin-top: 130px; font-size: 25px; font-weight: bold;">登录</div>
@@ -131,7 +97,8 @@ function routerPushForgotPassword() {
         </div>
       </div>
     </div>
-  </div>
+  </template>
+ </CommonLayout>
 </template>
 
 <style scoped>
