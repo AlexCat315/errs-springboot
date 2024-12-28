@@ -1,7 +1,7 @@
 import {defaultFailure, post} from "../post.js";
 
 export function forgotPassword( password, repeatPassword, email, code, success, failure = defaultFailure) {
-    post("/api/account/forgot-password", {
+    post("/api/admin/account/forgot-password", {
         password: password,
         confirmPassword: repeatPassword,
         email: email,
@@ -11,6 +11,6 @@ export function forgotPassword( password, repeatPassword, email, code, success, 
 
 
 export function getEmailCode(email, success, failure = defaultFailure ){
-    post(`api/account/validate-email-forgot-password?email=${email}`,{
+    post(`api/admin/account/validate-email-forgot-password?email=${email}`,{
     }, success, failure)
 }
