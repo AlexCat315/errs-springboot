@@ -1,7 +1,7 @@
 import {defaultFailure, post} from "../post.js";
 
 export function register(username, password, repeatPassword, email, code, success, failure = defaultFailure) {
-    post("/api/account/register", {
+    post("/api/admin/account/register", {
         username: username,
         password: password,
         repeatPassword: repeatPassword,
@@ -11,6 +11,6 @@ export function register(username, password, repeatPassword, email, code, succes
 }
 
 export function getEmailCode(email, success, failure = defaultFailure ){
-    post(`api/account/validate-email-register?email=${email}`,{
+    post(`api/admin/account/validate-email-register?email=${email}`,{
     }, success, failure)
 }
