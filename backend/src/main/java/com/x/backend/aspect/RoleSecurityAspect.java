@@ -9,6 +9,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
@@ -16,11 +17,6 @@ import java.lang.reflect.Method;
 @Aspect
 @Component
 public class RoleSecurityAspect {
-    private final HttpServletRequest request;
-
-    public RoleSecurityAspect(HttpServletRequest request) {
-        this.request = request;
-    }
 
     @Resource
     private JWTUtils jwtUtils;
@@ -50,11 +46,7 @@ public class RoleSecurityAspect {
             // ... 校验逻辑
             // 如果为：admin，则校验当前用户是否为admin角色
             // 如果为：{"admin", "user", "anonymous"}，则校验当前用户是否为admin或user或anonymous角色
-            String token = request.getHeader("Authorization");
-            if (token == null) {
-                throw new SecurityException("No token provided");
-            }
-            String role = jwtUtils.getRole(token);
+            String role = jwtUtils.getRole();
             for (String requiredRole : requiredRoles) {
                 if (role.equals(RoleConstants.ROLE_ADMIN)) {
                     return;

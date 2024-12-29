@@ -1,6 +1,7 @@
 package com.x.backend.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.x.backend.annotation.VipSecurity;
@@ -41,11 +42,7 @@ public class VipSecurityAspect {
             vipSecurity = targetClass.getAnnotation(VipSecurity.class);
         }
         if (vipSecurity != null) {
-            String token = request.getHeader("Authorization");
-            if (token == null) {
-                throw new SecurityException("No token provided");
-            }
-            String vipLevel = jwtUtils.getVip(token);
+            String vipLevel = jwtUtils.getVip();
             if (vipLevel == null) {
                 throw new SecurityException("Invalid token");
             }

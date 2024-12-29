@@ -7,6 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import com.x.backend.pojo.admin.entity.Account;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -19,6 +22,8 @@ public class JWTUtils {
 
     private final HttpServletRequest request;
 
+    @Autowired
+    @Lazy
     public JWTUtils(HttpServletRequest request) {
         this.request = request;
     }
