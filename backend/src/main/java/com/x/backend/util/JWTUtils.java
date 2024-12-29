@@ -3,13 +3,9 @@ package com.x.backend.util;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
-import jakarta.servlet.http.HttpServletRequest;
-
 import com.x.backend.pojo.admin.entity.Account;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -22,13 +18,12 @@ public class JWTUtils {
 
     private final HttpServletRequest request;
 
-    @Autowired
-    @Lazy
     public JWTUtils(HttpServletRequest request) {
         this.request = request;
     }
 
     public static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
+
 
     /**
      * @param account    用户信息
@@ -70,8 +65,7 @@ public class JWTUtils {
     }
 
     public Integer getId() {
-        String token = request.getHeader("Authorization");
-        return getId(token);
+        return getId(getHeaderToken());
     }
 
     // 获取过期时间
@@ -89,8 +83,7 @@ public class JWTUtils {
     }
 
     public Long getExpireTime() {
-        String token = request.getHeader("Authorization");
-        return getExpireTime(token);
+        return getExpireTime(getHeaderToken());
     }
 
     // 获取角色
@@ -108,8 +101,8 @@ public class JWTUtils {
     }
 
     public String getRole() {
-        String token = request.getHeader("Authorization");
-        return getRole(token);
+
+        return getRole(getHeaderToken());
     }
 
     // 获取VIP等级
@@ -127,8 +120,7 @@ public class JWTUtils {
     }
 
     public String getVip() {
-        String token = request.getHeader("Authorization");
-        return getVip(token);
+        return getVip(getHeaderToken());
     }
 
     // 获取有效 token 部分
@@ -138,6 +130,10 @@ public class JWTUtils {
         }
         // 截取有效 token 部分
         return token.substring(7);
+    }
+
+    private String getHeaderToken() {
+       return request.getHeader("Authorization");
     }
 
 }

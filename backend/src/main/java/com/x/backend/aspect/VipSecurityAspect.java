@@ -1,17 +1,15 @@
 package com.x.backend.aspect;
 
-import org.aspectj.lang.annotation.Aspect;
-import org.springframework.stereotype.Component;
-
 import com.x.backend.annotation.VipSecurity;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
-
-import java.lang.reflect.Method;
-
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Method;
 
 @Aspect
 @Component
@@ -21,7 +19,7 @@ public class VipSecurityAspect {
     @Resource
     private JWTUtils jwtUtils;
 
-    @Before("execution(* *(..))")
+    @Before("@annotation(com.x.backend.annotation.VipSecurity) || @within(com.x.backend.annotation.VipSecurity)")
     public void checkVip(JoinPoint joinPoint) throws SecurityException {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

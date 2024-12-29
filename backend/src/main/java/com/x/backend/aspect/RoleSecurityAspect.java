@@ -24,7 +24,7 @@ public class RoleSecurityAspect {
     // 如果没有@RoleSecurity注解，则直接放行
     // 例如：@RoleSecurity(role = "admin")注解表示只有admin角色的用户才可以访问该方法
     // 例如：@RoleSecurity(role = {"admin", "user"})注解表示admin或user角色的用户都可以访问该方法
-    @Before("execution(* *(..))")
+    @Before("@annotation(com.x.backend.annotation.RoleSecurity) || @within(com.x.backend.annotation.RoleSecurity)")
     public void checkRole(JoinPoint joinPoint) throws SecurityException {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
