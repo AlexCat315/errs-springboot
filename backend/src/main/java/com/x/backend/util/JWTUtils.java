@@ -3,6 +3,8 @@ package com.x.backend.util;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
+
 import com.x.backend.pojo.admin.entity.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,12 @@ import java.util.Map;
 @Slf4j
 @Component
 public class JWTUtils {
+
+    private final HttpServletRequest request;
+
+    public JWTUtils(HttpServletRequest request) {
+        this.request = request;
+    }
 
     public static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
 
@@ -56,6 +64,11 @@ public class JWTUtils {
         throw new RuntimeException("JWT校验错误");
     }
 
+    public Integer getId() {
+        String token = request.getHeader("Authorization");
+        return getId(token);
+    }
+
     // 获取过期时间
     public Long getExpireTime(String token) {
         try {
@@ -68,6 +81,11 @@ public class JWTUtils {
             throw new RuntimeException("JWT校验错误");
         }
         throw new RuntimeException("JWT校验错误");
+    }
+
+    public Long getExpireTime() {
+        String token = request.getHeader("Authorization");
+        return getExpireTime(token);
     }
 
     // 获取角色
@@ -84,6 +102,11 @@ public class JWTUtils {
         throw new RuntimeException("JWT校验错误");
     }
 
+    public String getRole() {
+        String token = request.getHeader("Authorization");
+        return getRole(token);
+    }
+
     // 获取VIP等级
     public String getVip(String token) {
         try {
@@ -96,6 +119,11 @@ public class JWTUtils {
             throw new RuntimeException("JWT校验错误");
         }
         throw new RuntimeException("JWT校验错误");
+    }
+
+    public String getVip() {
+        String token = request.getHeader("Authorization");
+        return getVip(token);
     }
 
     // 获取有效 token 部分
