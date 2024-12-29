@@ -3,7 +3,7 @@ package com.x.backend.util;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
-import com.x.backend.pojo.entity.Account;
+import com.x.backend.pojo.admin.entity.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,12 +1,14 @@
 package com.x.backend.controller.admin;
 
+import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
-import com.x.backend.pojo.dto.AccountDTO;
-import com.x.backend.pojo.entity.Account;
-import com.x.backend.pojo.vo.request.ForgotPasswordVo;
-import com.x.backend.pojo.vo.request.LoginVo;
-import com.x.backend.pojo.vo.request.RegisterVo;
+import com.x.backend.pojo.admin.dto.AccountDTO;
+import com.x.backend.pojo.admin.dto.InsertInviteDTO;
+import com.x.backend.pojo.admin.entity.Account;
+import com.x.backend.pojo.admin.vo.request.ForgotPasswordVo;
+import com.x.backend.pojo.admin.vo.request.LoginVo;
+import com.x.backend.pojo.admin.vo.request.RegisterVo;
 import com.x.backend.service.admin.AccountService;
 import com.x.backend.service.admin.EmailService;
 import com.x.backend.util.JWTUtils;
@@ -16,10 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-
 @RestController
 @RequestMapping(value = "/api/admin/account")
 public class AccountController {
@@ -58,7 +60,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "/validate-email-register")
-    public ResultEntity<String> validateEmailRegister(@RequestParam(value = "email") String email) {
+    public ResultEntity<String> validateEmailRegister(@RequestParam String email) {
         if (email == null) {
             return ResultEntity.failure(-1, "邮箱不能为空");
         }
@@ -67,8 +69,8 @@ public class AccountController {
         if (redisEmail != null && expire > 540) {
             return ResultEntity.failure(-1, "该邮箱已请求过验证，请稍后再试");
         }
-        // 向数据库查询该邮箱是否已经注册过
         try {
+            // 向数据库查询该邮箱是否已经注册过
             accountService.findByEmail(email);
             // 生成随机6位字符验证码
             String code = randomCodeGeneratorUtils.generateRandomCode();
@@ -86,7 +88,7 @@ public class AccountController {
     public ResultEntity<String> register(@RequestBody RegisterVo registerVo) {
         if (registerVo.getUsername() == null || registerVo.getPassword() == null ||
                 registerVo.getRepeatPassword() == null || registerVo.getEmail() == null
-                || registerVo.getCode() == null) {
+                || registerVo.getCode() == null || registerVo.getInviteCode() == null) {
             return ResultEntity.failure(-1, "请填写完整信息");
         }
         if (!registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
@@ -97,16 +99,35 @@ public class AccountController {
         if (code == null || !code.equals(registerVo.getCode())) {
             return ResultEntity.failure(-1, "验证码错误");
         }
+        // 验证邀请码是否正确
+        Integer inviteID;
+        try {
+            inviteID = accountService.findByInviteCode(registerVo.getInviteCode());
+        } catch (ForbiddenException e) {
+            return ResultEntity.failure(-1, e.getMessage());
+        }
+        if (inviteID == null) {
+            return ResultEntity.failure(-1, "邀请码错误");
+        }
+
         // 向数据库插入用户信息
         Account account = new Account();
         account.setUsername(registerVo.getUsername());
         account.setPassword(registerVo.getPassword());
         account.setEmail(registerVo.getEmail());
-        account.setRole("user");
+        account.setRole(RoleConstants.ROLE_ADMIN);
+        account.setCreatedAt(new Date());
+        account.setIsBanned(false);
+        account.setIsAllowLogin(false);
         try {
-            accountService.register(account);
+            Integer aId = accountService.register(account);
             // 清除验证码
             redisTemplate.delete(registerVo.getEmail());
+            // 向数据库插入邀请信息
+            InsertInviteDTO insertInviteDTO = new InsertInviteDTO();
+            insertInviteDTO.setAId(aId);
+            insertInviteDTO.setInvitedId(inviteID);
+            accountService.insertInvite(insertInviteDTO);
             return ResultEntity.success();
         } catch (RuntimeException e) {
             return ResultEntity.failure(-1, e.getMessage());
@@ -179,7 +200,6 @@ public class AccountController {
         } catch (Exception e) {
             return ResultEntity.failure(-1, e.getMessage());
         }
-
 
     }
 

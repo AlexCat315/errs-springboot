@@ -1,4 +1,4 @@
-package com.x.backend.pojo.vo.request;
+package com.x.backend.pojo.admin.vo.request;
 
 import lombok.Data;
 

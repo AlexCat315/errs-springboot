@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x.backend.mapper.admin.AccountMapper">
-    <resultMap id="getAccountInfoMap" type="com.x.backend.pojo.entity.Account">
+    <resultMap id="getAccountInfoMap" type="com.x.backend.pojo.admin.entity.Account">
         <result property="aId" column="a_id"/>
         <result property="role" column="role"/>
     </resultMap>
+    <insert id="insertInvite">
+        insert into invite (a_id, invite_id,invite_time,status ) values (#{aId}, #{inviteId}, #{inviteTime}, #{status})
+    </insert>
     <select id="login" resultMap="getAccountInfoMap">
-        select a_id,role
+        select a_id, role
         from account
-        where
-            username = #{username} or email = #{username}
-        and password = #{password}
+        where username = #{username}
+           or email = #{username}
+            and password = #{password}
     </select>
+    <select id="findByInviteCode" resultType="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
+        select a_id, role
+        from account
+        where invite_code = #{inviteCode}
+    </select>
+
 </mapper>

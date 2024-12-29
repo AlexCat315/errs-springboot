@@ -1,7 +1,8 @@
 package com.x.backend.service.admin;
 
-import com.x.backend.pojo.dto.AccountDTO;
-import com.x.backend.pojo.entity.Account;
+import com.x.backend.pojo.admin.dto.AccountDTO;
+import com.x.backend.pojo.admin.dto.InsertInviteDTO;
+import com.x.backend.pojo.admin.entity.Account;
 
 public interface AccountService {
     Account login(AccountDTO accountDTO);
@@ -10,9 +11,13 @@ public interface AccountService {
 
     void findByEmail(String email);
 
-    void register(Account account);
+    Integer register(Account account);
 
     void isEmailExists(String email);
 
     void updatePassword(Account account);
+
+    Integer findByInviteCode(String inviteCode);
+
+    void insertInvite(InsertInviteDTO insertInviteDTO);
 }

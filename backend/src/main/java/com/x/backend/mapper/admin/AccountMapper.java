@@ -1,8 +1,10 @@
 package com.x.backend.mapper.admin;
 
-import com.x.backend.pojo.dto.AccountDTO;
-import com.x.backend.pojo.dto.ForgotPasswordDTO;
-import com.x.backend.pojo.entity.Account;
+import com.x.backend.pojo.admin.dto.AccountDTO;
+import com.x.backend.pojo.admin.dto.FindInviteCodeDTO;
+import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
+import com.x.backend.pojo.admin.entity.Account;
+import com.x.backend.pojo.admin.entity.Invite;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -30,4 +32,8 @@ public interface AccountMapper {
 
     @Update("update account set password = #{newPassword} where email = #{email}")
     Integer updatePassword(ForgotPasswordDTO forgotPasswordDTO);
+
+    FindInviteCodeDTO findByInviteCode(String inviteCode);
+
+    Integer insertInvite(Invite invite);
 }

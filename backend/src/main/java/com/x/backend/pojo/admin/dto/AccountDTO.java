@@ -1,4 +1,4 @@
-package com.x.backend.pojo.dto;
+package com.x.backend.pojo.admin.dto;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.x.backend.pojo.entity;
+package com.x.backend.pojo.admin.entity;
 
 import lombok.Data;
 
