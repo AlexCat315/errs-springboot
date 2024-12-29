@@ -73,7 +73,7 @@ public class JWTUtils {
             if (token != null && !token.isEmpty()) {
                 JWTPayload jwtPayload = analysisJWT(token);
                 Object expireTime = jwtPayload.getClaim("expire_time");
-                return Long.parseLong((String) expireTime);
+                return Long.parseLong(expireTime.toString());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException("JWT校验错误");
