@@ -11,4 +11,5 @@ public class RegisterVo implements Serializable {
     private String repeatPassword;
     private String email; // 邮箱
     private String code; // 验证码
+    private String inviteCode; // 邀请码
 }
