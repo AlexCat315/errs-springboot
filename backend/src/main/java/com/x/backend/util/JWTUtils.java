@@ -24,7 +24,6 @@ public class JWTUtils {
 
     public static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
 
-
     /**
      * @param account    用户信息
      * @param expireTime 过期时间（天）
@@ -132,8 +131,12 @@ public class JWTUtils {
         return token.substring(7);
     }
 
+    public String getToken() {
+        return getToken(getHeaderToken());
+    }
+
     private String getHeaderToken() {
-       return request.getHeader("Authorization");
+        return request.getHeader("Authorization");
     }
 
 }
