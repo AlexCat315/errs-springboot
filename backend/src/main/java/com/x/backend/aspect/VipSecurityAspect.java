@@ -1,13 +1,11 @@
 package com.x.backend.aspect;
 
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.x.backend.annotation.VipSecurity;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.lang.reflect.Method;
 
@@ -19,11 +17,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 @Component
 public class VipSecurityAspect {
 
-    private final HttpServletRequest request;
-
-    public VipSecurityAspect(HttpServletRequest request) {
-        this.request = request;
-    }
 
     @Resource
     private JWTUtils jwtUtils;
