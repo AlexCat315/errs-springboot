@@ -10,7 +10,7 @@ import org.springframework.web.filter.CorsFilter;
 public class HandelCorsFilter {
 
     @Bean
-    public CorsFilter corsFilter() {
+    CorsFilter corsFilter() {
         // 1.创建 CORS 配置对象
         CorsConfiguration config = new CorsConfiguration();
         // 支持域
