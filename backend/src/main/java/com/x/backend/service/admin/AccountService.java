@@ -1,4 +1,4 @@
-package com.x.backend.service;
+package com.x.backend.service.admin;
 
 import com.x.backend.pojo.dto.AccountDTO;
 import com.x.backend.pojo.entity.Account;

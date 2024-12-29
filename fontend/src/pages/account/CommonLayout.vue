@@ -29,6 +29,7 @@
                     <el-carousel height="200px" motion-blur>
                         <el-carousel-item>
                             <p class="content-message">文娱推荐与评分系统管理端使用指南</p>
+                            <p class="content-message">进一步优化系统可用度公告</p> 
                         </el-carousel-item>
                         <el-carousel-item>
                             <p class="content-message">

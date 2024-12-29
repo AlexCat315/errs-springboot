@@ -1,11 +1,11 @@
-package com.x.backend.service.impl;
+package com.x.backend.service.admin.impl;
 
 import com.x.backend.exception.ForbiddenException;
-import com.x.backend.mapper.AccountMapper;
+import com.x.backend.mapper.admin.AccountMapper;
 import com.x.backend.pojo.dto.AccountDTO;
 import com.x.backend.pojo.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.entity.Account;
-import com.x.backend.service.AccountService;
+import com.x.backend.service.admin.AccountService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

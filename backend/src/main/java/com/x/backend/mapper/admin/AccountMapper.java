@@ -1,4 +1,4 @@
-package com.x.backend.mapper;
+package com.x.backend.mapper.admin;
 
 import com.x.backend.pojo.dto.AccountDTO;
 import com.x.backend.pojo.dto.ForgotPasswordDTO;

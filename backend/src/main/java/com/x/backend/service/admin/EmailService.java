@@ -1,4 +1,4 @@
-package com.x.backend.service;
+package com.x.backend.service.admin;
 
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Value;

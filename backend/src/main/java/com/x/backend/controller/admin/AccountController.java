@@ -1,4 +1,4 @@
-package com.x.backend.controller;
+package com.x.backend.controller.admin;
 
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
@@ -7,8 +7,8 @@ import com.x.backend.pojo.entity.Account;
 import com.x.backend.pojo.vo.request.ForgotPasswordVo;
 import com.x.backend.pojo.vo.request.LoginVo;
 import com.x.backend.pojo.vo.request.RegisterVo;
-import com.x.backend.service.AccountService;
-import com.x.backend.service.EmailService;
+import com.x.backend.service.admin.AccountService;
+import com.x.backend.service.admin.EmailService;
 import com.x.backend.util.JWTUtils;
 import com.x.backend.util.RandomCodeGeneratorUtils;
 import jakarta.annotation.Resource;
