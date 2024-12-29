@@ -192,7 +192,6 @@ public class AccountController {
         try {
             String jwt = jwtUtils.getToken();
             Integer id = jwtUtils.getId(jwt);
-            log.warn("logout user id: {}", id);
             Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
             redisTemplate.opsForValue().set("blacklist" + id, jwt, expireTime, TimeUnit.MILLISECONDS);

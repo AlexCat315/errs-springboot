@@ -18,11 +18,11 @@ public class JWTUtils {
 
     private final HttpServletRequest request;
 
-    public JWTUtils(HttpServletRequest request) {
+    private JWTUtils(HttpServletRequest request) {
         this.request = request;
     }
 
-    public static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
+    private static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
 
     /**
      * @param account    用户信息
@@ -43,7 +43,7 @@ public class JWTUtils {
         return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    public JWTPayload analysisJWT(String token) {
+    private JWTPayload analysisJWT(String token) {
         JWT jwt = JWTUtil.parseToken(token);
         return jwt.getPayload();
     }
@@ -73,7 +73,7 @@ public class JWTUtils {
             if (token != null && !token.isEmpty()) {
                 JWTPayload jwtPayload = analysisJWT(token);
                 Object expireTime = jwtPayload.getClaim("expire_time");
-                return Long.parseLong(expireTime.toString());
+                return Long.parseLong((String) expireTime);
             }
         } catch (RuntimeException e) {
             throw new RuntimeException("JWT校验错误");
@@ -82,7 +82,7 @@ public class JWTUtils {
     }
 
     public Long getExpireTime() {
-        return getExpireTime(getHeaderToken());
+        return getExpireTime(getToken());
     }
 
     // 获取角色
@@ -101,7 +101,7 @@ public class JWTUtils {
 
     public String getRole() {
 
-        return getRole(getHeaderToken());
+        return getRole(getToken());
     }
 
     // 获取VIP等级
@@ -119,12 +119,15 @@ public class JWTUtils {
     }
 
     public String getVip() {
-        return getVip(getHeaderToken());
+        return getVip(getToken());
     }
 
     // 获取有效 token 部分
     public String getToken(String token) {
         if (token == null) {
+            throw new RuntimeException("JWT校验错误");
+        }
+        if (!token.startsWith("Bearer ")) {
             throw new RuntimeException("JWT校验错误");
         }
         // 截取有效 token 部分
@@ -137,6 +140,7 @@ public class JWTUtils {
 
     private String getHeaderToken() {
         return request.getHeader("Authorization");
+
     }
 
 }
