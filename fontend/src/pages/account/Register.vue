@@ -65,7 +65,7 @@ function userRegister() {
       formRef.value.validate();
       // 验证通过，执行登录操作
       if (validatePasswordKey.value === 1) {
-        register(form.username, form.password, form.repeatPassword, form.email, form.code, () => {
+        register(form.username, form.password, form.repeatPassword, form.email, form.code,form.inviteCode, () => {
           // 处理登录成功后的逻辑
           router.push('/login')
           ElMessage.success('注册成功')
