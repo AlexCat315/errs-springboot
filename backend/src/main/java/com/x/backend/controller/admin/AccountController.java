@@ -188,12 +188,12 @@ public class AccountController {
     }
 
     @PostMapping("/logout")
-    public ResultEntity<String> logout(@RequestHeader(value = "Authorization") String token) {
+    public ResultEntity<String> logout() {
         try {
-            String jwt = jwtUtils.getToken(token);
+            String jwt = jwtUtils.getToken();
             Integer id = jwtUtils.getId(jwt);
             log.warn("logout user id: {}", id);
-            Long expireTime = jwtUtils.getExpireTime(token); // 过期时间(ms)
+            Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
             redisTemplate.opsForValue().set("blacklist" + id, jwt, expireTime, TimeUnit.MILLISECONDS);
             return ResultEntity.success();
