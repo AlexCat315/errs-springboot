@@ -135,7 +135,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "validate-email-forgot-password")
-    public ResultEntity<String> validateEmailForgotPassword(@RequestParam(value = "email") String email) {
+    public ResultEntity<String> validateEmailForgotPassword(@RequestParam String email) {
         if (email == null) {
             return ResultEntity.failure(-1, "邮箱不能为空");
         }
