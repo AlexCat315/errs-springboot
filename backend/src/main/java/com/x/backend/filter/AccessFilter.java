@@ -1,6 +1,6 @@
 package com.x.backend.filter;
 
-
+import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.constructor.PathExcludeConstructor;
 import com.x.backend.pojo.ResultEntity;
@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -23,12 +25,15 @@ public class AccessFilter extends OncePerRequestFilter {
 
     @Resource
     private PathExcludeConstructor pathExcludeConstructor;
-
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
+    @Resource
+    private JWTUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(@SuppressWarnings("null") @NonNull HttpServletRequest request,
-                                    @SuppressWarnings("null") @NonNull HttpServletResponse response,
-                                    @SuppressWarnings("null") @NonNull FilterChain chain) throws ServletException, IOException {
+            @SuppressWarnings("null") @NonNull HttpServletResponse response,
+            @SuppressWarnings("null") @NonNull FilterChain chain) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
@@ -45,12 +50,13 @@ public class AccessFilter extends OncePerRequestFilter {
             response.getWriter().write(ResultEntity.failure(401, "无权限访问").toString());
             return;
         }
+        if (isBlackList()) {
+            response.getWriter().write(ResultEntity.failure(401, "您的账户已失效，请重新登录").toString());
+        }
         chain.doFilter(request, response);
     }
 
 
-    @Resource
-    private JWTUtils jwtUtils;
 
     /**
      * 获取访问URL的路径，并判断是否有权限访问
@@ -77,5 +83,22 @@ public class AccessFilter extends OncePerRequestFilter {
         }
     }
 
+    /*
+     * *
+     * 验证token是否被列入黑名单
+     * 
+     * @param token 要验证的token
+     * 
+     * @return 是否被列入黑名单 true: 是 false: 否
+     */
+    private Boolean isBlackList() {
+        int id = jwtUtils.getId();
+        String jwt = jwtUtils.getToken();
+        String value = redisTemplate.opsForValue().get(id + "_" + jwt);
+        if (BlockConstants.REDIS_LOGOUT_BLOCK.equals(value)) {
+            return true;
+        }
+        return false;
+    }
 
 }
