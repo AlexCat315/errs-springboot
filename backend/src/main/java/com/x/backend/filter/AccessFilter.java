@@ -26,9 +26,9 @@ public class AccessFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(@SuppressWarnings("null") @NonNull HttpServletRequest request,
+                                    @SuppressWarnings("null") @NonNull HttpServletResponse response,
+                                    @SuppressWarnings("null") @NonNull FilterChain chain) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
