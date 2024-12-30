@@ -4,7 +4,6 @@ import router from "../router/router.js";
 
 
 const defaultError = (err) => {
-    console.error(err)
     if (err.response) {
         switch (err.response.status) {
             case 401:
