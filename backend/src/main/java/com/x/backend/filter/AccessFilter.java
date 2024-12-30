@@ -33,19 +33,23 @@ public class AccessFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@SuppressWarnings("null") @NonNull HttpServletRequest request,
-            @SuppressWarnings("null") @NonNull HttpServletResponse response,
-            @SuppressWarnings("null") @NonNull FilterChain chain) throws ServletException, IOException {
+                                    @SuppressWarnings("null") @NonNull HttpServletResponse response,
+                                    @SuppressWarnings("null") @NonNull FilterChain chain) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
         }
-
         response.setContentType("application/json;charset=UTF-8"); // 设置Content-Type
         try {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             Boolean hasPermission = hasPermission(request);
             if (!hasPermission) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
+                return;
+            }
+            if (isBlackList()) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toJSONString());
                 return;
             }
         } catch (Exception e) {
@@ -53,13 +57,8 @@ public class AccessFilter extends OncePerRequestFilter {
             response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
             return;
         }
-        if (isBlackList()) {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toJSONString());
-        }
         chain.doFilter(request, response);
     }
-
 
 
     /**
@@ -90,9 +89,9 @@ public class AccessFilter extends OncePerRequestFilter {
     /*
      * *
      * 验证token是否被列入黑名单
-     * 
+     *
      * @param token 要验证的token
-     * 
+     *
      * @return 是否被列入黑名单 true: 是 false: 否
      */
     private Boolean isBlackList() {
