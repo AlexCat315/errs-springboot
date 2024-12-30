@@ -57,14 +57,13 @@ public class JWTUtils {
                 return Integer.parseInt(uid.toString());
             }
         } catch (RuntimeException e) {
-
             throw new RuntimeException("JWT校验错误");
         }
         throw new RuntimeException("JWT校验错误");
     }
 
     public Integer getId() {
-        return getId(getHeaderToken());
+        return getId(getToken());
     }
 
     // 获取过期时间
@@ -148,7 +147,7 @@ public class JWTUtils {
      * */
     public boolean verifyToken(String token) {
         try {
-            if (token != null && !token.isEmpty()) {
+            if (token != null) {
                 JWTPayload jwtPayload = analysisJWT(token);
                 Object expireTime = jwtPayload.getClaim("expire_time");
                 long expire = Long.parseLong(expireTime.toString());
