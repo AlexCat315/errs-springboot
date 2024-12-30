@@ -153,7 +153,7 @@ const toMyInfo = () => {
   /* 加上阴影效果 */
   margin-left: 10px;
   /* 左侧边距 */
-  font-family: 'Arial', sans-serif;
+  font-family: 'yousu-title-black',serif;
   /* 字体样式，可以替换为其他字体 */
 }
 </style>
