@@ -62,6 +62,9 @@ public class ResultEntity<T> implements Serializable {
     public static <T> ResultEntity<T> failure(Integer code, String msg) {
         return new ResultEntity<>(code, msg, null);
     }
+    public static <T> ResultEntity<T> failure( String msg) {
+        return new ResultEntity<>(HttpCodeConstants.BAD_REQUEST, msg, null);
+    }
 
     // 静态方法，用于返回服务器内部错误的响应
     public static <T> ResultEntity<T> serverError() {
