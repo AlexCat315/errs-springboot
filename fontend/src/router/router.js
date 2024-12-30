@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHistory} from "vue-router";
+import {verifyToken} from "../net/token.ts";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,6 +46,7 @@ router.beforeEach((to, from, next) => {
     } else {
         // 否则直接放行
         next();
+        verifyToken();
     }
 });
 
