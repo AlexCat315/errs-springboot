@@ -1,5 +1,5 @@
-import {post} from "./post";
-import router from "../router/router";
+import {post} from "./post.js";
+import router from "../router/router.js";
 import {ElMessage} from "element-plus";
 
 
@@ -17,7 +17,7 @@ export function verifyToken() {
         // token失效,删除token
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
-        router.push('/login');
+        router.push('/login').then(r => {});
         ElMessage.warning('登录已失效,请重新登录');
     })
     return true;
