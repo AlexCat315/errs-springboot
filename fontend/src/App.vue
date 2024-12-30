@@ -1,11 +1,29 @@
 <script setup>
-import { provide, ref } from 'vue';
+import {onBeforeUnmount, provide, ref} from 'vue';
+import {verifyToken} from "./net/token.ts";
 
 // 定义全局变量
 const globalSelect = ref("1");
 
 // 提供全局变量
 provide('globalSelect', globalSelect);
+
+// 全局定时器
+const timer = setInterval(() => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    token = sessionStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+  }
+  verifyToken();
+}, 3000);
+
+// 组件销毁时清除定时器
+onBeforeUnmount(() => {
+  clearInterval(timer);
+});
 </script>
 
 <template>
