@@ -32,6 +32,9 @@ public class AccountServiceImpl implements AccountService {
         if (result == null || result.getAId() < 1) {
             throw new RuntimeException(HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);
         }
+        if (!result.getRole().equalsIgnoreCase(RoleConstants.ROLE_ADMIN)) {
+            throw new ForbiddenException(HttpMessageConstants.FORBIDDEN);
+        }
         return result;
     }
 
