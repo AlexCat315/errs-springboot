@@ -143,4 +143,27 @@ public class JWTUtils {
 
     }
 
+    /**
+     * 验证token是否有效
+     * */
+    public boolean verifyToken(String token) {
+        try {
+            if (token != null && !token.isEmpty()) {
+                JWTPayload jwtPayload = analysisJWT(token);
+                Object expireTime = jwtPayload.getClaim("expire_time");
+                long expire = Long.parseLong(expireTime.toString());
+                if (System.currentTimeMillis() < expire) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            log.error("JWT校验错误", e);
+        }
+        return false;
+    }
+
+    public boolean verifyToken() {
+        return verifyToken(getToken());
+    }
+
 }
