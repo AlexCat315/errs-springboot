@@ -1,22 +1,39 @@
 package com.x.backend.util;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncryptUtils {
 
-    @Value("${salt.key}")
-    private String saltKey;
-
     /**
-     * 使用SHA-256和盐值加密密码
+     * 加密密码
      *
      * @param password 原始密码
-     * @return 加密后的密码
+     * @return 盐值:哈希值
      */
     public String encryptPassword(String password) {
-        return SecureUtil.sha256(password + saltKey);
+        String salt = RandomUtil.randomString(16); // 生成16位随机盐值
+        String hashedPassword = SecureUtil.sha256(password + salt);
+        return salt + ":" + hashedPassword;
+    }
+
+    /**
+     * 验证密码是否匹配
+     *
+     * @param password 原始密码
+     * @param storedPassword 盐值:哈希值
+     * @return 是否匹配
+     */
+    public boolean verifyPassword(String password, String storedPassword) {
+        String[] parts = storedPassword.split(":");
+        if (parts.length != 2) {
+            throw new IllegalArgumentException("Invalid stored password format");
+        }
+        String salt = parts[0];
+        String storedHash = parts[1];
+        String inputHash = SecureUtil.sha256(password + salt);
+        return inputHash.equals(storedHash);
     }
 }
