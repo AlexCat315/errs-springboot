@@ -46,6 +46,12 @@ spring:
     username: cyke0315@163.com
     password: YYf493Ag2DVktyRD
     protocol: smtp
+  web:
+    cors:
+      origin: '*'
+      credentials: true
+      methods: '*'
+
 
 # 映射器（Mapper）配置
 mybatis:
@@ -58,5 +64,6 @@ logging:
     root: INFO
     org.springframework: INFO
     org.mybatis: DEBUG
+
 
 
