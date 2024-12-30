@@ -22,4 +22,26 @@ public class HttpMessageConstants {
     public static final String PASSWORD_ERROR = "密码错误";
     // 验证码错误
     public static final String VERIFICATION_CODE_ERROR = "验证码错误";
+    // 密码不能为空
+    public static final String PASSWORD_NOT_NULL = "密码不能为空";
+    // 账号或密码错误
+    public static final String ACCOUNT_OR_PASSWORD_ERROR = "账号或密码错误";
+    // 邮箱不能为空
+    public static final String EMAIL_NOT_NULL = "邮箱不能为空";
+    //请求频繁，请稍后再试
+    public static final String REQUEST_FREQUENT = "请求频繁，请稍后再试";
+    // 信息填写不完整
+    public static final String INFO_INCOMPLETE = "信息填写不完整";
+    // 密码不一致
+    public static final String PASSWORD_NOT_MATCH = "密码不一致";
+    // 验证码错误或已过期
+    public static final String VERIFICATION_CODE_EXPIRED = "验证码错误或已过期";
+    // 邀请码错误或已过期
+    public static final String INVITATION_CODE_ERROR = "邀请码错误或已过期";
+    // 邀请码不能为空
+    public static final String INVITATION_CODE_NOT_NULL = "邀请码不能为空";
+    // 邮箱错误
+    public static final String EMAIL_ERROR = "邮箱错误";
+    // 邮箱已存在
+    public static final String EMAIL_EXIST = "邮箱已存在";
 }
