@@ -115,7 +115,7 @@ public class AccountController {
         try {
             inviteID = accountService.findByInviteCode(registerVo.getInviteCode());
         } catch (ForbiddenException e) {
-            return ResultEntity.failure( e.getMessage());
+            return ResultEntity.failure(e.getMessage());
         }
         if (inviteID == null) {
             return ResultEntity.failure(HttpMessageConstants.INVITATION_CODE_ERROR);
@@ -148,12 +148,12 @@ public class AccountController {
     @PostMapping(value = "validate-email-forgot-password")
     public ResultEntity<String> validateEmailForgotPassword(@RequestParam String email) {
         if (email == null) {
-            return ResultEntity.failure( HttpMessageConstants.EMAIL_ERROR);
+            return ResultEntity.failure(HttpMessageConstants.EMAIL_ERROR);
         }
         String redisEmail = redisTemplate.opsForValue().get(email);
         Long expire = redisTemplate.getExpire(email, java.util.concurrent.TimeUnit.SECONDS);
         if (redisEmail != null && expire > 540) {
-            return ResultEntity.failure( HttpMessageConstants.REQUEST_FREQUENT);
+            return ResultEntity.failure(HttpMessageConstants.REQUEST_FREQUENT);
         }
         // 向数据库查询该邮箱是否已经注册过
         try {
@@ -208,7 +208,24 @@ public class AccountController {
             redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
-            return ResultEntity.failure( e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 验证token是否有效
+     */
+    @PostMapping("/validate-token")
+    public ResultEntity<String> validateToken() {
+        try {
+            boolean verifyToken = jwtUtils.verifyToken();
+            if (verifyToken) {
+                return ResultEntity.success();
+            }
+            return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
+        } catch (Exception e) {
+            log.error("validate token error: {}", e.getMessage());
+            return ResultEntity.failure(HttpMessageConstants.TOKEN_CHECK_FAILED);
         }
     }
 
