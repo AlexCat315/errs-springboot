@@ -216,9 +216,9 @@ public class AccountController {
      * 验证token是否有效
      */
     @PostMapping("/validate-token")
-    public ResultEntity<String> validateToken(@RequestParam String token) {
+    public ResultEntity<String> validateToken() {
         try {
-            boolean verifyToken = jwtUtils.verifyToken(token);
+            boolean verifyToken = jwtUtils.verifyToken();
             if (verifyToken) {
                 return ResultEntity.success();
             }
