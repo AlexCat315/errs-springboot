@@ -6,6 +6,8 @@ package com.x.backend.constants;
 public class HttpCodeConstants {
     // 请求成功
     public static final int OK = 200;
+    // 请求失败
+    public static final int BAD_REQUEST = 400;
     // 未授权
     public static final int UNAUTHORIZED = 4001;
     // 权限不足，拒绝访问
@@ -14,6 +16,9 @@ public class HttpCodeConstants {
     public static final int NOT_FOUND = 4004;
     // Token过期，已失效
     public static final int UNAUTHORIZED_TOKEN = 4005;
+    // 请求参数错误
+    public static final int BAD_REQUEST_PARAM = 4006;
+
     // 服务器内部错误
     public static final int INTERNAL_SERVER_ERROR = 500;
     // 服务不可用
