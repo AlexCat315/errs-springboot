@@ -10,8 +10,8 @@ function verifyToken() {
     if (token === null || token === undefined || token === '') {
         token = sessionStorage.getItem('token');
     }
-    post(`/api/verifyToken?token=${token}`, {}, () => {
-
+    post('/api/admin/account/validate-token', {}, () => {
+        // token有效,不做任何操作
     }, () => {
         // token失效,删除token
         localStorage.removeItem('token');
