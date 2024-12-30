@@ -65,5 +65,9 @@ logging:
     org.springframework: INFO
     org.mybatis: DEBUG
 
+# 加密盐值
+salt:
+  key: saltKeyIsVeryLongAndSecure # 盐值
+
 
 
