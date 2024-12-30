@@ -1,6 +1,8 @@
 package com.x.backend.filter;
 
 import com.x.backend.constants.BlockConstants;
+import com.x.backend.constants.HttpCodeConstants;
+import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.constructor.PathExcludeConstructor;
 import com.x.backend.pojo.ResultEntity;
@@ -12,7 +14,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -43,15 +44,15 @@ public class AccessFilter extends OncePerRequestFilter {
         try {
             Boolean hasPermission = hasPermission(request);
             if (!hasPermission) {
-                response.getWriter().write(ResultEntity.failure(401, "无权限访问").toString());
+                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toString());
                 return;
             }
         } catch (Exception e) {
-            response.getWriter().write(ResultEntity.failure(401, "无权限访问").toString());
+            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toString());
             return;
         }
         if (isBlackList()) {
-            response.getWriter().write(ResultEntity.failure(401, "您的账户已失效，请重新登录").toString());
+            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toString());
         }
         chain.doFilter(request, response);
     }
