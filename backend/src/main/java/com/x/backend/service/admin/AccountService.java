@@ -1,11 +1,10 @@
 package com.x.backend.service.admin;
 
-import com.x.backend.pojo.admin.dto.AccountDTO;
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
 import com.x.backend.pojo.admin.entity.Account;
 
 public interface AccountService {
-    Account login(AccountDTO accountDTO);
+    Account login(String username);
 
     void setToken(String token,Account account);
 

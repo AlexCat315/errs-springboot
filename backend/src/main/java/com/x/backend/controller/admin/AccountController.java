@@ -6,7 +6,6 @@ import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
-import com.x.backend.pojo.admin.dto.AccountDTO;
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
 import com.x.backend.pojo.admin.entity.Account;
 import com.x.backend.pojo.admin.vo.request.ForgotPasswordVo;
@@ -14,6 +13,7 @@ import com.x.backend.pojo.admin.vo.request.LoginVo;
 import com.x.backend.pojo.admin.vo.request.RegisterVo;
 import com.x.backend.service.admin.AccountService;
 import com.x.backend.service.admin.EmailService;
+import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
 import com.x.backend.util.RandomCodeGeneratorUtils;
 import com.x.backend.util.TimeUtils;
@@ -46,6 +46,8 @@ public class AccountController {
     private RandomCodeGeneratorUtils randomCodeGeneratorUtils;
     @Resource
     private TimeUtils timeUtils;
+    @Resource
+    private EncryptUtils encryptUtils;
 
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
@@ -53,11 +55,12 @@ public class AccountController {
             return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST_PARAM,
                     HttpMessageConstants.PASSWORD_NOT_NULL);
         }
-        AccountDTO accountDTO = new AccountDTO();
-        accountDTO.setUsername(loginVo.getUsername());
-        accountDTO.setPassword(loginVo.getPassword());
         try {
-            Account account = accountService.login(accountDTO);
+            Account account = accountService.login( loginVo.getUsername());
+            boolean verifyPassword = encryptUtils.verifyPassword(loginVo.getPassword(), account.getPassword());
+            if (!verifyPassword) {
+                return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
+            }
             String jwt = jwtUtils.createJWT(account, 7);
             if (loginVo.getRememberMe()) {
                 return ResultEntity.success("localStorage_" + jwt);

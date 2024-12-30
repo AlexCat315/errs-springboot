@@ -9,11 +9,10 @@
         insert into invite (a_id, invite_id,invite_time,status ) values (#{aId}, #{inviteId}, #{inviteTime}, #{status})
     </insert>
     <select id="login" resultMap="getAccountInfoMap">
-        select a_id, role
+        select a_id, role,password
         from account
         where username = #{username}
            or email = #{username}
-            and password = #{password}
     </select>
     <select id="findByInviteCode" resultType="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
         select a_id, role

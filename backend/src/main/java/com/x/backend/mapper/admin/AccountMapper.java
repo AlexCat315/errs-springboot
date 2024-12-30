@@ -1,6 +1,5 @@
 package com.x.backend.mapper.admin;
 
-import com.x.backend.pojo.admin.dto.AccountDTO;
 import com.x.backend.pojo.admin.dto.FindInviteCodeDTO;
 import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.admin.entity.Account;
@@ -13,7 +12,7 @@ import org.apache.ibatis.annotations.Update;
 @Mapper
 public interface AccountMapper {
 
-    Account login(AccountDTO accountDTO);
+    Account login(String username);
 
     @Select("select count(t_id) from token where a_id = #{aId}")
     Integer findTokenByAId(Integer aId);

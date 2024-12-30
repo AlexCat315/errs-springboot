@@ -5,7 +5,6 @@ import com.x.backend.constants.InviteStatusConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.mapper.admin.AccountMapper;
-import com.x.backend.pojo.admin.dto.AccountDTO;
 import com.x.backend.pojo.admin.dto.FindInviteCodeDTO;
 import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
@@ -26,9 +25,9 @@ public class AccountServiceImpl implements AccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public Account login(AccountDTO accountDTO) {
+    public Account login(String username) {
         // 调mapper方法
-        Account result = accountMapper.login(accountDTO);
+        Account result = accountMapper.login(username);
         if (result == null || result.getAId() < 1) {
             throw new RuntimeException(HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);
         }
