@@ -47,11 +47,6 @@ public class AccessFilter extends OncePerRequestFilter {
                 response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
                 return;
             }
-            if (isBlackList()) {
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toJSONString());
-                return;
-            }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
@@ -72,6 +67,9 @@ public class AccessFilter extends OncePerRequestFilter {
         if (pathExcludeConstructor.excludePath(url)) {
             return true;
         }
+        if (isBlackList()) {
+            return false;
+        }
         if (url.startsWith("/api/admin")) {
             // 管理员权限
             String role = jwtUtils.getRole();
@@ -80,10 +78,8 @@ public class AccessFilter extends OncePerRequestFilter {
             // 用户权限
             String role = jwtUtils.getRole();
             return role != null && role.equalsIgnoreCase(RoleConstants.ROLE_USER);
-        } else {
-            // 其他权限
-            return true;
         }
+        return true;
     }
 
     /*
