@@ -23,6 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 此路径下的接口不需要权限控制，因为不需要登录即可访问，仅仅是一些基础的操作，如注册、登录、忘记密码等。
+ * 如果需要修改@RequestMapping路径，请修改/backend/src/main/resources/exclude-paths.json中的配置。
+ */
 @Slf4j
 @RestController
 @RequestMapping(value = "/api/admin/account")
@@ -204,7 +208,6 @@ public class AccountController {
             return ResultEntity.failure(-1, e.getMessage());
         }
     }
-
 
 
 }
