@@ -1,6 +1,8 @@
 package com.x.backend.pojo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -62,6 +64,16 @@ public class ResultEntity<T> implements Serializable {
     // 静态方法，用于返回服务器内部错误的响应
     public static <T> ResultEntity<T> serverError() {
         return new ResultEntity<>(500, "Server internal error", null);
+    }
+
+    // toString方法，将对象转换为json字符串，利用jackson的ObjectMapper类
+    @Override
+    public String toString() {
+        try {
+            return new ObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            return this.toString();
+        }
     }
 }
 
