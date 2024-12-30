@@ -157,7 +157,7 @@ public class JWTUtils {
                 }
             }
         } catch (Exception e) {
-            log.error("JWT校验错误", e);
+            throw new RuntimeException(e);
         }
         return false;
     }
