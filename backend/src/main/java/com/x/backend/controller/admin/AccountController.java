@@ -1,6 +1,8 @@
 package com.x.backend.controller.admin;
 
 import com.x.backend.constants.BlockConstants;
+import com.x.backend.constants.HttpCodeConstants;
+import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
@@ -48,7 +50,8 @@ public class AccountController {
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
         if (loginVo.getPassword() == null) {
-            return ResultEntity.failure(-1, "密码不能为空");
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST_PARAM,
+                    HttpMessageConstants.PASSWORD_NOT_NULL);
         }
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setUsername(loginVo.getUsername());
@@ -63,19 +66,19 @@ public class AccountController {
                 return ResultEntity.success("sessionStorage_" + jwt);
             }
         } catch (RuntimeException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, e.getMessage());
         }
     }
 
     @PostMapping(value = "/validate-email-register")
     public ResultEntity<String> validateEmailRegister(@RequestParam String email) {
         if (email == null) {
-            return ResultEntity.failure(-1, "邮箱不能为空");
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.EMAIL_NOT_NULL);
         }
         String redisEmail = redisTemplate.opsForValue().get(email);
         Long expire = redisTemplate.getExpire(email, java.util.concurrent.TimeUnit.SECONDS);
         if (redisEmail != null && expire > 540) {
-            return ResultEntity.failure(-1, "该邮箱已请求过验证，请稍后再试");
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.REQUEST_FREQUENT);
         }
         try {
             // 向数据库查询该邮箱是否已经注册过
@@ -88,7 +91,7 @@ public class AccountController {
             redisTemplate.opsForValue().set(email, code, 600, java.util.concurrent.TimeUnit.SECONDS);
             return ResultEntity.success();
         } catch (ForbiddenException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -97,25 +100,25 @@ public class AccountController {
         if (registerVo.getUsername() == null || registerVo.getPassword() == null ||
                 registerVo.getRepeatPassword() == null || registerVo.getEmail() == null
                 || registerVo.getCode() == null || registerVo.getInviteCode() == null) {
-            return ResultEntity.failure(-1, "请填写完整信息");
+            return ResultEntity.failure(HttpMessageConstants.INFO_INCOMPLETE);
         }
         if (!registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
-            return ResultEntity.failure(-1, "两次密码输入不一致");
+            return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
         }
         // 验证验证码是否正确
         String code = redisTemplate.opsForValue().get(registerVo.getEmail());
         if (code == null || !code.equals(registerVo.getCode())) {
-            return ResultEntity.failure(-1, "验证码错误");
+            return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
         }
         // 验证邀请码是否正确
         Integer inviteID;
         try {
             inviteID = accountService.findByInviteCode(registerVo.getInviteCode());
         } catch (ForbiddenException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure( e.getMessage());
         }
         if (inviteID == null) {
-            return ResultEntity.failure(-1, "邀请码错误");
+            return ResultEntity.failure(HttpMessageConstants.INVITATION_CODE_ERROR);
         }
 
         // 向数据库插入用户信息
@@ -138,19 +141,19 @@ public class AccountController {
             accountService.insertInvite(insertInviteDTO);
             return ResultEntity.success();
         } catch (RuntimeException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure(e.getMessage());
         }
     }
 
     @PostMapping(value = "validate-email-forgot-password")
     public ResultEntity<String> validateEmailForgotPassword(@RequestParam String email) {
         if (email == null) {
-            return ResultEntity.failure(-1, "邮箱不能为空");
+            return ResultEntity.failure( HttpMessageConstants.EMAIL_ERROR);
         }
         String redisEmail = redisTemplate.opsForValue().get(email);
         Long expire = redisTemplate.getExpire(email, java.util.concurrent.TimeUnit.SECONDS);
         if (redisEmail != null && expire > 540) {
-            return ResultEntity.failure(-1, "该邮箱已请求过验证，请稍后再试");
+            return ResultEntity.failure( HttpMessageConstants.REQUEST_FREQUENT);
         }
         // 向数据库查询该邮箱是否已经注册过
         try {
@@ -163,7 +166,7 @@ public class AccountController {
             redisTemplate.opsForValue().set(email, code, 600, java.util.concurrent.TimeUnit.SECONDS);
             return ResultEntity.success();
         } catch (ForbiddenException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure(e.getMessage());
         }
     }
 
@@ -171,15 +174,15 @@ public class AccountController {
     public ResultEntity<String> forgotPassword(@RequestBody ForgotPasswordVo forgotPasswordVo) {
         if (forgotPasswordVo.getPassword() == null || forgotPasswordVo.getConfirmPassword() == null ||
                 forgotPasswordVo.getCode() == null) {
-            return ResultEntity.failure(-1, "请填写完整信息");
+            return ResultEntity.failure(HttpMessageConstants.INFO_INCOMPLETE);
         }
         if (!forgotPasswordVo.getPassword().equals(forgotPasswordVo.getConfirmPassword())) {
-            return ResultEntity.failure(-1, "两次密码输入不一致");
+            return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
         }
         // 验证验证码是否正确
         String code = redisTemplate.opsForValue().get(forgotPasswordVo.getEmail());
         if (code == null || !code.equals(forgotPasswordVo.getCode())) {
-            return ResultEntity.failure(-1, "验证码错误");
+            return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
         }
         // 向数据库更新用户密码
         Account account = new Account();
@@ -191,7 +194,7 @@ public class AccountController {
             redisTemplate.delete(forgotPasswordVo.getEmail());
             return ResultEntity.success();
         } catch (RuntimeException e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure(e.getMessage());
         }
     }
 
@@ -205,7 +208,7 @@ public class AccountController {
             redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
-            return ResultEntity.failure(-1, e.getMessage());
+            return ResultEntity.failure( e.getMessage());
         }
     }
 

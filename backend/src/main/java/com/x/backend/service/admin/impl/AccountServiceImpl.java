@@ -1,5 +1,6 @@
 package com.x.backend.service.admin.impl;
 
+import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.InviteStatusConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
@@ -29,7 +30,7 @@ public class AccountServiceImpl implements AccountService {
         // 调mapper方法
         Account result = accountMapper.login(accountDTO);
         if (result == null || result.getAId() < 1) {
-            throw new RuntimeException("账号或密码错误");
+            throw new RuntimeException(HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);
         }
         return result;
     }
@@ -43,13 +44,12 @@ public class AccountServiceImpl implements AccountService {
         if (result == null || result < 1) {
             Integer insertResult = accountMapper.insertToken(account.getAId(), token);
             if (insertResult < 1) {
-                throw new RuntimeException("服务器内部错误");
+                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
             }
-
         } else {
             Integer updateResult = accountMapper.updateToken(token, account.getAId());
             if (updateResult < 1) {
-                throw new RuntimeException("服务器内部错误");
+                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
             }
         }
     }
