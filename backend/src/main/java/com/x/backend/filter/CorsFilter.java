@@ -21,13 +21,13 @@ import java.io.IOException;
 public class CorsFilter extends HttpFilter {
 
     @Value("${spring.web.cors.origin}")
-    String origin;
+    private String origin;
 
     @Value("${spring.web.cors.credentials}")
-    boolean credentials;
+    private boolean credentials;
 
     @Value("${spring.web.cors.methods}")
-    String methods;
+    private String methods;
 
     @Override
     protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
