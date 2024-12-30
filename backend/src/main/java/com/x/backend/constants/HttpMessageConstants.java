@@ -42,6 +42,13 @@ public class HttpMessageConstants {
     public static final String INVITATION_CODE_NOT_NULL = "邀请码不能为空";
     // 邮箱错误
     public static final String EMAIL_ERROR = "邮箱错误";
-    // 邮箱已存在
-    public static final String EMAIL_EXIST = "邮箱已存在";
+    // 邮箱已被注册
+    public static final String EMAIL_REGISTERED = "邮箱已被注册";
+    // 该邮箱未注册
+    public static final String EMAIL_NOT_REGISTERED = "该邮箱未注册";
+    // 账户密码更新失败
+    public static final String ACCOUNT_PASSWORD_UPDATE_FAILED = "账户密码更新失败";
+    // 该邀请人没有权限
+    public static final String INVITER_NO_PERMISSION = "邀请人权限不足";
+
 }
