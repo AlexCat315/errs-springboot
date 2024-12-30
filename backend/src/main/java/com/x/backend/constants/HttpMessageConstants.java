@@ -50,5 +50,7 @@ public class HttpMessageConstants {
     public static final String ACCOUNT_PASSWORD_UPDATE_FAILED = "账户密码更新失败";
     // 该邀请人没有权限
     public static final String INVITER_NO_PERMISSION = "邀请人权限不足";
+    // Token校验失败
+    public static final String TOKEN_CHECK_FAILED = "Token校验失败";
 
 }
