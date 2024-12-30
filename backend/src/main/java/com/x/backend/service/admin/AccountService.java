@@ -20,4 +20,6 @@ public interface AccountService {
     Integer findByInviteCode(String inviteCode);
 
     void insertInvite(InsertInviteDTO insertInviteDTO);
+
+    Account findAccountByNameOrEmail(String username);
 }

@@ -1,5 +1,6 @@
 package com.x.backend.controller.admin;
 
+import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
@@ -13,6 +14,7 @@ import com.x.backend.service.admin.AccountService;
 import com.x.backend.service.admin.EmailService;
 import com.x.backend.util.JWTUtils;
 import com.x.backend.util.RandomCodeGeneratorUtils;
+import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,6 +38,8 @@ public class AccountController {
     private RedisTemplate<String, String> redisTemplate;
     @Resource
     private RandomCodeGeneratorUtils randomCodeGeneratorUtils;
+    @Resource
+    private TimeUtils timeUtils;
 
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
@@ -194,12 +198,13 @@ public class AccountController {
             Integer id = jwtUtils.getId(jwt);
             Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
-            redisTemplate.opsForValue().set("blacklist" + id, jwt, expireTime, TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
             return ResultEntity.failure(-1, e.getMessage());
         }
-
     }
+
+
 
 }

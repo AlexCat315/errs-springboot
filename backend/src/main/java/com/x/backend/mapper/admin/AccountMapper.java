@@ -36,4 +36,6 @@ public interface AccountMapper {
     FindInviteCodeDTO findByInviteCode(String inviteCode);
 
     Integer insertInvite(Invite invite);
+    @Select("select a_id,username,email from account where username = #{username} or email = #{username}")
+    Account findAccountByNameOrEmail(String username);
 }
