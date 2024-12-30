@@ -1,9 +1,9 @@
 <script setup>
-import { reactive, ref } from "vue";
-import { Message, Unlock, User, ChatDotRound, Promotion } from '@element-plus/icons-vue'
+import {reactive, ref} from "vue";
+import {ChatDotRound, Message, Promotion, Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-import { getEmailCode, register } from "../../net/account/register.js";
-import { ElMessage } from "element-plus";
+import {getEmailCode, register} from "../../net/account/register.js";
+import {ElMessage} from "element-plus";
 import CommonLayout from "./CommonLayout.vue";
 
 
@@ -59,7 +59,6 @@ function userRegister() {
     form.code === '' ||
     form.inviteCode === '') {
     ElMessage.warning('请填写完整信息')
-    return
   } else {
     try {
       formRef.value.validate();
