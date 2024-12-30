@@ -1,5 +1,6 @@
 import axios from 'axios'
 import {ElMessage} from "element-plus";
+import router from "../../router/router.js";
 
 
 const defaultError = (err) => {
@@ -9,7 +10,7 @@ const defaultError = (err) => {
             case 401:
                 ElMessage.warning('未授权，请重新登录');
                 // 可以跳转到登录页面
-                window.location.href = '/login';
+                router.push('/login').then(r => {});
                 break;
             case 403:
                 ElMessage.warning('权限不足，无法访问');
