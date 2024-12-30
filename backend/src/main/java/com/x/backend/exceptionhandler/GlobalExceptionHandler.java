@@ -15,9 +15,4 @@ public class GlobalExceptionHandler {
         return ResultEntity.failure(404, e.getMessage());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResultEntity<String> handleRuntimeException(RuntimeException e) {
-        log.error("RuntimeException: {}", e.getMessage());
-        return ResultEntity.failure(500, e.getMessage());
-    }
 }
