@@ -1,11 +1,31 @@
 import axios from 'axios'
 import {ElMessage} from "element-plus";
+import router from "../router/router.js";
 
 
-export const defaultError = (err) => {
-    console.warn(err)
-    ElMessage.warning('发生了错误')
-}
+const defaultError = (err) => {
+    console.error(err)
+    if (err.response) {
+        switch (err.response.status) {
+            case 401:
+                ElMessage.warning('未授权，请重新登录');
+                // 可以跳转到登录页面
+                router.push('/login').then(r => {});
+                break;
+            case 403:
+                ElMessage.warning('权限不足，无法访问');
+                break;
+            case 500:
+                ElMessage.error('服务器内部错误');
+                break;
+            default:
+                ElMessage.warning('发生了错误');
+        }
+    } else {
+        ElMessage.warning('网络错误，请稍后重试');
+    }
+};
+
 export const defaultFailure = (message, code, url) => {
     console.warn(`请求地址：${url},状态码：${code},错误信息：${message}`)
     ElMessage.warning(message)
