@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
         Integer result = accountMapper.findByEmail(email);
         if (result != null && result > 0) {
-            throw new ForbiddenException("该邮箱已被注册");
+            throw new ForbiddenException(HttpMessageConstants.EMAIL_REGISTERED);
         }
     }
 
@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
         // 往数据库中插入记录
         Integer result = accountMapper.insert(account);
         if (result < 1) {
-            throw new RuntimeException("服务器内部错误");
+            throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
         }
         return result;
     }
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
         Integer result = accountMapper.findByEmail(email);
         if (result == null || result < 1) {
-            throw new ForbiddenException("该邮箱未注册");
+            throw new ForbiddenException(HttpMessageConstants.EMAIL_NOT_REGISTERED);
         }
     }
 
@@ -96,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
         forgotPasswordDTO.setNewPassword(account.getPassword());
         Integer result = accountMapper.updatePassword(forgotPasswordDTO);
         if (result != 1) {
-            throw new ForbiddenException("密码更新失败");
+            throw new ForbiddenException(HttpMessageConstants.ACCOUNT_PASSWORD_UPDATE_FAILED);
         }
     }
 
@@ -106,10 +106,10 @@ public class AccountServiceImpl implements AccountService {
         // 查询数据库中是否有此验证码
         FindInviteCodeDTO result = accountMapper.findByInviteCode(inviteCode);
         if (result == null || result.getAId() < 1) {
-            throw new ForbiddenException("邀请码错误");
+            throw new ForbiddenException(HttpMessageConstants.INVITATION_CODE_ERROR);
         }
         if (!result.getRole().equalsIgnoreCase(RoleConstants.ROLE_ADMIN)) {
-            throw new ForbiddenException("该邀请人没有权限");
+            throw new ForbiddenException(HttpMessageConstants.INVITER_NO_PERMISSION);
         }
         return result.getAId();
     }
@@ -126,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
         invite.setStatus(InviteStatusConstants.WAIT);
         Integer result = accountMapper.insertInvite(invite);
         if (result < 1) {
-            throw new RuntimeException("服务器内部错误");
+            throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
         }
     }
 
