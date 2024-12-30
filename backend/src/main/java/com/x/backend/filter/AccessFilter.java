@@ -44,15 +44,15 @@ public class AccessFilter extends OncePerRequestFilter {
         try {
             Boolean hasPermission = hasPermission(request);
             if (!hasPermission) {
-                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toString());
+                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
                 return;
             }
         } catch (Exception e) {
-            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toString());
+            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
             return;
         }
         if (isBlackList()) {
-            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toString());
+            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toJSONString());
         }
         chain.doFilter(request, response);
     }
@@ -96,10 +96,7 @@ public class AccessFilter extends OncePerRequestFilter {
         int id = jwtUtils.getId();
         String jwt = jwtUtils.getToken();
         String value = redisTemplate.opsForValue().get(id + "_" + jwt);
-        if (BlockConstants.REDIS_LOGOUT_BLOCK.equals(value)) {
-            return true;
-        }
-        return false;
+        return BlockConstants.REDIS_LOGOUT_BLOCK.equals(value);
     }
 
 }
