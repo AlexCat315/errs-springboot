@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class EncryptUtils {
 
     @Value("${salt.key}")
-    private static String saltKey;
+    private String saltKey;
 
     /**
      * 使用SHA-256和盐值加密密码
@@ -16,7 +16,7 @@ public class EncryptUtils {
      * @param password 原始密码
      * @return 加密后的密码
      */
-    public static String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         return SecureUtil.sha256(password + saltKey);
     }
 }
