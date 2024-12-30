@@ -39,19 +39,22 @@ public class AccessFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
-        response.setStatus(HttpServletResponse.SC_OK);
+
         response.setContentType("application/json;charset=UTF-8"); // 设置Content-Type
         try {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             Boolean hasPermission = hasPermission(request);
             if (!hasPermission) {
-                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
+                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
                 return;
             }
         } catch (Exception e) {
-            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
             return;
         }
         if (isBlackList()) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED_TOKEN, HttpMessageConstants.LOGIN_EXPIRED).toJSONString());
         }
         chain.doFilter(request, response);
