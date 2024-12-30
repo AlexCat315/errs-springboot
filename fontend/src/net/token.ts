@@ -1,11 +1,12 @@
 import {post} from "./post";
 import router from "../router/router";
+import {ElMessage} from "element-plus";
 
 
 /**
  * 验证token是否有效
  * */
-function verifyToken() {
+export function verifyToken() {
     let token = localStorage.getItem('token');
     if (token === null || token === undefined || token === '') {
         token = sessionStorage.getItem('token');
@@ -17,6 +18,7 @@ function verifyToken() {
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
         router.push('/login');
+        ElMessage.warning('登录已失效,请重新登录');
     })
     return true;
 }
