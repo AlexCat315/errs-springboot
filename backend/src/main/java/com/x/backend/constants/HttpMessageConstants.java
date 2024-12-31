@@ -58,5 +58,7 @@ public class HttpMessageConstants {
     public static final String ACCOUNT_NOT_ALLOWED_LOGIN = "账户不允许登录";
     // 账户已被禁用
     public static final String ACCOUNT_DISABLED = "账户已被禁用";
+    // 账户无需续签
+    public static final String ACCOUNT_NO_NEED_RENEW = "账户无需续签";
 
 }

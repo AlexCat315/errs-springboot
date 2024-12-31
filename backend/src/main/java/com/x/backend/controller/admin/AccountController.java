@@ -279,7 +279,7 @@ public class AccountController {
                 redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
                 return ResultEntity.success("localStorage_" + newJwt);
             } else {
-                return ResultEntity.failure(null);
+                return ResultEntity.failure(HttpMessageConstants.ACCOUNT_NO_NEED_RENEW);
             }
         } catch (Exception e) {
             log.error("refresh token error: {}", e.getMessage());
