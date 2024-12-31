@@ -37,7 +37,6 @@ public class JWTUtils {
                 put("role", account.getRole());
                 put("expire_time", EXPIRE_DAY);
                 put("vip", account.getVip());
-
             }
         };
         return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
