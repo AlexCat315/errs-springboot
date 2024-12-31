@@ -57,3 +57,5 @@ build/
 
 ### giga ide ###
 .gigaide
+/errs-pc/package-lock.json
+/errs-pc/src-tauri/Cargo.lock
