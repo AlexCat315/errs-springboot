@@ -6,8 +6,6 @@ import com.x.backend.pojo.admin.entity.Account;
 public interface AccountService {
     Account login(String username);
 
-    void setToken(String token,Account account);
-
     void findByEmail(String email);
 
     Integer register(Account account);

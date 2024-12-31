@@ -37,24 +37,6 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
-    @Transactional(rollbackFor = RuntimeException.class)
-    @Override
-    public void setToken(String token, Account account) {
-        // 调mapper方法，往数据库中更新token
-        // 查询数据库中是否有该用户的记录，如果有，则更新token，如果没有，则新增记录
-        Integer result = accountMapper.findTokenByAId(account.getAId());
-        if (result == null || result < 1) {
-            Integer insertResult = accountMapper.insertToken(account.getAId(), token);
-            if (insertResult < 1) {
-                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
-            }
-        } else {
-            Integer updateResult = accountMapper.updateToken(token, account.getAId());
-            if (updateResult < 1) {
-                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
-            }
-        }
-    }
 
     @Override
     public void findByEmail(String email) {
