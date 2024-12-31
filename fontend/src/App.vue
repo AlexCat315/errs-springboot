@@ -9,7 +9,8 @@ const globalSelect = ref("1");
 provide('globalSelect', globalSelect);
 
 // 全局定时器
-const timer = setInterval(() => {
+// 定时器用于验证token
+const verifyTimer = setInterval(() => {
   let token = localStorage.getItem('token');
   if (!token) {
     token = sessionStorage.getItem('token');
@@ -18,18 +19,31 @@ const timer = setInterval(() => {
     }
   }
   verifyToken();
-}, 3000);
+}, 3000);  //3s
+
+// 定时器用于刷新token
+const refreshTimer = setInterval(() => {
+  let token = localStorage.getItem('token');
+  if (!token) {
+    token = sessionStorage.getItem('token');
+    if (!token) {
+      return;
+    }
+  }
+  verifyToken(true);
+}, 60000); //60s
 
 // 组件销毁时清除定时器
 onBeforeUnmount(() => {
-  clearInterval(timer);
+  clearInterval(verifyTimer);
+  clearInterval(refreshTimer);
 });
 </script>
 
 <template>
   <router-view v-slot="{ Component }">
     <transition name="scale" mode="out-in">
-      <component :is="Component" />
+      <component :is="Component"/>
     </transition>
   </router-view>
 </template>
@@ -45,13 +59,16 @@ body,
   margin: 0;
   padding: 0;
 }
+
 .scale-enter-active, .scale-leave-active {
   transition: transform 0.5s, opacity 0.5s;
 }
+
 .scale-enter-from {
   transform: scale(0.8);
   opacity: 0;
 }
+
 .scale-leave-to {
   transform: scale(1.2);
   opacity: 0;
