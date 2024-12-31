@@ -26,7 +26,6 @@ public interface AccountMapper {
     @Select("select a_id from account where email = #{email}")
     Integer findByEmail(String email);
 
-    @Insert("insert into account (email, password, username, role) values (#{email}, #{password}, #{username}, #{role})")
     Integer insert(Account account);
 
     @Update("update account set password = #{newPassword} where email = #{email}")
@@ -35,6 +34,7 @@ public interface AccountMapper {
     FindInviteCodeDTO findByInviteCode(String inviteCode);
 
     Integer insertInvite(Invite invite);
+
     @Select("select a_id,username,email from account where username = #{username} or email = #{username}")
     Account findAccountByNameOrEmail(String username);
 }

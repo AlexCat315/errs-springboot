@@ -6,15 +6,25 @@
         <result property="role" column="role"/>
     </resultMap>
     <insert id="insertInvite">
-        insert into invite (a_id, invite_id,invite_time,status ) values (#{aId}, #{inviteId}, #{inviteTime}, #{status})
+        insert into invite (a_id, invited_id, invite_time, status)
+        values (#{aId}, #{invitedId}, #{inviteTime}, #{status})
     </insert>
+    <insert id="insert">
+        insert into account (username, email, password, role, created_at, vip, is_allow_login, is_banned)
+        values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip}, #{isAllowLogin}, #{isBanned})
+    </insert>
+
     <select id="login" resultMap="getAccountInfoMap">
-        select a_id, role,password
+        select a_id, role, password
         from account
         where username = #{username}
            or email = #{username}
     </select>
-    <select id="findByInviteCode" resultType="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
+    <resultMap id="findInviteCodeMap" type="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
+        <result property="aId" column="a_id"/>
+        <result property="role" column="role"/>
+    </resultMap>
+    <select id="findByInviteCode" resultMap="findInviteCodeMap">
         select a_id, role
         from account
         where invite_code = #{inviteCode}

@@ -12,7 +12,7 @@ import com.x.backend.pojo.admin.entity.Account;
 import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.service.admin.AccountService;
 import jakarta.annotation.Resource;
-import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void setToken(String token, Account account) {
         // 调mapper方法，往数据库中更新token
@@ -66,17 +66,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public Integer register(Account account) {
-        // 调mapper方法
-        // 往数据库中插入记录
-        Integer result = accountMapper.insert(account);
-        if (result < 1) {
-            throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
-        }
-        return result;
-    }
+
 
     @Override
     public void isEmailExists(String email) {
@@ -88,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void updatePassword(Account account) {
         // 调mapper方法
@@ -107,7 +97,7 @@ public class AccountServiceImpl implements AccountService {
         // 调mapper方法
         // 查询数据库中是否有此验证码
         FindInviteCodeDTO result = accountMapper.findByInviteCode(inviteCode);
-        if (result == null || result.getAId() < 1) {
+        if (result == null || result.getAId() == null || result.getAId() < 1) {
             throw new ForbiddenException(HttpMessageConstants.INVITATION_CODE_ERROR);
         }
         if (!result.getRole().equalsIgnoreCase(RoleConstants.ROLE_ADMIN)) {
@@ -116,19 +106,41 @@ public class AccountServiceImpl implements AccountService {
         return result.getAId();
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public Integer register(Account account) {
+        // 调mapper方法
+        // 往数据库中插入记录
+        try {
+            Integer result = accountMapper.insert(account);
+            if (result < 1) {
+                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
+            }
+            return result;
+        } catch (RuntimeException e) {
+            throw new RuntimeException(HttpMessageConstants.REGISTER_FAILED);
+        }
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void insertInvite(InsertInviteDTO insertInviteDTO) {
         // 调mapper方法
         // 往数据库中插入记录
         Invite invite = new Invite();
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.map(insertInviteDTO, invite);
+        BeanUtils.copyProperties(insertInviteDTO, invite);
         invite.setInviteTime(new Date());
         invite.setStatus(InviteStatusConstants.WAIT);
-        Integer result = accountMapper.insertInvite(invite);
-        if (result < 1) {
-            throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
+        try {
+            Integer result = accountMapper.insertInvite(invite);
+            if (result < 1) {
+                throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
+            }
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains(HttpMessageConstants.INVITATION_CODE_ERROR)) {
+                throw new ForbiddenException(HttpMessageConstants.REGISTER_FAILED);
+            }
+            throw new RuntimeException(HttpMessageConstants.REGISTER_FAILED);
         }
     }
 

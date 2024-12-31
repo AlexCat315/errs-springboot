@@ -20,6 +20,7 @@ import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -99,6 +100,7 @@ public class AccountController {
     }
 
     @PostMapping(value = "/register")
+    @Transactional(rollbackFor = RuntimeException.class)
     public ResultEntity<String> register(@RequestBody RegisterVo registerVo) {
         if (registerVo.getUsername() == null || registerVo.getPassword() == null ||
                 registerVo.getRepeatPassword() == null || registerVo.getEmail() == null
@@ -127,7 +129,7 @@ public class AccountController {
         // 向数据库插入用户信息
         Account account = new Account();
         account.setUsername(registerVo.getUsername());
-        account.setPassword(registerVo.getPassword());
+        account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
         account.setEmail(registerVo.getEmail());
         account.setRole(RoleConstants.ROLE_ADMIN);
         account.setCreatedAt(new Date());
@@ -144,7 +146,7 @@ public class AccountController {
             accountService.insertInvite(insertInviteDTO);
             return ResultEntity.success();
         } catch (RuntimeException e) {
-            return ResultEntity.failure(e.getMessage());
+            return ResultEntity.failure(HttpMessageConstants.REGISTER_FAILED);
         }
     }
 
