@@ -62,10 +62,6 @@ public class AccountController {
             if (!verifyPassword) {
                 return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
             }
-            // 验证是否被禁止登录
-            if (!account.getIsAllowLogin()) {
-                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
-            }
             // 验证是否被封禁
             if (account.getIsBanned()) {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
@@ -151,7 +147,6 @@ public class AccountController {
         account.setRole(RoleConstants.ROLE_ADMIN);
         account.setCreatedAt(new Date());
         account.setIsBanned(true);
-        account.setIsAllowLogin(false);
         try {
             Integer aId = accountService.register(account);
             // 清除验证码
@@ -270,10 +265,6 @@ public class AccountController {
             Account account = accountService.findById(id);
             if (account == null) {
                 return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
-            }
-            // 验证是否被禁止登录
-            if (!account.getIsAllowLogin()) {
-                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
             }
             // 验证是否被封禁
             if (account.getIsBanned()) {

@@ -5,11 +5,10 @@
         <result property="aId" column="a_id"/>
         <result property="role" column="role"/>
         <result property="password" column="password"/>
-        <result property="isAllowLogin" column="is_allow_login"/>
         <result property="isBanned" column="is_banned"/>
     </resultMap>
     <select id="login" resultMap="getAccountInfoMap">
-        select a_id, role, password, is_allow_login, is_banned
+        select a_id, role, password, is_banned
         from account
         where username = #{username}
            or email = #{username}
@@ -39,11 +38,10 @@
         <result property="email" column="email"/>
         <result property="role" column="role"/>
         <result property="password" column="password"/>
-        <result property="isAllowLogin" column="is_allow_login"/>
         <result property="isBanned" column="is_banned"/>
     </resultMap>
-    <select id="findById" resultMap="findAccountInfoMap" >
-        select a_id, username, email, role, password, is_allow_login, is_banned
+    <select id="findById" resultMap="findAccountInfoMap">
+        select a_id, username, email, role, password, is_banned
         from account
         where a_id = #{aId}
     </select>
