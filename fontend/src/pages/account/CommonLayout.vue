@@ -36,14 +36,18 @@
 
             </el-carousel-item>
             <el-carousel-item>
+              <div class="content-message-list">
               <el-link :underline="false" class="content-message">
                 关于系统安全，请阅读《文娱推荐与评分系统安全说明书》
               </el-link>
+              </div>
             </el-carousel-item>
             <el-carousel-item>
+              <div class="content-message-list">
               <el-link :underline="false" class="content-message">
                 进一步加强安全防范意识，落实安全准则
               </el-link>
+              </div>
             </el-carousel-item>
           </el-carousel>
         </div>
