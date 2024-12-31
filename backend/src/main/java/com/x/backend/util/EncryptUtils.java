@@ -27,6 +27,12 @@ public class EncryptUtils {
      * @return 是否匹配
      */
     public boolean verifyPassword(String password, String storedPassword) {
+        if (password == null || storedPassword == null) {
+            return false;
+        }
+        if (password.isEmpty() || storedPassword.isEmpty()) {
+            return false;
+        }
         String[] parts = storedPassword.split(":");
         if (parts.length != 2) {
             throw new IllegalArgumentException("Invalid stored password format");

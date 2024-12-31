@@ -62,6 +62,10 @@ public class AccountController {
             if (!verifyPassword) {
                 return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
             }
+            // 验证是否被禁止登录
+            if (!account.getIsAllowLogin()) {
+                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ACTIVATED);
+            }
             String jwt = jwtUtils.createJWT(account, 7);
             if (loginVo.getRememberMe()) {
                 return ResultEntity.success("localStorage_" + jwt);

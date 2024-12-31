@@ -54,5 +54,9 @@ public class HttpMessageConstants {
     public static final String INVITER_NO_PERMISSION = "邀请人权限不足";
     // Token校验失败
     public static final String TOKEN_CHECK_FAILED = "Token校验失败";
+    // 账户未激活
+    public static final String ACCOUNT_NOT_ACTIVATED = "账户未激活";
+    // 账户已激活
+    public static final String ACCOUNT_ACTIVATED = "账户已激活";
 
 }

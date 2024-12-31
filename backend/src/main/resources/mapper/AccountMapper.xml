@@ -4,7 +4,17 @@
     <resultMap id="getAccountInfoMap" type="com.x.backend.pojo.admin.entity.Account">
         <result property="aId" column="a_id"/>
         <result property="role" column="role"/>
+        <result property="password" column="password"/>
+        <result property="isAllowLogin" column="is_allow_login"/>
+        <result property="isBanned" column="is_banned"/>
     </resultMap>
+    <select id="login" resultMap="getAccountInfoMap">
+        select a_id, role, password, is_allow_login, is_banned
+        from account
+        where username = #{username}
+           or email = #{username}
+    </select>
+
     <insert id="insertInvite">
         insert into invite (a_id, invited_id, invite_time, status)
         values (#{aId}, #{invitedId}, #{inviteTime}, #{status})
@@ -14,12 +24,6 @@
         values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip}, #{isAllowLogin}, #{isBanned})
     </insert>
 
-    <select id="login" resultMap="getAccountInfoMap">
-        select a_id, role, password
-        from account
-        where username = #{username}
-           or email = #{username}
-    </select>
     <resultMap id="findInviteCodeMap" type="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
         <result property="aId" column="a_id"/>
         <result property="role" column="role"/>
