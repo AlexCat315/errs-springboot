@@ -10,16 +10,13 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "errs-pc",
+        "title": "",
         "width": 800,
         "height": 600,
-        "transparent": true,
-        "decorations": true,
-        "fullscreen": false,
-        "alwaysOnTop": false,
-        "resizable": true
+        "transparent": true
       }
     ],
     "security": {
