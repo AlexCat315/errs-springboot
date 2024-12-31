@@ -231,36 +231,4 @@ function getCode() {
   border: 1px solid rgba(255, 255, 255, 0.3);
   /* 淡白色边框 */
 }
-
-.message-card {
-  width: 700px;
-  height: 280px;
-  z-index: auto;
-  margin-left: 100px;
-  margin-top: 50px;
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(3px);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.login_name {
-  margin-top: 200px;
-  margin-left: 100px;
-  display: inline-block;
-  font-family: 'MyFont1';
-  font-size: 60px;
-  line-height: 1em;
-  color: #e07a5f;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  font-family: 'yousu-title-black';
-}
-
-.content-message {
-  font-family: 'LXGWMarkerGothic-Regular';
-}
 </style>

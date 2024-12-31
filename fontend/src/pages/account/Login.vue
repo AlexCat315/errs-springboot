@@ -1,9 +1,9 @@
 <script setup>
-import { reactive, ref } from "vue";
-import { Unlock, User } from '@element-plus/icons-vue'
+import {reactive, ref} from "vue";
+import {Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
-import { login } from "../../net/account/login.js";
-import { ElMessage } from "element-plus";
+import {login} from "../../net/account/login.js";
+import {ElMessage} from "element-plus";
 import CommonLayout from "./CommonLayout.vue";
 
 const form = reactive({
@@ -120,37 +120,5 @@ function routerPushForgotPassword() {
   /* 卡片阴影 */
   border: 1px solid rgba(255, 255, 255, 0.3);
   /* 淡白色边框 */
-}
-
-.message-card {
-  width: 700px;
-  height: 280px;
-  z-index: auto;
-  margin-left: 100px;
-  margin-top: 50px;
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(3px);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-.login_name {
-  margin-top: 200px;
-  margin-left: 100px;
-  display: inline-block;
-  font-family: 'MyFont1';
-  font-size: 60px;
-  line-height: 1em;
-  color: #e07a5f;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  font-family: 'yousu-title-black';
-}
-
-.content-message {
-  font-family: 'LXGWMarkerGothic-Regular';
 }
 </style>
