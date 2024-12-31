@@ -17,8 +17,25 @@ export function verifyToken() {
         // token失效,删除token
         localStorage.removeItem('token');
         sessionStorage.removeItem('token');
-        router.push('/login').then(r => {});
+        router.push('/login').then(r => {
+        });
         ElMessage.warning('登录已失效,请重新登录');
     })
     return true;
+}
+
+/**
+ * 续签token
+ * */
+export function refreshToken() {
+    let token = localStorage.getItem('token');
+    if (token === null || token === undefined || token === '') {
+        token = sessionStorage.getItem('token');
+    }
+    post('/api/admin/account/refresh-token', {}, (data: any) => {
+        // 续签成功,更新token
+        localStorage.setItem('token', data.token);
+        sessionStorage.setItem('token', data.token);
+    }, () => {
+    })
 }
