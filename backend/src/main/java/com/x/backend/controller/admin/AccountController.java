@@ -57,7 +57,7 @@ public class AccountController {
                     HttpMessageConstants.PASSWORD_NOT_NULL);
         }
         try {
-            Account account = accountService.login( loginVo.getUsername());
+            Account account = accountService.login(loginVo.getUsername());
             boolean verifyPassword = encryptUtils.verifyPassword(loginVo.getPassword(), account.getPassword());
             if (!verifyPassword) {
                 return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
@@ -109,6 +109,12 @@ public class AccountController {
         }
         if (!registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
             return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
+        }
+        // 验证用户名是否存在
+        try {
+            accountService.isUsernameExists(registerVo.getUsername());
+        } catch (ForbiddenException e) {
+            return ResultEntity.failure(e.getMessage());
         }
         // 验证验证码是否正确
         String code = redisTemplate.opsForValue().get(registerVo.getEmail());

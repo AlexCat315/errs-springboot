@@ -37,4 +37,7 @@ public interface AccountMapper {
 
     @Select("select a_id,username,email from account where username = #{username} or email = #{username}")
     Account findAccountByNameOrEmail(String username);
+
+    @Select("select a_id from account where username = #{username}")
+    Account findAccountByName(String username);
 }

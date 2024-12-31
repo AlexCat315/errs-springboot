@@ -155,4 +155,14 @@ public class AccountServiceImpl implements AccountService {
         return null;
     }
 
+    @Override
+    public void isUsernameExists(String username) {
+        // 调mapper方法
+        // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
+        Account result = accountMapper.findAccountByName(username);
+        if (result != null && result.getAId() > 0) {
+            throw new ForbiddenException(HttpMessageConstants.ACCOUNT_REGISTERED);
+        }
+    }
+
 }

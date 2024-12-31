@@ -21,4 +21,6 @@ public interface AccountService {
     void insertInvite(InsertInviteDTO insertInviteDTO);
 
     Account findAccountByNameOrEmail(String username);
+
+    void isUsernameExists(String username);
 }
