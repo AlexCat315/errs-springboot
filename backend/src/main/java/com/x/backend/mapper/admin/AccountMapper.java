@@ -40,4 +40,6 @@ public interface AccountMapper {
 
     @Select("select a_id from account where username = #{username}")
     Account findAccountByName(String username);
+
+    Account findById(Integer id);
 }

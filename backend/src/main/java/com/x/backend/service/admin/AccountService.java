@@ -23,4 +23,7 @@ public interface AccountService {
     Account findAccountByNameOrEmail(String username);
 
     void isUsernameExists(String username);
+
+
+    Account findById(Integer id);
 }

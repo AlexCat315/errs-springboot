@@ -251,5 +251,51 @@ public class AccountController {
         }
     }
 
+    /**
+     * 续签token
+     */
+    @PostMapping("/refresh-token")
+    public ResultEntity<String> refreshToken() {
+        try {
+            String jwt = jwtUtils.getToken();
+            Integer id = jwtUtils.getId(jwt);
+            Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
+
+            // 验证token是否被黑名单
+            String redisToken = redisTemplate.opsForValue().get(id + "_" + jwt);
+            if (redisToken != null && redisToken.equals(BlockConstants.REDIS_LOGOUT_BLOCK)) {
+                return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
+            }
+            // 通过id查询用户信息
+            Account account = accountService.findById(id);
+            if (account == null) {
+                return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
+            }
+            // 验证是否被禁止登录
+            if (!account.getIsAllowLogin()) {
+                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
+            }
+            // 验证是否被封禁
+            if (account.getIsBanned()) {
+                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
+            }
+            // 验证token过期时间是否在续签时间范围内（1天<expireTime<3天）
+            if (1L < timeUtils.timestamp2Days(expireTime) &&
+                    timeUtils.timestamp2Days(expireTime) < 3L) {
+                // 续签token
+                String newJwt = jwtUtils.createJWT(account, 7);
+                // 向Redis中保存该用户的token，为黑名单
+                redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+                return ResultEntity.success("localStorage_" + newJwt);
+            } else {
+                return ResultEntity.failure(null);
+            }
+        } catch (Exception e) {
+            log.error("refresh token error: {}", e.getMessage());
+            return ResultEntity.serverError();
+        }
+
+    }
+
 
 }

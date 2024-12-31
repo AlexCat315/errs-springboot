@@ -165,4 +165,15 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Override
+    public Account findById(Integer id) {
+        // 调mapper方法
+        // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
+        Account result = accountMapper.findById(id);
+        if (result != null && result.getAId() > 0) {
+            return result;
+        }
+        return null;
+    }
+
 }
