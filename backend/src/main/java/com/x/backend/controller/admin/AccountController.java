@@ -64,7 +64,11 @@ public class AccountController {
             }
             // 验证是否被禁止登录
             if (!account.getIsAllowLogin()) {
-                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ACTIVATED);
+                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
+            }
+            // 验证是否被封禁
+            if (account.getIsBanned()) {
+                return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
             String jwt = jwtUtils.createJWT(account, 7);
             if (loginVo.getRememberMe()) {
@@ -143,7 +147,7 @@ public class AccountController {
         account.setEmail(registerVo.getEmail());
         account.setRole(RoleConstants.ROLE_ADMIN);
         account.setCreatedAt(new Date());
-        account.setIsBanned(false);
+        account.setIsBanned(true);
         account.setIsAllowLogin(false);
         try {
             Integer aId = accountService.register(account);
