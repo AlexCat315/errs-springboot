@@ -46,6 +46,8 @@ public class HttpMessageConstants {
     public static final String EMAIL_REGISTERED = "邮箱已被注册";
     // 该邮箱未注册
     public static final String EMAIL_NOT_REGISTERED = "该邮箱未注册";
+    // 账户已被注册
+    public static final String ACCOUNT_REGISTERED = "账户已被注册";
     // 账户密码更新失败
     public static final String ACCOUNT_PASSWORD_UPDATE_FAILED = "账户密码更新失败";
     // 该邀请人没有权限
