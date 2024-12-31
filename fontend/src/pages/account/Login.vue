@@ -89,11 +89,11 @@ function routerPushForgotPassword() {
           </el-form>
         </div>
         <div style="margin-top: 40px;">
-          <el-button @click="userLogin" style="width: 200px; height: 40px;" type="success">登录</el-button>
+          <el-button color="#6a39b7" style="width: 200px; height: 40px;" @click="userLogin">登录</el-button>
         </div>
         <el-link href="/register" style="font-size: 13px;margin-top: 20px;">没有账号？</el-link>
         <div style="margin-top: 20px;margin-bottom: 40px;">
-          <el-button style="width: 200px;height: 40px;" type="danger" @click="router.push('/register')">立即注册</el-button>
+          <el-button color="#4db051" style="width: 200px;height: 40px;" @click="router.push('/register')">立即注册</el-button>
         </div>
       </div>
     </div>
