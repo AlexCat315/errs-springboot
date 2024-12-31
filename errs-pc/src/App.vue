@@ -1,21 +1,14 @@
 <script setup>
-import { ref } from "vue";
-import { invoke } from "@tauri-apps/api/core";
-import XButton from "./components/XButton.vue";
-
-const greetMsg = ref("");
-
-async function greet() {
-  // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-  greetMsg.value = await invoke("greet", { name: "123112312" });
-}
+// import { ref } from "vue";
+// import { invoke } from "@tauri-apps/api/core";
+import LeftPanel from "./pages/LeftPanel.vue";
 </script>
 
 <template>
   <div class="page" style="display: flex;">
     <!-- 左侧菜单栏 -->
     <div class="left-panel">
-      
+      <LeftPanel />
     </div>
     <!-- 右侧内容 -->
     <div class="right-panel">
@@ -38,7 +31,7 @@ body,
 }
 
 .left-panel {
-  width: 200px;
+  width: 280px;
   height: 100%;
   display: flex;
   flex-direction: column;
