@@ -110,9 +110,12 @@ public class AccountController {
     @PostMapping(value = "/register")
     @Transactional(rollbackFor = RuntimeException.class)
     public ResultEntity<String> register(@RequestBody RegisterVo registerVo) {
+        if (registerVo.getInviteCode() == null) {
+            return ResultEntity.failure(HttpMessageConstants.INVITATION_CODE_NOT_NULL);
+        }
         if (registerVo.getUsername() == null || registerVo.getPassword() == null ||
                 registerVo.getRepeatPassword() == null || registerVo.getEmail() == null
-                || registerVo.getCode() == null || registerVo.getInviteCode() == null) {
+                || registerVo.getCode() == null) {
             return ResultEntity.failure(HttpMessageConstants.INFO_INCOMPLETE);
         }
         if (!registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
