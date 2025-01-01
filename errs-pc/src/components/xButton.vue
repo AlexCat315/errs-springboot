@@ -1,5 +1,5 @@
-<script lang="js" setup>
-import { ref, defineProps } from "vue";
+<script lang="ts" setup>
+import {defineProps, ref} from "vue";
 // 接受父组件传递的 props
 // text 和 icon 都是字符串类型
 const props = defineProps({
@@ -13,39 +13,54 @@ const props = defineProps({
     },
     size:{
         type: String,
-        default: "16px"
-    }
+        default: "18px"
+    },
+    backgroundColor:{
+        type: String,
+        default: "black"
+    },
+  height:{
+    type: String,
+    default: "36px"
+  },
+  width:{
+      type: String,
+      default: "120px"
+  },
+  borderRadius:{
+      type: String,
+      default: "10px"
+  },
+  textColor:{
+      type: String,
+      default: "white"
+  }
 });
 const text = ref(props.text);
 const icon = ref(props.icon);
 </script>
 
 <template>
-<button class="button">
-    <img :style="{height: props.size, width: props.size}" style="margin-right: 3px;" v-if="icon !== ''" :src="icon" alt="icon" class="svg-icon" />
-  <span class="lable">{{ text }}</span>
+<button :style="{backgroundColor: props.backgroundColor, height: props.height, width: props.width, borderRadius: props.borderRadius}" class="button">
+    <img v-if="icon !== ''"  :src="icon" :style="{height: props.size, width: props.size}" alt="icon" class="svg-icon" />
+  <span :style="{color: props.textColor}" class="liable">{{ text }}</span>
 </button>
 </template>
 
 <style lang="css" scoped>
 .button {
   display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 6px 12px;
   gap: 8px;
-  height: 36px;
-  width: 120px;
   border: none;
-  background: black;
-  border-radius: 20px;
   cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
-.lable {
+.liable {
   line-height: 20px;
   font-size: 17px;
-  color: white;
   font-family: sans-serif;
   letter-spacing: 1px;
 }

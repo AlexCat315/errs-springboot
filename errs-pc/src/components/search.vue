@@ -7,7 +7,7 @@ const props = defineProps({
   },
   height: {
     type: String,
-    default: "25px"
+    default: "28px"
   }
 });
 
@@ -59,7 +59,7 @@ const emitSearch = (event) => {
   border: 2px solid transparent;
   border-radius: 8px;
   outline: none;
-  background-color: #f3f3f4;
+  background-color: #fff;
   color: #0d0c22;
   transition: .3s ease;
   margin-left: 12px;
