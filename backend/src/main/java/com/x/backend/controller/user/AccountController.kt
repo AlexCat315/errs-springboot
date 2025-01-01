@@ -1,17 +1,20 @@
 package com.x.backend.controller.user
 
 import com.x.backend.pojo.ResultEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
-@RestController("userAccountController")
+@RestController(value = "userAccountController")
 @RequestMapping("/api/user/account")
 class AccountController {
 
 
-    @PostMapping("/test")
-    fun test() : ResultEntity<String> {
+    @PostMapping("/post-test")
+    fun test(@RequestParam string:  String ) : ResultEntity<String> {
+        return ResultEntity.success(string)
+    }
+
+    @GetMapping("/get-test")
+    fun getTest() : ResultEntity<String> {
         return ResultEntity.success("test")
     }
 }
