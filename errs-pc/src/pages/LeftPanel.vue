@@ -1,21 +1,29 @@
 <script setup lang="js">
 import Search from '../components/search.vue';
-import { reactive, ref, defineProps, watch } from "vue";
+import {reactive, ref, watch} from "vue";
+import {Post} from "../net/post.js";
 
 const menuItems = [
-  { name: '探索', icon: '🌍' }, // 使用 Emoji 作为示例
-  { name: '创作', icon: '✏️' },
-  { name: '工作', icon: '💼' },
-  { name: '游戏', icon: '🎮' },
-  { name: '开发', icon: '💻' },
+  {name: '探索', icon: '🌍'},
+  {name: '创作', icon: '✏️'},
+  {name: '工作', icon: '💼'},
+  {name: '游戏', icon: '🎮'},
+  {name: '开发', icon: '💻'},
 ];
 
 const activeItem = ref('');
 const selectItem = (item) => {
   activeItem.value = item;
+  Post(`/api/user/account/post-test?string=post parameter string success`, {
+  }, (data) => {
+    console.log(data.data);
+  }, (data) => {
+    console.log(data);
+  })
 };
 
-const searchValue = reactive({ value: '' });
+const searchValue = reactive({value: ''});
+
 const props = defineProps({
   distanceToLeft: {
     type: Number,
@@ -24,21 +32,24 @@ const props = defineProps({
 });
 
 watch(() => props.distanceToLeft, (newValue, oldValue) => {
-  console.log(`右侧距离从 ${oldValue} 改变为 ${newValue}`);
+  console.log(`右侧距离从 ${oldValue} 改变为 ${newValue}`)
 });
+const searchFun = (value) => {
+  searchValue.value = value
+}
 </script>
 
 
 <template>
   <div style="margin-top: 35px;">
-    <Search style="margin-top: 30px;" @update:search="handleSearch" />
+    <Search style="margin-top: 30px;" @update:search="searchFun"/>
 
     <div :style="{ width: `${props.distanceToLeft}px` }" class="sidebar">
       <ul>
         <li
             v-for="item in menuItems"
             :key="item.name"
-            :class="{ 'active': activeItem.value === item.name }"
+            :class="{ 'active': activeItem === item.name }"
             @click="selectItem(item.name)"
         >
           <!-- 显示图标 -->
