@@ -1,9 +1,8 @@
 mod http_client;
 
+use crate::http_client::{get_request, post_request};
 use tauri::Manager;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
-use tauri_plugin_http::init as http_plugin;
-use crate::your_module_name::{get_request, post_request};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -24,7 +23,11 @@ pub fn run() {
             Ok(())
         })
         .plugin(tauri_plugin_http::init())
-        .invoke_handler(tauri::generate_handler![get_request, post_request])
+        .invoke_handler(tauri::generate_handler![
+            get_request,
+            post_request
+
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
