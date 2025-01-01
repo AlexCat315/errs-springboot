@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Service
+@Service(value = "adminAccountService")
 public class AccountServiceImpl implements AccountService {
 
     @Resource
