@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * 如果需要修改@RequestMapping路径，请修改/backend/src/main/resources/exclude-paths.json中的配置。
  */
 @Slf4j
-@RestController
+@RestController(value = "adminAccountController")
 @RequestMapping(value = "/api/admin/account")
 public class AccountController {
 
