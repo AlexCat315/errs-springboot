@@ -180,6 +180,7 @@
                 <version>${kotlin.version}</version>
                 <executions>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <id>compile</id>
                         <phase>compile</phase>
                         <goals>
@@ -193,6 +194,7 @@
                         </configuration>
                     </execution>
                     <execution>
+                        <?m2e execute onConfiguration?>
                         <id>test-compile</id>
                         <phase>test-compile</phase>
                         <goals>
