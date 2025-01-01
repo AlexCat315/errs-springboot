@@ -1,7 +1,7 @@
 <script setup lang="js">
 import Search from '../components/search.vue';
 import {reactive, ref, watch} from "vue";
-import {Post} from "../net/post.js";
+import {Get} from "../net/get.ts";
 
 const menuItems = [
   {name: '探索', icon: '🌍'},
@@ -14,8 +14,7 @@ const menuItems = [
 const activeItem = ref('');
 const selectItem = (item) => {
   activeItem.value = item;
-  Post(`/api/user/account/post-test?string=post parameter string success`, {
-  }, (data) => {
+  Get(`/api/user/account/get-test?string=post parameter string success`,  (data) => {
     console.log(data.data);
   }, (data) => {
     console.log(data);
