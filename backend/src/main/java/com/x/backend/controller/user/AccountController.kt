@@ -14,7 +14,7 @@ class AccountController {
     }
 
     @GetMapping("/get-test")
-    fun getTest() : ResultEntity<String> {
+    fun getTest(@RequestParam string: String) : ResultEntity<String> {
         return ResultEntity.success("get success")
     }
 }
