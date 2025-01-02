@@ -5,12 +5,16 @@ import {Get} from "../net/get.ts";
 
 // 定义菜单项数据
 const menuItems = [
-  { name: '探索', icon: new URL('../assets/icons/探索.svg', import.meta.url).href },
-  { name: '游戏', icon: new URL('../assets/icons/游戏.svg', import.meta.url).href },
-  { name: '图书', icon: new URL('../assets/icons/图书.svg', import.meta.url).href },
-  { name: '新闻', icon: new URL('../assets/icons/新闻.svg', import.meta.url).href },
-  { name: '视频', icon: new URL('../assets/icons/视频.svg', import.meta.url).href },
+  {name: '探索', icon: new URL('../assets/icons/探索.svg', import.meta.url).href},
+  {name: '游戏', icon: new URL('../assets/icons/游戏.svg', import.meta.url).href},
+  {name: '图书', icon: new URL('../assets/icons/图书.svg', import.meta.url).href},
+  {name: '新闻', icon: new URL('../assets/icons/新闻.svg', import.meta.url).href},
+  {name: '视频', icon: new URL('../assets/icons/视频.svg', import.meta.url).href},
 ];
+
+const bottomMenuItems =[
+  {name: '设置', icon: new URL('../assets/icons/setting.svg', import.meta.url).href},
+]
 
 const activeItem = ref('');
 const selectItem = (item) => {
@@ -39,9 +43,8 @@ const searchFun = (value) => {
 }
 </script>
 
-
 <template>
-  <div style="margin-top: 35px;">
+  <div style="margin-top: 35px; height: 100vh; display: flex; flex-direction: column;">
     <Search style="margin-top: 30px;" @update:search="searchFun"/>
 
     <div :style="{ width: `${props.distanceToLeft}px` }" class="sidebar">
@@ -52,9 +55,26 @@ const searchFun = (value) => {
             :class="{ 'active': activeItem === item.name }"
             @click="selectItem(item.name)"
         >
-          <!-- 显示图标 -->
-          <img :src=item.icon  alt="" class="icon"/>
-          <!-- 显示文字 -->
+          <img :src="item.icon" alt="" class="icon"/>
+          {{ item.name }}
+        </li>
+      </ul>
+    </div>
+
+    <!-- 底部菜单栏 -->
+    <div
+        :style="{ width: `${props.distanceToLeft}px` }"
+        class="sidebar"
+        style="margin-top: auto; margin-bottom: 15px;"
+    >
+      <ul>
+        <li
+            v-for="item in bottomMenuItems"
+            :key="item.name"
+            :class="{ 'active': activeItem === item.name }"
+            @click="selectItem(item.name)"
+        >
+          <img :src="item.icon" alt="" class="icon"/>
           {{ item.name }}
         </li>
       </ul>
@@ -62,18 +82,16 @@ const searchFun = (value) => {
   </div>
 </template>
 
-
 <style scoped>
 .sidebar ul {
   list-style-type: none;
   padding: 10px;
   border-radius: 10px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
 }
 
 .sidebar li {
-  display: flex; /* 使图标和文字水平排列 */
+  display: flex;
   align-items: center;
   padding: 10px;
   font-size: 15px;
@@ -91,8 +109,7 @@ const searchFun = (value) => {
 }
 
 .icon {
-  margin-right: 16px; /* 图标与文字之间的间距 */
-  font-size: 18px; /* 根据需要调整图标大小 */
+  margin-right: 16px;
   width: 22px;
   height: 22px;
 }
