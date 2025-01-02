@@ -6,11 +6,11 @@ use tauri::command;
 
 // 定义一个命令，用于合并图片
 #[command]
-pub async fn conflate_img(vec: Vec<String>, output_dir: String) -> Result<String, String> {
+pub async fn conflate_img(vec: Vec<String>, output_dir: String,name : String) -> Result<String, String> {
     if vec.is_empty() {
         return Err("No images provided".to_string());
     }
-    
+
     let mut imgs = Vec::new();
     let mut total_width = 0;
     let mut target_height = None;
@@ -49,7 +49,7 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String) -> Result<String
     std::fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
 
     // 生成输出文件路径
-    let output_path = PathBuf::from(output_dir).join("combined_image.png");
+    let output_path = PathBuf::from(output_dir).join(&name);
 
     // 创建新的图像
     let mut new_img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(total_width, target_height);
