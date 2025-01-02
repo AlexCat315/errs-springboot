@@ -1,6 +1,6 @@
 use image::{imageops::FilterType, ImageBuffer, Rgba};
 use std::fs::File;
-use std::io::BufReader;
+use std::io::{BufReader, BufWriter};
 use std::path::PathBuf;
 use tauri::command;
 
@@ -67,7 +67,8 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String) -> Result<String
     }
 
     // 将图片保存为 PNG 格式（如果文件已存在，直接覆盖）
-    new_img.save(&output_path).map_err(|e| e.to_string())?;
+    // 将图片保存为 PNG 格式并压缩
+    compress_png(&new_img, &output_path).map_err(|e| e.to_string())?;
 
     // 返回文件路径
     Ok(output_path.to_string_lossy().to_string())
@@ -97,4 +98,22 @@ pub async fn get_img_names(dir: String) -> Result<Vec<String>, String> {
     }
 
     Ok(img_paths)
+}
+use png::{Compression, Encoder};
+
+
+// 压缩 PNG 图像
+fn compress_png(image: &ImageBuffer<Rgba<u8>, Vec<u8>>, output_path: &PathBuf) -> Result<(), String> {
+    let file = File::create(output_path).map_err(|e| e.to_string())?;
+    let writer = BufWriter::new(file);
+
+    let (width, height) = image.dimensions();
+    let mut encoder = Encoder::new(writer, width, height);
+    encoder.set_compression(Compression::Best); // 设置最高压缩级别
+    let mut writer = encoder.write_header().map_err(|e| e.to_string())?;
+
+    // 将图像数据写入文件
+    writer.write_image_data(&image).map_err(|e| e.to_string())?;
+
+    Ok(())
 }
