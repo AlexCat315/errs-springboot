@@ -6,17 +6,15 @@ export async function callConflateImg() {
         const imagePaths = await invoke<string[]>('get_img_names', {
             dir: '../src/assets/background',
         });
-        
+
         // 查询 local storage 中imagePaths 的值是否相同
         const localStorageImagePaths = localStorage.getItem('imagePaths');
 
         if (localStorageImagePaths !== null){
             if (JSON.stringify(imagePaths) === localStorageImagePaths) {
-                console.log('图片路径未改变，无需拼接');
                 return;
             }
         }
-
         // 存储最新图片路径到 local storage
         localStorage.setItem('imagePaths', JSON.stringify(imagePaths));
 
@@ -28,8 +26,6 @@ export async function callConflateImg() {
             vec: imagePaths,
             outputDir: outputDir,
         });
-
-        console.log('图片拼接成功，保存路径:', result);
     } catch (error) {
         console.error('调用命令失败:', error);
     }
