@@ -15,8 +15,6 @@ export async function callConflateImg() {
                 return;
             }
         }
-        // 存储最新图片路径到 local storage
-        localStorage.setItem('imagePaths', JSON.stringify(imagePaths));
 
         // 指定输出目录
         const outputDir = '../src/assets/background';
@@ -25,7 +23,12 @@ export async function callConflateImg() {
         const result = await invoke<string>('conflate_img', {
             vec: imagePaths,
             outputDir: outputDir,
+            name: 'background'
         });
+        // 存储最新图片路径到 local storage
+        localStorage.setItem('imagePaths', JSON.stringify(imagePaths));
+
+        console.log('调用命令成功:', result);
     } catch (error) {
         console.error('调用命令失败:', error);
     }
