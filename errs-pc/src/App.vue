@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-
 import LeftPanel from "./pages/LeftPanel.vue";
-import {onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeMount, onBeforeUnmount, onMounted, ref} from "vue";
+import {callConflateImg} from "./assets/script/callConflateImg";
 
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
 
@@ -12,7 +12,6 @@ const updateRightPanelOffset = () => {
     rightPanelOffset.value = rightPanel.offsetLeft;
   }
 };
-
 
 const observeLayoutChanges = () => {
   const observer = new ResizeObserver(() => {
@@ -29,6 +28,9 @@ const observeLayoutChanges = () => {
 
 let layoutObserver: ResizeObserver | null = null;
 
+onBeforeMount(() => {
+  callConflateImg()
+});
 onMounted(() => {
   updateRightPanelOffset(); // 初始化距离
   layoutObserver = observeLayoutChanges(); // 开启布局变化监听
@@ -45,7 +47,7 @@ onBeforeUnmount(() => {
   <div class="page" style="display: flex;">
     <!-- 左侧菜单栏 -->
     <div class="left-panel">
-      <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset"  />
+      <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />
     </div>
     <!-- 右侧内容 -->
     <div class="right-panel">
@@ -55,29 +57,62 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-body,
-#app {
-  margin: 0;
-  padding: 0;
+.page {
+  position: relative;
+  display: flex;
+  height: 100vh;
 }
 
-:host {
-  margin: 0;
-  padding: 0;
+@keyframes moveBackground {
+  0% {
+    background-position: left;
+  }
+  50% {
+    background-position: right;
+  }
+  100% {
+    background-position: left;
+  }
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../src/assets/background/combined_image.png');
+  background-size: cover;
+  background-position: left;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  z-index: -1;
+  animation: moveBackground 180s linear infinite;
 }
 
 .left-panel {
+  position: relative;
   width: 260px;
   height: 100%;
   display: flex;
   flex-direction: column;
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  background-color: rgba(255,255,255,0.3);
+}
+
+
+
+.left-panel .content {
+  position: relative;
+  z-index: 1;
 }
 
 .right-panel {
   width: 100%;
   height: 100vh;
   background-color: #fff;
-  /* 四周边框圆角 */
-  border-radius: 10px;
+  border-radius: 5px;
 }
 </style>

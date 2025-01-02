@@ -1,6 +1,7 @@
 mod http_client;
-
+mod utils;
 use crate::http_client::{get_request, post_request};
+use crate::utils::img_utils::{conflate_img, get_img_names};
 use tauri::Manager;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
@@ -27,8 +28,9 @@ pub fn run() {
         .plugin(tauri_plugin_http::init())
         .invoke_handler(tauri::generate_handler![
             get_request,
-            post_request
-
+            post_request,
+            conflate_img,
+            get_img_names,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

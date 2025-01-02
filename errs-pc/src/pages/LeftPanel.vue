@@ -2,6 +2,7 @@
 import Search from '../components/search.vue';
 import {reactive, ref, watch} from "vue";
 import {Get} from "../net/get.ts";
+import {callConflateImg} from "../assets/script/callConflateImg.ts";
 
 // 定义菜单项数据
 const menuItems = [
@@ -19,11 +20,11 @@ const bottomMenuItems =[
 const activeItem = ref('');
 const selectItem = (item) => {
   activeItem.value = item;
-  Get(`/api/user/account/get-test?string=post parameter string success`, (data) => {
-    console.log(data.data);
-  }, (data) => {
-    console.log(data);
-  })
+  // Get(`/api/user/account/get-test?string=post parameter string success`, (data) => {
+  //   console.log(data.data);
+  // }, (data) => {
+  //   console.log(data);
+  // })
 };
 
 const searchValue = reactive({value: ''});
