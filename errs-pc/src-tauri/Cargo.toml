@@ -26,4 +26,5 @@ window-vibrancy = "0.5.2"
 tauri-plugin-http = "2.2.0"
 reqwest = "0.12.11"
 image = "0.25.5"
+png = "0.17.16"
 
