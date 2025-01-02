@@ -1,8 +1,7 @@
 <script setup lang="js">
 import Search from '../components/search.vue';
-import {reactive, ref, watch} from "vue";
+import {reactive, ref} from "vue";
 import {Get} from "../net/get.ts";
-import {callConflateImg} from "../assets/script/callConflateImg.ts";
 
 // 定义菜单项数据
 const menuItems = [
@@ -36,9 +35,6 @@ const props = defineProps({
   },
 });
 
-watch(() => props.distanceToLeft, (newValue, oldValue) => {
-  console.log(`右侧距离从 ${oldValue} 改变为 ${newValue}`)
-});
 const searchFun = (value) => {
   searchValue.value = value
 }

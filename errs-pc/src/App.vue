@@ -82,7 +82,7 @@ onBeforeUnmount(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../src/assets/background/combined_image.png');
+  background-image: url('../src/assets/background/background.png');
   background-size: cover;
   background-position: left;
   -webkit-backdrop-filter: blur(10px);
@@ -102,12 +102,6 @@ onBeforeUnmount(() => {
   background-color: rgba(255,255,255,0.3);
 }
 
-
-
-.left-panel .content {
-  position: relative;
-  z-index: 1;
-}
 
 .right-panel {
   width: 100%;
