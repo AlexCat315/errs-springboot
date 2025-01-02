@@ -1,12 +1,12 @@
 use image::{imageops::FilterType, ImageBuffer, Rgba};
+use png::Encoder;
 use std::fs::File;
-use std::io::{BufReader, BufWriter};
+use std::io::BufWriter;
 use std::path::PathBuf;
 use tauri::command;
 
-// 定义一个命令，用于合并图片
 #[command]
-pub async fn conflate_img(vec: Vec<String>, output_dir: String,name : String) -> Result<String, String> {
+pub async fn conflate_img(vec: Vec<String>, output_dir: String, name: String) -> Result<String, String> {
     if vec.is_empty() {
         return Err("No images provided".to_string());
     }
@@ -15,64 +15,62 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String,name : String) ->
     let mut total_width = 0;
     let mut target_height = None;
 
-    // 首先加载所有图片并确定目标高度
+    // 处理每张图片
     for path in &vec {
-        let file = File::open(path).map_err(|e| e.to_string())?;
-        let reader = BufReader::new(file);
-        let format = image::ImageFormat::from_path(path).map_err(|e| e.to_string())?;
-        let img = image::load(reader, format).map_err(|e| e.to_string())?;
+        let img = image::open(path).map_err(|e| format!("Failed to open image {}: {}", path, e))?;
+        let img = img.to_rgba8(); // 确保图片格式一致
 
         if let Some(h) = target_height {
             if img.height() != h {
-                // 如果图片高度不一致，调整为目标高度
-                let resized_img = img.resize_to_fill(img.width(), h, FilterType::Lanczos3);
-                let img_width = resized_img.width(); // 先获取宽度
-                imgs.push((resized_img, img_width)); // 再移动 resized_img
-                total_width += img_width;
+                // 按比例缩放宽度
+                let width = (img.width() as f32 * (h as f32 / img.height() as f32)) as u32;
+                let resized_img = image::imageops::resize(&img, width, h, FilterType::Lanczos3);
+                total_width += resized_img.width();
+                imgs.push(resized_img);
             } else {
-                let img_width = img.width(); // 先获取宽度
-                imgs.push((img, img_width)); // 再移动 img
-                total_width += img_width;
+                total_width += img.width();
+                imgs.push(img);
             }
         } else {
-            // 设置第一张图片的高度为目标高度
             target_height = Some(img.height());
-            let img_width = img.width(); // 先获取宽度
-            imgs.push((img, img_width)); // 再移动 img
-            total_width += img_width;
+            total_width += img.width();
+            imgs.push(img);
         }
     }
 
     let target_height = target_height.ok_or("No images provided".to_string())?;
 
-    // 创建输出目录（如果不存在）
-    std::fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
+    // 创建输出目录
+    std::fs::create_dir_all(&output_dir).map_err(|e| format!("Failed to create output directory: {}", e))?;
+    let output_path = PathBuf::from(output_dir).join(format!("{}.png", name));
 
-    // 生成输出文件路径
-    let output_path = PathBuf::from(output_dir).join(name + ".png");
-
-    // 创建新的图像
+    // 创建新的图片缓冲区
     let mut new_img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(total_width, target_height);
+    let mut x_offset = 0;
 
-    let mut x = 0;
-    for (img, img_width) in imgs {
-        let img = img.to_rgba8();
-        for y in 0..target_height {
-            for w in 0..img_width {
-                let pixel = img.get_pixel(w, y);
-                new_img.put_pixel(x + w, y, *pixel);
-            }
+    // 拼接图片
+    for img in imgs {
+        for (x, y, pixel) in img.enumerate_pixels() {
+            new_img.put_pixel(x_offset + x, y, *pixel);
         }
-        x += img_width;
+        x_offset += img.width();
     }
 
-    // 将图片保存为 PNG 格式（如果文件已存在，直接覆盖）
-    // 将图片保存为 PNG 格式并压缩
-    compress_png(&new_img, &output_path).map_err(|e| e.to_string())?;
+    // 保存图片
+    let file = File::create(&output_path).map_err(|e| format!("Failed to create output file: {}", e))?;
+    let w = BufWriter::new(file);
+    let mut encoder = Encoder::new(w, new_img.width(), new_img.height());
+    encoder.set_color(png::ColorType::Rgba);
+    encoder.set_depth(png::BitDepth::Eight);
+    encoder.set_compression(png::Compression::Best); // 使用最高压缩级别
 
-    // 返回文件路径
+    let mut writer = encoder.write_header().map_err(|e| format!("Failed to write PNG header: {}", e))?;
+    writer.write_image_data(&new_img.into_raw()).map_err(|e| format!("Failed to write PNG data: {}", e))?;
+
     Ok(output_path.to_string_lossy().to_string())
 }
+
+
 
 // 定义一个命令，通过路径获取到该目录下的所有图片的名字如{"/path/to/img1.jpg", "/path/to/img2.png"}
 #[command]
@@ -98,22 +96,4 @@ pub async fn get_img_names(dir: String) -> Result<Vec<String>, String> {
     }
 
     Ok(img_paths)
-}
-use png::{Compression, Encoder};
-
-
-// 压缩 PNG 图像
-fn compress_png(image: &ImageBuffer<Rgba<u8>, Vec<u8>>, output_path: &PathBuf) -> Result<(), String> {
-    let file = File::create(output_path).map_err(|e| e.to_string())?;
-    let writer = BufWriter::new(file);
-
-    let (width, height) = image.dimensions();
-    let mut encoder = Encoder::new(writer, width, height);
-    encoder.set_compression(Compression::Best); // 设置最高压缩级别
-    let mut writer = encoder.write_header().map_err(|e| e.to_string())?;
-
-    // 将图像数据写入文件
-    writer.write_image_data(&image).map_err(|e| e.to_string())?;
-
-    Ok(())
 }
