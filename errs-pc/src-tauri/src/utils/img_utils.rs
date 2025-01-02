@@ -49,7 +49,7 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String,name : String) ->
     std::fs::create_dir_all(&output_dir).map_err(|e| e.to_string())?;
 
     // 生成输出文件路径
-    let output_path = PathBuf::from(output_dir).join(&name);
+    let output_path = PathBuf::from(output_dir).join(name + ".png");
 
     // 创建新的图像
     let mut new_img: ImageBuffer<Rgba<u8>, Vec<u8>> = ImageBuffer::new(total_width, target_height);
