@@ -34,21 +34,17 @@ pub async fn post_request(
             request_builder = request_builder.header(&key, &value);
         }
     }
-    println!("success headers");
 
     if let Some(json_body) = body {
         request_builder = request_builder.json(&json_body);
     }
-    println!("success body");
 
     let response = request_builder
         .send()
         .await
         .map_err(|e| {
-            println!("Request failed: {}", e);
             ErrorResponse { error: e.to_string() }
         })?;
-    println!("success response {:?}", response);
 
     let status_code = response.status().as_u16() as i32;
     let text = response
