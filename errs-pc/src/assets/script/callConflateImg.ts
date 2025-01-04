@@ -14,6 +14,9 @@ export async function callConflateImg() {
         if (localStorageImagePaths !== null){
             if (JSON.stringify(imagePaths) === localStorageImagePaths) {
                 return;
+            }else{
+               // 删除local storage 中imagePaths 的值
+                localStorage.removeItem('imagePaths');
             }
         }
 
