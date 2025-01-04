@@ -1,5 +1,6 @@
 use image::{imageops::FilterType, ImageBuffer, Rgba};
 use png::Encoder;
+use std::ffi::OsStr;
 use std::fs::File;
 use std::io::BufWriter;
 use std::path::PathBuf;
@@ -72,27 +73,32 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String, name: String) ->
 
 
 
-// 定义一个命令，通过路径获取到该目录下的所有图片的名字如{"/path/to/img1.jpg", "/path/to/img2.png"}
 #[command]
-pub async fn get_img_names(dir: String) -> Result<Vec<String>, String> {
+pub async fn get_img_names(dir: String, exclude: Vec<String>) -> Result<Vec<String>, String> {
     let mut img_paths = Vec::new();
     let dir_path = PathBuf::from(dir);
 
-    if dir_path.is_dir() {
-        for entry in std::fs::read_dir(&dir_path).map_err(|e| e.to_string())? {
-            let entry = entry.map_err(|e| e.to_string())?;
-            let file_path = entry.path();
+    if !dir_path.is_dir() {
+        return Err("Path is not a directory".to_string());
+    }
 
-            if file_path.is_file() {
-                if let Some(extension) = file_path.extension() {
-                    if extension == "jpg" || extension == "png" {
+    // 支持的图片扩展名
+    let supported_extensions = ["jpg", "jpeg", "png", "gif", "bmp", "webp"];
+
+    for entry in std::fs::read_dir(&dir_path).map_err(|e| e.to_string())? {
+        let entry = entry.map_err(|e| e.to_string())?;
+        let file_path = entry.path();
+
+        if file_path.is_file() {
+            if let Some(extension) = file_path.extension().and_then(OsStr::to_str) {
+                if supported_extensions.contains(&extension.to_lowercase().as_str()) {
+                    let file_name = file_path.file_name().and_then(OsStr::to_str).unwrap_or("");
+                    if !exclude.contains(&file_name.to_string()) {
                         img_paths.push(file_path.to_string_lossy().to_string());
                     }
                 }
             }
         }
-    } else {
-        return Err("Path is not a directory".to_string());
     }
 
     Ok(img_paths)

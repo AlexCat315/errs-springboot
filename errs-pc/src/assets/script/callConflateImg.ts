@@ -5,6 +5,7 @@ export async function callConflateImg() {
         //利用ts调用 获取 ../src/assets/background/下的所有图片文件路径
         const imagePaths = await invoke<string[]>('get_img_names', {
             dir: '../src/assets/background',
+            exclude: ['background.png']
         });
 
         // 查询 local storage 中imagePaths 的值是否相同
