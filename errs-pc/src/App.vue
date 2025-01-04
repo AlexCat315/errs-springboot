@@ -28,8 +28,10 @@ const observeLayoutChanges = () => {
 
 let layoutObserver: ResizeObserver | null = null;
 
-onMounted(() => {
+onBeforeMount(() => {
   callConflateImg()
+});
+onMounted(() => {
   updateRightPanelOffset(); // 初始化距离
   layoutObserver = observeLayoutChanges(); // 开启布局变化监听
 });
