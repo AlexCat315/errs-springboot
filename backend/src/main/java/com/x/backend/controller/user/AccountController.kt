@@ -10,11 +10,11 @@ class AccountController {
 
     @PostMapping("/post-test")
     fun test(@RequestParam string:  String ) : ResultEntity<String> {
-        return ResultEntity.success(string)
+        return ResultEntity.success("post function test success:" + string)
     }
 
     @GetMapping("/get-test")
     fun getTest(@RequestParam string: String) : ResultEntity<String> {
-        return ResultEntity.success("get success")
+        return ResultEntity.success("get function test success:" + string)
     }
 }
