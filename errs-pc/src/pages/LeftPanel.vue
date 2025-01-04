@@ -1,7 +1,6 @@
 <script setup lang="js">
 import Search from '../components/search.vue';
 import {reactive, ref} from "vue";
-import {Get} from "../net/get.ts";
 
 // 定义菜单项数据
 const menuItems = [
@@ -13,19 +12,45 @@ const menuItems = [
 ];
 
 const bottomMenuItems =[
-  {name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href},
-  {name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href},
+  {key : 1,name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href},
+  {key : 2,name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href},
 
-]
-
+];
 const activeItem = ref('');
 const selectItem = (item) => {
-  activeItem.value = item;
-  // Get(`/api/user/account/get-test?string=post parameter string success`, (data) => {
-  //   console.log(data.data);
-  // }, (data) => {
-  //   console.log(data);
-  // })
+  // 传入item为name
+  switch (item) {
+    case '探索':
+      console.log('探索');
+      break;
+    case '游戏':
+      console.log('游戏');
+      break;
+    case '图书':
+      console.log('图书');
+      break;
+    case '新闻':
+      console.log('新闻');
+      break;
+    case '视频':
+      console.log('视频');
+      break;
+    default:
+      break;
+  }
+};
+const selectButtomItem = (item) => {
+  // 传入item为key
+  switch (item) {
+    case 1:
+      console.log('收藏');
+      break;
+    case 2:
+      console.log('设置');
+      break;
+    default:
+      break;
+  }
 };
 
 const searchValue = reactive({value: ''});
@@ -69,9 +94,9 @@ const searchFun = (value) => {
       <ul>
         <li
             v-for="item in bottomMenuItems"
-            :key="item.name"
+            :key="item.key"
             :class="{ 'active': activeItem === item.name }"
-            @click="selectItem(item.name)"
+            @click="selectButtomItem(item.key)"
         >
           <img :src="item.icon" alt="" class="icon"/>
           {{ item.name }}
