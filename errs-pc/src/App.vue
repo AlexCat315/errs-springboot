@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
 import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
-import {callConflateImg} from "./assets/script/callConflateImg";
+import {callConflateImg} from "./script/callConflateImg.ts";
 // 定义全局变量
 const globalSelect = ref(1);
 
