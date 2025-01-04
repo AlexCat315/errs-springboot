@@ -6,14 +6,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { getSelectMeunKey } from '../script/selectMenu.ts';
-// 不断获取当前选中的菜单项
-const selectMeunKey = ref(getSelectMeunKey());
-// 定时器
-setInterval(() => {
-   console.log('rightPanel', selectMeunKey);
-}, 1000);
+// 接收全局状态
+const globalSelect = inject("globalSelect");
 
 </script>
 

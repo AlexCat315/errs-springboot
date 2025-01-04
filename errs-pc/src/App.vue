@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
-import {callConflateImg} from "./script/callConflateImg.ts";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
+import { callConflateImg } from "./script/callConflateImg.ts";
 import RightPanel from "./pages/rightPanel.vue";
+
+import { provide } from 'vue';
 // 定义全局变量
 const globalSelect = ref(0);
 
 // 提供全局变量
 provide('globalSelect', globalSelect);
-
 
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
 
@@ -74,9 +75,11 @@ onBeforeUnmount(() => {
   0% {
     background-position: left;
   }
+
   50% {
     background-position: right;
   }
+
   100% {
     background-position: left;
   }
@@ -106,7 +109,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  background-color: rgba(255,255,255,0.3);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 
