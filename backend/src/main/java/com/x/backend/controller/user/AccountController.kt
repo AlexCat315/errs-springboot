@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/user/account")
 class AccountController {
 
+    @PostMapping("/register")
+    fun register(@RequestBody user: String): ResultEntity<String> {
+        // TODO: implement register logic
+        return ResultEntity.success(user)
+    }
+
 
     @PostMapping("/post-test")
     fun test(@RequestParam string:  String ) : ResultEntity<String> {
