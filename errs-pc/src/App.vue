@@ -2,6 +2,12 @@
 import LeftPanel from "./pages/LeftPanel.vue";
 import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
 import {callConflateImg} from "./assets/script/callConflateImg";
+// 定义全局变量
+const globalSelect = ref(1);
+
+// 提供全局变量
+provide('globalSelect', globalSelect);
+
 
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
 
