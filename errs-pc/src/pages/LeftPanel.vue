@@ -13,7 +13,9 @@ const menuItems = [
 ];
 
 const bottomMenuItems =[
-  {name: '设置', icon: new URL('../assets/icons/setting.svg', import.meta.url).href},
+  {name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href},
+  {name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href},
+
 ]
 
 const activeItem = ref('');
