@@ -8,6 +8,7 @@ use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .setup(|app| {
             let window = app.get_window("main").unwrap();
 
@@ -20,8 +21,8 @@ pub fn run() {
             #[cfg(target_os = "windows")]
             apply_blur(&window, Some((18, 18, 18, 125)))
                 .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
-            
-            // Linux 
+
+            // Linux
 
             Ok(())
         })

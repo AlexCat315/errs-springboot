@@ -7,7 +7,11 @@ use std::path::PathBuf;
 use tauri::command;
 
 #[command]
-pub async fn conflate_img(vec: Vec<String>, output_dir: String, name: String) -> Result<String, String> {
+pub async fn conflate_img(
+    vec: Vec<String>,
+    output_dir: String,
+    name: String,
+) -> Result<String, String> {
     if vec.is_empty() {
         return Err("No images provided".to_string());
     }
@@ -42,7 +46,8 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String, name: String) ->
     let target_height = target_height.ok_or("No images provided".to_string())?;
 
     // 创建输出目录
-    std::fs::create_dir_all(&output_dir).map_err(|e| format!("Failed to create output directory: {}", e))?;
+    std::fs::create_dir_all(&output_dir)
+        .map_err(|e| format!("Failed to create output directory: {}", e))?;
     let output_path = PathBuf::from(output_dir).join(format!("{}.png", name));
 
     // 创建新的图片缓冲区
@@ -58,20 +63,23 @@ pub async fn conflate_img(vec: Vec<String>, output_dir: String, name: String) ->
     }
 
     // 保存图片
-    let file = File::create(&output_path).map_err(|e| format!("Failed to create output file: {}", e))?;
+    let file =
+        File::create(&output_path).map_err(|e| format!("Failed to create output file: {}", e))?;
     let w = BufWriter::new(file);
     let mut encoder = Encoder::new(w, new_img.width(), new_img.height());
     encoder.set_color(png::ColorType::Rgba);
     encoder.set_depth(png::BitDepth::Eight);
     encoder.set_compression(png::Compression::Best); // 使用最高压缩级别
 
-    let mut writer = encoder.write_header().map_err(|e| format!("Failed to write PNG header: {}", e))?;
-    writer.write_image_data(&new_img.into_raw()).map_err(|e| format!("Failed to write PNG data: {}", e))?;
+    let mut writer = encoder
+        .write_header()
+        .map_err(|e| format!("Failed to write PNG header: {}", e))?;
+    writer
+        .write_image_data(&new_img.into_raw())
+        .map_err(|e| format!("Failed to write PNG data: {}", e))?;
 
     Ok(output_path.to_string_lossy().to_string())
 }
-
-
 
 #[command]
 pub async fn get_img_names(dir: String, exclude: Vec<String>) -> Result<Vec<String>, String> {

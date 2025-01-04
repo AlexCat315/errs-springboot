@@ -2,8 +2,9 @@
 import LeftPanel from "./pages/LeftPanel.vue";
 import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
 import {callConflateImg} from "./script/callConflateImg.ts";
+import RightPanel from "./pages/rightPanel.vue";
 // 定义全局变量
-const globalSelect = ref(1);
+const globalSelect = ref(0);
 
 // 提供全局变量
 provide('globalSelect', globalSelect);
@@ -57,7 +58,7 @@ onBeforeUnmount(() => {
     </div>
     <!-- 右侧内容 -->
     <div class="right-panel">
-      <!-- 其他内容 -->
+      <RightPanel />
     </div>
   </div>
 </template>

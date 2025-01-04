@@ -25,7 +25,9 @@ pub async fn post_request(
     let client = Client::builder()
         .timeout(Duration::from_secs(30)) // 设置超时时间为 30 秒
         .build()
-        .map_err(|e| ErrorResponse { error: e.to_string() })?;
+        .map_err(|e| ErrorResponse {
+            error: e.to_string(),
+        })?;
 
     let mut request_builder = client.post(&url);
 
@@ -39,20 +41,17 @@ pub async fn post_request(
         request_builder = request_builder.json(&json_body);
     }
 
-    let response = request_builder
-        .send()
-        .await
-        .map_err(|e| {
-            ErrorResponse { error: e.to_string() }
-        })?;
+    let response = request_builder.send().await.map_err(|e| ErrorResponse {
+        error: e.to_string(),
+    })?;
 
     let status_code = response.status().as_u16() as i32;
-    let text = response
-        .text()
-        .await
-        .map_err(|e| ErrorResponse { error: e.to_string() })?;
-    let body: Value = serde_json::from_str(&text)
-        .map_err(|e| ErrorResponse { error: e.to_string() })?;
+    let text = response.text().await.map_err(|e| ErrorResponse {
+        error: e.to_string(),
+    })?;
+    let body: Value = serde_json::from_str(&text).map_err(|e| ErrorResponse {
+        error: e.to_string(),
+    })?;
 
     let result_entity = ResultEntity {
         code: Some(status_code),
