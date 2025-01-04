@@ -4,40 +4,41 @@ import {reactive, ref} from "vue";
 
 // 定义菜单项数据
 const menuItems = [
-  {name: '探索', icon: new URL('../assets/icons/探索.svg', import.meta.url).href},
-  {name: '游戏', icon: new URL('../assets/icons/游戏.svg', import.meta.url).href},
-  {name: '图书', icon: new URL('../assets/icons/图书.svg', import.meta.url).href},
-  {name: '新闻', icon: new URL('../assets/icons/新闻.svg', import.meta.url).href},
-  {name: '视频', icon: new URL('../assets/icons/视频.svg', import.meta.url).href},
+  {key:1,name: '探索', icon: new URL('../assets/icons/探索.svg', import.meta.url).href},
+  {key: 2,name: '游戏', icon: new URL('../assets/icons/游戏.svg', import.meta.url).href},
+  {key:3,name: '图书', icon: new URL('../assets/icons/图书.svg', import.meta.url).href},
+  {key:4,name: '新闻', icon: new URL('../assets/icons/新闻.svg', import.meta.url).href},
+  {key:5,name: '视频', icon: new URL('../assets/icons/视频.svg', import.meta.url).href},
 ];
 
 const bottomMenuItems =[
-  {key : 1,name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href},
-  {key : 2,name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href},
+  {key : 6,name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href},
+  {key : 7,name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href},
 
 ];
-const activeItem = ref('');
+
 const selectItem = (item) => {
-  // 传入item为name
-  switch (item) {
-    case '探索':
+  // 传入item为key
+  switch(item){
+    case 1:
       console.log('探索');
       break;
-    case '游戏':
+    case 2:
       console.log('游戏');
       break;
-    case '图书':
+    case 3:
       console.log('图书');
       break;
-    case '新闻':
+    case 4:
       console.log('新闻');
       break;
-    case '视频':
+    case 5:
       console.log('视频');
       break;
     default:
       break;
   }
+  
 };
 const selectButtomItem = (item) => {
   // 传入item为key
@@ -75,9 +76,8 @@ const searchFun = (value) => {
       <ul>
         <li
             v-for="item in menuItems"
-            :key="item.name"
-            :class="{ 'active': activeItem === item.name }"
-            @click="selectItem(item.name)"
+            :key="item.key"
+            @click="selectItem(item.key)"
         >
           <img :src="item.icon" alt="" class="icon"/>
           {{ item.name }}
@@ -95,7 +95,7 @@ const searchFun = (value) => {
         <li
             v-for="item in bottomMenuItems"
             :key="item.key"
-            :class="{ 'active': activeItem === item.name }"
+
             @click="selectButtomItem(item.key)"
         >
           <img :src="item.icon" alt="" class="icon"/>

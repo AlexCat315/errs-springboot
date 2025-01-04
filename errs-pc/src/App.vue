@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import {onBeforeMount, onBeforeUnmount, onMounted, ref} from "vue";
+import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
 import {callConflateImg} from "./assets/script/callConflateImg";
 
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
