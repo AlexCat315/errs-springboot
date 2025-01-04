@@ -88,7 +88,7 @@ onBeforeUnmount(() => {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   z-index: -1;
-  animation: moveBackground 180s linear infinite;
+  animation: moveBackground 360s linear infinite;
 }
 
 .left-panel {
