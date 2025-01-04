@@ -1,7 +1,7 @@
 <script setup lang="js">
 import Search from '../components/search.vue';
 import {reactive} from "vue";
-import {setSelectMenu} from "../script/selectMenu.ts";
+import {setSelectMeunKey} from "../script/selectMenu.ts";
 
 // 定义菜单项数据
 const menuItems = [
@@ -19,10 +19,10 @@ const bottomMenuItems =[
 ];
 
 const selectItem = (item) => {
-  setSelectMenu(item);
+  setSelectMeunKey(item);
 };
 const selectButtomItem = (item) => {
-  setSelectMenu(item);
+  setSelectMeunKey(item);
 };
 
 const searchValue = reactive({value: ''});
