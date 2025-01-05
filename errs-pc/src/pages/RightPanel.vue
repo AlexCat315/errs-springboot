@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
+import { inject } from 'vue';
 // 接收全局状态
 const globalSelect = inject("globalSelect");
 
