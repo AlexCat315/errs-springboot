@@ -22,7 +22,11 @@ pub fn run() {
             apply_blur(&window, Some((18, 18, 18, 125)))
                 .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
 
-            // Linux
+            // Linux 上启用 Blur 效果
+            #[cfg(target_os = "linux")]
+            apply_blur(&window, Some((18, 18, 18, 125)))
+               .expect("Unsupported platform! 'apply_blur' is only supported on Linux");
+            
 
             Ok(())
         })
