@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "type": "npm",
+            "name": "tauri dev run",
+            "command": "run",
+            "scripts": "tauri dev"
+        }
+    ]
+}

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
-import { callConflateImg } from "./script/callConflateImg.ts";
-import RightPanel from "./pages/rightPanel.vue";
+import { callConflateImg } from "./script/callConflateImg";
+import RightPanel from "./pages/RightPanel.vue";
 
 import { provide } from 'vue';
 // 定义全局变量

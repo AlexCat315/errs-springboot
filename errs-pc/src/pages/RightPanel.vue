@@ -1,16 +1,18 @@
-<template>
-    <div class="right-panel">
-        <h1>Right Panel</h1>
-        <!-- Add your content here -->
-    </div>
-</template>
 
 <script setup>
-import { inject } from 'vue';
+import { inject,ref } from 'vue';
+import Setting from './content/Setting.vue';
 // 接收全局状态
 const globalSelect = inject("globalSelect");
-
+const selectIndex = ref(globalSelect.value);
 </script>
+<template>
+    <div class="right-panel">
+     <div>
+        <Setting v-if="selectIndex === 7"/>
+     </div>
+    </div>
+</template>
 
 <style scoped>
 .right-panel {
