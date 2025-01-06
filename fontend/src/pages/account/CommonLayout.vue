@@ -7,12 +7,11 @@
   <div style="
         max-width: 100%;
         height: 100vh;
-        overflow: hidden;
         display: flex;
         font-family: system-ui;
         position: relative;">
     <!-- 背景图片 -->
-    <el-image fit="cover" src="../../assets/resources/login/login.jpg"
+    <img  src="../../assets/resources/login/acc.jpg"
               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"/>
     <!-- 登录卡片 -->
     <div>
@@ -119,8 +118,8 @@
 
 .content-message-list{
 /* 从上到下,列排列 */
-  display: flex !important;
-  flex-direction: column !important;
+  display: flex ;
+  flex-direction: column ;
 }
 
 .demonstration {
