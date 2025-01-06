@@ -11,7 +11,7 @@
         font-family: system-ui;
         position: relative;">
     <!-- 背景图片 -->
-    <img  src="../../assets/resources/login/acc.jpg"
+    <img alt=""  src="../../assets/resources/login/acc.jpg"
               style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;"/>
     <!-- 登录卡片 -->
     <div>
