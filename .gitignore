@@ -60,5 +60,6 @@ build/
 /errs-pc/package-lock.json
 /errs-pc/src-tauri/Cargo.lock
 
+
 ### fleet ###
-.fleet
+.fleet/*
