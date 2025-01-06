@@ -1,6 +1,6 @@
 <script setup>
 import {reactive, ref} from "vue";
-import {Unlock, User} from '@element-plus/icons-vue'
+import {Unlock, com.x.backend.pojo.user.User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 import {login} from "../../net/account/login.js";
 import {ElMessage} from "element-plus";
@@ -62,7 +62,7 @@ function routerPushForgotPassword() {
               <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户/邮箱">
                 <template #prefix>
                   <el-icon>
-                    <User />
+                    <com.x.backend.pojo.user.User />
                   </el-icon>
                 </template>
               </el-input>

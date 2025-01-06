@@ -3,7 +3,7 @@ import {logoutJS} from "../net/account/logout.js"
 import router from "../router/router.js";
 import {ElMessage} from "element-plus";
 import {inject, ref, watch} from "vue";
-import {Expand, Fold, House, User} from "@element-plus/icons-vue";
+import {Expand, Fold, House, com.x.backend.pojo.user.User} from "@element-plus/icons-vue";
 
 function logout() {
   logoutJS(() => {
@@ -99,7 +99,7 @@ const toMyInfo = () => {
           </el-menu-item>
           <el-menu-item index="2">
             <el-icon>
-              <User />
+              <com.x.backend.pojo.user.User />
             </el-icon>
 
             <template #title>用户管理</template>
@@ -121,7 +121,7 @@ const toMyInfo = () => {
             </el-button>
           </div>
           <el-dropdown style="width: 70px; cursor: pointer">
-            <el-button style="margin-top: 10px" :icon="User" circle />
+            <el-button style="margin-top: 10px" :icon="com.x.backend.pojo.user.User" circle />
 
             <template #dropdown>
               <el-dropdown-menu>
