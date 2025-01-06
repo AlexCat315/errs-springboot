@@ -9,18 +9,18 @@ class AccountController {
 
     @PostMapping("/register")
     fun register(@RequestBody user: String): ResultEntity<String> {
-        // TODO: implement register logic
+
         return ResultEntity.success(user)
     }
 
 
     @PostMapping("/post-test")
     fun test(@RequestParam string:  String ) : ResultEntity<String> {
-        return ResultEntity.success("post function test success:" + string)
+        return ResultEntity.success("post function test success:$string")
     }
 
     @GetMapping("/get-test")
     fun getTest(@RequestParam string: String) : ResultEntity<String> {
-        return ResultEntity.success("get function test success:" + string)
+        return ResultEntity.success("get function test success:$string")
     }
 }
