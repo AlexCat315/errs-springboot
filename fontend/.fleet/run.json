@@ -2,9 +2,9 @@
     "configurations": [
         {
             "type": "npm",
-            "name": "tauri dev run",
+            "name": "amdin web dev",
             "command": "run",
-            "scripts": "tauri dev"
-        },
+            "scripts": "dev"
+        }
     ]
 }

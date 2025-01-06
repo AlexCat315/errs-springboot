@@ -1,9 +1,4 @@
 {
     "configurations": [
-        {
-            "type": "java-source-run",
-            "name": "Java-source-run configuration",
-            "sourceFile": "$PROJECT_DIR$/backend/src/main/java/com/x/backend/BackendApplication.java"
-        }
     ]
 }
