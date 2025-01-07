@@ -64,7 +64,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .page {
   position: relative;
   display: flex;
@@ -118,5 +118,16 @@ onBeforeUnmount(() => {
   height: 100vh;
   background-color: #fff;
   border-radius: 5px;
+}
+
+/* 自定义字体 */
+@font-face {
+  font-family: 'yousu-title-black';
+  src: url('../src/assets/ttf/优设标题黑.ttf');
+}
+
+@font-face {
+  font-family: 'LXGWMarkerGothic-Regular';
+  src: url('../src/assets/ttf/LXGWMarkerGothic-Regular.ttf');
 }
 </style>
