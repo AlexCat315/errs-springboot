@@ -1,22 +1,21 @@
-
 <script setup>
-import { inject,ref } from 'vue';
+import {onMounted, inject, ref} from 'vue';
 import Setting from './content/Setting.vue';
 // 接收全局状态
 const globalSelect = inject("globalSelect");
-const selectIndex = ref(globalSelect.value);
+const globalTheme = inject("globalTheme");
+
+const selectMenu = ref(globalSelect)
+const selectTheme = ref(globalTheme)
 </script>
 <template>
-    <div class="right-panel">
-     <div>
-        <Setting v-if="selectIndex === 7"/>
-     </div>
+    <div :style="{backgroundColor:selectTheme==='light'?'#fff':'#191919'}" class="right-panel">
+        <Setting v-if="selectMenu === 7"/>
     </div>
 </template>
 
 <style scoped>
 .right-panel {
     padding: 20px;
-    background-color: #f5f5f5;
 }
 </style>

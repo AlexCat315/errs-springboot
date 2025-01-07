@@ -11,6 +11,11 @@ const globalSelect = ref(0);
 // 提供全局变量
 provide('globalSelect', globalSelect);
 
+
+// 定义一个颜色主题全局变量
+const globalTheme = ref('light');
+provide('globalTheme',globalTheme);
+
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
 
 // 更新右侧内容的偏移量
