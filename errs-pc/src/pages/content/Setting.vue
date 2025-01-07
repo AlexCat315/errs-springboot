@@ -14,6 +14,5 @@ const isLogin = ref(false);
 <style scoped lang="css">
 .setting_content {
     height: 100vh;
-    font-family: 'yousu-title-black', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 </style>

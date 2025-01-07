@@ -9,13 +9,11 @@ const selectMenu = ref(globalSelect)
 const selectTheme = ref(globalTheme)
 </script>
 <template>
-    <div :style="{backgroundColor:selectTheme==='light'?'#fff':'#191919'}" class="right-panel">
+    <div :style="{backgroundColor:selectTheme==='light'?'#fff':'#191919'}">
         <Setting v-if="selectMenu === 7"/>
     </div>
 </template>
 
 <style scoped>
-.right-panel {
-    padding: 20px;
-}
+
 </style>
