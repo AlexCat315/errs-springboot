@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*
 class AccountController {
 
     @PostMapping("/register")
-    fun register(@RequestBody user: User): ResultEntity<User>? {
-
-        return ResultEntity.success(user)
+    fun register(@RequestBody user: User): ResultEntity<String>? {
+        return ResultEntity.success()
     }
 
 

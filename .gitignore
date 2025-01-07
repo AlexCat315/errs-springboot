@@ -63,3 +63,6 @@ build/
 
 ### fleet ###
 .fleet/*
+
+### prod yaml ###
+application-prod.yaml
