@@ -3,11 +3,19 @@ import { inject, ref } from "vue";
 const globalTheme = inject("globalTheme");
 const selectTheme = ref(globalTheme.value);
 const isLogin = false;
+const globalShowSetting = inject("globalShowSetting");
+
+const loginClick = () => {
+    globalShowSetting.value = false;
+
+}
+
 
 </script>
 <template>
     <!-- 已登录 -->
-    <button v-if="isLogin" id="btn-message" style="--online-status: #93e200;" :style="{ backgroundColor : selectTheme === 'dark' ? '#212121' : '#f5f5f5'}"  class="button-message">
+    <button v-if="isLogin" id="btn-message" style="--online-status: #93e200;"
+        :style="{ backgroundColor: selectTheme === 'dark' ? '#212121' : '#f5f5f5' }" class="button-message">
         <div class="content-avatar">
             <div class="status-user"></div>
             <div class="avatar">
@@ -19,13 +27,15 @@ const isLogin = false;
             </div>
         </div>
         <div class="notice-content">
-            <div >
-                <div :style="{ 'color': selectTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">Message<span class="number-message">3</span></div>
+            <div>
+                <div :style="{ 'color': selectTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">
+                    Message<span class="number-message">3</span></div>
             </div>
         </div>
     </button>
     <!-- 未登录 -->
-    <button v-if="!isLogin" id="btn-message" :style="{ '--bg-color': selectTheme === 'dark' ? '#212121' : '#f5f5f5' }" style="--online-status: red;" class="button-message">
+    <button @click="loginClick()" v-if="!isLogin" id="btn-message" :style="{ '--bg-color': selectTheme === 'dark' ? '#212121' : '#f5f5f5' }"
+        style="--online-status: red;" class="button-message">
         <div class="content-avatar">
             <div class="status-user"></div>
             <div class="avatar">
@@ -39,7 +49,7 @@ const isLogin = false;
         <div :style="{ 'color': selectTheme === 'dark' ? '#fff' : '#212121' }" class="notice-content">
             <div v-if="!isLogin">
                 <div class="lable-message">未登录</div>
-              
+
             </div>
 
         </div>
@@ -174,5 +184,4 @@ const isLogin = false;
     background-color: var(--bg-color-sup);
     border-radius: 20px;
 }
-
 </style>
