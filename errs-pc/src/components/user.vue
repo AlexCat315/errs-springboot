@@ -71,7 +71,6 @@ const loginClick = () => {
     justify-content: center;
     align-items: center;
     font: 400 var(--font-size) Helvetica Neue, sans-serif;
-    box-shadow: 0 0 2.17382px rgba(0, 0, 0, .049), 0 1.75px 6.01034px rgba(0, 0, 0, .07), 0 3.63px 14.4706px rgba(0, 0, 0, .091), 0 22px 48px rgba(0, 0, 0, .14);
     background-color: var(--bg-color);
     border-radius: 68px;
     cursor: pointer;
