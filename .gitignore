@@ -66,5 +66,3 @@ build/
 
 ### prod yaml ###
 application-prod.yaml
-
-backend/src/main/resources/application-dev.yaml
