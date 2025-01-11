@@ -3,14 +3,14 @@ import {logoutJS} from "../net/account/logout.js"
 import router from "../router/router.js";
 import {ElMessage} from "element-plus";
 import {inject, ref, watch} from "vue";
-import {Expand, Fold, House, com.x.backend.pojo.user.User} from "@element-plus/icons-vue";
+import {Expand, Fold, House, User} from "@element-plus/icons-vue";
 
 function logout() {
   logoutJS(() => {
     // 删除token
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
-    router.push({ name: 'login' });
+    router.push({name: 'login'});
     ElMessage.success('退出成功');
   }, () => {
     ElMessage.error('退出失败');
@@ -74,32 +74,32 @@ const toMyInfo = () => {
           box-shadow: 2px 0 6px #8459a5;
         ">
         <el-menu style="height: 100%; overflow-x: hidden" background-color="#7288fa" text-color="#FFFFFF"
-          :active-text-color="activeTextColor" :collapse-transition="false" :collapse="isCollapse"
-          @select="handleSelect" :default-active="selectIndex">
+                 :active-text-color="activeTextColor" :collapse-transition="false" :collapse="isCollapse"
+                 @select="handleSelect" :default-active="selectIndex">
           <div style="height: 60px; line-height: 60px; text-align: center">
             <img src="../assets/img/logo.png" alt="logo" style="
                 width: 30px;
                 position: relative;
                 top: 5px;
                 margin-right: 5px;
-              " />
+              "/>
             <b class="logo-text" v-show="logoTextShow">文娱推荐与评分系统</b>
           </div>
           <el-menu-item @click="collapse" v-if="isCollapse">
             <el-icon>
-              <Expand />
+              <Expand/>
             </el-icon>
             <template #title>展开菜单</template>
           </el-menu-item>
           <el-menu-item index="1">
             <el-icon>
-              <House />
+              <House/>
             </el-icon>
             <template #title>主菜单</template>
           </el-menu-item>
           <el-menu-item index="2">
             <el-icon>
-              <com.x.backend.pojo.user.User />
+              <User/>
             </el-icon>
 
             <template #title>用户管理</template>
@@ -121,7 +121,7 @@ const toMyInfo = () => {
             </el-button>
           </div>
           <el-dropdown style="width: 70px; cursor: pointer">
-            <el-button style="margin-top: 10px" :icon="com.x.backend.pojo.user.User" circle />
+            <el-button style="margin-top: 10px" :icon="User" circle/>
 
             <template #dropdown>
               <el-dropdown-menu>
@@ -153,7 +153,7 @@ const toMyInfo = () => {
   /* 加上阴影效果 */
   margin-left: 10px;
   /* 左侧边距 */
-  font-family: 'yousu-title-black',serif;
+  font-family: 'yousu-title-black', serif;
   /* 字体样式，可以替换为其他字体 */
 }
 </style>
