@@ -66,5 +66,4 @@ build/
 
 ### prod yaml ###
 application-prod.yaml
-### dev yaml ###
-application-dev.yaml
+
