@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/user/account")
 class AccountController {
 
-    @Resource
-    @Qualifier("userAccountMapper")
+    @Resource(name = "userAccountService")
     lateinit var accountService: AccountService
 
 

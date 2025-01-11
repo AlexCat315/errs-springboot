@@ -12,12 +12,11 @@ import org.springframework.stereotype.Service
 @Service("userAccountService")
 class AccountServiceImpl() : AccountService {
 
-    @Resource
-    @Qualifier("userAccountMapper")
-    lateinit var AccountMapper: AccountMapper
+    @Resource(name = "userAccountMapper")
+    lateinit var accountMapper: AccountMapper
 
   override fun findUsreByUsername(username: String): Account {
-      val user = AccountMapper.findUserByUsername(username)
+      val user = accountMapper.findUserByUsername(username)
       TODO("Not yet implemented")
     }
 

@@ -24,8 +24,7 @@ import java.util.Date;
 @Service("adminAccountService")
 public class AccountServiceImpl implements AccountService {
 
-    @Resource()
-    @Qualifier("adminAccountMapper")
+    @Resource(name = "adminAccountMapper")
     private AccountMapper accountMapper;
 
     @Override
