@@ -19,6 +19,7 @@ import com.x.backend.util.RandomCodeGeneratorUtils;
 import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -31,11 +32,12 @@ import java.util.concurrent.TimeUnit;
  * 如果需要修改@RequestMapping路径，请修改/backend/src/main/resources/exclude-paths.json中的配置。
  */
 @Slf4j
-@RestController(value = "adminAccountController")
+@RestController("adminAccountController")
 @RequestMapping(value = "/api/admin/account")
 public class AccountController {
 
     @Resource
+    @Qualifier("adminAccountService")
     private AccountService accountService;
     @Resource
     private JWTUtils jwtUtils;

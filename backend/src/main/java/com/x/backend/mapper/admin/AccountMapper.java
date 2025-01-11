@@ -7,7 +7,9 @@ import com.x.backend.pojo.admin.entity.Invite;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Component;
 
+@Component(value = "adminAccountMapper")
 @Mapper
 public interface AccountMapper {
 
