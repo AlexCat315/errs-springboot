@@ -11,6 +11,14 @@ class AccountController {
 
     @PostMapping("/register")
     fun register(@RequestBody user: User): ResultEntity<String>? {
+        // 注册逻辑
+            
+        return ResultEntity.success()
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody user: User): ResultEntity<String>? {
+        // 登录逻辑
         return ResultEntity.success()
     }
 
