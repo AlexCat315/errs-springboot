@@ -13,7 +13,6 @@ import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.service.admin.AccountService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

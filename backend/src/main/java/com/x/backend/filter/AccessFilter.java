@@ -12,10 +12,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -34,9 +32,10 @@ public class AccessFilter extends OncePerRequestFilter {
     private JWTUtils jwtUtils;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request,
-                                    @NotNull HttpServletResponse response,
-                                    @NotNull FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            @SuppressWarnings({ "null" }) @NotNull HttpServletRequest request,
+            @SuppressWarnings({ "null" }) @NotNull HttpServletResponse response,
+            @SuppressWarnings({ "null" }) @NotNull FilterChain chain) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
@@ -46,17 +45,18 @@ public class AccessFilter extends OncePerRequestFilter {
             Boolean hasPermission = hasPermission(request);
             if (!hasPermission) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write(ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
+                response.getWriter().write(ResultEntity
+                        .failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.FORBIDDEN).toJSONString());
                 return;
             }
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write(ResultEntity.failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
+            response.getWriter().write(ResultEntity
+                    .failure(HttpCodeConstants.UNAUTHORIZED, HttpMessageConstants.UNAUTHORIZED).toJSONString());
             return;
         }
         chain.doFilter(request, response);
     }
-
 
     /**
      * 获取访问URL的路径，并判断是否有权限访问
@@ -98,6 +98,5 @@ public class AccessFilter extends OncePerRequestFilter {
         String value = redisTemplate.opsForValue().get(id + "_" + jwt);
         return BlockConstants.REDIS_LOGOUT_BLOCK.equals(value);
     }
-
 
 }
