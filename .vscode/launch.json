@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "command": "cd fontend && npm run dev" ,
+            "name": "Admin npm start dev",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "command": "cd errs-pc && npm run tauri dev" ,
+            "name": "tauri pc npm start dev",
+            "request": "launch",
+            "type": "node-terminal"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendApplication<backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.x.backend.BackendApplication",
+            "projectName": "backend",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

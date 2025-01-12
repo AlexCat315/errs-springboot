@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
+#.vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -53,7 +53,7 @@ build/
 !**/src/test/**/build/
 
 ### VS Code ###
-.vscode/
+# .vscode/
 
 ### giga ide ###
 .gigaide
