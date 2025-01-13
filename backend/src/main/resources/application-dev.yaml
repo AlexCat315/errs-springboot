@@ -53,6 +53,7 @@ spring:
       methods: '*'
 
 
+
 # 映射器（Mapper）配置
 mybatis:
   mapper-locations: classpath:mapper/*/*.xml
@@ -64,6 +65,10 @@ logging:
     root: INFO
     org.springframework: INFO
     org.mybatis: DEBUG
+
+errs:
+  jwt:
+    key: "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU"
 
 
 
