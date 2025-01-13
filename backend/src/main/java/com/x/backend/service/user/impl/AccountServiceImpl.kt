@@ -34,7 +34,7 @@ class AccountServiceImpl : AccountService {
             return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR)
         }
         // 验证是否被封禁
-        if (userAccount!!.isBanned) {
+        if (userAccount?.isBanned == true) {
             return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED)
         }
         val jwt = jwtUtils!!.createJWT(userAccount, 7)

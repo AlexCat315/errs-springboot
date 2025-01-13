@@ -6,6 +6,7 @@ import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.constructor.PathExcludeConstructor;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.common.Account;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
@@ -29,7 +30,7 @@ public class AccessFilter extends OncePerRequestFilter {
     @Resource
     private RedisTemplate<String, String> redisTemplate;
     @Resource
-    private JWTUtils jwtUtils;
+    private JWTUtils<Account> jwtUtils;
 
     @Override
     protected void doFilterInternal(

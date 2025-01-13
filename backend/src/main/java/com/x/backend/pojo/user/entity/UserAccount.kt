@@ -7,4 +7,5 @@ import java.io.Serializable
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-class UserAccount : Account(), Serializable
+ class UserAccount(
+) : Account(), Serializable

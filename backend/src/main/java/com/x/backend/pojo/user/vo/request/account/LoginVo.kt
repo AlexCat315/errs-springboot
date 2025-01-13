@@ -1,9 +1,9 @@
-package com.x.backend.pojo.user.vo.request.account;
+package com.x.backend.pojo.user.vo.request.account
 
-import lombok.Data;
+import lombok.Data
 
 @Data
-public class LoginVo {
-    private String username;
-    private String password;
+class LoginVo {
+     val username: String? = null
+     val password: String? = null
 }
