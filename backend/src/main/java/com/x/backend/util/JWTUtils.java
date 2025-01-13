@@ -6,6 +6,7 @@ import cn.hutool.jwt.JWTUtil;
 import com.x.backend.pojo.common.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -22,23 +23,24 @@ public class JWTUtils<T extends Account> {
         this.request = request;
     }
 
-    private static final String KEY = "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU";
+    @Value("${errs.jwt.key}")
+    private String KEY;
 
     /**
      * @param account    用户信息
      * @param expireTime 过期时间（天）
      */
-    public String createJWT(T  account, Integer expireTime) {
+    public String createJWT(T account, Integer expireTime) {
         Long EXPIRE_DAY = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * expireTime;
-            Map<String, Object> map = new HashMap<>() {
-                {
-                    put("uid", account.getAId());
-                    put("role", account.getRole());
-                    put("expire_time", EXPIRE_DAY);
-                    put("vip", account.getVip());
-                }
-            };
-            return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
+        Map<String, Object> map = new HashMap<>() {
+            {
+                put("uid", account.getAId());
+                put("role", account.getRole());
+                put("expire_time", EXPIRE_DAY);
+                put("vip", account.getVip());
+            }
+        };
+        return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     private JWTPayload analysisJWT(String token) {
