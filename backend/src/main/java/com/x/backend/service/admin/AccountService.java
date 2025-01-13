@@ -1,28 +1,28 @@
 package com.x.backend.service.admin;
 
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
-import com.x.backend.pojo.admin.entity.Account;
+import com.x.backend.pojo.admin.entity.AdminAccount;
 
 public interface AccountService {
     
-    Account login(String username);
+    AdminAccount login(String username);
 
     void findByEmail(String email);
 
-    Integer register(Account account);
+    Integer register(AdminAccount adminAccount);
 
     void isEmailExists(String email);
 
-    void updatePassword(Account account);
+    void updatePassword(AdminAccount adminAccount);
 
     Integer findByInviteCode(String inviteCode);
 
     void insertInvite(InsertInviteDTO insertInviteDTO);
 
-    Account findAccountByNameOrEmail(String username);
+    AdminAccount findAccountByNameOrEmail(String username);
 
     void isUsernameExists(String username);
 
 
-    Account findById(Integer id);
+    AdminAccount findById(Integer id);
 }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { inject, ref } from "vue";
+import {inject} from "vue";
 import User from "../../../components/user.vue";
 
 const globalTheme = inject("globalTheme");
@@ -8,7 +8,7 @@ const globalTheme = inject("globalTheme");
 </script>
 
 <template>
-    <div class="account">
+    <div class="adminAccount">
         <!--头部设置-->
         <div style="display: flex; justify-content: space-between;">
             <h2 style="font-family: LXGWMarkerGothic-Regular,'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

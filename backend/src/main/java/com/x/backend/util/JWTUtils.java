@@ -1,22 +1,20 @@
 package com.x.backend.util;
 
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
+import com.x.backend.pojo.common.Account;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.stereotype.Component;
-
-import com.x.backend.pojo.admin.entity.Account;
-
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTPayload;
-import cn.hutool.jwt.JWTUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Component
-public class JWTUtils {
+public class JWTUtils<T extends Account> {
 
     private final HttpServletRequest request;
 
@@ -30,18 +28,17 @@ public class JWTUtils {
      * @param account    用户信息
      * @param expireTime 过期时间（天）
      */
-    public String createJWT(Account account, Integer expireTime) {
+    public String createJWT(T  account, Integer expireTime) {
         Long EXPIRE_DAY = System.currentTimeMillis() + 1000L * 60 * 60 * 24 * expireTime;
-
-        Map<String, Object> map = new HashMap<>() {
-            {
-                put("uid", account.getAId());
-                put("role", account.getRole());
-                put("expire_time", EXPIRE_DAY);
-                put("vip", account.getVip());
-            }
-        };
-        return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
+            Map<String, Object> map = new HashMap<>() {
+                {
+                    put("uid", account.getAId());
+                    put("role", account.getRole());
+                    put("expire_time", EXPIRE_DAY);
+                    put("vip", account.getVip());
+                }
+            };
+            return JWTUtil.createToken(map, KEY.getBytes(StandardCharsets.UTF_8));
     }
 
     private JWTPayload analysisJWT(String token) {
@@ -145,7 +142,7 @@ public class JWTUtils {
 
     /**
      * 验证token是否有效
-     * */
+     */
     public boolean verifyToken(String token) {
         try {
             if (token != null) {

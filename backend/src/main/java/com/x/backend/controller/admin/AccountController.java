@@ -7,7 +7,7 @@ import com.x.backend.constants.RoleConstants;
 import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
-import com.x.backend.pojo.admin.entity.Account;
+import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.vo.request.ForgotPasswordVo;
 import com.x.backend.pojo.admin.vo.request.LoginVo;
 import com.x.backend.pojo.admin.vo.request.RegisterVo;
@@ -38,7 +38,7 @@ public class AccountController {
     @Resource(name = "adminAccountService")
     private AccountService accountService;
     @Resource
-    private JWTUtils jwtUtils;
+    private JWTUtils<AdminAccount> jwtUtils;
     @Resource
     private EmailService emailService;
     @Resource
@@ -57,20 +57,20 @@ public class AccountController {
                     HttpMessageConstants.PASSWORD_NOT_NULL);
         }
         try {
-            Account account = accountService.login(loginVo.getUsername());
-            boolean verifyPassword = encryptUtils.verifyPassword(loginVo.getPassword(), account.getPassword());
+            AdminAccount adminAccount = accountService.login(loginVo.getUsername());
+            boolean verifyPassword = encryptUtils.verifyPassword(loginVo.getPassword(), adminAccount.getPassword());
             if (!verifyPassword) {
                 return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
             }
             // 验证是否被封禁
-            if (account.getIsBanned()) {
+            if (adminAccount.getIsBanned()) {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
-            String jwt = jwtUtils.createJWT(account, 7);
+            String jwt = jwtUtils.createJWT(adminAccount, 7);
             if (loginVo.getRememberMe()) {
                 return ResultEntity.success("localStorage_" + jwt);
             } else {
-                jwt = jwtUtils.createJWT(account, 1);
+                jwt = jwtUtils.createJWT(adminAccount, 1);
                 return ResultEntity.success("sessionStorage_" + jwt);
             }
         } catch (RuntimeException e) {
@@ -140,15 +140,15 @@ public class AccountController {
         }
 
         // 向数据库插入用户信息
-        Account account = new Account();
-        account.setUsername(registerVo.getUsername());
-        account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
-        account.setEmail(registerVo.getEmail());
-        account.setRole(RoleConstants.ROLE_ADMIN);
-        account.setCreatedAt(new Date());
-        account.setIsBanned(true);
+        AdminAccount adminAccount = new AdminAccount();
+        adminAccount.setUsername(registerVo.getUsername());
+        adminAccount.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
+        adminAccount.setEmail(registerVo.getEmail());
+        adminAccount.setRole(RoleConstants.ROLE_ADMIN);
+        adminAccount.setCreatedAt(new Date());
+        adminAccount.setIsBanned(true);
         try {
-            Integer aId = accountService.register(account);
+            Integer aId = accountService.register(adminAccount);
             // 清除验证码
             redisTemplate.delete(registerVo.getEmail());
             // 向数据库插入邀请信息
@@ -202,11 +202,11 @@ public class AccountController {
             return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
         }
         // 向数据库更新用户密码
-        Account account = new Account();
-        account.setPassword(forgotPasswordVo.getPassword());
-        account.setEmail(forgotPasswordVo.getEmail());
+        AdminAccount adminAccount = new AdminAccount();
+        adminAccount.setPassword(forgotPasswordVo.getPassword());
+        adminAccount.setEmail(forgotPasswordVo.getEmail());
         try {
-            accountService.updatePassword(account);
+            accountService.updatePassword(adminAccount);
             // 清除验证码
             redisTemplate.delete(forgotPasswordVo.getEmail());
             return ResultEntity.success();
@@ -262,19 +262,19 @@ public class AccountController {
                 return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
             }
             // 通过id查询用户信息
-            Account account = accountService.findById(id);
-            if (account == null) {
+            AdminAccount adminAccount = accountService.findById(id);
+            if (adminAccount == null) {
                 return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
             }
             // 验证是否被封禁
-            if (account.getIsBanned()) {
+            if (adminAccount.getIsBanned()) {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
             // 验证token过期时间是否在续签时间范围内（1天<expireTime<3天）
             if (1L < timeUtils.timestamp2Days(expireTime) &&
                     timeUtils.timestamp2Days(expireTime) < 3L) {
                 // 续签token
-                String newJwt = jwtUtils.createJWT(account, 7);
+                String newJwt = jwtUtils.createJWT(adminAccount, 7);
                 // 向Redis中保存该用户的token，为黑名单
                 redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
                 return ResultEntity.success("localStorage_" + newJwt);

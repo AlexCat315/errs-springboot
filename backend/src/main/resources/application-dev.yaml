@@ -55,7 +55,7 @@ spring:
 
 # 映射器（Mapper）配置
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath:mapper/*/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # 日志

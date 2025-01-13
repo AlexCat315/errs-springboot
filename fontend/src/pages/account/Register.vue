@@ -1,6 +1,6 @@
 <script setup>
 import {reactive, ref} from "vue";
-import {ChatDotRound, Message, Promotion, Unlock, com.x.backend.pojo.user.User} from '@element-plus/icons-vue'
+import {ChatDotRound, Message, Promotion, Unlock, User} from '@element-plus/icons-vue'
 import router from "../../router/router.js";
 import {getEmailCode, register} from "../../net/account/register.js";
 import {ElMessage} from "element-plus";
@@ -127,7 +127,7 @@ function getCode() {
                 <el-input v-model="form.username" maxlength="25" type="text" placeholder="用户/邮箱">
                   <template #prefix>
                     <el-icon>
-                      <com.x.backend.pojo.user.User />
+                      <User />
                     </el-icon>
                   </template>
                 </el-input>

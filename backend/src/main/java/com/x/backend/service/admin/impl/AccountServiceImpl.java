@@ -8,7 +8,7 @@ import com.x.backend.mapper.admin.AccountMapper;
 import com.x.backend.pojo.admin.dto.FindInviteCodeDTO;
 import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.admin.dto.InsertInviteDTO;
-import com.x.backend.pojo.admin.entity.Account;
+import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.service.admin.AccountService;
 import jakarta.annotation.Resource;
@@ -27,9 +27,9 @@ public class AccountServiceImpl implements AccountService {
     private AccountMapper accountMapper;
 
     @Override
-    public Account login(String username) {
+    public AdminAccount login(String username) {
         // 调mapper方法
-        Account result = accountMapper.login(username);
+        AdminAccount result = accountMapper.login(username);
         if (result == null || result.getAId() < 1) {
             throw new RuntimeException(HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);
         }
@@ -61,12 +61,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public void updatePassword(Account account) {
+    public void updatePassword(AdminAccount adminAccount) {
         // 调mapper方法
         // 往数据库中更新密码
         ForgotPasswordDTO forgotPasswordDTO = new ForgotPasswordDTO();
-        forgotPasswordDTO.setEmail(account.getEmail());
-        forgotPasswordDTO.setNewPassword(account.getPassword());
+        forgotPasswordDTO.setEmail(adminAccount.getEmail());
+        forgotPasswordDTO.setNewPassword(adminAccount.getPassword());
         Integer result = accountMapper.updatePassword(forgotPasswordDTO);
         if (result != 1) {
             throw new ForbiddenException(HttpMessageConstants.ACCOUNT_PASSWORD_UPDATE_FAILED);
@@ -89,11 +89,11 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public Integer register(Account account) {
+    public Integer register(AdminAccount adminAccount) {
         // 调mapper方法
         // 往数据库中插入记录
         try {
-            Integer result = accountMapper.insert(account);
+            Integer result = accountMapper.insert(adminAccount);
             if (result < 1) {
                 throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
             }
@@ -126,10 +126,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account findAccountByNameOrEmail(String username) {
+    public AdminAccount findAccountByNameOrEmail(String username) {
         // 调mapper方法
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
-        Account result = accountMapper.findAccountByNameOrEmail(username);
+        AdminAccount result = accountMapper.findAccountByNameOrEmail(username);
         if (result != null && result.getAId() > 0) {
             return result;
         }
@@ -140,17 +140,17 @@ public class AccountServiceImpl implements AccountService {
     public void isUsernameExists(String username) {
         // 调mapper方法
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
-        Account result = accountMapper.findAccountByName(username);
+        AdminAccount result = accountMapper.findAccountByName(username);
         if (result != null && result.getAId() > 0) {
             throw new ForbiddenException(HttpMessageConstants.ACCOUNT_REGISTERED);
         }
     }
 
     @Override
-    public Account findById(Integer id) {
+    public AdminAccount findById(Integer id) {
         // 调mapper方法
         // 查询数据库中是否有该用户的记录，如果有，则返回，如果没有，则返回null
-        Account result = accountMapper.findById(id);
+        AdminAccount result = accountMapper.findById(id);
         if (result != null && result.getAId() > 0) {
             return result;
         }
