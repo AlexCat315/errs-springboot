@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.backend.mapper.admin.AccountMapper">
+    <resultMap id="getAccountInfoMap" type="com.x.backend.pojo.admin.entity.AdminAccount">
+        <result property="aId" column="a_id"/>
+        <result property="role" column="role"/>
+        <result property="password" column="password"/>
+        <result property="isBanned" column="is_banned"/>
+    </resultMap>
+    <select id="login" resultMap="getAccountInfoMap">
+        select a_id, role, password, is_banned
+        from account
+        where username = #{username}
+           or email = #{username}
+    </select>
+
+    <insert id="insertInvite">
+        insert into invite (a_id, invited_id, invite_time, status)
+        values (#{aId}, #{invitedId}, #{inviteTime}, #{status})
+    </insert>
+    <insert id="insert">
+        insert into account (username, email, password, role, created_at, vip, is_allow_login, is_banned)
+        values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip}, #{isAllowLogin}, #{isBanned})
+    </insert>
+
+    <resultMap id="findInviteCodeMap" type="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
+        <result property="aId" column="a_id"/>
+        <result property="role" column="role"/>
+    </resultMap>
+    <select id="findByInviteCode" resultMap="findInviteCodeMap">
+        select a_id, role
+        from account
+        where invite_code = #{inviteCode}
+    </select>
+    <resultMap id="findAccountInfoMap" type="com.x.backend.pojo.admin.entity.AdminAccount">
+        <result property="aId" column="a_id"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="role" column="role"/>
+        <result property="password" column="password"/>
+        <result property="isBanned" column="is_banned"/>
+    </resultMap>
+    <select id="findById" resultMap="findAccountInfoMap">
+        select a_id, username, email, role, password, is_banned
+        from account
+        where a_id = #{aId}
+    </select>
+</mapper>

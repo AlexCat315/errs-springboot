@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.backend.mapper.user.AccountMapper">
+    <resultMap id="findAccountByUsernameMap" type="com.x.backend.pojo.user.entity.UserAccount">
+        <result property="aId" column="a_id"/>
+        <result property="role" column="role"/>
+        <result property="password" column="password"/>
+        <result property="isBanned" column="is_banned"/>
+    </resultMap>
+    <!-- findAccountByUsername -->
+    <select id="findAccountByUsername" resultMap="findAccountByUsernameMap">
+        select  a_id, role, password, is_banned from account where email = #{username}
+    </select>
+
+</mapper>
