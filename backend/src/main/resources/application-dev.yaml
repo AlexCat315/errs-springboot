@@ -51,6 +51,14 @@ spring:
       origin: '*'
       credentials: true
       methods: '*'
+    flow:
+      period: 3
+      limit: 20
+      block: 30
+errs:
+  jwt:
+    key: "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU"
+
 
 
 
@@ -65,10 +73,6 @@ logging:
     root: INFO
     org.springframework: INFO
     org.mybatis: DEBUG
-
-errs:
-  jwt:
-    key: "YUAN SHEN GAO SHOU SHI CAI BI , TAI KEN LE , TOU JU YOU"
 
 
 
