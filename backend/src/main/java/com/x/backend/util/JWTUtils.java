@@ -1,16 +1,18 @@
 package com.x.backend.util;
 
-import cn.hutool.jwt.JWT;
-import cn.hutool.jwt.JWTPayload;
-import cn.hutool.jwt.JWTUtil;
-import com.x.backend.pojo.admin.entity.Account;
-import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import com.x.backend.pojo.admin.entity.Account;
+
+import cn.hutool.jwt.JWT;
+import cn.hutool.jwt.JWTPayload;
+import cn.hutool.jwt.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -53,7 +55,7 @@ public class JWTUtils {
             if (token != null && !token.isEmpty()) {
                 JWTPayload jwtPayload = analysisJWT(token);
                 Object uid = jwtPayload.getClaim("uid");
-                return Integer.parseInt(uid.toString());
+                return Integer.valueOf(uid.toString());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException("JWT校验错误");
@@ -71,7 +73,7 @@ public class JWTUtils {
             if (token != null && !token.isEmpty()) {
                 JWTPayload jwtPayload = analysisJWT(token);
                 Object expireTime = jwtPayload.getClaim("expire_time");
-                return Long.parseLong(expireTime.toString());
+                return Long.valueOf(expireTime.toString());
             }
         } catch (RuntimeException e) {
             throw new RuntimeException("JWT校验错误");
@@ -154,7 +156,7 @@ public class JWTUtils {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             throw new RuntimeException(e);
         }
         return false;
