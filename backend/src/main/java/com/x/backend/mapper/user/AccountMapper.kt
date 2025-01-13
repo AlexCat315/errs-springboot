@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository
 @Component("userAccountMapper")
 @Mapper
 interface AccountMapper {
+    
     fun findUserByUsername(username:String):Account
 }

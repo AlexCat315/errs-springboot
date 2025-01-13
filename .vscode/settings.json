@@ -5,5 +5,6 @@
     "marscode.codeCompletionPro": {
         "enableCodeCompletionPro": true
     },
-    "marscode.enableInlineCommand": true
+    "marscode.enableInlineCommand": true,
+    "java.dependency.packagePresentation": "hierarchical"
 }

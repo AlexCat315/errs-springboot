@@ -39,7 +39,6 @@ public class AccountServiceImpl implements AccountService {
         return result;
     }
 
-
     @Override
     public void findByEmail(String email) {
         // 调mapper方法
@@ -49,8 +48,6 @@ public class AccountServiceImpl implements AccountService {
             throw new ForbiddenException(HttpMessageConstants.EMAIL_REGISTERED);
         }
     }
-
-
 
     @Override
     public void isEmailExists(String email) {

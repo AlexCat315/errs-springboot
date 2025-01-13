@@ -4,6 +4,7 @@ import com.x.backend.pojo.admin.dto.InsertInviteDTO;
 import com.x.backend.pojo.admin.entity.Account;
 
 public interface AccountService {
+    
     Account login(String username);
 
     void findByEmail(String email);
