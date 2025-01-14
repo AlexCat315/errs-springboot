@@ -2,6 +2,7 @@ package com.x.backend.service.user.impl
 
 import com.x.backend.constants.HttpCodeConstants
 import com.x.backend.constants.HttpMessageConstants
+import com.x.backend.constants.RoleConstants
 import com.x.backend.mapper.user.AccountMapper
 import com.x.backend.pojo.ResultEntity
 import com.x.backend.pojo.user.entity.UserAccount
@@ -31,11 +32,15 @@ class AccountServiceImpl : AccountService {
         val userAccount = accountMapper!!.findAccountByUsername(loginVo?.username)
         val verifyPassword = encryptUtils!!.verifyPassword(loginVo?.password, userAccount?.password)
         if (!verifyPassword) {
-            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR)
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR)
         }
         // 验证是否被封禁
         if (userAccount?.isBanned == true) {
             return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED)
+        }
+        // 验证权限
+        if (userAccount?.role != RoleConstants.ROLE_USER){
+            return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN)
         }
         val jwt = jwtUtils!!.createJWT(userAccount, 7)
         return ResultEntity.success(jwt)

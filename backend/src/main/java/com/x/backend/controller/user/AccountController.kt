@@ -16,7 +16,7 @@ class AccountController {
     @PostMapping("/login")
     fun login(@RequestBody loginVo: LoginVo?): ResultEntity<String?>? {
         if (loginVo?.username == null || loginVo.password == null || loginVo.username.isEmpty() || loginVo.password.isEmpty()) {
-            return ResultEntity.failure(HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR)
+            return ResultEntity.failure(HttpMessageConstants.INFO_INCOMPLETE)
         }
         return accountService!!.login(loginVo)
     }
