@@ -1,4 +1,4 @@
-<script setup lang="js">
+<script setup lang="js" >
 import { inject, ref } from "vue";
 const globalTheme = inject("globalTheme");
 const selectTheme = ref(globalTheme.value);
