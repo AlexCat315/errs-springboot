@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Slf4j
-@Component
+@Component("accessFilter")
 public class AccessFilter extends OncePerRequestFilter {
 
     @Resource
