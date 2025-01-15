@@ -14,6 +14,8 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Component("userAccountService")
 @Service("userAccountService")
 public class AccountServiceImpl implements AccountService {
@@ -35,11 +37,11 @@ public class AccountServiceImpl implements AccountService {
             return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);
         }
         // 验证是否被封禁
-        if (Boolean.TRUE.equals(userAccount.isBanned())) {
+        if (userAccount.getIsBanned()) {
             return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
         }
         // 验证权限
-        if (userAccount.getRole() != RoleConstants.ROLE_USER) {
+        if (!Objects.equals(userAccount.getRole(), RoleConstants.ROLE_USER)) {
             return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
         }
         String jwt = jwtUtils.createJWT(userAccount, 7);

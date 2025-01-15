@@ -2,6 +2,7 @@ package com.x.backend.aspect;
 
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
+import com.x.backend.pojo.common.Account;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import org.aspectj.lang.JoinPoint;
@@ -17,7 +18,7 @@ import java.lang.reflect.Method;
 public class RoleSecurityAspect {
 
     @Resource
-    private JWTUtils jwtUtils;
+    private JWTUtils<Account> jwtUtils;
 
     // 获取所有Java类和方法是否有@RoleSecurity注解
     // 如果有，则判断当前用户是否有对应的角色权限，如果没有，则返回403错误

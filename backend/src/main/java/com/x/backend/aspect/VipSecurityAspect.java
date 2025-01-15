@@ -1,6 +1,7 @@
 package com.x.backend.aspect;
 
 import com.x.backend.annotation.VipSecurity;
+import com.x.backend.pojo.common.Account;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import org.aspectj.lang.JoinPoint;
@@ -17,7 +18,7 @@ public class VipSecurityAspect {
 
 
     @Resource
-    private JWTUtils jwtUtils;
+    private JWTUtils<Account> jwtUtils;
 
     @Before("@annotation(com.x.backend.annotation.VipSecurity) || @within(com.x.backend.annotation.VipSecurity)")
     public void checkVip(JoinPoint joinPoint) throws SecurityException {

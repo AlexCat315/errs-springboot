@@ -63,7 +63,7 @@ public class AccountController {
                 return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.PASSWORD_ERROR);
             }
             // 验证是否被封禁
-            if (Boolean.TRUE.equals(adminAccount.isBanned())) {
+            if (Boolean.TRUE.equals(adminAccount.getIsBanned())) {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
             String jwt = jwtUtils.createJWT(adminAccount, 7);
@@ -146,7 +146,7 @@ public class AccountController {
         adminAccount.setEmail(registerVo.getEmail());
         adminAccount.setRole(RoleConstants.ROLE_ADMIN);
         adminAccount.setCreatedAt(new Date());
-        adminAccount.setBanned(true);
+        adminAccount.setIsBanned(true);
         try {
             Integer aId = accountService.register(adminAccount);
             // 清除验证码
@@ -267,7 +267,7 @@ public class AccountController {
                 return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
             }
             // 验证是否被封禁
-            if (Boolean.TRUE.equals(adminAccount.isBanned())) {
+            if (Boolean.TRUE.equals(adminAccount.getIsBanned())) {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
             // 验证token过期时间是否在续签时间范围内（1天<expireTime<3天）
