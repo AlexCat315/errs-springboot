@@ -10,12 +10,16 @@ import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.service.user.AccountService;
 import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
+
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Slf4j
 @Component("userAccountService")
 @Service("userAccountService")
 public class AccountServiceImpl implements AccountService {
@@ -32,6 +36,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public ResultEntity<String> login(LoginVo loginVo) {
         UserAccount userAccount = accountMapper.findAccountByUsername(loginVo.getUsername());
+        if (userAccount == null) {
+            return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.ACCOUNT_NOT_EXIST);
+        }
         boolean verifyPassword = encryptUtils.verifyPassword(loginVo.getPassword(), userAccount.getPassword());
         if (!verifyPassword) {
             return ResultEntity.failure(HttpCodeConstants.BAD_REQUEST, HttpMessageConstants.ACCOUNT_OR_PASSWORD_ERROR);

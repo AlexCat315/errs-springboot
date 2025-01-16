@@ -60,5 +60,9 @@ public class HttpMessageConstants {
     public static final String ACCOUNT_DISABLED = "账户已被禁用";
     // 账户无需续签
     public static final String ACCOUNT_NO_NEED_RENEW = "账户无需续签";
+    // json解析失败
+    public static final String JSON_PARSE_FAILED = "json解析失败";
+    // 账户不存在
+    public static final String ACCOUNT_NOT_EXIST = "账户不存在";
 
 }
