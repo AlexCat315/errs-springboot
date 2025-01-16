@@ -64,8 +64,8 @@ onBeforeUnmount(() => {
       <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />
     </div>
     <!-- 右侧内容 -->
-    <div class="right-panel">
-      <RightPanel />
+    <div class="right-panel"  >
+      <RightPanel  />
     </div>
   </div>
 </template>
@@ -116,6 +116,7 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   background-color: rgba(255, 255, 255, 0.3);
+  z-index: 1;
 }
 
 
@@ -124,6 +125,7 @@ onBeforeUnmount(() => {
   height: 100vh;
   background-color: #fff;
   border-radius: 5px;
+  z-index: 1;
 }
 
 /* 自定义字体 */

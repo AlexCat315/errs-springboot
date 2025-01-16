@@ -17,8 +17,8 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
       <Account />
     </div>
     <div v-if="!globalShowSetting">
-      <LoginLightPanle v-if="selectTheme === 'light'" />
-      <LoginDarkPanle v-if="selectTheme === 'dark'" />
+      <LoginLightPanle  v-if="selectTheme === 'light'" />
+      <LoginDarkPanle  v-if="selectTheme === 'dark'" />
     </div>
 
   </div>
