@@ -102,7 +102,7 @@ const props = defineProps({
   box-shadow: 4px 4px 10px -10px rgba(0, 0, 0, 1);
   align-items: center;
   display: flex;
-  border-radius: 4px;
+  border-radius: 10px;
   padding: 5px 0;
   font-weight: 300;
 }
