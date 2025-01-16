@@ -6,7 +6,6 @@
     <div style="display: flex;">
         <div class="custom-loader">
         </div>
-
     </div>
 
 

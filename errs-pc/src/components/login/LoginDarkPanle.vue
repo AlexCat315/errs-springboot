@@ -2,6 +2,7 @@
 import { inject, ref, Ref } from 'vue';
 import { login } from "../../net/account/login";
 import Message from '../message/Message.vue';
+import Loading from '../Loading.vue';
 
 
 const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
@@ -12,12 +13,15 @@ const loginForm = ref({
   password: ''
 });
 const loginSubmit = async () => {
+  showLoading.value = true;
   await login(loginForm.value, (data: any) => {
+    showLoading.value = false;
     console.log("login success", data);
   }, (message: string) => {
     showMessage.value = true;
     messageInfo.value = message;
     messageType.value = 'error';
+    showLoading.value = false;
     setTimeout(() => {
       showMessage.value = false;
     }, 2000);
@@ -36,10 +40,18 @@ const submitGoBackSetting = () => {
 const showMessage = ref(false);
 const messageInfo = ref('');
 const messageType = ref('info');
+const showLoading = ref(false);
+
+
 </script>
 
 
 <template>
+    <div>
+   <!-- Loading 遮罩层 -->
+   <div v-if="showLoading"  class="loading-overlay">
+      <Loading style="margin-left: 200px;margin-top: -120px;" />
+    </div>
   <form class="form">
     <div class="flex-column">
       <label>Email </label>
@@ -130,10 +142,12 @@ const messageType = ref('info');
     </div>
     <button @click="submitGoBackSetting()" type="button" class="button-submit-back">返回设置</button>
   </form>
+</div>
 </template>
 
 <style scoped lang="css">
 .form {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -143,6 +157,21 @@ const messageType = ref('info');
   border-radius: 20px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+/* Loading 遮罩层 */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(58, 58, 58, 0.8);
+  /* 半透明背景 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  /* 确保遮罩层在最上层 */
 }
 
 ::placeholder {

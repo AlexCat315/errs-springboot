@@ -40,7 +40,7 @@ const submitGoBackSetting = () => {
 const showMessage = ref(false);
 const messageInfo = ref('');
 const messageType = ref('info');
-const showLoading = ref(true);
+const showLoading = ref(false);
 
 
 
@@ -52,7 +52,7 @@ const showLoading = ref(true);
   <div>
     <!-- Loading 遮罩层 -->
     <div v-if="showLoading"  class="loading-overlay">
-      <Loading />
+      <Loading style="margin-left: 200px;margin-top: -120px;" />
     </div>
 
     <!-- 表单内容 -->
