@@ -18,6 +18,8 @@ const bottomMenuItems = [
 const globalSelect = inject("globalSelect");
 const selectIndex = ref(globalSelect.value);
 const globalTheme = inject("globalTheme")
+const selectTheme = ref(globalTheme);
+
 const selectItem = (item) => {
   // 设置选中的菜单项，保存到全局变量中
   globalSelect.value = item;
@@ -41,6 +43,7 @@ const searchFun = (value) => {
   searchValue.value = value
 }
 
+
 </script>
 
 <template>
@@ -50,7 +53,8 @@ const searchFun = (value) => {
     <Search v-if="globalTheme === 'dark'" background-color="#403e3d" style="margin-top: 30px;"
             @update:search="searchFun"/>
 
-    <div :style="{ width: `${props.distanceToLeft}px` }" class="sidebar">
+    <div  :style="{ width: `${props.distanceToLeft}px`,'--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
+        '--active-background': selectTheme === 'light'? '#FFF':'black' }" class="sidebar">
       <ul>
         <li v-for="item in menuItems" :key="item.key" :class="{ active: item.key === selectIndex.value }"
             @click="selectItem(item.key)">
@@ -61,7 +65,8 @@ const searchFun = (value) => {
     </div>
 
     <!-- 底部菜单栏 -->
-    <div :style="{ width: `${props.distanceToLeft}px` }" class="sidebar" style="margin-top: auto; margin-bottom: 15px;">
+    <div :style="{ width: `${props.distanceToLeft}px`,'--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
+        '--active-background': selectTheme === 'light'? '#FFF':'black' }" class="sidebar" style="margin-top: auto; margin-bottom: 15px;">
       <ul>
         <li v-for="item in bottomMenuItems" :key="item.key" :class="{ active: item.key === selectIndex.value }"
             @click="selectButtomItem(item.key)">
@@ -91,12 +96,13 @@ const searchFun = (value) => {
   height: 23px;
 }
 
+
 .sidebar li:hover {
-  background-color: #f0efef;
+  background-color: var(--hover-background);
 }
 
 .sidebar li.active {
-  background-color: #FFFF;
+  background-color: var(--active-background);
 }
 
 .icon {
