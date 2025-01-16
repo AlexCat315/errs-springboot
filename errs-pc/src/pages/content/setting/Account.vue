@@ -8,7 +8,7 @@ const globalTheme = inject("globalTheme");
 </script>
 
 <template>
-    <div class="adminAccount">
+    <div>
         <!--头部设置-->
         <div style="display: flex; justify-content: space-between;">
             <h2 style="font-family: LXGWMarkerGothic-Regular,'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
