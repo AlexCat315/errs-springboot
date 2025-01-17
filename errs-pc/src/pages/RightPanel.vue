@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, inject, ref} from 'vue';
+import {inject, ref} from 'vue';
 import Setting from './content/Setting.vue';
 // 接收全局状态
 const globalSelect = inject("globalSelect");
