@@ -15,8 +15,12 @@ provide('globalSelect', globalSelect);
 // 定义一个颜色主题全局变量
 const globalTheme = ref('dark');
 provide('globalTheme',globalTheme);
+const selectTheme = ref(globalTheme)
+
 const globalShowSetting = ref(true);
 provide('globalShowSetting', globalShowSetting);
+
+
 const rightPanelOffset = ref(0); // 存储右侧内容到左边的距离
 
 // 更新右侧内容的偏移量
@@ -64,7 +68,7 @@ onBeforeUnmount(() => {
       <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />
     </div>
     <!-- 右侧内容 -->
-    <div class="right-panel"  >
+    <div class="right-panel" :style="{'--background-color' : selectTheme === 'light' ? '#FFF' : 'black'}"  >
       <RightPanel  />
     </div>
   </div>
@@ -123,7 +127,7 @@ onBeforeUnmount(() => {
 .right-panel {
   width: 100%;
   height: 100vh;
-  background-color: #fff;
+  background-color: var(--background-color);
   border-radius: 5px;
   z-index: 1;
 }

@@ -6,14 +6,15 @@ const globalSelect = inject("globalSelect");
 const globalTheme = inject("globalTheme");
 
 const selectMenu = ref(globalSelect)
-const selectTheme = ref(globalTheme)
+
 </script>
 <template>
-    <div :style="{backgroundColor:selectTheme==='light'?'#fff':'#191919'}">
+    <div>
         <Setting v-if="selectMenu === 7"/>
     </div>
 </template>
 
-<style scoped>
+<style lang="css" scoped>
+
 
 </style>
