@@ -12,13 +12,13 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
 </script>
 
 <template>
-  <div :style="{ backgroundColor: selectTheme === 'light' ? '#fff' : '#262727' }" class="setting_content">
+  <div :style="{ backgroundColor: selectTheme === 'light' ? '#ddd' : '#262727' }" class="setting_content">
     <div
       :style="{ backgroundColor: selectTheme === 'light' ? '#fff' : '#1a1a1a', boxShadow: selectTheme === 'light' ? ' 0 2px 5px rgba(0, 0, 0, 0.1)' : ' 0 2px 5px #fff' }"
       v-if="globalShowSetting" class="card">
       <Account />
     </div>
-    <div v-if="!globalShowSetting">
+    <div  v-if="!globalShowSetting">
       <LoginLightPanle v-if="selectTheme === 'light'" />
       <LoginDarkPanle v-if="selectTheme === 'dark'" />
     </div>

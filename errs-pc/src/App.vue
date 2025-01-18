@@ -13,7 +13,7 @@ provide('globalSelect', globalSelect);
 
 
 // 定义一个颜色主题全局变量
-const globalTheme = ref('dark');
+const globalTheme = ref('light');``
 provide('globalTheme',globalTheme);
 const selectTheme = ref(globalTheme)
 

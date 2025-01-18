@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, ref, Ref, defineProps } from 'vue';
+import { inject, ref, Ref} from 'vue';
 import { login } from "../../net/account/login";
 import Message from '../message/Message.vue';
 import Loading from '../Loading.vue';
@@ -181,7 +181,7 @@ const showLoading = ref(false);
 }
 
 .inputForm {
-  border: 1.5px solid #ecedec;
+  border: 1.5px solid #ddd;
   border-radius: 10px;
   height: 50px;
   display: flex;

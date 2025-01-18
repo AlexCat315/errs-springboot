@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {defineProps, ref} from "vue";
+import {ref} from "vue";
 // 接受父组件传递的 props
 // text 和 icon 都是字符串类型
 const props = defineProps({
