@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, provide, Ref, ref, watch } from 'vue';
+import { inject, Ref, ref } from 'vue';
 import Account from "./setting/Account.vue";
 import LoginLightPanle from '../../components/login/LoginLightPanle.vue';
 import LoginDarkPanle from '../../components/login/LoginDarkPanle.vue';
@@ -19,7 +19,7 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
       :style="{ backgroundColor: selectTheme === 'light' ? '#fff' : '#1a1a1a', boxShadow: selectTheme === 'light' ? ' 0 2px 5px rgba(0, 0, 0, 0.1)' : ' 0 2px 5px #fff' }"
       v-if="globalShowSetting" class="card">
       <Account />
-      <p class="title">主题切换</p>
+      <p :style="{color : selectTheme === 'light' ? 'black' : '#ddd'}" class="title">主题切换</p>
       <LightTheme v-if="selectTheme === 'light'"/>
       <DarkTheme v-else />
     </div>

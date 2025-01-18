@@ -1,27 +1,101 @@
-<script setup lang="js">
+<script setup lang="ts">
+import { inject, onMounted, Ref, ref } from 'vue';
+import { get_system_theme } from '../../util/Theme';
 
+// 注入全局主题变量，并确保其类型
+const globalTheme = inject<Ref<string>>("globalTheme");
+if (!globalTheme) {
+    console.error("globalTheme is not provided.");
+}
 
+// 初始化 selectTheme，确保其值为 globalTheme.value
+const selectTheme = ref(globalTheme?.value || 'light');
+
+// 从 localStorage 获取主题
+const localTheme = ref<string | null>(localStorage.getItem('theme'));
+
+// 定义响应式数据来存储选中的值
+const selectedOption = ref<string>('');
+
+// 初始化主题设置
+const themeStting = () => {
+    if (localTheme.value) {
+        selectedOption.value = localTheme.value;
+        if (localTheme.value === 'system') {
+            get_system_theme().then((isDark) => {
+                if (isDark) {
+                    selectTheme.value = 'dark';
+                    if (globalTheme) {
+                        globalTheme.value = 'dark';
+                    }
+                } else {
+                    selectTheme.value = 'light';
+                    if (globalTheme) {
+                        globalTheme.value = 'light';
+                    }
+                }
+            });
+
+        } else {
+            selectTheme.value = localTheme.value;
+        }
+    } else {
+        // 如果 localStorage 中没有主题，使用 selectTheme 的值
+        selectedOption.value = selectTheme.value;
+        localStorage.setItem('theme', selectTheme.value);
+    }
+};
+
+// 监听选中的值变化
+const handleSelection = () => {
+    localStorage.setItem('theme', selectedOption.value);
+    if (selectedOption.value === 'system') {
+        get_system_theme().then((isDark) => {
+            if (isDark) {
+                selectTheme.value = 'dark';
+                if (globalTheme) {
+                    globalTheme.value = 'dark';
+                }
+            } else {
+                selectTheme.value = 'light';
+                if (globalTheme) {
+                    globalTheme.value = 'light';
+                }
+            }
+        });
+
+    } else {
+        selectTheme.value = selectedOption.value;
+    }
+    if (globalTheme) {
+        globalTheme.value = selectTheme.value;
+    }
+    localStorage.setItem('theme', selectedOption.value);
+};
+
+// 初始化时调用主题设置函数
+onMounted(() => {
+    themeStting();
+});
 </script>
 
 <template>
     <div class="mydict">
         <div>
             <label>
-                <input type="radio" name="radio" checked="">
+                <input type="radio" name="radio" value="system" v-model="selectedOption" @change="handleSelection">
                 <span>跟随系统</span>
             </label>
             <label>
-                <input type="radio" name="radio">
+                <input type="radio" name="radio" value="light" v-model="selectedOption" @change="handleSelection">
                 <span>明亮</span>
             </label>
             <label>
-                <input type="radio" name="radio">
+                <input type="radio" name="radio" value="dark" v-model="selectedOption" @change="handleSelection">
                 <span>暗夜</span>
             </label>
-
         </div>
     </div>
-
 </template>
 
 <style lang="css" scoped>

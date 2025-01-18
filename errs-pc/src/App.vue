@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { callConflateImg } from "./script/callConflateImg";
 import RightPanel from "./pages/RightPanel.vue";
 
 import { provide } from 'vue';
+import { get_system_theme } from "./util/Theme";
 // 定义全局变量
 const globalSelect = ref(0);
 
@@ -13,9 +14,45 @@ provide('globalSelect', globalSelect);
 
 
 // 定义一个颜色主题全局变量
-const globalTheme = ref('light');
-provide('globalTheme',globalTheme);
+const globalTheme = ref('');
+const theme = localStorage.getItem('theme');
+if (theme) {
+  if (theme === 'system') {
+    get_system_theme().then((isDark) => {
+      if (isDark) {
+        globalTheme.value = 'dark';
+      } else {
+        globalTheme.value = 'light';
+      }
+    });
+  } else {
+    globalTheme.value = theme;
+  }
+} else {
+  get_system_theme().then((isDark) => {
+    if (isDark) {
+      globalTheme.value = 'dark';
+    } else {
+      globalTheme.value = 'light';
+    }
+  });
+}
+// 定时器
+setInterval(() => {
+  if (theme === 'system') {
+    get_system_theme().then((isDark) => {
+      if (isDark) {
+        globalTheme.value = 'dark';
+      } else {
+        globalTheme.value = 'light';
+      }
+    });
+  }
+}, 1000);
+provide('globalTheme', globalTheme);
 const selectTheme = ref(globalTheme)
+
+
 
 const globalShowSetting = ref(true);
 provide('globalShowSetting', globalShowSetting);
@@ -59,6 +96,9 @@ onBeforeUnmount(() => {
     layoutObserver.disconnect(); // 销毁观察器
   }
 });
+
+
+
 </script>
 
 <template>
@@ -68,8 +108,8 @@ onBeforeUnmount(() => {
       <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />
     </div>
     <!-- 右侧内容 -->
-    <div class="right-panel" :style="{'--background-color' : selectTheme === 'light' ? '#FFF' : 'black'}"  >
-      <RightPanel  />
+    <div class="right-panel" :style="{ '--background-color': selectTheme === 'light' ? '#FFF' : 'black' }">
+      <RightPanel />
     </div>
   </div>
 </template>

@@ -4,6 +4,7 @@ mod utils;
 
 use crate::http_client::{get_request, post_request};
 use crate::utils::img_utils::{conflate_img, get_img_names};
+use crate::utils::theme_utils::get_system_theme;
 use tauri::Manager;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
@@ -38,6 +39,7 @@ pub fn run() {
             post_request,
             conflate_img,
             get_img_names,
+            get_system_theme
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
