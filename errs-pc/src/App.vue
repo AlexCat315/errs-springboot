@@ -15,9 +15,9 @@ provide('globalSelect', globalSelect);
 
 // 定义一个颜色主题全局变量
 const globalTheme = ref('');
-const theme = localStorage.getItem('theme');
+const theme = ref(localStorage.getItem('theme'));
 if (theme) {
-  if (theme === 'system') {
+  if (theme.value === 'system') {
     get_system_theme().then((isDark) => {
       if (isDark) {
         globalTheme.value = 'dark';
@@ -26,7 +26,9 @@ if (theme) {
       }
     });
   } else {
-    globalTheme.value = theme;
+    if (typeof theme.value === 'string') {
+      globalTheme.value = theme.value;
+    }
   }
 } else {
   get_system_theme().then((isDark) => {
@@ -39,7 +41,8 @@ if (theme) {
 }
 // 定时器
 setInterval(() => {
-  if (theme === 'system') {
+  const theme = ref(localStorage.getItem('theme'));
+  if (theme.value === 'system') {
     get_system_theme().then((isDark) => {
       if (isDark) {
         globalTheme.value = 'dark';
