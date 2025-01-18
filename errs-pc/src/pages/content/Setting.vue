@@ -22,6 +22,8 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
       <LoginLightPanle v-if="selectTheme === 'light'" />
       <LoginDarkPanle v-if="selectTheme === 'dark'" />
     </div>
+    
+    
 
   </div>
 </template>
