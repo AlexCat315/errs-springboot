@@ -1,147 +1,249 @@
 <script lang="ts" setup>
-import { inject, ref, Ref } from 'vue';
+import { inject, ref, Ref, nextTick } from "vue";
 import { login } from "../../net/account/login";
-import Message from '../message/Message.vue';
-import Loading from '../Loading.vue';
+import Message from "../message/Message.vue";
+import Loading from "../Loading.vue";
+import QRCode from "qrcode";
 
-
-const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
+const globalShowSetting = inject<Ref<boolean>>("globalShowSetting");
 const globalSelect = inject<Ref<number>>("globalSelect");
 
 const loginForm = ref({
-  username: '',
-  password: ''
+  username: "",
+  password: "",
 });
 const loginSubmit = async () => {
   showLoading.value = true;
-  await login(loginForm.value, (data: any) => {
-    showLoading.value = false;
-    console.log("login success", data);
-  }, (message: string) => {
-    showMessage.value = true;
-    messageInfo.value = message;
-    messageType.value = 'error';
-    showLoading.value = false;
-    setTimeout(() => {
-      showMessage.value = false;
-    }, 2000);
-    console.log("login fail" + message);
-  });
-}
-
+  await login(
+    loginForm.value,
+    (data: any) => {
+      console.log("login success", data);
+      showLoading.value = false;
+    },
+    (message: string) => {
+      showLoading.value = false;
+      showMessage.value = true;
+      messageInfo.value = message;
+      messageType.value = "error";
+      setTimeout(() => {
+        showMessage.value = false;
+      }, 2000);
+      console.log("login fail" + message);
+    }
+  );
+};
 
 const submitGoBackSetting = () => {
   if (globalShowSetting && globalSelect) {
     globalShowSetting.value = true;
     globalSelect.value = 7;
   }
-}
+};
 
 const showMessage = ref(false);
-const messageInfo = ref('');
-const messageType = ref('info');
+const messageInfo = ref("");
+const messageType = ref("info");
 const showLoading = ref(false);
 
+const showAppVerify = ref(false);
 
+const toAppVerify = async () => {
+  showAppVerify.value = true;
+  await nextTick();
+  generateQRCode();
+};
 
+const qrcodeCanvas = ref<HTMLCanvasElement | null>(null);
+const text = ref<string>("https://example.com");
+const errorMessage = ref<string>("");
+const qrOptions = ref({
+  width: 200,
+  color: {
+    dark: "#000000",
+    light: "#ffffff",
+  },
+});
+
+const generateQRCode = () => {
+  if (qrcodeCanvas.value) {
+    text.value = "https://example.com"; // 使用固定的URL
+    QRCode.toCanvas(
+      qrcodeCanvas.value,
+      text.value,
+      qrOptions.value,
+      (error) => {
+        if (error) {
+          errorMessage.value = "Failed to generate QR code: " + error.message;
+        } else {
+          errorMessage.value = "";
+        }
+      }
+    );
+  } else {
+    errorMessage.value = "Canvas not found.";
+  }
+};
+const toLogin = () => {
+  showAppVerify.value = false;
+};
 </script>
-
 
 <template>
   <div>
     <!-- Loading 遮罩层 -->
     <div v-if="showLoading" class="loading-overlay">
-      <Loading style="margin-left: 200px;margin-top: -120px;" />
+      <Loading style="margin-left: 200px; margin-top: -120px" />
     </div>
-    <form action="javascript:void(0)" class="form">
-      <div class="flex-column">
-        <label>Email </label>
-      </div>
 
-
-      <div class="inputForm">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="0 0 32 32" height="20">
-          <g data-name="Layer 3" id="Layer_3">
-            <path
-              d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z">
-            </path>
-          </g>
-        </svg>
-        <input v-model="loginForm.username" placeholder="邮箱账号" class="input" type="text">
-      </div>
-
-      <div class="flex-column">
-        <label>Password</label>
-      </div>
-      <div class="inputForm">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" viewBox="-64 0 512 512" height="20">
-          <path
-            d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0">
-          </path>
-          <path
-            d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0">
-          </path>
-        </svg>
-        <input v-model="loginForm.password" placeholder="密码" class="input" type="password">
-      </div>
-
-      <div class="flex-row">
-        <div>
+    <!-- 表单内容 -->
+    <form class="form">
+      <div v-if="!showAppVerify">
+        <div class="flex-column" style="margin-top: 30px">
+          <label style="margin-top: 30px">Email</label>
         </div>
-        <span class="span">忘记密码?</span>
-      </div>
-      <Message v-if="showMessage" :type="messageType" :message="messageInfo" width="180px" className="error-msg" />
-      <button @click="loginSubmit()" type="button" class="button-submit">登 录</button>
-      <p class="p">没有账号? <span class="span">立即注册</span>
-
-      </p>
-      <p class="p line">或</p>
-
-      <div class="flex-row">
-        <button class="btn google">
-          <svg xml:space="preserve" style="enable-background:new 0 0 512 512;" viewBox="0 0 512 512" y="0px" x="0px"
-            xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Layer_1" width="20"
-            version="1.1">
-            <path d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
-	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
-	C103.821,274.792,107.225,292.797,113.47,309.408z" style="fill:#FBBB00;"></path>
-            <path d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451
-	c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535
-	c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176L507.527,208.176z"
-              style="fill:#518EF8;"></path>
-            <path d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512
-	c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771
-	c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z" style="fill:#28B446;"></path>
-            <path d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012
-	c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0
-	C318.115,0,375.068,22.126,419.404,58.936z" style="fill:#F14336;"></path>
-
-          </svg>
-
-          Google
-
-        </button>
-        <button class="btn apple">
-          <svg xml:space="preserve" style="enable-background:new 0 0 22.773 22.773;" viewBox="0 0 22.773 22.773" y="0px"
-            x="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" id="Capa_1" width="20"
-            height="20" version="1.1">
-            <g>
-              <g>
-                <path
-                  d="M15.769,0c0.053,0,0.106,0,0.162,0c0.13,1.606-0.483,2.806-1.228,3.675c-0.731,0.863-1.732,1.7-3.351,1.573 c-0.108-1.583,0.506-2.694,1.25-3.561C13.292,0.879,14.557,0.16,15.769,0z">
-                </path>
-                <path
-                  d="M20.67,16.716c0,0.016,0,0.03,0,0.045c-0.455,1.378-1.104,2.559-1.896,3.655c-0.723,0.995-1.609,2.334-3.191,2.334 c-1.367,0-2.275-0.879-3.676-0.903c-1.482-0.024-2.297,0.735-3.652,0.926c-0.155,0-0.31,0-0.462,0 c-0.995-0.144-1.798-0.932-2.383-1.642c-1.725-2.098-3.058-4.808-3.306-8.276c0-0.34,0-0.679,0-1.019 c0.105-2.482,1.311-4.5,2.914-5.478c0.846-0.52,2.009-0.963,3.304-0.765c0.555,0.086,1.122,0.276,1.619,0.464 c0.471,0.181,1.06,0.502,1.618,0.485c0.378-0.011,0.754-0.208,1.135-0.347c1.116-0.403,2.21-0.865,3.652-0.648 c1.733,0.262,2.963,1.032,3.723,2.22c-1.466,0.933-2.625,2.339-2.427,4.74C17.818,14.688,19.086,15.964,20.67,16.716z">
-                </path>
-              </g>
+        <div style="margin-top: 20px" class="inputForm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            viewBox="0 0 32 32"
+            height="20"
+          >
+            <g data-name="Layer 3" id="Layer_3">
+              <path
+                d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
+              ></path>
             </g>
           </svg>
+          <input
+            v-model="loginForm.username"
+            placeholder="邮箱账号"
+            class="input"
+            type="text"
+          />
+        </div>
 
-          Apple
+        <div style="margin-top: 30px" class="flex-column">
+          <label>Password</label>
+        </div>
+        <div style="margin-top: 20px" class="inputForm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            viewBox="-64 0 512 512"
+            height="20"
+          >
+            <path
+              d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"
+            ></path>
+            <path
+              d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"
+            ></path>
+          </svg>
+          <input
+            v-model="loginForm.password"
+            placeholder="密码"
+            class="input"
+            type="password"
+          />
+        </div>
 
+        <div class="flex-row">
+          <div></div>
+          <span style="margin-top: 10px" class="span">忘记密码?</span>
+        </div>
+        <Message
+          v-if="showMessage"
+          :type="messageType"
+          :message="messageInfo"
+          width="180px"
+          className="error-msg"
+        />
+        <button @click="loginSubmit()" type="button" class="button-submit">
+          登 录
+        </button>
+        <p class="p">没有账号? <span class="span">立即注册</span></p>
+        <p class="p line">或</p>
+
+        <div class="flex-row">
+          <button class="btn google">
+            <svg
+              xml:space="preserve"
+              style="enable-background: new 0 0 512 512"
+              viewBox="0 0 512 512"
+              y="0px"
+              x="0px"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              xmlns="http://www.w3.org/2000/svg"
+              id="Layer_1"
+              width="20"
+              version="1.1"
+            >
+              <path
+                d="M113.47,309.408L95.648,375.94l-65.139,1.378C11.042,341.211,0,299.9,0,256
+	c0-42.451,10.324-82.483,28.624-117.732h0.014l57.992,10.632l25.404,57.644c-5.317,15.501-8.215,32.141-8.215,49.456
+	C103.821,274.792,107.225,292.797,113.47,309.408z"
+                style="fill: #fbbb00"
+              ></path>
+              <path
+                d="M507.527,208.176C510.467,223.662,512,239.655,512,256c0,18.328-1.927,36.206-5.598,53.451
+	c-12.462,58.683-45.025,109.925-90.134,146.187l-0.014-0.014l-73.044-3.727l-10.338-64.535
+	c29.932-17.554,53.324-45.025,65.646-77.911h-136.89V208.176h138.887L507.527,208.176L507.527,208.176z"
+                style="fill: #518ef8"
+              ></path>
+              <path
+                d="M416.253,455.624l0.014,0.014C372.396,490.901,316.666,512,256,512
+	c-97.491,0-182.252-54.491-225.491-134.681l82.961-67.91c21.619,57.698,77.278,98.771,142.53,98.771
+	c28.047,0,54.323-7.582,76.87-20.818L416.253,455.624z"
+                style="fill: #28b446"
+              ></path>
+              <path
+                d="M419.404,58.936l-82.933,67.896c-23.335-14.586-50.919-23.012-80.471-23.012
+	c-66.729,0-123.429,42.957-143.965,102.724l-83.397-68.276h-0.014C71.23,56.123,157.06,0,256,0
+	C318.115,0,375.068,22.126,419.404,58.936z"
+                style="fill: #f14336"
+              ></path>
+            </svg>
+            Google
+          </button>
+          <button @click="toAppVerify()" class="btn apple">
+            <svg
+              t="1737203464746"
+              class="icon"
+              viewBox="0 0 1024 1024"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              p-id="4296"
+              data-spm-anchor-id="a313x.search_index.0.i1.d39c3a81HGptt2"
+              width="30"
+              height="30"
+            >
+              <path
+                d="M903.825478 533.599947l-783.637654 0c-16.641005 0-30.147624-13.494339-30.147624-30.133298 0-16.625656 13.507642-30.148647 30.147624-30.148647l783.637654 0c16.670681 0 30.133298 13.522991 30.133298 30.148647C933.958776 520.105608 920.49616 533.599947 903.825478 533.599947M813.426609 895.284453 647.261125 895.284453c-16.670681 0-30.163997-13.462616-30.163997-30.132274 0-16.670681 13.493316-30.163997 30.163997-30.163997l166.166507 0c16.641005 0 30.102598-13.492292 30.102598-30.132274L843.530231 654.16179c0-16.671705 13.492292-30.133298 30.162974-30.133298 16.672728 0 30.133298 13.461593 30.133298 30.133298l0 150.694117C903.825478 854.717526 863.258551 895.284453 813.426609 895.284453M382.300544 895.284453 210.602044 895.284453c-49.861618 0-90.413196-40.566928-90.413196-90.428545L120.188848 654.16179c0-16.671705 13.507642-30.133298 30.147624-30.133298 16.641005 0 30.117948 13.461593 30.117948 30.133298l0 150.694117c0 16.641005 13.537318 30.132274 30.147624 30.132274L382.300544 834.988182c16.670681 0 30.163997 13.493316 30.163997 30.163997C412.463518 881.821837 398.970202 895.284453 382.300544 895.284453M150.336472 382.903783c-16.639982 0-30.147624-13.507642-30.147624-30.148647L120.188848 202.061019c0-49.861618 40.552601-90.413196 90.413196-90.413196L382.300544 111.647823c16.670681 0 30.163997 13.506619 30.163997 30.147624 0 16.610306-13.493316 30.117948-30.163997 30.117948L210.602044 171.913395c-16.610306 0-30.147624 13.537318-30.147624 30.147624l0 150.694117C180.45442 369.396141 166.976454 382.903783 150.336472 382.903783M873.692181 382.903783c-16.670681 0-30.162974-13.507642-30.162974-30.148647L843.529207 202.061019c0-16.610306-13.461593-30.147624-30.102598-30.147624L647.261125 171.913395c-16.670681 0-30.163997-13.507642-30.163997-30.117948 0-16.641005 13.493316-30.147624 30.163997-30.147624l166.166507 0c49.830919 0 90.39887 40.552601 90.39887 90.413196l0 150.694117C903.825478 369.396141 890.364909 382.903783 873.692181 382.903783"
+                fill="#bfbfbf"
+                p-id="4297"
+                data-spm-anchor-id="a313x.search_index.0.i2.d39c3a81HGptt2"
+                class="selected"
+              ></path>
+            </svg>
+            APP扫码
+          </button>
+        </div>
+        <button
+          @click="submitGoBackSetting()"
+          type="button"
+          class="button-submit-back"
+        >
+          返回设置
         </button>
       </div>
-      <button @click="submitGoBackSetting()" type="button" class="button-submit-back">返回设置</button>
+      <!-- app 扫码 -->
+      <div v-if="showAppVerify" class="app-verify-container">
+        <h4>请使用APP扫码登录</h4>
+        <div>
+          <canvas ref="qrcodeCanvas"></canvas>
+        </div>
+        <p @click="toLogin()" class="clickable-text">使用账号密码登录</p>
+      </div>
     </form>
   </div>
 </template>
@@ -186,7 +288,7 @@ const showLoading = ref(false);
   align-self: flex-end;
 }
 
-.flex-column>label {
+.flex-column > label {
   color: #f1f1f1;
   font-weight: 600;
 }
@@ -228,7 +330,7 @@ const showLoading = ref(false);
   justify-content: space-between;
 }
 
-.flex-row>div>label {
+.flex-row > div > label {
   font-size: 14px;
   color: #f1f1f1;
   font-weight: 400;
@@ -313,5 +415,25 @@ const showLoading = ref(false);
   margin-top: 30px;
   animation: moveUp 0.4s ease-in-out forwards;
   /* 动画持续 1 秒 */
+}
+
+.app-verify-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.clickable-text {
+  color: #518ef8;
+  cursor: pointer;
+}
+
+.clickable-text:hover {
+  text-decoration: underline;
+}
+
+.clickable-text.active {
+  text-decoration: underline;
 }
 </style>
