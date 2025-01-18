@@ -3,6 +3,8 @@ import { inject, provide, Ref, ref, watch } from 'vue';
 import Account from "./setting/Account.vue";
 import LoginLightPanle from '../../components/login/LoginLightPanle.vue';
 import LoginDarkPanle from '../../components/login/LoginDarkPanle.vue';
+import LightTheme from '../../components/theme_model/LightTheme.vue';
+import DarkTheme from '../../components/theme_model/DarkTheme.vue';
 
 const isLogin = ref(false);
 const globalTheme = inject<string>("globalTheme");
@@ -17,15 +19,14 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
       :style="{ backgroundColor: selectTheme === 'light' ? '#fff' : '#1a1a1a', boxShadow: selectTheme === 'light' ? ' 0 2px 5px rgba(0, 0, 0, 0.1)' : ' 0 2px 5px #fff' }"
       v-if="globalShowSetting" class="card">
       <Account />
+      <p class="title">主题切换</p>
+      <LightTheme v-if="selectTheme === 'light'"/>
+      <DarkTheme v-else />
     </div>
     <div  v-if="!globalShowSetting">
       <LoginLightPanle v-if="selectTheme === 'light'" />
       <LoginDarkPanle v-if="selectTheme === 'dark'" />
     </div>
-    
-    
-    
-
   </div>
 </template>
 
@@ -47,5 +48,9 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
   height: 70%;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.title {
+  font-weight: 400;
+  font-family: Arial, Helvetica, sans-serif;
 }
 </style>

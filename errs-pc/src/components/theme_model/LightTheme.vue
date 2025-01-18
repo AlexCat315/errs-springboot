@@ -1,0 +1,77 @@
+<script setup lang="js">
+
+
+</script>
+
+<template>
+    <div class="mydict">
+        <div>
+            <label>
+                <input type="radio" name="radio" checked="">
+                <span>跟随系统</span>
+            </label>
+            <label>
+                <input type="radio" name="radio">
+                <span>明亮</span>
+            </label>
+            <label>
+                <input type="radio" name="radio">
+                <span>暗夜</span>
+            </label>
+
+        </div>
+    </div>
+</template>
+
+<style lang="css" scoped>
+:focus {
+    outline: 0;
+    border-color: #2260ff;
+    box-shadow: 0 0 0 4px #b5c9fc;
+}
+
+.mydict div {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+}
+
+.mydict input[type="radio"] {
+    clip: rect(0 0 0 0);
+    clip-path: inset(100%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.mydict input[type="radio"]:checked+span {
+    box-shadow: 0 0 0 0.0625em #0043ed;
+    background-color: #dee7ff;
+    z-index: 1;
+    color: #0043ed;
+}
+
+label span {
+    display: block;
+    cursor: pointer;
+    background-color: #fff;
+    padding: 0.375em .75em;
+    position: relative;
+    margin-left: .0625em;
+    box-shadow: 0 0 0 0.0625em #b5bfd9;
+    letter-spacing: .05em;
+    color: #3e4963;
+    text-align: center;
+    transition: background-color .5s ease;
+}
+
+label:first-child span {
+    border-radius: .375em 0 0 .375em;
+}
+
+label:last-child span {
+    border-radius: 0 .375em .375em 0;
+}
+</style>
