@@ -96,6 +96,10 @@ const props = defineProps({
 </template>
 
 <style lang="css" scoped>
+.popup-container {
+  z-index: 9999 !important;
+}
+
 .popup {
   margin: 10px;
   box-shadow: 4px 4px 10px -10px rgba(0, 0, 0, 1);
