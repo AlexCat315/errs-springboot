@@ -19,7 +19,7 @@ public class AccountController {
 
     @Resource(name = "userAccountService")
     private AccountService accountService;
-    @Resource(name = "jwtUtils")
+    @Resource
     private JWTUtils<Account> jwtUtils;
 
     @PostMapping("/login")
@@ -31,9 +31,10 @@ public class AccountController {
         return accountService.login(loginVo);
     }
 
-    @GetMapping("/validate/token?token={token}")
-    public ResultEntity<String> validateToken(String token) {
+    @GetMapping("/validate/token")
+    public ResultEntity<String> validateToken(@RequestParam String token) {
         try {
+            log.info(token);
             boolean verifyToken = jwtUtils.verifyToken() && RoleConstants.ROLE_USER.equals(jwtUtils.getRole());
             if (verifyToken) {
                 return ResultEntity.success();

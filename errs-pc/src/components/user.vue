@@ -1,13 +1,26 @@
-<script setup lang="js" >
+<script setup lang="js">
 import { inject, ref } from "vue";
+import { validate_token } from "../net/account/validate_token";
 const globalTheme = inject("globalTheme");
 const selectTheme = ref(globalTheme.value);
-const isLogin = false;
+const isLogin = ref(false);
 const globalShowSetting = inject("globalShowSetting");
 
 const loginClick = () => {
     globalShowSetting.value = false;
+}
 
+
+const token = ref(localStorage.getItem('token'));
+if (token.value !== null && token.value !== '' && token.value !== undefined) {
+    validate_token(token.value, (data) => {
+        console.log(data);
+        if (data.code === 200) {
+            isLogin.value = true;
+        }
+    }, (message) => {
+        console.log(message);
+    })
 }
 
 
@@ -34,8 +47,9 @@ const loginClick = () => {
         </div>
     </button>
     <!-- 未登录 -->
-    <button @click="loginClick()" v-if="!isLogin" id="btn-message" :style="{ '--bg-color': selectTheme === 'dark' ? '#212121' : '#f5f5f5' }"
-        style="--online-status: red;" class="button-message">
+    <button @click="loginClick()" v-if="!isLogin" id="btn-message"
+        :style="{ '--bg-color': selectTheme === 'dark' ? '#212121' : '#f5f5f5' }" style="--online-status: red;"
+        class="button-message">
         <div class="content-avatar">
             <div class="status-user"></div>
             <div class="avatar">

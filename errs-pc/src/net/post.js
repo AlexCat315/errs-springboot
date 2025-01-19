@@ -3,25 +3,27 @@ import { invoke } from "@tauri-apps/api/core";
 const baseUrl = "http://127.0.0.1:12345";
 
 function accessHeader() {
-  if (localStorage.getItem('token') !== null) {
-      return {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
+  if (
+    typeof localStorage.getItem("token") === "string" &&
+    localStorage.getItem("token") !== "undefined"
+  ) {
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
   }
-  if (sessionStorage.getItem('token') !== null) {
-      return {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-      }
+  if (sessionStorage.getItem("token") !== null) {
+    return {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    };
   }
   return {
-      'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  };
 }
 
 export async function Post(url, body, success, failure) {
-
   const headers = accessHeader();
   try {
     const response = await invoke("post_request", {

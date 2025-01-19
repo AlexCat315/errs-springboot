@@ -26,6 +26,8 @@ public class JWTUtils<T extends Account> {
     @Value("${errs.jwt.key}")
     private String KEY;
 
+    private final static String tokenHeader = "Bearer ";
+
     /**
      * @param account    用户信息
      * @param expireTime 过期时间（天）
@@ -130,7 +132,7 @@ public class JWTUtils<T extends Account> {
             throw new RuntimeException("JWT校验错误");
         }
         // 截取有效 token 部分
-        return token.substring(7);
+        return token.substring(tokenHeader.length());
     }
 
     public String getToken() {
@@ -139,7 +141,6 @@ public class JWTUtils<T extends Account> {
 
     private String getHeaderToken() {
         return request.getHeader("Authorization");
-
     }
 
     /**
