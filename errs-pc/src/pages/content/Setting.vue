@@ -38,6 +38,10 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
         <div style="margin-top: 20px;">
           <GPUCheckbox />
         </div>
+        <div class="divider"></div>
+        <!-- 隐私设置 -->
+        <p :style="{ color: selectTheme === 'light' ? 'black' : '#FFF' }" class="title">隐私设置</p>
+
       </div>
 
       <!--  -->
