@@ -235,7 +235,7 @@ public class AccountController {
     @PostMapping("/validate-token")
     public ResultEntity<String> validateToken() {
         try {
-            boolean verifyToken = jwtUtils.verifyToken();
+            boolean verifyToken = jwtUtils.verifyToken() && RoleConstants.ROLE_ADMIN.equals(jwtUtils.getRole());
             if (verifyToken) {
                 return ResultEntity.success();
             }
