@@ -17,7 +17,7 @@ const loginSubmit = async () => {
   await login(
     loginForm.value,
     (data: any) => {
-      localStorage.setItem("token", data.token);
+      localStorage.setItem("token", data.data);
       if (globalShowSetting) {
         globalShowSetting.value = true;
       }
