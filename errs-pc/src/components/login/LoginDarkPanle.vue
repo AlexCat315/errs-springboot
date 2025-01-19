@@ -17,7 +17,10 @@ const loginSubmit = async () => {
   await login(
     loginForm.value,
     (data: any) => {
-      console.log("login success", data);
+      localStorage.setItem("token", data.token);
+      if (globalShowSetting) {
+        globalShowSetting.value = true;
+      }
       showLoading.value = false;
     },
     (message: string) => {

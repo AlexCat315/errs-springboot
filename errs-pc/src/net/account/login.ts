@@ -12,8 +12,8 @@ export async function login(
       username: LoginForm.username,
       password: LoginForm.password,
     },
-    () => {
-      success();
+    (data:any) => {
+      success(data);
     },
     (message: string) => {
       failure(message);

@@ -17,7 +17,10 @@ const loginSubmit = async () => {
   await login(
     loginForm.value,
     (data: any) => {
-      console.log("login success", data);
+      localStorage.setItem("token", data.token);
+      if (globalShowSetting) {
+        globalShowSetting.value = true;
+      }
       showLoading.value = false;
     },
     (message: string) => {
@@ -187,7 +190,7 @@ const toLogin = () => {
           <p @click="toLogin()" class="clickable-text">使用账号密码登录</p>
         </div>
         <div v-if="showWeChatVerify" class="app-verify-container">
-          <div  style="display: flex; justify-content: space-between;">
+          <div style="display: flex; justify-content: space-between;">
             <h4>请打开手机</h4>
             <h4 style="color:#2d79f3;">微信</h4>
             <h4>扫码登录</h4>
