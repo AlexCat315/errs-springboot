@@ -32,7 +32,7 @@ const logCheckboxValue = () => {
 <template>
   <div class="checkbox-wrapper-33">
     <label class="checkbox">
-      <input class="checkbox__trigger visuallyhidden" type="checkbox" v-model="isChecked" @change="logCheckboxValue"
+      <input style="border-radius: 20px;" class="checkbox__trigger visuallyhidden" type="checkbox" v-model="isChecked" @change="logCheckboxValue"
         ref="checkboxRef" />
       <span class="checkbox__symbol">
         <svg aria-hidden="true" class="icon-checkbox" width="13px" height="13px" viewBox="0 0 28 28" version="1"
@@ -106,7 +106,7 @@ const logCheckboxValue = () => {
   height: 0.3em;
   background-color: var(--c-primary-20-percent-opacity);
   opacity: 0;
-  border-radius: 3em;
+  border-radius: 10px;
   transform: scale(1.1);
   transform-origin: 50% 50%;
 }
