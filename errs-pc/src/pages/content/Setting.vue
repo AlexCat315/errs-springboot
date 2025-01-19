@@ -5,6 +5,7 @@ import LoginLightPanle from '../../components/login/LoginLightPanle.vue';
 import LoginDarkPanle from '../../components/login/LoginDarkPanle.vue';
 import LightTheme from '../../components/theme_model/LightTheme.vue';
 import DarkTheme from '../../components/theme_model/DarkTheme.vue';
+import SystemCheckbox from '../../components/checkbox/SystemCheckbox.vue';
 
 const isLogin = ref(false);
 const globalTheme = inject<string>("globalTheme");
@@ -19,11 +20,25 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
       :style="{ backgroundColor: selectTheme === 'light' ? '#fff' : '#1a1a1a', boxShadow: selectTheme === 'light' ? ' 0 2px 5px rgba(0, 0, 0, 0.1)' : ' 0 2px 5px #fff' }"
       v-if="globalShowSetting" class="card">
       <Account />
-      <p :style="{color : selectTheme === 'light' ? 'black' : '#ddd'}" class="title">主题切换</p>
-      <LightTheme v-if="selectTheme === 'light'"/>
-      <DarkTheme v-else />
+      <!-- 常规设置 -->
+      <div>
+        <p :style="{ color: selectTheme === 'light' ? 'black' : '#FFF' }" class="title">常规设置</p>
+        <!-- 主题切换 -->
+        <div>
+          <p :style="{ color: selectTheme === 'light' ? '#606266' : '#bfc3cb' }" class="title-h2">主题切换</p>
+          <LightTheme v-if="selectTheme === 'light'" />
+          <DarkTheme v-else />
+        </div>
+        <div class="divider"></div>
+        <div>
+          <SystemCheckbox />
+        </div>
+      </div>
+
+      <!--  -->
+
     </div>
-    <div  v-if="!globalShowSetting">
+    <div v-if="!globalShowSetting">
       <LoginLightPanle v-if="selectTheme === 'light'" />
       <LoginDarkPanle v-if="selectTheme === 'dark'" />
     </div>
@@ -49,8 +64,22 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .title {
+  font-size: 15px;
+  font-weight: 800;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.title-h2 {
+  font-size: 13px;
   font-weight: 400;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.divider {
+  height: 1px;
+  background-color: #ccc;
+  margin: 20px 0;
 }
 </style>

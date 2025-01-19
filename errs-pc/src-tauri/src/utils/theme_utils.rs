@@ -1,5 +1,5 @@
-use tauri::command;
 use dark_light::{detect, Mode};
+use tauri::command;
 
 #[command]
 pub async fn get_system_theme() -> Result<String, String> {

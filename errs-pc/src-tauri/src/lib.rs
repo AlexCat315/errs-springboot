@@ -1,16 +1,20 @@
 mod http_client;
 mod utils;
 
-
 use crate::http_client::{get_request, post_request};
 use crate::utils::img_utils::{conflate_img, get_img_names};
 use crate::utils::theme_utils::get_system_theme;
 use tauri::Manager;
+use tauri_plugin_autostart::MacosLauncher;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_autostart::init(
+            MacosLauncher::LaunchAgent,       // macOS 启动方式
+            Some(vec!["--flag1", "--flag2"]), // 可选：传递给应用程序的参数
+        ))
         .plugin(tauri_plugin_store::Builder::new().build())
         .setup(|app| {
             let window = app.get_window("main").unwrap();
@@ -28,8 +32,7 @@ pub fn run() {
             // Linux 上启用 Blur 效果
             #[cfg(target_os = "linux")]
             apply_blur(&window, Some((18, 18, 18, 125)))
-               .expect("Unsupported platform! 'apply_blur' is only supported on Linux");
-            
+                .expect("Unsupported platform! 'apply_blur' is only supported on Linux");
 
             Ok(())
         })

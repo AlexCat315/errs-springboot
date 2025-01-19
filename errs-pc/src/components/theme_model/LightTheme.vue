@@ -99,11 +99,17 @@ onMounted(() => {
 </template>
 
 <style lang="css" scoped>
+
 :focus {
     outline: 0;
     border-color: #2260ff;
     box-shadow: 0 0 0 4px #b5c9fc;
 }
+.mydict {
+    transform: scale(0.75);
+    transform-origin: left;
+}
+
 
 .mydict div {
     display: flex;

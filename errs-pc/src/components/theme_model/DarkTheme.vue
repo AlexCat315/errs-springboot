@@ -104,6 +104,11 @@ onMounted(() => {
     border-color: #4d82ff;
     box-shadow: 0 0 0 4px #2a4a8f;
 }
+.mydict {
+    transform: scale(0.75);
+    transform-origin: left;
+}
+
 
 .mydict div {
     display: flex;
