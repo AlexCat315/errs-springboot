@@ -17,7 +17,7 @@
         "width": 900,
         "height": 700,
         "transparent": true,
-         "titleBarStyle": "Overlay"
+        "titleBarStyle": "Overlay"
       }
     ],
     "security": {

@@ -7,6 +7,7 @@ use crate::utils::theme_utils::get_system_theme;
 use tauri::Manager;
 use tauri_plugin_autostart::MacosLauncher;
 use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
+use crate::utils::gpu_utils::set_gpu_acceleration;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -42,7 +43,8 @@ pub fn run() {
             post_request,
             conflate_img,
             get_img_names,
-            get_system_theme
+            get_system_theme,
+            set_gpu_acceleration
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

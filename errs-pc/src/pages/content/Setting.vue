@@ -6,6 +6,7 @@ import LoginDarkPanle from '../../components/login/LoginDarkPanle.vue';
 import LightTheme from '../../components/theme_model/LightTheme.vue';
 import DarkTheme from '../../components/theme_model/DarkTheme.vue';
 import SystemCheckbox from '../../components/checkbox/SystemCheckbox.vue';
+import GPUCheckbox from '../../components/checkbox/GPUCheckbox.vue';
 
 const isLogin = ref(false);
 const globalTheme = inject<string>("globalTheme");
@@ -29,9 +30,13 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
           <LightTheme v-if="selectTheme === 'light'" />
           <DarkTheme v-else />
         </div>
-        <div class="divider"></div>
-        <div>
+        <!-- 开机自动启动 -->
+        <div style="margin-top: 20px;">
           <SystemCheckbox />
+        </div>
+        <!-- 启用GPU加速 -->
+        <div style="margin-top: 20px;">
+          <GPUCheckbox />
         </div>
       </div>
 
@@ -59,8 +64,8 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
 .card {
   background-color: #ddd;
   padding: 20px;
-  width: 70%;
-  height: 70%;
+  width: 90%;
+  height: 90%;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }

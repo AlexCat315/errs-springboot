@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, Ref, ref } from 'vue';
-import { enable, isEnabled, disable } from '@tauri-apps/plugin-autostart';
+import { invoke } from "@tauri-apps/api/core";
 
 
 const globalTheme = inject<Ref<string>>("globalTheme");
@@ -10,21 +10,25 @@ if (!globalTheme) {
 
 
 // 使用 v-model 绑定值
-const isChecked = ref(false);
+const isChecked = ref(true);
 
-isEnabled().then((enabled) => {
-  isChecked.value = enabled;
-});
+const localStoreGpu = localStorage.getItem('gpu');
+if (localStoreGpu) {
+  isChecked.value = localStoreGpu === 'true';
+} else {
+  isChecked.value = true;
+  localStorage.setItem('gpu', 'true');
+}
+
 // 使用 ref 绑定 DOM 元素
 const checkboxRef = ref<HTMLInputElement | null>(null);
 
 // 过 ref 获取 DOM 元素
 const logCheckboxValue = () => {
-  checkboxRef.value?.checked === true ? enable() : disable();
-  isEnabled().then((enabled) => {
-    console.log(enabled);
-  });
-
+  localStorage.setItem('gpu', checkboxRef.value?.checked ? 'true' : 'false');
+  invoke("set_gpu_acceleration", {
+    enabled: checkboxRef.value?.checked
+  })
 };
 
 </script>
@@ -41,7 +45,7 @@ const logCheckboxValue = () => {
         </svg>
       </span>
       <p class="checkbox__textwrapper" :style="{ color: globalTheme === 'light' ? 'black' : '#bfc3cb' }">
-        开机自动启动
+        启用GPU加速
       </p>
     </label>
   </div>
@@ -53,9 +57,9 @@ const logCheckboxValue = () => {
   --s-xsmall: 0.625em;
   --s-small: 1.2em;
   --border-width: 1px;
-  --c-primary: #5f11e8;
-  --c-primary-20-percent-opacity: rgb(95 17 232 / 20%);
-  --c-primary-10-percent-opacity: rgb(95 17 232 / 10%);
+  --c-primary: #057710;
+  --c-primary-20-percent-opacity: rgba(43, 114, 58, 0.2);
+  --c-primary-10-percent-opacity: rgba(75, 158, 88, 0.1);
   --t-base: 0.4s;
   --t-fast: 0.2s;
   --e-in: ease-in;
