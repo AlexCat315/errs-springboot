@@ -2,8 +2,27 @@ import { invoke } from "@tauri-apps/api/core";
 
 const baseUrl = "http://127.0.0.1:12345";
 
+function accessHeader() {
+  if (localStorage.getItem('token') !== null) {
+      return {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+  }
+  if (sessionStorage.getItem('token') !== null) {
+      return {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+      }
+  }
+  return {
+      'Content-Type': 'application/json'
+  }
+}
+
 export async function Post(url, body, success, failure) {
-  const headers = { "Content-Type": "application/json" };
+
+  const headers = accessHeader();
   try {
     const response = await invoke("post_request", {
       url: baseUrl + url,
