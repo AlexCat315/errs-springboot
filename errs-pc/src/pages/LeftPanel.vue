@@ -53,15 +53,15 @@ const searchFun = (value) => {
     <Search v-if="globalTheme === 'dark'" background-color="#403e3d" style="margin-top: 30px;"
       @update:search="searchFun" />
 
-    <div  :style="{
-        width: `${props.distanceToLeft}px`,
-        '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
-        '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
-        '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef', 
-        '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
-      }" class="sidebar">
+    <div :style="{
+      width: `${props.distanceToLeft}px`,
+      '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
+      '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
+      '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef',
+      '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
+    }" class="sidebar">
       <ul>
-        <li v-for="item in menuItems" :key="item.key" :class="{ active: item.key === selectIndex.value }"
+        <li v-for="item in menuItems" :key="item.key" :class="{ active: item.key === selectIndex }"
           @click="selectItem(item.key)">
           <img :src="item.icon" alt="" class="icon" />
           {{ item.name }}
@@ -70,17 +70,15 @@ const searchFun = (value) => {
     </div>
 
     <!-- 底部菜单栏 -->
-    <div
-      :style="{
-        width: `${props.distanceToLeft}px`,
-        '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
-        '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
-        '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef', 
-        '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
-      }"
-      class="sidebar" style="margin-top: auto; margin-bottom: 15px;">
+    <div :style="{
+      width: `${props.distanceToLeft}px`,
+      '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
+      '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
+      '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef',
+      '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
+    }" class="sidebar" style="margin-top: auto; margin-bottom: 15px;">
       <ul>
-        <li v-for="item in bottomMenuItems" :key="item.key" :class="{ active: item.key === selectIndex.value }"
+        <li v-for="item in bottomMenuItems" :key="item.key" :class="{ active: item.key === selectIndex }"
           @click="selectButtomItem(item.key)">
           <img :src="item.icon" alt="" class="icon" />
           {{ item.name }}
