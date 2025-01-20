@@ -5,7 +5,6 @@ export function validate_token(
   success: Function,
   failure: Function
 ) {
-    console.log("validate_token", token);
   Get(
     `/api/user/account/validate/token?token=${token}`,
     (data: any) => {

@@ -7,8 +7,8 @@ import LightTheme from '../../components/theme_model/LightTheme.vue';
 import DarkTheme from '../../components/theme_model/DarkTheme.vue';
 import SystemCheckbox from '../../components/checkbox/SystemCheckbox.vue';
 import GPUCheckbox from '../../components/checkbox/GPUCheckbox.vue';
+import PrivacyCheckbox from '../../components/checkbox/privacy/PrivacyCheckbox.vue';
 
-const isLogin = ref(false);
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
 const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
@@ -41,7 +41,7 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
         <div class="divider"></div>
         <!-- 隐私设置 -->
         <p :style="{ color: selectTheme === 'light' ? 'black' : '#FFF' }" class="title">隐私设置</p>
-
+        <PrivacyCheckbox />
       </div>
 
       <!--  -->

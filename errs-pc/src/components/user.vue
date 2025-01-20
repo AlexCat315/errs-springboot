@@ -14,7 +14,6 @@ const loginClick = () => {
 const token = ref(localStorage.getItem('token'));
 if (token.value !== null && token.value !== '' && token.value !== undefined) {
     validate_token(token.value, (data) => {
-        console.log(data);
         if (data.code === 200) {
             isLogin.value = true;
         }

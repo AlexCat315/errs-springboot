@@ -5,7 +5,6 @@ export async function login(
   success: Function,
   failure: Function
 ) {
-  console.log("login", LoginForm.username, LoginForm.password);
   Post(
     "/api/user/account/login",
     {

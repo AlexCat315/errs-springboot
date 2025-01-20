@@ -20,14 +20,14 @@ const selectIndex = ref(globalSelect.value);
 const globalTheme = inject("globalTheme")
 const selectTheme = ref(globalTheme);
 
-const selectItem = (item) => {
-  // 设置选中的菜单项，保存到全局变量中
-  globalSelect.value = item;
-  selectIndex.value = item;
+const selectItem = (key) => {
+  globalSelect.value = key;
+  selectIndex.value = key;
 };
-const selectButtomItem = (item) => {
-  globalSelect.value = item;
-  selectIndex.value = item;
+
+const selectButtomItem = (key) => {
+  globalSelect.value = key;
+  selectIndex.value = key;
 };
 
 const searchValue = reactive({ value: '' });
@@ -58,7 +58,7 @@ const searchFun = (value) => {
         '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
         '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
         '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef', 
-        'active-color': selectTheme === 'light' ? 'black' : '#FFF'
+        '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
       }" class="sidebar">
       <ul>
         <li v-for="item in menuItems" :key="item.key" :class="{ active: item.key === selectIndex.value }"
@@ -76,7 +76,7 @@ const searchFun = (value) => {
         '--hover-background': selectTheme === 'light' ? '#f0efef' : '#1a1a1a',
         '--active-background': selectTheme === 'light' ? '#FFF' : 'black',
         '--hover-color': selectTheme === 'light' ? '#1a1a1a' : '#f0efef', 
-        'active-color': selectTheme === 'light' ? 'black' : '#FFF'
+        '--active-color': selectTheme === 'light' ? 'black' : '#FFF'
       }"
       class="sidebar" style="margin-top: auto; margin-bottom: 15px;">
       <ul>
