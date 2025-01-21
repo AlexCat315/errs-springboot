@@ -3,6 +3,8 @@ package com.x.backend.util;
 import cn.hutool.jwt.JWT;
 import cn.hutool.jwt.JWTPayload;
 import cn.hutool.jwt.JWTUtil;
+
+import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.pojo.common.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -149,11 +151,16 @@ public class JWTUtils<T extends Account> {
     public boolean verifyToken(String token) {
         try {
             if (token != null) {
-                JWTPayload jwtPayload = analysisJWT(token);
-                Object expireTime = jwtPayload.getClaim("expire_time");
-                long expire = Long.parseLong(expireTime.toString());
-                if (System.currentTimeMillis() < expire) {
-                    return true;
+                boolean verify = JWTUtil.verify(token, KEY.getBytes());
+                if (verify) {
+                    JWTPayload jwtPayload = analysisJWT(token);
+                    Object expireTime = jwtPayload.getClaim("expire_time");
+                    long expire = Long.parseLong(expireTime.toString());
+                    if (System.currentTimeMillis() < expire) {
+                        return true;
+                    }
+                } else {
+                    throw new RuntimeException(HttpMessageConstants.TOKEN_CHECK_FAILED);
                 }
             }
         } catch (NumberFormatException e) {

@@ -17,8 +17,12 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
         if (data.code === 200) {
             isLogin.value = true;
         }
+        console.log("success:", data);
     }, (message) => {
-        console.log(message);
+        localStorage.removeItem('token');
+        console.log("failure:", message);
+    }, (message) => {
+        console.log("error:", message);
     })
 }
 

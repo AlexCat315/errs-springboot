@@ -39,7 +39,8 @@ interface ResultEntity<T = any> {
 export async function Get(
   url: string,
   success: (data: any) => void,
-  failure: (message: string) => void
+  failure: (message: string) => void,
+  errorfn: (message: string) => void
 ) {
   const headers = accessHeader();
   try {
@@ -66,13 +67,12 @@ export async function Get(
     }
 
     // 如果请求成功，调用 success 回调函数
-    if (response.code === 200) {
+    if (response.code === 200 && response.data.code === 200) {
       success(response.data);
     } else {
-      failure(response.message || "请求失败");
+      failure(response.data.message || "请求失败");
     }
   } catch (error) {
-    console.error("Error in Get:", error);
-    failure("请求失败");
+    errorfn(error)
   }
 }

@@ -10,7 +10,9 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.*;
-import com.x.backend.util.JWTUtils;;
+import com.x.backend.util.JWTUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;;
 
 @Slf4j
 @RestController("userAccountController")
@@ -34,16 +36,21 @@ public class AccountController {
     @GetMapping("/validate/token")
     public ResultEntity<String> validateToken(@RequestParam String token) {
         try {
-            log.info(token);
             boolean verifyToken = jwtUtils.verifyToken() && RoleConstants.ROLE_USER.equals(jwtUtils.getRole());
             if (verifyToken) {
                 return ResultEntity.success();
             }
             return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
         } catch (Exception e) {
-            log.error("validate token error: {}", e.getMessage());
             return ResultEntity.failure(HttpMessageConstants.TOKEN_CHECK_FAILED);
         }
+    }
+
+    @PostMapping("path")
+    public String postMethodName(@RequestBody String entity) {
+        // TODO: process POST request
+
+        return entity;
     }
 
     @GetMapping("/test")

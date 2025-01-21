@@ -1,274 +1,91 @@
 <script setup lang="ts">
 
 </script>
-<template>
-    <div class="card">
-        <section class="info-section">
-            <div class="background-design">
-                <div class="circle"></div>
-                <div class="circle"></div>
-                <div class="circle"></div>
-            </div>
-            <div class="left-side">
-                <div class="weather">
-                    <div>
-                        <svg stroke="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-                            <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
-                            <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M512 704a192 192 0 1 0 0-384 192 192 0 0 0 0 384zm0 64a256 256 0 1 1 0-512 256 256 0 0 1 0 512zm0-704a32 32 0 0 1 32 32v64a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 768a32 32 0 0 1 32 32v64a32 32 0 1 1-64 0v-64a32 32 0 0 1 32-32zM195.2 195.2a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 1 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm543.104 543.104a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 0 1-45.248 45.248l-45.248-45.248a32 32 0 0 1 0-45.248zM64 512a32 32 0 0 1 32-32h64a32 32 0 0 1 0 64H96a32 32 0 0 1-32-32zm768 0a32 32 0 0 1 32-32h64a32 32 0 1 1 0 64h-64a32 32 0 0 1-32-32zM195.2 828.8a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248L240.448 828.8a32 32 0 0 1-45.248 0zm543.104-543.104a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248l-45.248 45.248a32 32 0 0 1-45.248 0z"
-                                    fill="#ffffff"></path>
-                            </g>
-                        </svg>
-                    </div>
-                    <div>Sunny</div>
-                </div>
-                <div class="temperature">36°</div>
-                <div class="range">42°/28°</div>
-            </div>
-            <div class="right-side">
-                <div>
-                    <div class="hour">23:56</div>
-                    <div class="date">MON 08-23</div>
-                </div>
-                <div class="city">A Coruña</div>
-            </div>
-        </section>
-        <section class="days-section">
-            <button>
-                <span class="day">TUE</span>
-                <span class="icon-weather-day"><svg stroke="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 1024 1024">
-                        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
-                        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path
-                                d="M512 704a192 192 0 1 0 0-384 192 192 0 0 0 0 384zm0 64a256 256 0 1 1 0-512 256 256 0 0 1 0 512zm0-704a32 32 0 0 1 32 32v64a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 768a32 32 0 0 1 32 32v64a32 32 0 1 1-64 0v-64a32 32 0 0 1 32-32zM195.2 195.2a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 1 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm543.104 543.104a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 0 1-45.248 45.248l-45.248-45.248a32 32 0 0 1 0-45.248zM64 512a32 32 0 0 1 32-32h64a32 32 0 0 1 0 64H96a32 32 0 0 1-32-32zm768 0a32 32 0 0 1 32-32h64a32 32 0 1 1 0 64h-64a32 32 0 0 1-32-32zM195.2 828.8a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248L240.448 828.8a32 32 0 0 1-45.248 0zm543.104-543.104a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248l-45.248 45.248a32 32 0 0 1-45.248 0z"
-                                fill="#ffffff"></path>
-                        </g>
-                    </svg></span>
-            </button>
-            <button>
-                <span class="day">WED</span>
-                <span class="icon-weather-day">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path
-                                d="M16 18.5L15 21M8 18.5L7 21M12 18.5L11 21M7 15C4.23858 15 2 12.7614 2 10C2 7.23858 4.23858 5 7 5C7.03315 5 7.06622 5.00032 7.09922 5.00097C8.0094 3.2196 9.86227 2 12 2C14.5192 2 16.6429 3.69375 17.2943 6.00462C17.3625 6.00155 17.4311 6 17.5 6C19.9853 6 22 8.01472 22 10.5C22 12.9853 19.9853 15 17.5 15C13.7434 15 11.2352 15 7 15Z"
-                                stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </g>
-                    </svg>
-                </span>
-            </button>
-            <button>
-                <span class="day">THU</span>
-                <span class="icon-weather-day">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
-                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path
-                                d="M16 18.5L15 21M8 18.5L7 21M12 18.5L11 21M7 15C4.23858 15 2 12.7614 2 10C2 7.23858 4.23858 5 7 5C7.03315 5 7.06622 5.00032 7.09922 5.00097C8.0094 3.2196 9.86227 2 12 2C14.5192 2 16.6429 3.69375 17.2943 6.00462C17.3625 6.00155 17.4311 6 17.5 6C19.9853 6 22 8.01472 22 10.5C22 12.9853 19.9853 15 17.5 15C13.7434 15 11.2352 15 7 15Z"
-                                stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </g>
-                    </svg>
-                </span>
-            </button>
-            <button>
-                <span class="day">FRI</span>
-                <span class="icon-weather-day">
-                    <svg stroke="#ffffff" fill="#ffffff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-                        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
-                        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
-                        <g id="SVGRepo_iconCarrier">
-                            <path
-                                d="M512 704a192 192 0 1 0 0-384 192 192 0 0 0 0 384zm0 64a256 256 0 1 1 0-512 256 256 0 0 1 0 512zm0-704a32 32 0 0 1 32 32v64a32 32 0 0 1-64 0V96a32 32 0 0 1 32-32zm0 768a32 32 0 0 1 32 32v64a32 32 0 1 1-64 0v-64a32 32 0 0 1 32-32zM195.2 195.2a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 1 1-45.248 45.248L195.2 240.448a32 32 0 0 1 0-45.248zm543.104 543.104a32 32 0 0 1 45.248 0l45.248 45.248a32 32 0 0 1-45.248 45.248l-45.248-45.248a32 32 0 0 1 0-45.248zM64 512a32 32 0 0 1 32-32h64a32 32 0 0 1 0 64H96a32 32 0 0 1-32-32zm768 0a32 32 0 0 1 32-32h64a32 32 0 1 1 0 64h-64a32 32 0 0 1-32-32zM195.2 828.8a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248L240.448 828.8a32 32 0 0 1-45.248 0zm543.104-543.104a32 32 0 0 1 0-45.248l45.248-45.248a32 32 0 0 1 45.248 45.248l-45.248 45.248a32 32 0 0 1-45.248 0z"
-                                fill="#ffffff"></path>
-                        </g>
-                    </svg>
-                </span>
-            </button>
-        </section>
-    </div>
-</template>
-
-
 <style scoped>
-.card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 180px;
-    width: 280px;
-    border-radius: 25px;
-    background: lightgrey;
-    overflow: hidden;
-    transition: 100ms ease;
-    box-shadow: rgba(0, 0, 0, 0.15) 2px 3px 4px;
-}
-
-/* ---------- Info section ---------- */
-
-.info-section {
+  .card {
+    width: 342px;
+    height: 184px;
     position: relative;
+    padding: 20px;
+    color: #fff;
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: space-between;
-    width: 100%;
-    height: 75%;
-    color: white;
-}
+  }
 
-.left-side {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 100%;
-    z-index: 1;
-    padding-left: 18px;
-}
-
-button {
-    display: block;
-    border: none;
-    background: transparent;
-}
-
-.weather {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 5px;
-}
-
-.weather div {
-    display: flex;
-    align-items: center;
-}
-
-.weather div:nth-child(1) {
-    width: 40%;
-    height: auto;
-}
-
-.temperature {
-    font-size: 34pt;
-    font-weight: 500;
-    line-height: 8%;
-}
-
-.right-side {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: space-around;
-    height: 100%;
-    padding-right: 18px;
-    z-index: 1;
-}
-
-.right-side>div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-}
-
-.hour {
-    font-size: 19pt;
-    line-height: 1em;
-}
-
-.date {
-    font-size: 15px;
-}
-
-/* ---------- Background ---------- */
-.background-design {
+  .background {
+    fill: linear-gradient(90deg, #5936B4 0%, #362A84 100%);
     position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: #ec7263;
-    overflow: hidden;
-}
+    inset: 0;
+    z-index: -1;
+  }
 
-.circle {
-    background-color: #efc745;
-}
-
-.circle:nth-child(1) {
+  .cloud {
     position: absolute;
-    top: -80%;
-    right: -50%;
-    width: 300px;
-    height: 300px;
-    opacity: 0.4;
-    border-radius: 50%;
-}
+    right: 0;
+    top: -12px;
+  }
 
-.circle:nth-child(2) {
-    position: absolute;
-    top: -70%;
-    right: -30%;
-    width: 210px;
-    height: 210px;
-    opacity: 0.4;
-    border-radius: 50%;
-}
+  .cloud svg {
+    height: 120px;
+  }
 
-.circle:nth-child(3) {
-    position: absolute;
-    top: -35%;
-    right: -8%;
-    width: 100px;
-    height: 100px;
-    opacity: 1;
-    border-radius: 50%;
-}
+  .card .main-text {
+    font-size: 48px;
+    z-index: 2;
+  }
 
-/* ---------- Days section ---------- */
-.days-section {
+  .card .info {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    width: 100%;
-    height: 25%;
-    background-color: #974859;
-    gap: 2px;
-    box-shadow: inset 0px 2px 5px #974859;
-}
+  }
 
-.days-section button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    background-color: #a75265;
-    box-shadow: inset 0px 2px 5px #974859;
-    cursor: pointer;
-    transition: 100ms ease;
-    gap: 5px;
-}
+  .card .info .text-gray {
+    color: rgba(235, 235, 245, 0.60);
+  }
 
-.days-section button:hover {
-    scale: 0.9;
-    border-radius: 10px;
-}
-
-.days-section .day {
-    font-size: 10pt;
-    font-weight: 500;
-    color: white;
-    opacity: 0.7;
-}
-
-.icon-weather-day {
-    display: flex;
-    align-items: center;
-    width: 20px;
-    height: 100%;
-}
+  .card .info .info-right {
+    align-self: flex-end;
+  }
 </style>
+
+<template>
+  <div class="card">
+    <svg fill="none" viewBox="0 0 342 175" height="175" width="342" xmlns="http://www.w3.org/2000/svg" class="background">
+      <path fill="url(#paint0_linear_103_640)" d="M0 66.4396C0 31.6455 0 14.2484 11.326 5.24044C22.6519 -3.76754 39.6026 0.147978 73.5041 7.97901L307.903 62.1238C324.259 65.9018 332.436 67.7909 337.218 73.8031C342 79.8154 342 88.2086 342 104.995V131C342 151.742 342 162.113 335.556 168.556C329.113 175 318.742 175 298 175H44C23.2582 175 12.8873 175 6.44365 168.556C0 162.113 0 151.742 0 131V66.4396Z"></path>
+      <defs>
+        <linearGradient gradientUnits="userSpaceOnUse" y2="128" x2="354.142" y1="128" x1="0" id="paint0_linear_103_640">
+          <stop stop-color="#5936B4"></stop>
+          <stop stop-color="#362A84" offset="1"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="cloud">
+      <svg fill="#000000" preserveAspectRatio="xMidYMid meet" class="iconify iconify--emojione" role="img" aria-hidden="true" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+        <g stroke-width="0" id="SVGRepo_bgCarrier"></g>
+        <g stroke-linejoin="round" stroke-linecap="round" id="SVGRepo_tracerCarrier"></g>
+        <g id="SVGRepo_iconCarrier">
+          <g fill="#75d6ff">
+            <path d="M10.8 42.9c-.5 1.5-.1 3 1 3.4c1.1.4 2.4-.5 3-2c.6-1.8.7-4.1.2-6.9c-2.1 1.9-3.6 3.8-4.2 5.5"> </path>
+            <path d="M13.2 57.4c.6-1.8.7-4.1.2-6.9c-2.1 1.8-3.6 3.7-4.2 5.5c-.5 1.5-.1 3 1 3.4c1.1.4 2.5-.5 3-2"> </path>
+            <path d="M51.5 37.4c-2.1 1.8-3.6 3.7-4.2 5.5c-.5 1.5-.1 3 1 3.4c1.1.4 2.4-.5 3-2c.5-1.7.6-4.1.2-6.9"> </path>
+            <path d="M38.2 55.9c-.5 1.5-.1 3 1 3.4s2.4-.5 3-2c.6-1.8.7-4.1.2-6.9c-2 1.9-3.5 3.8-4.2 5.5"> </path>
+            <path d="M46.9 55.9c-.5 1.5-.1 3 1 3.4s2.4-.5 3-2c.6-1.8.7-4.1.2-6.9c-2.1 1.9-3.6 3.8-4.2 5.5"> </path>
+            <path d="M18.6 55.9c-.5 1.5-.1 3 1 3.4s2.4-.5 3-2c.6-1.8.7-4.1.2-6.9c-2.1 1.9-3.6 3.8-4.2 5.5"> </path>
+          </g>
+          <path d="M24.5 31.9l-4.9 16.2h12.5L27.9 62l16.5-20.2H32.5l2.9-9.9z" fill="#ffce31"> </path>
+          <path fill="#ffffff" d="M18.2 32.5c-.8 0-1.6-.1-2.4-.4c-3.1-1-5.3-3.9-5.3-7.2c0-2.2 1-4.3 2.6-5.7c.4-.4.9-.7 1.4-1l.5-1.8c1.3-4.4 5.4-7.5 10-7.5c.5 0 .9 0 1.5.1c.4.1.8.1 1.2.3l.2-.4c1.9-3.3 5.4-5.4 9.2-5.4C43 3.5 47.7 8.2 47.7 14v1c.4.2.9.4 1.3.6c2.8 1.6 4.5 4.6 4.5 7.8c0 4.2-2.9 7.8-7 8.8c-.7.2-1.4.2-2 .2H18.2z"> </path>
+          <path fill="#b6c1d1" d="M37.1 5c5 0 9 4 9 8.9v.7c-2.1.2-4 1-5.4 2.3c1.1-.6 2.4-1 3.7-1c.5 0 1 .1 1.5.1c.8.2 1.6.5 2.3.9c2.3 1.3 3.8 3.7 3.8 6.5c0 3.6-2.5 6.5-5.8 7.3c-.7.2-1.2.3-1.8.3H18.2c-.7 0-1.3-.1-1.9-.3c-2.4-.8-4.2-3.1-4.2-5.8c0-1.8.8-3.5 2.1-4.6c.6-.5 1.3-.9 2-1.2c.6-.2 1.3-.3 2-.3c2 0 3.7.9 4.9 2.4h.1c-1.3-2.4-3.7-4.1-6.6-4.3c1.1-3.7 4.5-6.4 8.5-6.4c.4 0 .9 0 1.3.1c.8.1 1.6.3 2.3.7c2.7 1.2 4.7 3.7 5.1 6.8V18c0-3.4-1.8-6.5-4.5-8.3C30.8 6.9 33.8 5 37.1 5m0-3C33 2 29.2 4.1 27 7.6h-.3c-.6-.1-1.2-.1-1.7-.1c-5.3 0-10 3.5-11.4 8.6l-.3 1.2c-.4.2-.7.5-1.1.8c-2 1.7-3.1 4.2-3.1 6.9c0 4 2.5 7.4 6.3 8.7c.9.3 1.9.5 2.9.5h26.2c.8 0 1.6-.1 2.4-.3c4.8-1.1 8.2-5.3 8.2-10.3c0-3.8-2-7.3-5.3-9.1c-.2-.1-.3-.2-.5-.3v-.1C49.2 7.4 43.8 2 37.1 2z"> </path>
+        </g>
+      </svg>
+    </div>
+    <p class="main-text">24°</p>
+    <div class="info">
+      <div class="info-left">
+        <p class="text-gray">H:32° L: 16°</p>
+        <p>Kathmandu, Nepal</p>
+      </div>
+      <p class="info-right">Mid Rain</p>
+    </div>
+  </div>
+</template>
