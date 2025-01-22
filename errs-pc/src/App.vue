@@ -163,7 +163,7 @@ onBeforeUnmount(() => {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
   background-color: rgba(255, 255, 255, 0.3);
-  z-index: 1;
+  z-index: 9999 !important;
 }
 
 

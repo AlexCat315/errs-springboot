@@ -1,36 +1,32 @@
-<script setup lang="ts">
-import { inject, onBeforeUnmount, onMounted, ref } from 'vue';
-import WeatherCard from './explore/WeatherCard.vue';
 
+<script setup lang="ts">
+import { inject, ref } from 'vue';
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
+const showTitle = ref(false); // 控制标题显示状态
 
-const showTitle = ref(true); // 控制标题显示状态
+// 定义一个 ref 来存储滚动的 Y 轴距离
+const scrollY = ref(0)
 
-const handleScroll = () => {
-  const scrollTop = window.scrollY || document.documentElement.scrollTop; // 获取滚动高度
-  showTitle.value = scrollTop > 100; // 当滚动高度超过100px时显示标题
-};
-
-// 添加滚动事件监听
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
-
-// 移除滚动事件监听
-onBeforeUnmount(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
-
+// 监听滚动事件的处理函数
+const handleScroll = (event: Event) => {
+  const target = event.target as HTMLElement
+  scrollY.value = target.scrollTop
+  if (scrollY.value > 100) {
+    showTitle.value = true
+  } else {
+    showTitle.value = false
+  }
+}
 </script>
 
 
 <template>
-  <div class="explore_content" :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#262727' }">
+  <div class="explore_content"  @scroll="handleScroll" :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#202327' }">
     <!-- 顶部标题 -->
-    <div class="title" :class="{ show: showTitle }">
-      这是顶部的标题
+    <div class="title" :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#171717',color : selectTheme === 'light' ? '#525252' : '#e1e4e8' }" :class="{ show: showTitle }">
+      探索
     </div>
     <!-- 图片卡片 -->
     <div class="explore_img_card"></div>
@@ -44,12 +40,19 @@ onBeforeUnmount(() => {
       <h1>1111</h1>
       <h1>1111</h1>
       <h1>1111</h1>
-      <h1>1111</h1>   <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
 
-      <h1>1111</h1>   <h1>1111</h1>   <h1>1111</h1>   <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
 
 
-      <h1>1111</h1>   <h1>1111</h1>   <h1>1111</h1>   <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
+      <h1>1111</h1>
     </div>
   </div>
 </template>
@@ -57,7 +60,14 @@ onBeforeUnmount(() => {
 <style scoped>
 .explore_content {
   height: 100vh;
-  overflow-y: auto; /* 启用滚动 */
+    /* 启用滚动 */
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  width: calc(100%);
+}
+
+.container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari 和 Edge */
 }
 
 .title {
@@ -69,18 +79,20 @@ onBeforeUnmount(() => {
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  color: white;
-  background: linear-gradient(to right, #4caf50, #81c784);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1;
   opacity: 0;
-  transform: translateY(-100%); /* 默认隐藏在视口上方 */
-  transition: all 0.3s ease-in-out; /* 平滑过渡效果 */
+  transform: translateY(-100%);
+  transition: all 0.3s ease-in-out;
+  border-radius: 8px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 15px;
+
 }
 
 .title.show {
   opacity: 1;
-  transform: translateY(0); /* 滚动后显示 */
+  transform: translateY(0);
 }
 
 .explore_img_card {
