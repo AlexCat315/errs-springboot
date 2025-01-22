@@ -7,7 +7,7 @@ import RightPanel from "./pages/RightPanel.vue";
 import { provide } from 'vue';
 import { get_system_theme } from "./util/Theme";
 // 定义全局变量
-const globalSelect = ref(0);
+const globalSelect = ref(1);
 
 // 提供全局变量
 provide('globalSelect', globalSelect);
