@@ -1,5 +1,5 @@
 <script setup>
-import { inject, ref } from 'vue';
+import { inject, ref ,computed} from 'vue';
 import Setting from './content/Setting.vue';
 import Explore from './content/Explore.vue';
 import Games from './content/Games.vue';
@@ -8,21 +8,40 @@ import News from './content/News.vue';
 import Videos from './content/Videos.vue';
 // 接收全局状态
 const globalSelect = inject("globalSelect");
-const globalTheme = inject("globalTheme");
 
-const selectMenu = ref(globalSelect)
+const selectMenu = ref(globalSelect);
 
+const componentMap = {
+  1: Explore,
+  2: Games,
+  3: Books,
+  4: News,
+  5: Videos,
+  7: Setting,
+};
+
+// 动态选择组件
+const currentComponent = computed(() => componentMap[selectMenu.value]);
 </script>
-<template>
-    <div>
-        <Explore v-if="selectMenu === 1" />
-        <Games v-if="selectMenu === 2" />
-        <Books v-if="selectMenu === 3" />
-        <News v-if="selectMenu === 4" />
-        <Videos v-if="selectMenu === 5" />
-        <Setting v-if="selectMenu === 7" />
 
-    </div>
+<template>
+  <transition name="fade-scale" mode="out-in">
+    <component :is="currentComponent" :key="selectMenu" />
+  </transition>
 </template>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.fade-scale-enter-active, .fade-scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+.fade-scale-enter-from {
+  transform: scale(0.9);
+  opacity: 0;
+}
+
+.fade-scale-leave-to {
+  transform: scale(1.2);
+  opacity: 0;
+}
+</style>
