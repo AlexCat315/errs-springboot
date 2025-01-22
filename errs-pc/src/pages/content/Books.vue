@@ -21,8 +21,8 @@ const handleScroll = (event: Event) => {
 
 // 轮播图数据和状态
 const images = reactive([
-  'src/assets/img/games/games_02.png',
-  'src/assets/img/games/games_01.webp',
+  'src/assets/img/books/books_02.png',
+  'src/assets/img/books/books_01.webp',
   'src/assets/img/games/games_03.webp',
 ]);
 const currentIndex = ref(0);
