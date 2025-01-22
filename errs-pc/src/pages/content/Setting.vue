@@ -1,13 +1,13 @@
 <script lang="ts" setup>
 import { inject, Ref, ref } from 'vue';
 import Account from "./setting/Account.vue";
-import LoginLightPanle from '../../components/login/LoginLightPanle.vue';
-import LoginDarkPanle from '../../components/login/LoginDarkPanle.vue';
+
 import LightTheme from '../../components/theme_model/LightTheme.vue';
 import DarkTheme from '../../components/theme_model/DarkTheme.vue';
 import SystemCheckbox from '../../components/checkbox/SystemCheckbox.vue';
 import GPUCheckbox from '../../components/checkbox/GPUCheckbox.vue';
 import PrivacyCheckbox from '../../components/checkbox/privacy/PrivacyCheckbox.vue';
+import AccountUser from '../../components/account/Account.vue';
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -48,8 +48,7 @@ const globalShowSetting = inject<Ref<boolean>>('globalShowSetting');
 
     </div>
     <div v-if="!globalShowSetting">
-      <LoginLightPanle v-if="selectTheme === 'light'" />
-      <LoginDarkPanle v-if="selectTheme === 'dark'" />
+      <AccountUser />
     </div>
   </div>
 </template>

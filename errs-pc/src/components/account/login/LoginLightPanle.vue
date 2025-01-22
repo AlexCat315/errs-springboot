@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, ref, Ref, nextTick } from "vue";
-import { login } from "../../net/account/login";
-import Message from "../message/Message.vue";
-import Loading from "../Loading.vue";
+import { login } from "../../../net/account/login";
+import Message from "../../message/Message.vue";
+import Loading from "../../Loading.vue";
 import QRCode from "qrcode";
 
 const globalShowSetting = inject<Ref<boolean>>("globalShowSetting");

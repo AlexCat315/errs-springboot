@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { inject, ref, Ref, nextTick } from "vue";
-import { login } from "../../net/account/login";
-import Message from "../message/Message.vue";
-import Loading from "../Loading.vue";
+import { login } from "../../../net/account/login";
+import Message from "../../message/Message.vue";
+import Loading from "../../Loading.vue";
 import QRCode from "qrcode";
 
 const globalShowSetting = inject<Ref<boolean>>("globalShowSetting");
@@ -184,7 +184,7 @@ const toLogin = () => {
       <!-- app 扫码 -->
       <div>
         <div v-if="showAppVerify" class="app-verify-container">
-          <h4>请使用APP扫码登录</h4>
+          <h4 style="color: aliceblue;">请使用APP扫码登录</h4>
           <div>
             <canvas ref="qrcodeCanvas"></canvas>
           </div>
@@ -192,9 +192,9 @@ const toLogin = () => {
         </div>
         <div v-if="showWeChatVerify" class="app-verify-container">
           <div style="display: flex; justify-content: space-between;">
-            <h4>请打开手机</h4>
+            <h4 style="color: aliceblue;">请打开手机</h4>
             <h4 style="color:#2d79f3;">微信</h4>
-            <h4>扫码登录</h4>
+            <h4 style="color: aliceblue;">扫码登录</h4>
           </div>
           <div>
             <canvas ref="qrcodeCanvas"></canvas>
