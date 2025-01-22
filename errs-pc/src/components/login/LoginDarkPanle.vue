@@ -14,6 +14,7 @@ const loginForm = ref({
 });
 const loginSubmit = async () => {
   showLoading.value = true;
+  await new Promise((resolve) => setTimeout(resolve, 1200));
   await login(
     loginForm.value,
     (data: any) => {
