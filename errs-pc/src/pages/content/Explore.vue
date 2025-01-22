@@ -39,6 +39,7 @@ let autoSwitchTimer: NodeJS.Timeout | null = null;
 const prevImage = () => {
   if (transitioning.value) return;
   transitioning.value = true;
+  startAutoSwitch()
   setTimeout(() => {
     currentIndex.value = (currentIndex.value - 1 + images.length) % images.length;
     transitioning.value = false;
@@ -49,6 +50,7 @@ const prevImage = () => {
 const nextImage = () => {
   if (transitioning.value) return;
   transitioning.value = true;
+  startAutoSwitch()
   setTimeout(() => {
     currentIndex.value = (currentIndex.value + 1) % images.length;
     transitioning.value = false;
@@ -63,7 +65,7 @@ const startAutoSwitch = () => {
   stopAutoSwitch(); // 确保不重复启动
   autoSwitchTimer = setInterval(() => {
     nextImage();
-  }, 4000); // 每 3 秒切换一次
+  }, 4000); // 每 4 秒切换一次
 };
 
 // 停止自动切换
@@ -120,9 +122,6 @@ onBeforeUnmount(() => {
         </svg>
       </button>
     </div>
-
-    <div class="explore_img_card_two"></div>
-
     <div>
       <h1>1111</h1>
       <h1>1111</h1>
