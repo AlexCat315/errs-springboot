@@ -104,6 +104,22 @@ const toLogin = () => {
   showWeChatVerify.value = false;
 };
 
+const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
+
+
+const showRegister = () => {
+  if (globalAccountSelect) {
+    globalAccountSelect.value = "Register";
+  }
+};
+
+const showForgot = () => {
+  if (globalAccountSelect) {
+    globalAccountSelect.value = "Forgot";
+  }
+};
+
+
 
 </script>
 

@@ -124,6 +124,7 @@ onBeforeUnmount(() => {
   height: 100vh;
 }
 
+
 @keyframes moveBackground {
   0% {
     background-position: left;

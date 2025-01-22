@@ -7,8 +7,6 @@ import QRCode from "qrcode";
 
 const globalShowSetting = inject<Ref<boolean>>("globalShowSetting");
 const globalSelect = inject<Ref<number>>("globalSelect");
-const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
-
 
 const loginForm = ref({
   username: "",
@@ -16,6 +14,7 @@ const loginForm = ref({
 });
 const loginSubmit = async () => {
   showLoading.value = true;
+  // 等待一秒
   await new Promise((resolve) => setTimeout(resolve, 1200));
   await login(
     loginForm.value,
@@ -105,18 +104,6 @@ const toLogin = () => {
   showWeChatVerify.value = false;
 };
 
-const showRegister = () => {
-  if (globalAccountSelect) {
-    globalAccountSelect.value = "Register";
-  }
-};
-
-const showForgot = () => {
-  if (globalAccountSelect) {
-    globalAccountSelect.value = "Forgot";
-  }
-};
-
 
 </script>
 
@@ -161,13 +148,13 @@ const showForgot = () => {
 
         <div class="flex-row">
           <div></div>
-          <span style="margin-top: 10px" @click="showForgot" class="span">忘记密码?</span>
+          <span style="margin-top: 10px" class="span">忘记密码?</span>
         </div>
         <Message v-if="showMessage" :type="messageType" :message="messageInfo" width="180px" className="error-msg" />
         <button @click="loginSubmit()" type="button" class="button-submit">
           登 录
         </button>
-        <p class="p">没有账号? <span @click="showRegister" class="span">立即注册</span></p>
+        <p class="p">没有账号? <span class="span">立即注册</span></p>
         <p class="p line">或</p>
 
         <div class="flex-row">
@@ -185,7 +172,7 @@ const showForgot = () => {
               p-id="4296" data-spm-anchor-id="a313x.search_index.0.i1.d39c3a81HGptt2" width="30" height="30">
               <path
                 d="M903.825478 533.599947l-783.637654 0c-16.641005 0-30.147624-13.494339-30.147624-30.133298 0-16.625656 13.507642-30.148647 30.147624-30.148647l783.637654 0c16.670681 0 30.133298 13.522991 30.133298 30.148647C933.958776 520.105608 920.49616 533.599947 903.825478 533.599947M813.426609 895.284453 647.261125 895.284453c-16.670681 0-30.163997-13.462616-30.163997-30.132274 0-16.670681 13.493316-30.163997 30.163997-30.163997l166.166507 0c16.641005 0 30.102598-13.492292 30.102598-30.132274L843.530231 654.16179c0-16.671705 13.492292-30.133298 30.162974-30.133298 16.672728 0 30.133298 13.461593 30.133298 30.133298l0 150.694117C903.825478 854.717526 863.258551 895.284453 813.426609 895.284453M382.300544 895.284453 210.602044 895.284453c-49.861618 0-90.413196-40.566928-90.413196-90.428545L120.188848 654.16179c0-16.671705 13.507642-30.133298 30.147624-30.133298 16.641005 0 30.117948 13.461593 30.117948 30.133298l0 150.694117c0 16.641005 13.537318 30.132274 30.147624 30.132274L382.300544 834.988182c16.670681 0 30.163997 13.493316 30.163997 30.163997C412.463518 881.821837 398.970202 895.284453 382.300544 895.284453M150.336472 382.903783c-16.639982 0-30.147624-13.507642-30.147624-30.148647L120.188848 202.061019c0-49.861618 40.552601-90.413196 90.413196-90.413196L382.300544 111.647823c16.670681 0 30.163997 13.506619 30.163997 30.147624 0 16.610306-13.493316 30.117948-30.163997 30.117948L210.602044 171.913395c-16.610306 0-30.147624 13.537318-30.147624 30.147624l0 150.694117C180.45442 369.396141 166.976454 382.903783 150.336472 382.903783M873.692181 382.903783c-16.670681 0-30.162974-13.507642-30.162974-30.148647L843.529207 202.061019c0-16.610306-13.461593-30.147624-30.102598-30.147624L647.261125 171.913395c-16.670681 0-30.163997-13.507642-30.163997-30.117948 0-16.641005 13.493316-30.147624 30.163997-30.147624l166.166507 0c49.830919 0 90.39887 40.552601 90.39887 90.413196l0 150.694117C903.825478 369.396141 890.364909 382.903783 873.692181 382.903783"
-                fill="#bfbfbf" p-id="4297" data-spm-anchor-id="a313x.search_index.0.i2.d39c3a81HGptt2" class="selected">
+                fill="#333333" p-id="4297" data-spm-anchor-id="a313x.search_index.0.i2.d39c3a81HGptt2" class="selected">
               </path>
             </svg>
             APP扫码
@@ -198,7 +185,7 @@ const showForgot = () => {
       <!-- app 扫码 -->
       <div>
         <div v-if="showAppVerify" class="app-verify-container">
-          <h4 style="color: aliceblue;">请使用APP扫码登录</h4>
+          <h4>请使用APP扫码登录</h4>
           <div>
             <canvas ref="qrcodeCanvas"></canvas>
           </div>
@@ -206,9 +193,9 @@ const showForgot = () => {
         </div>
         <div v-if="showWeChatVerify" class="app-verify-container">
           <div style="display: flex; justify-content: space-between;">
-            <h4 style="color: aliceblue;">请打开手机</h4>
+            <h4>请打开手机</h4>
             <h4 style="color:#2d79f3;">微信</h4>
-            <h4 style="color: aliceblue;">扫码登录</h4>
+            <h4>扫码登录</h4>
           </div>
           <div>
             <canvas ref="qrcodeCanvas"></canvas>
@@ -221,13 +208,20 @@ const showForgot = () => {
   </div>
 </template>
 
-<style scoped lang="css">
+<style lang="css" scoped>
+canvas {
+  border: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+/* 表单样式 */
 .form {
   position: relative;
+  /* 确保表单内容在遮罩层下方 */
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #1f1f1f;
+  background-color: #ffffff;
   padding: 30px;
   width: 450px;
   border-radius: 20px;
@@ -242,7 +236,7 @@ const showForgot = () => {
   right: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(58, 58, 58, 0.8);
+  background-color: rgba(236, 236, 236, 0.8);
   /* 半透明背景 */
   display: flex;
   align-items: center;
@@ -254,27 +248,21 @@ const showForgot = () => {
 ::placeholder {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  color: #aaa;
-}
-
-.form button {
-  align-self: flex-end;
 }
 
 .flex-column>label {
-  color: #f1f1f1;
+  color: #151717;
   font-weight: 600;
 }
 
 .inputForm {
-  border: 1.5px solid #333;
+  border: 1.5px solid #ddd;
   border-radius: 10px;
   height: 50px;
   display: flex;
   align-items: center;
   padding-left: 10px;
   transition: 0.2s ease-in-out;
-  background-color: #2b2b2b;
 }
 
 .input {
@@ -283,8 +271,6 @@ const showForgot = () => {
   border: none;
   width: 100%;
   height: 100%;
-  background-color: #2b2b2b;
-  color: #f1f1f1;
 }
 
 .input:focus {
@@ -303,12 +289,6 @@ const showForgot = () => {
   justify-content: space-between;
 }
 
-.flex-row>div>label {
-  font-size: 14px;
-  color: #f1f1f1;
-  font-weight: 400;
-}
-
 .span {
   font-size: 14px;
   margin-left: 5px;
@@ -319,7 +299,7 @@ const showForgot = () => {
 
 .button-submit {
   margin: 20px 0 10px 0;
-  background-color: #2d79f3;
+  background-color: #151717;
   border: none;
   color: white;
   font-size: 15px;
@@ -332,7 +312,7 @@ const showForgot = () => {
 
 .button-submit-back {
   margin: 20px 0 10px 0;
-  background-color: #d460f4;
+  background-color: #096565;
   border: none;
   color: white;
   font-size: 15px;
@@ -345,7 +325,7 @@ const showForgot = () => {
 
 .p {
   text-align: center;
-  color: #f1f1f1;
+  color: black;
   font-size: 14px;
   margin: 5px 0;
 }
@@ -360,9 +340,8 @@ const showForgot = () => {
   align-items: center;
   font-weight: 500;
   gap: 10px;
-  border: 1px solid #333;
-  background-color: #2b2b2b;
-  color: #f1f1f1;
+  border: 1px solid #ededef;
+  background-color: white;
   cursor: pointer;
   transition: 0.2s ease-in-out;
 }
@@ -378,7 +357,6 @@ const showForgot = () => {
 
   100% {
     transform: translateY(-50px);
-    /* 向上位移 50px */
   }
 }
 
@@ -387,7 +365,6 @@ const showForgot = () => {
   margin-bottom: -70px;
   margin-top: 30px;
   animation: moveUp 0.4s ease-in-out forwards;
-  /* 动画持续 1 秒 */
 }
 
 .app-verify-container {
