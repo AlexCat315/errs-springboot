@@ -164,13 +164,13 @@ const showForgot = () => {
 
         <div class="flex-row">
           <div></div>
-          <span style="margin-top: 10px" class="span">忘记密码?</span>
+          <span style="margin-top: 10px" @click="showForgot()" class="span">忘记密码?</span>
         </div>
         <Message v-if="showMessage" :type="messageType" :message="messageInfo" width="180px" className="error-msg" />
         <button @click="loginSubmit()" type="button" class="button-submit">
           登 录
         </button>
-        <p class="p">没有账号? <span class="span">立即注册</span></p>
+        <p class="p">没有账号? <span @click="showRegister()" class="span">立即注册</span></p>
         <p class="p line">或</p>
 
         <div class="flex-row">
