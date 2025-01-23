@@ -2,7 +2,6 @@
 import { inject, ref } from "vue";
 import { validate_token } from "../net/account/validate_token";
 const globalTheme = inject("globalTheme");
-const selectTheme = ref(globalTheme.value);
 const isLogin = ref(false);
 const globalShowSetting = inject("globalShowSetting");
 
@@ -31,7 +30,7 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
 <template>
     <!-- 已登录 -->
     <button v-if="isLogin" id="btn-message" style="--online-status: #93e200;"
-        :style="{ backgroundColor: selectTheme === 'dark' ? '#212121' : '#f5f5f5' }" class="button-message">
+        :style="{ backgroundColor: globalTheme === 'dark' ? '#212121' : '#f5f5f5' }" class="button-message">
         <div class="content-avatar">
             <div class="status-user"></div>
             <div class="avatar">
@@ -44,14 +43,14 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
         </div>
         <div class="notice-content">
             <div>
-                <div :style="{ 'color': selectTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">
+                <div :style="{ 'color': globalTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">
                     Message<span class="number-message">3</span></div>
             </div>
         </div>
     </button>
     <!-- 未登录 -->
     <button @click="loginClick()" v-if="!isLogin" id="btn-message"
-        :style="{ '--bg-color': selectTheme === 'dark' ? '#212121' : '#f5f5f5' }" style="--online-status: red;"
+        :style="{ '--bg-color': globalTheme === 'dark' ? '#212121' : '#f5f5f5' }" style="--online-status: red;"
         class="button-message">
         <div class="content-avatar">
             <div class="status-user"></div>
@@ -63,7 +62,7 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
                 </svg>
             </div>
         </div>
-        <div :style="{ 'color': selectTheme === 'dark' ? '#fff' : '#212121' }" class="notice-content">
+        <div :style="{ 'color': globalTheme === 'dark' ? '#fff' : '#212121' }" class="notice-content">
             <div v-if="!isLogin">
                 <div class="lable-message">未登录</div>
 
