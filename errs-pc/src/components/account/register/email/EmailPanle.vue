@@ -29,7 +29,6 @@ const showLogin = () => {
 <style scoped>
 .card {
   position: relative;
-  /* 关键：为绝对定位提供参考 */
   width: 340px;
   height: 350px;
   padding: 0 15px;
