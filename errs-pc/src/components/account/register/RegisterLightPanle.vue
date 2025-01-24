@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import EmailPanle from "./email/EmailPanle.vue";
+import EmailPanle from "./panle/EmailPanle.vue";
 
 
 </script>
