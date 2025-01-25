@@ -71,10 +71,12 @@ const verifyEmail = () => {
       toNextStep();
     }
     showLoading.value = false;
+    return;
   }, (message: string) => {
     showLoading.value = false;
     emailError.value = true;
     errorMessage.value = message;
+    return;
   }, () => {
     showLoading.value = false;
     emailError.value = true;
@@ -83,16 +85,8 @@ const verifyEmail = () => {
     setTimeout(() => {
       showErrorpanle.value = false;
     }, 3000);
+    return;
   })
-  // 定时器
-  setTimeout(() => {
-    showLoading.value = false;
-    errorPanleMsg.value = "请求超时";
-    showErrorpanle.value = true;
-    setTimeout(() => {
-      showErrorpanle.value = false;
-    }, 3000);
-  }, 7000);
 };
 
 
