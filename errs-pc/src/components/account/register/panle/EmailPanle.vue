@@ -2,7 +2,6 @@
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
 import { validate_email } from '../../../../net/account/register';
-import { showToast } from '../../../message/Toast';
 
 
 const globalTheme = inject<string>("globalTheme");
@@ -27,12 +26,12 @@ const toNextStep = () => {
 const email = ref("");
 const verifyEmail = () => {
   if (!email.value) {
-    showToast("请输入邮箱","warning")
+
     return;
   };
   // 验证邮箱格式
   if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
-    showToast("邮箱格式不正确","warning")
+
     return;
   };
   // 验证邮箱逻辑

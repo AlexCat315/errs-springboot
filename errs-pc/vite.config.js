@@ -7,6 +7,7 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
   plugins: [
     vue(),
+
   ],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
