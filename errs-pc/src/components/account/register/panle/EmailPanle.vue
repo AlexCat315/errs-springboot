@@ -39,7 +39,7 @@ const verifyEmail = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input class="email" placeholder="Your Email" type="text">
+      <input class="email" placeholder="邮箱账号" type="text">
       <button @click="verifyEmail()" class="sign-up">下一步</button>
     </div>
   </div>

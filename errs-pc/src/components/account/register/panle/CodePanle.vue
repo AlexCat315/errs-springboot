@@ -45,7 +45,7 @@ const verifyEmailCode = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input maxlength="6" class="email" placeholder="Your Email Code" type="text">
+      <input maxlength="6" class="email" placeholder="邮箱验证码" type="text">
       <div style="display: flex;">
         <button @click="previousStep()" style="width: 130px;background-color: rebeccapurple ;" class="sign-up">
           <div style="display: flex;">
