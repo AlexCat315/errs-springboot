@@ -9,6 +9,26 @@ const showPassowrdOne = ref(false);
 const showPassowrdTwo = ref(false);
 
 const globalVerifyRegisterSetup = inject<Ref<number>>("globalVerifyRegisterSetup");
+const password = ref('');
+const repeatPassword = ref('');
+const errorMessage = ref('');
+const isError = ref(false);
+
+const validatePassword = () => {
+  if (!password.value || password.value.length < 8) {
+    errorMessage.value = '密码长度至少8位';
+    isError.value = true;
+    return false;
+  }
+  if (password.value !== repeatPassword.value) {
+    errorMessage.value = '两次输入的密码不一致';
+    isError.value = true;
+    return false;
+  }
+  errorMessage.value = '';
+  isError.value = false;
+  return true;
+};
 
 // 上一步
 const prevStep = () => {
@@ -32,7 +52,13 @@ const showLogin = () => {
                                     outline: none;" />
         <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="form-title">填写密码</p>
         <div class="input-container">
-            <input placeholder="密码" :type="showPassowrdOne ? 'text' : 'password'">
+            <input 
+                v-model="password"
+                placeholder="密码" 
+                :type="showPassowrdOne ? 'text' : 'password'"
+                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }"
+                @input="validatePassword"
+            >
             <span @click="showPassowrdOne = !showPassowrdOne">
                 <svg v-if="showPassowrdOne" stroke="currentColor" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +77,13 @@ const showLogin = () => {
             </span>
         </div>
         <div class="input-container">
-            <input placeholder="重复密码" :type="showPassowrdTwo ? 'text' : 'password'">
+            <input 
+                v-model="repeatPassword"
+                placeholder="重复密码" 
+                :type="showPassowrdTwo ? 'text' : 'password'"
+                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }"
+                @input="validatePassword"
+            >
 
             <span @click="showPassowrdTwo = !showPassowrdTwo">
                 <svg v-if="showPassowrdTwo" stroke="currentColor" viewBox="0 0 24 24" fill="none"
@@ -70,7 +102,8 @@ const showLogin = () => {
                 </svg>
             </span>
         </div>
-        <button class="submit" type="submit">
+        <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+        <button class="submit" type="submit" @click.prevent="validatePassword">
             立即注册
         </button>
 
@@ -152,6 +185,13 @@ const showLogin = () => {
     width: 100%;
     border-radius: 0.5rem;
     text-transform: uppercase;
+}
+
+.error-message {
+    color: #ff4d4f;
+    font-size: 0.875rem;
+    margin-top: -5px;
+    margin-bottom: 10px;
 }
 
 .signup-link {

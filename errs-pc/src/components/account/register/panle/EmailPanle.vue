@@ -24,25 +24,37 @@ const toNextStep = () => {
 
 
 const email = ref("");
-const verifyEmail = () => {
-  if (!email.value) {
+const emailError = ref(false);
+const errorMessage = ref("");
 
+const verifyEmail = () => {
+  emailError.value = false;
+  errorMessage.value = "";
+
+  if (!email.value) {
+    emailError.value = true;
+    errorMessage.value = "邮箱不能为空";
     return;
   };
+  
   // 验证邮箱格式
   if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
-
+    emailError.value = true;
+    errorMessage.value = "邮箱格式不正确";
     return;
   };
+  
   // 验证邮箱逻辑
   validate_email(email.value, (data: any) => {
     console.log(data);
+    toNextStep();
   }, () => {
-    console.log("验证邮箱失败")
+    emailError.value = true;
+    errorMessage.value = "该邮箱已被注册";
   }, () => {
-    console.log("验证邮箱失败")
+    emailError.value = true;
+    errorMessage.value = "网络错误，请稍后重试";
   })
-  toNextStep();
 };
 
 
@@ -59,8 +71,16 @@ const verifyEmail = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input class="email" v-model="email" placeholder="邮箱账号" type="text">
-      <button @click="verifyEmail()" style="background-color: #00ad54;" class="sign-up">下一步</button>
+      <input 
+        class="email" 
+        :class="{ error: emailError }"
+        v-model="email" 
+        @input="emailError = false"
+        placeholder="邮箱账号" 
+        type="text"
+      >
+      <div v-if="emailError" class="error-message">{{ errorMessage }}</div>
+      <button @click="verifyEmail()" style="background-color: #00ad54;border-radius: 13px ;" class="sign-up">下一步</button>
     </div>
   </div>
 </template>
@@ -125,7 +145,6 @@ const verifyEmail = () => {
   background: #111;
   color: #fff;
   padding: 0.68em;
-  border-radius: 14px;
   font-weight: bold;
   height: 45px;
   margin-top: 10px;
@@ -135,5 +154,18 @@ const verifyEmail = () => {
 .sign-up:hover {
   opacity: 0.8;
   background-color: #00ad54;
+
+}
+
+.email.error {
+  border-color: #ff4d4f;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 4px;
+  text-align: left;
+  padding-left: 8px;
 }
 </style>

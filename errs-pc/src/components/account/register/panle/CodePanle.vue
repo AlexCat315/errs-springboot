@@ -26,9 +26,27 @@ const nextStep = () => {
     globalVerifyRegisterSetup.value += 1;
   }
 };
+const code = ref("");
+const codeError = ref(false);
+const errorMessage = ref("");
 
 // 验证邮箱验证码
 const verifyEmailCode = () => {
+  codeError.value = false;
+  errorMessage.value = "";
+
+  if (!code.value) {
+    codeError.value = true;
+    errorMessage.value = "验证码不能为空";
+    return;
+  };
+  
+  if (code.value.length !== 6) {
+    codeError.value = true;
+    errorMessage.value = "验证码必须为6位数字";
+    return;
+  };
+
   // 验证邮箱验证码逻辑
   nextStep();
 };
@@ -45,7 +63,16 @@ const verifyEmailCode = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input maxlength="6" class="email" placeholder="邮箱验证码" type="text">
+      <input 
+        v-model="code" 
+        maxlength="6" 
+        class="email" 
+        :class="{ error: codeError }"
+        @input="codeError = false"
+        placeholder="邮箱验证码" 
+        type="text"
+      >
+      <div v-if="codeError" class="error-message">{{ errorMessage }}</div>
       <div style="display: flex;">
         <button @click="previousStep()" style="width: 130px;background-color: rebeccapurple ;" class="sign-up">
           <div style="display: flex;">
@@ -145,5 +172,17 @@ const verifyEmailCode = () => {
 
 .sign-up:hover {
   opacity: 0.8;
+}
+
+.email.error {
+  border-color: #ff4d4f;
+}
+
+.error-message {
+  color: #ff4d4f;
+  font-size: 11px;
+  margin-top: 4px;
+  text-align: left;
+  padding-left: 8px;
 }
 </style>
