@@ -9,10 +9,11 @@ import com.x.backend.service.user.AccountService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Optional;
+
 import org.springframework.web.bind.annotation.*;
 import com.x.backend.util.JWTUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;;
+;
 
 @Slf4j
 @RestController("userAccountController")
@@ -46,11 +47,16 @@ public class AccountController {
         }
     }
 
-    @PostMapping("path")
-    public String postMethodName(@RequestBody String entity) {
-        // TODO: process POST request
-
-        return entity;
+    @GetMapping("validate/email")
+    public ResultEntity<String> validateEmail(
+        @RequestParam(required = true) String email
+    ) {
+        return Optional.of(email) // 这里用 of() 因为 required=true 保证 email 非 null
+            .filter(e -> !e.isBlank())               // 过滤空字符串
+            .filter(e -> e.contains("@"))            // 校验包含 @
+            .filter(e -> e.indexOf("@") > 0)         // 校验 @ 前有内容（local part）
+            .map(e -> ResultEntity.success(e))
+            .orElse(ResultEntity.failure("Invalid email: empty or format error"));
     }
 
     @GetMapping("/test")
