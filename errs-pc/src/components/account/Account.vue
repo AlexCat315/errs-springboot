@@ -15,6 +15,23 @@ const selectTheme = ref(globalTheme);
 const clickShow = ref("Login");
 provide("globalAccountSelect", clickShow);
 
+interface RegisterForm {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
+
+const registerFrom = ref<RegisterForm>({
+  email: "",
+  code: "",
+  password: "",
+  password_confirmation: "",
+});
+
+// 提供响应式数据
+provide("globalRegisterFrom", registerFrom);
+
 // 组件映射表
 const componentMap = {
     Login: {
@@ -47,19 +64,18 @@ const currentComponent = computed(() => {
 </template>
 
 <style lang="css" scoped>
-.scale-enter-active, .scale-leave-active {
-  transition: transform 0.5s, opacity 0.5s;
+.scale-enter-active,
+.scale-leave-active {
+    transition: transform 0.5s, opacity 0.5s;
 }
 
 .scale-enter-from {
-  transform: scale(0.8);
-  opacity: 0;
+    transform: scale(0.8);
+    opacity: 0;
 }
 
 .scale-leave-to {
-  transform: scale(1.2);
-  opacity: 0;
+    transform: scale(1.2);
+    opacity: 0;
 }
-
-
 </style>

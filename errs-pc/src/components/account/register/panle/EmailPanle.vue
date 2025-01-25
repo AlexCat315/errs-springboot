@@ -6,7 +6,21 @@ import { validate_email } from '../../../../net/account/register';
 
 const globalTheme = inject<string>("globalTheme");
 const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
+// 定义注入的类型（TypeScript 需要）
+interface RegisterForm {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
 
+// 注入父组件提供的数据
+const registerFrom = inject<Ref<RegisterForm>>("globalRegisterFrom");
+
+// 安全校验（确保注入成功）
+if (!registerFrom) {
+  throw new Error("未能注入 globalRegisterFrom");
+}
 
 const showLogin = () => {
   if (globalAccountSelect) {
@@ -46,8 +60,10 @@ const verifyEmail = () => {
 
   // 验证邮箱逻辑
   validate_email(email.value, (data: any) => {
-    console.log(data);
-    toNextStep();
+    if (data.code === 200) {
+      registerFrom.value.email = email.value;
+      toNextStep();
+    }
   }, (message: string) => {
     emailError.value = true;
     errorMessage.value = message;
