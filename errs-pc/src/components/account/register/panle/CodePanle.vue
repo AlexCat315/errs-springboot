@@ -37,7 +37,7 @@ const verifyEmailCode = () => {
 
 <template>
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
-    <Close @click="showLogin()" class="close-icon" /> <!-- 添加 class -->
+    <Close @click="showLogin()" style="transform: scale(0.8);" class="close-icon" /> <!-- 添加 class -->
     <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">填写验证码</span>
     <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__content">
       填写邮箱验证码，我们承诺不会将此信息用于其它目的，请放心填写。</p>

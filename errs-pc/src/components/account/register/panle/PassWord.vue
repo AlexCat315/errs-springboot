@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { inject, Ref, ref } from 'vue';
+import Close from '../Close.vue';
+
 const globalTheme = inject<string>("globalTheme");
 
 
@@ -14,10 +16,20 @@ const prevStep = () => {
         globalVerifyRegisterSetup.value -= 1;
     }
 };
+const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
+
+
+const showLogin = () => {
+    if (globalAccountSelect) {
+        globalAccountSelect.value = "Login";
+    }
+};
 </script>
 
 <template>
     <form :style="{ backgroundColor: globalTheme === 'light' ? '#fff' : '#333' }" class="form">
+        <Close @click="showLogin()" style="margin-left: 300px;transform: scale(0.7);border: none;
+                                    outline: none;" />
         <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="form-title">填写密码</p>
         <div class="input-container">
             <input placeholder="密码" :type="showPassowrdOne ? 'text' : 'password'">
@@ -64,7 +76,7 @@ const prevStep = () => {
 
         <p class="signup-link">
             信息有误？
-            <a  style="cursor: pointer;color: #00baf8;" @click="prevStep()">上一步</a>
+            <a style="cursor: pointer;color: #00baf8;" @click="prevStep()">上一步</a>
         </p>
     </form>
 </template>
@@ -84,6 +96,7 @@ const prevStep = () => {
     font-weight: 600;
     text-align: center;
     color: #000;
+    margin-top: -35px;
 }
 
 .input-container {
@@ -150,5 +163,12 @@ const prevStep = () => {
 
 .signup-link a {
     text-decoration: underline;
+}
+
+.close-icon {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
 }
 </style>

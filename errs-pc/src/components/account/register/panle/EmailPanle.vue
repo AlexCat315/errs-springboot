@@ -31,7 +31,7 @@ const verifyEmail = () => {
 
 <template>
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
-    <Close @click="showLogin()" class="close-icon" /> <!-- 添加 class -->
+    <Close @click="showLogin()" style="transform: scale(0.8);" class="close-icon" />
     <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">加入我们</span>
     <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__content">
       填写邮箱信息用于验证，我们承诺不会将此信息用于其它目的，请放心填写。</p>
@@ -40,7 +40,7 @@ const verifyEmail = () => {
 
     <div class="card__form">
       <input class="email" placeholder="邮箱账号" type="text">
-      <button @click="verifyEmail()" class="sign-up">下一步</button>
+      <button @click="verifyEmail()" style="background-color: #00ad54;" class="sign-up">下一步</button>
     </div>
   </div>
 </template>
@@ -111,7 +111,9 @@ const verifyEmail = () => {
   margin-top: 10px;
 }
 
+
 .sign-up:hover {
   opacity: 0.8;
+  background-color: #00ad54;
 }
 </style>
