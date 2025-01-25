@@ -14,20 +14,40 @@ const showLogin = () => {
 const globalVerifyRegisterSetup = inject<Ref<number>>("globalVerifyRegisterSetup");
 
 
+// 前往上一步
+const previousStep = () => {
+  if (globalVerifyRegisterSetup) {
+    globalVerifyRegisterSetup.value -= 1;
+  }
+};
+// 前往下一步
+const nextStep = () => {
+  if (globalVerifyRegisterSetup) {
+    globalVerifyRegisterSetup.value += 1;
+  }
+};
+
+// 验证邮箱验证码
+const verifyEmailCode = () => {
+  // 验证邮箱验证码逻辑
+  nextStep();
+};
 
 </script>
 
 <template>
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
     <Close @click="showLogin()" class="close-icon" /> <!-- 添加 class -->
-    <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">验证邮箱</span>
-    <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__content">填写邮箱验证码，我们承诺不会将此信息用于其它目的，请放心填写。</p>
-    <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" style="margin-top: -10px;color: cornflowerblue;"  class="card__content">当前 {{globalVerifyRegisterSetup}}/3 步</p>
+    <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">填写验证码</span>
+    <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__content">
+      填写邮箱验证码，我们承诺不会将此信息用于其它目的，请放心填写。</p>
+    <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" style="margin-top: -10px;color: cornflowerblue;"
+      class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input class="email" placeholder="Your Email" type="text">  
-      <div  style="display: flex;">
-        <button style="width: 130px;background-color: rebeccapurple ;" class="sign-up">
+      <input maxlength="6" class="email" placeholder="Your Email Code" type="text">
+      <div style="display: flex;">
+        <button @click="previousStep()" style="width: 130px;background-color: rebeccapurple ;" class="sign-up">
           <div style="display: flex;">
             <svg t="1737707467802" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
               p-id="7467" width="30" height="30">
@@ -38,7 +58,8 @@ const globalVerifyRegisterSetup = inject<Ref<number>>("globalVerifyRegisterSetup
             <p style="font-size: 14px;margin-top: 7px;margin-left: 13px;">上一步</p>
           </div>
         </button>
-        <button style="width: 130px;margin-left: 35px;background-color:cadetblue;" class="sign-up">
+        <button @click="verifyEmailCode()" style="width: 130px;margin-left: 35px;background-color:cadetblue;"
+          class="sign-up">
           <div style="display: flex;">
             <p style="font-size: 14px;margin-top: 7px;margin-left: 25px;">下一步</p>
             <svg style="margin-left: 15px;" t="1737707866714" class="icon" viewBox="0 0 1024 1024" version="1.1"

@@ -3,6 +3,7 @@
 import { inject, provide, Ref, ref } from "vue";
 import CodePanle from "./panle/CodePanle.vue";
 import EmailPanle from "./panle/EmailPanle.vue";
+import PassWord from "./panle/PassWord.vue";
 
 const setup = ref(1)
 provide("globalVerifyRegisterSetup", setup);
@@ -14,6 +15,7 @@ provide("globalVerifyRegisterSetup", setup);
   <div>
     <EmailPanle v-if="setup === 1" />
     <CodePanle v-if="setup === 2" />
+    <PassWord v-if="setup === 3" />
   </div>
 </template>
 
