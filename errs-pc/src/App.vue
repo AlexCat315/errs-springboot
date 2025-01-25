@@ -124,6 +124,18 @@ onBeforeUnmount(() => {
   height: 100vh;
 }
 
+* {
+  user-select: none; /* 禁止所有元素文本选择 */
+  -webkit-user-select: none; /* Safari/Chrome */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+}
+
+/* 允许输入框和文本域选择文本 */
+input, textarea {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
 
 @keyframes moveBackground {
   0% {
