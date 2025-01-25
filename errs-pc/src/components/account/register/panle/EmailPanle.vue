@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
+import { validate_email } from '../../../../net/account/register';
+
 
 const globalTheme = inject<string>("globalTheme");
 const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
@@ -19,17 +21,40 @@ const toNextStep = () => {
   }
 };
 
-const verifyEmail = () => {
-  // 验证邮箱逻辑
 
-  toNextStep();
+import { useToast } from 'vue-toastification';
+
+// 获取 Toast 实例
+const toast = useToast();
+
+// 创建一个函数来显示 toast
+const showToast = () => {
+  toast.success('这是一个成功的 Toast!');
 };
 
+const email = ref("");
+const verifyEmail = () => {
+  // 验证邮箱格式
+  if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
+    showToast()
+    return;
+  }
+  // 验证邮箱逻辑
+  validate_email(email.value, (data: any) => {
+    console.log(data);
+  }, () => {
+    console.log("验证邮箱失败")
+  }, () => {
+    console.log("验证邮箱失败")
+  })
+  toNextStep();
+};
 
 
 </script>
 
 <template>
+  
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
     <Close @click="showLogin()" style="transform: scale(0.8);" class="close-icon" />
     <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">加入我们</span>
@@ -39,7 +64,7 @@ const verifyEmail = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input class="email" placeholder="邮箱账号" type="text">
+      <input class="email" v-model="email" placeholder="邮箱账号" type="text">
       <button @click="verifyEmail()" style="background-color: #00ad54;" class="sign-up">下一步</button>
     </div>
   </div>
