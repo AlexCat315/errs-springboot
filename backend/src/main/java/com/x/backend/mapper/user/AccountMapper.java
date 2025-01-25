@@ -9,4 +9,6 @@ import org.springframework.stereotype.Component;
 @Mapper
 public interface AccountMapper {
     UserAccount findAccountByUsername(String username);
+
+    Integer validateEmail(String email);
 }

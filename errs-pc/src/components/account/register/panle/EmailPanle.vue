@@ -36,21 +36,21 @@ const verifyEmail = () => {
     errorMessage.value = "邮箱不能为空";
     return;
   };
-  
+
   // 验证邮箱格式
   if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
     emailError.value = true;
     errorMessage.value = "邮箱格式不正确";
     return;
   };
-  
+
   // 验证邮箱逻辑
   validate_email(email.value, (data: any) => {
     console.log(data);
     toNextStep();
-  }, () => {
+  }, (message: string) => {
     emailError.value = true;
-    errorMessage.value = "该邮箱已被注册";
+    errorMessage.value = message;
   }, () => {
     emailError.value = true;
     errorMessage.value = "网络错误，请稍后重试";
@@ -61,7 +61,7 @@ const verifyEmail = () => {
 </script>
 
 <template>
-  
+
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
     <Close @click="showLogin()" style="transform: scale(0.8);" class="close-icon" />
     <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">加入我们</span>
@@ -71,16 +71,11 @@ const verifyEmail = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input 
-        class="email" 
-        :class="{ error: emailError }"
-        v-model="email" 
-        @input="emailError = false"
-        placeholder="邮箱账号" 
-        type="text"
-      >
+      <input class="email" :class="{ error: emailError }" v-model="email" @input="emailError = false" placeholder="邮箱账号"
+        type="text">
       <div v-if="emailError" class="error-message">{{ errorMessage }}</div>
-      <button @click="verifyEmail()" style="background-color: #00ad54;border-radius: 13px ;" class="sign-up">下一步</button>
+      <button @click="verifyEmail()" style="background-color: #00ad54;border-radius: 13px ;"
+        class="sign-up">下一步</button>
     </div>
   </div>
 </template>

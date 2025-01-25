@@ -17,7 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.lang.classfile.ClassFile.Option;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component("userAccountService")
@@ -53,5 +55,15 @@ public class AccountServiceImpl implements AccountService {
         }
         String jwt = jwtUtils.createJWT(userAccount, 7);
         return ResultEntity.success(jwt);
+    }
+
+    @Override
+    public ResultEntity<String> validateEmail(String email) {
+        Integer reslut = accountMapper.validateEmail(email);
+
+        if (reslut == null || reslut <= 0) {
+            return ResultEntity.success();
+        }
+        return ResultEntity.failure(HttpMessageConstants.EMAIL_REGISTERED);
     }
 }

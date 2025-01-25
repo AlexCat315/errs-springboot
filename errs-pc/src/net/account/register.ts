@@ -10,10 +10,12 @@ export function validate_email(
     `/api/user/account/validate/email?email=${email}`,
     (data: any) => {
       success(data);
+      console.log(data);
     },
     (message: string) => {
       failure(message);
-    },(message: string)=>{
+    },
+    (message: string) => {
       error(message);
     }
   );

@@ -12,8 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 import org.springframework.web.bind.annotation.*;
-import com.x.backend.util.JWTUtils;
-;
+import com.x.backend.util.JWTUtils;;
 
 @Slf4j
 @RestController("userAccountController")
@@ -46,17 +45,28 @@ public class AccountController {
             return ResultEntity.failure(HttpMessageConstants.TOKEN_CHECK_FAILED);
         }
     }
-
     @GetMapping("validate/email")
     public ResultEntity<String> validateEmail(
-        @RequestParam(required = true) String email
-    ) {
-        return Optional.of(email) // 这里用 of() 因为 required=true 保证 email 非 null
-            .filter(e -> !e.isBlank())               // 过滤空字符串
-            .filter(e -> e.contains("@"))            // 校验包含 @
-            .filter(e -> e.indexOf("@") > 0)         // 校验 @ 前有内容（local part）
-            .map(e -> ResultEntity.success(e))
-            .orElse(ResultEntity.failure("Invalid email: empty or format error"));
+            @RequestParam(required = true) String email) {
+    
+        // 1. 检查邮箱是否为空或仅包含空白字符
+        if (email.isBlank()) {
+            return ResultEntity.failure("Invalid email: empty or format error");
+        }
+    
+        // 2. 检查是否包含 @ 符号
+        if (!email.contains("@")) {
+            return ResultEntity.failure("Invalid email: empty or format error");
+        }
+    
+        // 3. 检查 @ 符号的位置（不能在开头）
+        int atIndex = email.indexOf("@");
+        if (atIndex <= 0) { // @ 在第一个字符或未找到（但上一步已确保存在）
+            return ResultEntity.failure("Invalid email: empty or format error");
+        }
+    
+        // 所有格式校验通过，调用服务层验证邮箱是否已注册
+        return accountService.validateEmail(email);
     }
 
     @GetMapping("/test")
