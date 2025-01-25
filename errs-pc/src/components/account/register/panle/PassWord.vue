@@ -192,6 +192,7 @@ const showLogin = () => {
     font-size: 0.875rem;
     margin-top: -5px;
     margin-bottom: 10px;
+    font-size: 13px;
 }
 
 .signup-link {
