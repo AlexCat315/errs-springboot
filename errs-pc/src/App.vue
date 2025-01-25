@@ -151,6 +151,7 @@ input, textarea {
   }
 }
 
+
 .page::before {
   content: '';
   position: absolute;

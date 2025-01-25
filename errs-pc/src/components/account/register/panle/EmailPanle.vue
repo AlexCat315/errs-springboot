@@ -2,6 +2,7 @@
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
 import { validate_email } from '../../../../net/account/register';
+import { showToast } from '../../../message/Toast';
 
 
 const globalTheme = inject<string>("globalTheme");
@@ -22,23 +23,18 @@ const toNextStep = () => {
 };
 
 
-import { useToast } from 'vue-toastification';
-
-// 获取 Toast 实例
-const toast = useToast();
-
-// 创建一个函数来显示 toast
-const showToast = () => {
-  toast.success('这是一个成功的 Toast!');
-};
 
 const email = ref("");
 const verifyEmail = () => {
+  if (!email.value) {
+    showToast("请输入邮箱","warning")
+    return;
+  };
   // 验证邮箱格式
   if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
-    showToast()
+    showToast("邮箱格式不正确","warning")
     return;
-  }
+  };
   // 验证邮箱逻辑
   validate_email(email.value, (data: any) => {
     console.log(data);
