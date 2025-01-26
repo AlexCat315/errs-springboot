@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, Ref, ref } from 'vue';
 import Close from '../Close.vue';
+import Loading from '../../../Loading.vue';
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -13,6 +14,29 @@ const password = ref('');
 const repeatPassword = ref('');
 const errorMessage = ref('');
 const isError = ref(false);
+
+const showLoading = ref(false);
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
+
+interface RegisterForm {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
+
+// 注入父组件提供的数据
+const registerFrom = inject<Ref<RegisterForm>>("globalRegisterFrom");
+
+// 安全校验（确保注入成功）
+if (!registerFrom) {
+    showErrorpanle.value = true;
+    setTimeout(() => {
+      showErrorpanle.value = false;
+    }, 3000);
+  throw new Error("未能注入 globalRegisterFrom");
+}
 
 const validatePassword = () => {
   if (!password.value || password.value.length < 8) {
@@ -47,6 +71,14 @@ const showLogin = () => {
 </script>
 
 <template>
+
+  <!-- Loading 遮罩层 -->
+  <div v-if="showLoading" class="loading-overlay">
+    <Loading style="margin-left: 200px; margin-top: -120px" />
+  </div>
+
+  <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+
     <form :style="{ backgroundColor: globalTheme === 'light' ? '#fff' : '#333' }" class="form">
         <Close @click="showLogin()" style="margin-left: 300px;transform: scale(0.7);border: none;
                                     outline: none;" />
@@ -211,5 +243,51 @@ const showLogin = () => {
     right: 15px;
     top: 10px;
     cursor: pointer;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(236, 236, 236, 0.8);
+  /* 半透明背景 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  /* 确保遮罩层在最上层 */
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-20px);
+  }
+}
+
+.error-msg {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #FFF;
+  width: 150px;
+  height: 30px;
+  /* 建议显式设置高度 */
+  display: flex;
+  /* 启用 Flex 布局 */
+  align-items: center;
+  /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  z-index: 4;
+  margin-left: 100px;
+  margin-top: 30px;
+  animation: moveUp 0.4s ease-in-out forwards;
+  font-size: 13px;
 }
 </style>

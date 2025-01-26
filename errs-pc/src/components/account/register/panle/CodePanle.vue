@@ -2,11 +2,14 @@
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
 import { validate_code } from '../../../../net/account/register';
+import Loading from '../../../Loading.vue';
 
 const globalTheme = inject<string>("globalTheme");
 const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
 
-
+const showLoading = ref(false);
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
 const showLogin = () => {
   if (globalAccountSelect) {
     globalAccountSelect.value = "Login";
@@ -27,6 +30,7 @@ const nextStep = () => {
     globalVerifyRegisterSetup.value += 1;
   }
 };
+
 const code = ref("");
 const codeError = ref(false);
 const errorMessage = ref("");
@@ -57,27 +61,41 @@ const verifyEmailCode = () => {
     errorMessage.value = "验证码不能为空";
     return;
   };
-  
+
   if (code.value.length !== 6) {
     codeError.value = true;
     errorMessage.value = "验证码必须为6位数字";
     return;
   };
+  showLoading.value = true;
 
   validate_code(registerFrom.value.email, code.value, (data: any) => {
-
     if (data.code === 200) {
+      showLoading.value = false;
       nextStep();
     }
   }, (message: string) => {
-    codeError.value = true;
-    errorMessage.value = message;
+    showLoading.value = false; 
+    showErrorpanle.value = true;
+    errorPanleMsg.value = message;
+    setTimeout(() => {
+      showErrorpanle.value = false;
+      errorPanleMsg.value = "";
+    }, 3000);
   });
 };
 
 </script>
 
 <template>
+  <!-- Loading 遮罩层 -->
+  <div v-if="showLoading" class="loading-overlay">
+    <Loading style="margin-left: 200px; margin-top: -120px" />
+  </div>
+
+  <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+
+
   <div :style="{ background: globalTheme === 'light' ? '#fff' : '#333' }" class="card">
     <Close @click="showLogin()" style="transform: scale(0.8);" class="close-icon" /> <!-- 添加 class -->
     <span :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="card__title">填写验证码</span>
@@ -87,15 +105,8 @@ const verifyEmailCode = () => {
       class="card__content">当前 {{ globalVerifyRegisterSetup }}/3 步</p>
 
     <div class="card__form">
-      <input 
-        v-model="code" 
-        maxlength="6" 
-        class="email" 
-        :class="{ error: codeError }"
-        @input="codeError = false"
-        placeholder="邮箱验证码" 
-        type="text"
-      >
+      <input v-model="code" maxlength="6" class="email" :class="{ error: codeError }" @input="codeError = false"
+        placeholder="邮箱验证码" type="text">
       <div v-if="codeError" class="error-message">{{ errorMessage }}</div>
       <div style="display: flex;">
         <button @click="previousStep()" style="width: 130px;background-color: rebeccapurple ;" class="sign-up">
@@ -208,5 +219,51 @@ const verifyEmailCode = () => {
   margin-top: 4px;
   text-align: left;
   padding-left: 8px;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(236, 236, 236, 0.8);
+  /* 半透明背景 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  /* 确保遮罩层在最上层 */
+}
+
+@keyframes moveUp {
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(-20px);
+  }
+}
+
+.error-msg {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #FFF;
+  width: 150px;
+  height: 30px;
+  /* 建议显式设置高度 */
+  display: flex;
+  /* 启用 Flex 布局 */
+  align-items: center;
+  /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  font-family: Arial, Helvetica, sans-serif;
+  position: fixed;
+  z-index: 4;
+  margin-left: 100px;
+  margin-top: 30px;
+  animation: moveUp 0.4s ease-in-out forwards;
+  font-size: 13px;
 }
 </style>
