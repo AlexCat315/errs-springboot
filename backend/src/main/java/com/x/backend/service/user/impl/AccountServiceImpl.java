@@ -8,8 +8,10 @@ import com.x.backend.exception.ForbiddenException;
 import com.x.backend.mapper.user.AccountMapper;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
+import com.x.backend.pojo.user.dto.account.ForgotPasswordDTO;
 import com.x.backend.pojo.user.dto.account.ValidateEmailCodeDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.account.ForgotPassowrdVo;
 import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.service.admin.EmailService;
 import com.x.backend.service.user.AccountService;
@@ -21,14 +23,14 @@ import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
-
-import javax.management.RuntimeErrorException;
 
 @Slf4j
 @Component("userAccountService")
@@ -110,6 +112,7 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    @Transactional
     @Override
     public ResultEntity<String> register(Account account) throws DuplicateKeyException {
         Integer reslut = accountMapper.register(account);
@@ -123,7 +126,7 @@ public class AccountServiceImpl implements AccountService {
     public void sendCodeForgotPassord(String email) {
         Integer reslut = accountMapper.validateEmail(email);
         String key = BlockConstants.REDIS_USER_FORGOTPASSWORD_CODE + email;
-        if (reslut != null && reslut == 1) {
+        if (reslut != null && reslut > 0) {
             // 生成随机6位字符验证码
             String code = randomCodeGeneratorUtils.generateRandomCode();
             // 向email服务发送验证邮件
@@ -132,6 +135,14 @@ public class AccountServiceImpl implements AccountService {
         } else {
             throw new ForbiddenException(HttpMessageConstants.EMAIL_NOT_REGISTERED);
         }
+    }
+
+    @Transactional
+    @Override
+    public void forgotPassword(ForgotPassowrdVo forgotPassowrdVo) {
+        ForgotPasswordDTO forgotPasswordDTO = new ForgotPasswordDTO();
+        BeanUtils.copyProperties(forgotPassowrdVo, forgotPasswordDTO);
+        accountMapper.forgotPassowrd(forgotPasswordDTO);
     }
 
 }

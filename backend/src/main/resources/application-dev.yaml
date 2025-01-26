@@ -71,8 +71,9 @@ mybatis:
 logging:
   level:
     root: INFO
-    org.springframework: INFO
-    org.mybatis: DEBUG
+    org:
+     springframework: INFO
+     mybatis: TRACE
 
 
 

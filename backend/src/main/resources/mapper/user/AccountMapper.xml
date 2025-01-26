@@ -12,16 +12,16 @@
         password, is_banned from account where email = #{username} or username = #{username} </select>
 
     <!-- validateEmail -->
-
-    <select id="validateEmail"> select a_id from account where email = #{email} </select>
-
+    
+    <select id="validateEmail" resultType="java.lang.Integer"> SELECT a_id FROM account WHERE email = #{email} </select>
+    
     <!-- register -->
 
-    <insert id="register">
-         insert into account (username, email, password, role, created_at, vip,
-           is_banned) values (#{username}, #{email}, #{password}, #{role},
-        #{createdAt}, #{vip},  #{isBanned}) 
-        
-        </insert>
+    <insert id="register"> insert into account (username, email, password, role, created_at, vip,
+        is_banned) values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip},
+        #{isBanned}) </insert>
 
+    <!-- forgotPassowrd -->
+
+    <update id="forgotPassowrd"> update account set password = #{password} where email = #{email} </update>
 </mapper>

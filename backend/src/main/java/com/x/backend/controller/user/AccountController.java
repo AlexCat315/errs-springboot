@@ -8,6 +8,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.user.dto.account.ValidateEmailCodeDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.account.ForgotPassowrdVo;
 import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.pojo.user.vo.request.account.RegisterVo;
 import com.x.backend.pojo.user.vo.request.account.ValidateEmailCode;
@@ -65,7 +66,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("validate/email")
+    @GetMapping("/validate/email")
     public ResultEntity<String> validateEmail(
             @RequestParam(required = true) String email) {
 
@@ -89,7 +90,7 @@ public class AccountController {
         return accountService.validateEmail(email);
     }
 
-    @PostMapping("validate/email-code")
+    @PostMapping("/validate/email-code")
     public ResultEntity<String> validateEmailCode(@Valid @RequestBody ValidateEmailCode validateEmailCode) {
         ValidateEmailCodeDTO validateEmailCodeDTO = new ValidateEmailCodeDTO();
         BeanUtils.copyProperties(validateEmailCode, validateEmailCodeDTO);
@@ -100,7 +101,7 @@ public class AccountController {
         }
     }
 
-    @PostMapping("register")
+    @PostMapping("/register")
     public ResultEntity<String> register(@Valid @RequestBody RegisterVo registerVo) {
         try {
             String redisCode = redisTemplate.opsForValue()
@@ -140,8 +141,8 @@ public class AccountController {
         }
     }
 
-    @PostMapping("forgot-password/send-code")
-    public ResultEntity<String> forGotPasswordSendCode(@RequestBody String email) {
+    @PostMapping("/forgot-password/send-code")
+    public ResultEntity<String> forGotPasswordSendCode(@RequestParam String email) {
         try {
             accountService.sendCodeForgotPassord(email);
             return ResultEntity.success();
@@ -149,6 +150,27 @@ public class AccountController {
             return ResultEntity.failure(exception.getMessage());
         } catch (RuntimeException exception) {
             return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_SEND_ERROR);
+        }
+    }
+
+    @PostMapping("/forgot-password")
+    public ResultEntity<String> forgotPassowrd(@Valid @RequestBody ForgotPassowrdVo forgotPassowrdVo) {
+        try {
+            String redisCode = redisTemplate.opsForValue()
+                    .get(BlockConstants.REDIS_USER_FORGOTPASSWORD_CODE + forgotPassowrdVo.getEmail());
+            Boolean reslut = forgotPassowrdVo.getCode().equals(redisCode);
+            if (reslut) {
+                if (forgotPassowrdVo.getPassword().equals(forgotPassowrdVo.getRepeatPassword())) {
+                    forgotPassowrdVo.setPassword(encryptUtils.encryptPassword(forgotPassowrdVo.getRepeatPassword()));
+                    accountService.forgotPassword(forgotPassowrdVo);
+                    return ResultEntity.success();
+                }
+                return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
+            }
+            return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
+
+        } catch (Exception exception) {
+            return ResultEntity.serverError();
         }
     }
 
