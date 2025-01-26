@@ -110,10 +110,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResultEntity<String> register(Account account) throws DuplicateKeyException {
-       Integer reslut = accountMapper.register(account);
-       if (reslut == 1){
-        redisTemplate.delete(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + account.getEmail());
-       }
+        Integer reslut = accountMapper.register(account);
+        if (reslut != null && reslut == 1) {
+            redisTemplate.delete(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + account.getEmail());
+        }
         return ResultEntity.success();
     }
 
