@@ -1,5 +1,6 @@
 package com.x.backend.mapper.user;
 
+
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.user.dto.account.ForgotPasswordDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
@@ -15,5 +16,5 @@ public interface AccountMapper {
 
     Integer register(Account account);
 
-    void forgotPassowrd(ForgotPasswordDTO forgotPasswordDTO);
+    void forgotPassword(ForgotPasswordDTO forgotPasswordDTO);
 }

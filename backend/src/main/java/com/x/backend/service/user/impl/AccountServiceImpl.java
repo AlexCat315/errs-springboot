@@ -142,7 +142,7 @@ public class AccountServiceImpl implements AccountService {
     public void forgotPassword(ForgotPassowrdVo forgotPassowrdVo) {
         ForgotPasswordDTO forgotPasswordDTO = new ForgotPasswordDTO();
         BeanUtils.copyProperties(forgotPassowrdVo, forgotPasswordDTO);
-        accountMapper.forgotPassowrd(forgotPasswordDTO);
+        accountMapper.forgotPassword(forgotPasswordDTO);
     }
 
 }
