@@ -3,6 +3,7 @@ import { inject, Ref, ref } from 'vue';
 import Close from '../Close.vue';
 import Loading from '../../../Loading.vue';
 import { register } from '../../../../net/account/register';
+import { disable } from '@tauri-apps/plugin-autostart';
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -55,11 +56,13 @@ const validatePassword = () => {
 
     return true;
 };
+const showRegisterButton = ref(true);
 
 const registerClick = () => {
     showLoading.value = true;
     registerFrom.value.password = password.value;
     registerFrom.value.password_confirmation = repeatPassword.value;
+    showRegisterButton.value = false;
     register(registerFrom.value, (data: any) => {
         if (data.code === 200) {
             showLoading.value = false;
@@ -69,7 +72,8 @@ const registerClick = () => {
                 showErrorpanle.value = false;
                 errorPanleMsg.value = "";
                 showLogin();
-            }, 10000);
+            }, 1200);
+            showRegisterButton.value = true;
         }
     }, (message: string) => {
         errorMessage.value = message;
@@ -153,7 +157,10 @@ const showLogin = () => {
             </span>
         </div>
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <button @click="registerClick" class="submit" type="submit" @click.prevent="validatePassword">
+        <button v-if="showRegisterButton" @click="registerClick"  class="submit" type="submit" @click.prevent="validatePassword">
+            立即注册
+        </button>
+        <button v-if="!showRegisterButton"  :disable="!showRegisterButton"  class="submit" type="submit" @click.prevent="validatePassword">
             立即注册
         </button>
 
@@ -168,7 +175,7 @@ const showLogin = () => {
 
     display: block;
     padding: 1rem;
-    max-width: 350px;
+    width: 370px;
     border-radius: 0.5rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
