@@ -3,6 +3,7 @@ package com.x.backend.controller.user;
 import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
+import com.x.backend.exception.ForbiddenException;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.user.dto.account.ValidateEmailCodeDTO;
@@ -136,6 +137,18 @@ public class AccountController {
             return accountService.register(account);
         } catch (Exception exception) {
             return ResultEntity.serverError();
+        }
+    }
+
+    @PostMapping("forgot-password/send-code")
+    public ResultEntity<String> forGotPasswordSendCode(@RequestBody String email) {
+        try {
+            accountService.sendCodeForgotPassord(email);
+            return ResultEntity.success();
+        } catch (ForbiddenException exception) {
+            return ResultEntity.failure(exception.getMessage());
+        } catch (RuntimeException exception) {
+            return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_SEND_ERROR);
         }
     }
 

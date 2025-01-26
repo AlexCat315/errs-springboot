@@ -4,6 +4,7 @@ import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpCodeConstants;
 import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
+import com.x.backend.exception.ForbiddenException;
 import com.x.backend.mapper.user.AccountMapper;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
@@ -26,7 +27,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
+
+import javax.management.RuntimeErrorException;
 
 @Slf4j
 @Component("userAccountService")
@@ -115,6 +117,21 @@ public class AccountServiceImpl implements AccountService {
             redisTemplate.delete(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + account.getEmail());
         }
         return ResultEntity.success();
+    }
+
+    @Override
+    public void sendCodeForgotPassord(String email) {
+        Integer reslut = accountMapper.validateEmail(email);
+        String key = BlockConstants.REDIS_USER_FORGOTPASSWORD_CODE + email;
+        if (reslut != null && reslut == 1) {
+            // 生成随机6位字符验证码
+            String code = randomCodeGeneratorUtils.generateRandomCode();
+            // 向email服务发送验证邮件
+            emailService.sendEmail(email, "验证邮箱", "您正在忘记密码，您的验证码为：" + code + "，请在10分钟内完成验证。");
+            redisTemplate.opsForValue().set(key, code, 600, java.util.concurrent.TimeUnit.SECONDS);
+        } else {
+            throw new ForbiddenException(HttpMessageConstants.EMAIL_NOT_REGISTERED);
+        }
     }
 
 }

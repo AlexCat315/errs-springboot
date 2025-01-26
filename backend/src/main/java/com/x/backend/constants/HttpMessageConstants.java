@@ -36,6 +36,8 @@ public class HttpMessageConstants {
     public static final String PASSWORD_NOT_MATCH = "密码不一致";
     // 验证码错误或已过期
     public static final String VERIFICATION_CODE_EXPIRED = "验证码错误或已过期";
+    // 验证码发送失败
+    public static final String VERIFICATION_CODE_SEND_ERROR = "验证码发送失败";
     // 邀请码错误或已过期
     public static final String INVITATION_CODE_ERROR = "邀请码错误或已过期";
     // 邀请码不能为空

@@ -10,4 +10,5 @@ public interface AccountService {
     ResultEntity<String> validateEmail(String email);
     ResultEntity<String> validateEmaiCode(ValidateEmailCodeDTO validateEmailCodeDTO);
     ResultEntity<String> register(Account account);
+    void sendCodeForgotPassord(String email);
 }
