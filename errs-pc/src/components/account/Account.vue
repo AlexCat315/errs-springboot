@@ -15,22 +15,7 @@ const selectTheme = ref(globalTheme);
 const clickShow = ref("Login");
 provide("globalAccountSelect", clickShow);
 
-interface RegisterForm {
-  email: string;
-  code: string;
-  password: string;
-  password_confirmation: string;
-}
 
-const registerFrom = ref<RegisterForm>({
-  email: "",
-  code: "",
-  password: "",
-  password_confirmation: "",
-});
-
-// 提供响应式数据
-provide("globalRegisterFrom", registerFrom);
 
 // 组件映射表
 const componentMap = {

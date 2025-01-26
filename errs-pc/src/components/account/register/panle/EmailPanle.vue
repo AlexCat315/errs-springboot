@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
-import { validate_email } from '../../../../net/account/register';
+import { validate_code, validate_email } from '../../../../net/account/register';
 import Loading from '../../../Loading.vue';
 
 
 const globalTheme = inject<string>("globalTheme");
 const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
-// 定义注入的类型（TypeScript 需要）
+
 interface RegisterForm {
   email: string;
   code: string;
@@ -86,7 +86,13 @@ const verifyEmail = () => {
       showErrorpanle.value = false;
     }, 3000);
     return;
-  })
+  });
+
+  validate_code(email.value,"", ()=>{
+
+  },()=>{
+
+  });
 };
 
 

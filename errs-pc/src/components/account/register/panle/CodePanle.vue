@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { inject, ref, Ref } from 'vue';
 import Close from '../Close.vue';
+import { validate_code } from '../../../../net/account/register';
 
 const globalTheme = inject<string>("globalTheme");
 const globalAccountSelect = inject<Ref<string>>("globalAccountSelect");
@@ -29,6 +30,22 @@ const nextStep = () => {
 const code = ref("");
 const codeError = ref(false);
 const errorMessage = ref("");
+interface RegisterForm {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
+
+// 注入父组件提供的数据
+const registerFrom = inject<Ref<RegisterForm>>("globalRegisterFrom");
+
+// 安全校验（确保注入成功）
+if (!registerFrom) {
+  codeError.value = true;
+  errorMessage.value = "发生错误，请稍候重试";
+  throw new Error("未能注入 globalRegisterFrom");
+}
 
 // 验证邮箱验证码
 const verifyEmailCode = () => {
@@ -47,8 +64,15 @@ const verifyEmailCode = () => {
     return;
   };
 
-  // 验证邮箱验证码逻辑
-  nextStep();
+  validate_code(registerFrom.value.email, code.value, (data: any) => {
+
+    if (data.code === 200) {
+      nextStep();
+    }
+  }, (message: string) => {
+    codeError.value = true;
+    errorMessage.value = message;
+  });
 };
 
 </script>

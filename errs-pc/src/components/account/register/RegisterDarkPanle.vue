@@ -5,9 +5,24 @@ import CodePanle from "./panle/CodePanle.vue";
 import EmailPanle from "./panle/EmailPanle.vue";
 import PassWord from "./panle/PassWord.vue";
 
-const setup = ref(1)
+const setup = ref(2)
 provide("globalVerifyRegisterSetup", setup);
+interface RegisterForm {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
 
+const registerFrom = ref<RegisterForm>({
+  email: "",
+  code: "",
+  password: "",
+  password_confirmation: "",
+});
+
+// 提供响应式数据
+provide("globalRegisterFrom", registerFrom);
 
 </script>
 
