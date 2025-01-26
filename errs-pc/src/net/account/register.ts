@@ -26,22 +26,42 @@ export function validate_code(
   email: string,
   code: string,
   success: Function,
-  failure: Function,
+  failure: Function
 ) {
-
-Post(
-  "/api/user/account/validate/email-code",
-  {
-    email: email,
-    code: code,
-  },
-  (data:any) => {
-    success(data);
-  },
-  (message: string) => {
-    failure(message);
-  },
-);
+  Post(
+    "/api/user/account/validate/email-code",
+    {
+      email: email,
+      code: code,
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    }
+  );
 }
 
-
+export function register(
+  RegisterForm: any,
+  success: Function,
+  failure: Function
+) {
+  Post(
+    "/api/user/account/register",
+    {
+      username: RegisterForm.username,
+      password: RegisterForm.password,
+      repeatPassword: RegisterForm.password_confirmation,
+      email: RegisterForm.email,
+      code: RegisterForm.code,
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    }
+  );
+}

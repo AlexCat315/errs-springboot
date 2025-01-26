@@ -2,6 +2,7 @@
 import { inject, Ref, ref } from 'vue';
 import Close from '../Close.vue';
 import Loading from '../../../Loading.vue';
+import { register } from '../../../../net/account/register';
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -20,10 +21,10 @@ const showErrorpanle = ref(false);
 const errorPanleMsg = ref("");
 
 interface RegisterForm {
-  email: string;
-  code: string;
-  password: string;
-  password_confirmation: string;
+    email: string;
+    code: string;
+    password: string;
+    password_confirmation: string;
 }
 
 // 注入父组件提供的数据
@@ -33,25 +34,47 @@ const registerFrom = inject<Ref<RegisterForm>>("globalRegisterFrom");
 if (!registerFrom) {
     showErrorpanle.value = true;
     setTimeout(() => {
-      showErrorpanle.value = false;
+        showErrorpanle.value = false;
     }, 3000);
-  throw new Error("未能注入 globalRegisterFrom");
+    throw new Error("未能注入 globalRegisterFrom");
 }
 
 const validatePassword = () => {
-  if (!password.value || password.value.length < 8) {
-    errorMessage.value = '密码长度至少8位';
-    isError.value = true;
-    return false;
-  }
-  if (password.value !== repeatPassword.value) {
-    errorMessage.value = '两次输入的密码不一致';
-    isError.value = true;
-    return false;
-  }
-  errorMessage.value = '';
-  isError.value = false;
-  return true;
+    if (!password.value || password.value.length < 8) {
+        errorMessage.value = '密码长度至少8位';
+        isError.value = true;
+        return false;
+    }
+    if (password.value !== repeatPassword.value) {
+        errorMessage.value = '两次输入的密码不一致';
+        isError.value = true;
+        return false;
+    }
+    errorMessage.value = '';
+    isError.value = false;
+    showLoading.value = true;
+    registerFrom.value.password = password.value;
+    registerFrom.value.password_confirmation = repeatPassword.value;
+    register(registerFrom.value, (data: any) => {
+        if (data.code === 200) {
+            showLoading.value = false;
+            errorMessage.value = "注册成功";
+            showErrorpanle.value = true;
+            setTimeout(() => {
+                showErrorpanle.value = false;
+                errorPanleMsg.value = "";
+            }, 1500);
+            showLogin();
+        }
+    }, (message: string) => {
+        errorMessage.value = message;
+        showErrorpanle.value = true;
+        setTimeout(() => {
+            showErrorpanle.value = false;
+            errorPanleMsg.value = "";
+        }, 2500);
+    });
+    return true;
 };
 
 // 上一步
@@ -72,25 +95,20 @@ const showLogin = () => {
 
 <template>
 
-  <!-- Loading 遮罩层 -->
-  <div v-if="showLoading" class="loading-overlay">
-    <Loading style="margin-left: 200px; margin-top: -120px" />
-  </div>
+    <!-- Loading 遮罩层 -->
+    <div v-if="showLoading" class="loading-overlay">
+        <Loading style="margin-left: 200px; margin-top: -120px" />
+    </div>
 
-  <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+    <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
 
     <form :style="{ backgroundColor: globalTheme === 'light' ? '#fff' : '#333' }" class="form">
         <Close @click="showLogin()" style="margin-left: 300px;transform: scale(0.7);border: none;
                                     outline: none;" />
         <p :style="{ color: globalTheme === 'light' ? 'black' : '#fff' }" class="form-title">填写密码</p>
         <div class="input-container">
-            <input 
-                v-model="password"
-                placeholder="密码" 
-                :type="showPassowrdOne ? 'text' : 'password'"
-                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }"
-                @input="validatePassword"
-            >
+            <input v-model="password" placeholder="密码" :type="showPassowrdOne ? 'text' : 'password'"
+                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }" @input="validatePassword">
             <span @click="showPassowrdOne = !showPassowrdOne">
                 <svg v-if="showPassowrdOne" stroke="currentColor" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -109,13 +127,8 @@ const showLogin = () => {
             </span>
         </div>
         <div class="input-container">
-            <input 
-                v-model="repeatPassword"
-                placeholder="重复密码" 
-                :type="showPassowrdTwo ? 'text' : 'password'"
-                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }"
-                @input="validatePassword"
-            >
+            <input v-model="repeatPassword" placeholder="重复密码" :type="showPassowrdTwo ? 'text' : 'password'"
+                :style="{ borderColor: isError ? '#ff4d4f' : '#e5e7eb' }" @input="validatePassword">
 
             <span @click="showPassowrdTwo = !showPassowrdTwo">
                 <svg v-if="showPassowrdTwo" stroke="currentColor" viewBox="0 0 24 24" fill="none"
@@ -246,49 +259,49 @@ const showLogin = () => {
 }
 
 .loading-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(236, 236, 236, 0.8);
-  /* 半透明背景 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  /* 确保遮罩层在最上层 */
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(236, 236, 236, 0.8);
+    /* 半透明背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* 确保遮罩层在最上层 */
 }
 
 @keyframes moveUp {
-  0% {
-    transform: translateY(0);
-  }
+    0% {
+        transform: translateY(0);
+    }
 
-  100% {
-    transform: translateY(-20px);
-  }
+    100% {
+        transform: translateY(-20px);
+    }
 }
 
 .error-msg {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #FFF;
-  width: 150px;
-  height: 30px;
-  /* 建议显式设置高度 */
-  display: flex;
-  /* 启用 Flex 布局 */
-  align-items: center;
-  /* 垂直居中 */
-  justify-content: center;
-  /* 水平居中 */
-  font-family: Arial, Helvetica, sans-serif;
-  position: fixed;
-  z-index: 4;
-  margin-left: 100px;
-  margin-top: 30px;
-  animation: moveUp 0.4s ease-in-out forwards;
-  font-size: 13px;
-  border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #FFF;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    margin-left: 100px;
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
 }
 </style>
