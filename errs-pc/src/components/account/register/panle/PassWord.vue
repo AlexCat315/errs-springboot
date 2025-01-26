@@ -52,19 +52,24 @@ const validatePassword = () => {
     }
     errorMessage.value = '';
     isError.value = false;
+
+    return true;
+};
+
+const registerClick = () => {
     showLoading.value = true;
     registerFrom.value.password = password.value;
     registerFrom.value.password_confirmation = repeatPassword.value;
     register(registerFrom.value, (data: any) => {
         if (data.code === 200) {
             showLoading.value = false;
-            errorMessage.value = "注册成功";
+            errorPanleMsg.value = '注册成功';
             showErrorpanle.value = true;
             setTimeout(() => {
                 showErrorpanle.value = false;
                 errorPanleMsg.value = "";
-            }, 1500);
-            showLogin();
+                showLogin();
+            }, 10000);
         }
     }, (message: string) => {
         errorMessage.value = message;
@@ -74,8 +79,8 @@ const validatePassword = () => {
             errorPanleMsg.value = "";
         }, 2500);
     });
-    return true;
-};
+}
+
 
 // 上一步
 const prevStep = () => {
@@ -148,7 +153,7 @@ const showLogin = () => {
             </span>
         </div>
         <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
-        <button class="submit" type="submit" @click.prevent="validatePassword">
+        <button @click="registerClick" class="submit" type="submit" @click.prevent="validatePassword">
             立即注册
         </button>
 

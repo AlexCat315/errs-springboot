@@ -74,8 +74,11 @@ const verifyEmail = () => {
     return;
   }, (message: string) => {
     showLoading.value = false;
-    emailError.value = true;
-    errorMessage.value = message;
+    errorPanleMsg.value = message;
+    showErrorpanle.value = true;
+    setTimeout(() => {
+      showErrorpanle.value = false;
+    }, 3000);
     return;
   }, () => {
     showLoading.value = false;
@@ -88,11 +91,6 @@ const verifyEmail = () => {
     return;
   });
 
-  validate_code(email.value,"", ()=>{
-
-  },()=>{
-
-  });
 };
 
 

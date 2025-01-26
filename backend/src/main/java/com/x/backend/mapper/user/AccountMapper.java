@@ -5,7 +5,6 @@ import com.x.backend.pojo.user.entity.UserAccount;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
-
 @Component(value = "userAccountMapper")
 @Mapper
 public interface AccountMapper {
@@ -13,5 +12,5 @@ public interface AccountMapper {
 
     Integer validateEmail(String email);
 
-    void register(Account account);
+    Integer register(Account account);
 }

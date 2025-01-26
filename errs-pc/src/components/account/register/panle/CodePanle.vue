@@ -71,6 +71,8 @@ const verifyEmailCode = () => {
 
   validate_code(registerFrom.value.email, code.value, (data: any) => {
     if (data.code === 200) {
+      console.log(data);
+      registerFrom.value.code = code.value;
       showLoading.value = false;
       nextStep();
     }

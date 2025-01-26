@@ -75,20 +75,23 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResultEntity<String> validateEmail(String email) {
-        String key = BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + email;
-        Long expire = redisTemplate.getExpire(key, java.util.concurrent.TimeUnit.SECONDS);
-        if (expire <= 0 || expire <= 520) {
-            Integer reslut = accountMapper.validateEmail(email);
-            if (reslut == null || reslut <= 0) {
-                // 生成随机6位字符验证码
-                String code = randomCodeGeneratorUtils.generateRandomCode();
-                // 向email服务发送验证邮件
-                emailService.sendEmail(email, "验证邮箱", "欢迎注册我们的网站，您的验证码为：" + code + "，请在10分钟内完成验证。");
-                redisTemplate.opsForValue().set(key, code, 600, java.util.concurrent.TimeUnit.SECONDS);
-                return ResultEntity.success();
+        Integer reslut = accountMapper.validateEmail(email);
+        if (reslut == null || reslut <= 0) {
+            String key = BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + email;
+            Long expire = redisTemplate.getExpire(key, java.util.concurrent.TimeUnit.SECONDS);
+            if (expire <= 0 || expire <= 520) {
+                reslut = accountMapper.validateEmail(email);
+                if (reslut == null || reslut <= 0) {
+                    // 生成随机6位字符验证码
+                    String code = randomCodeGeneratorUtils.generateRandomCode();
+                    // 向email服务发送验证邮件
+                    emailService.sendEmail(email, "验证邮箱", "欢迎注册我们的网站，您的验证码为：" + code + "，请在10分钟内完成验证。");
+                    redisTemplate.opsForValue().set(key, code, 600, java.util.concurrent.TimeUnit.SECONDS);
+                    return ResultEntity.success();
+                }
+            } else {
+                return ResultEntity.failure(HttpMessageConstants.REQUEST_FREQUENT);
             }
-        } else {
-            return ResultEntity.failure(HttpMessageConstants.REQUEST_FREQUENT);
         }
         return ResultEntity.failure(HttpMessageConstants.EMAIL_REGISTERED);
     }
@@ -107,7 +110,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResultEntity<String> register(Account account) throws DuplicateKeyException {
-        accountMapper.register(account);
+       Integer reslut = accountMapper.register(account);
+       if (reslut == 1){
+        redisTemplate.delete(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + account.getEmail());
+       }
         return ResultEntity.success();
     }
 

@@ -132,6 +132,7 @@ public class AccountController {
             account.setRole(RoleConstants.ROLE_USER);
             account.setCreatedAt(new Date());
             account.setIsBanned(false);
+            log.error(id, e);
             return accountService.register(account);
         } catch (Exception exception) {
             return ResultEntity.serverError();
