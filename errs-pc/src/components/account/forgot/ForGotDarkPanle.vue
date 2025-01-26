@@ -1,11 +1,11 @@
-<script lang="ts" setup>
-import Panle from './Panle.vue';
-
-
+<script setup lang="ts">
+import Panle from "../forgot/Panle.vue";
 </script>
 
 <template>
-  <Panle />
+    <div>
+        <Panle />
+    </div>
 </template>
 
 <style scoped lang="css"></style>

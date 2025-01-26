@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import { onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
 import { callConflateImg } from "./script/callConflateImg";
 import RightPanel from "./pages/RightPanel.vue";
 
@@ -99,6 +99,7 @@ onBeforeUnmount(() => {
     layoutObserver.disconnect(); // 销毁观察器
   }
 });
+
 
 
 

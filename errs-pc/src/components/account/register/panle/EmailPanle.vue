@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { inject, ref, Ref } from 'vue';
+import { inject, ref, Ref, watch } from 'vue';
 import Close from '../Close.vue';
-import { validate_code, validate_email } from '../../../../net/account/register';
+import {  validate_email } from '../../../../net/account/register';
 import Loading from '../../../Loading.vue';
 
 
@@ -44,9 +44,12 @@ const errorMessage = ref("");
 const showLoading = ref(false);
 const showErrorpanle = ref(false);
 const errorPanleMsg = ref("");
-
+const isSending = ref(false);
+const countdown = ref(0);
 
 const verifyEmail = () => {
+  if (isSending.value) return;
+
   emailError.value = false;
   errorMessage.value = "";
 
@@ -56,15 +59,19 @@ const verifyEmail = () => {
     return;
   };
 
-  // 验证邮箱格式
   if (!email.value.match(/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/)) {
     emailError.value = true;
     errorMessage.value = "邮箱格式不正确";
     return;
   };
+
+  // 启动倒计时
+  isSending.value = true;
+  countdown.value = 60;
+
+
   showLoading.value = true;
 
-  // 验证邮箱逻辑
   validate_email(email.value, (data: any) => {
     if (data.code === 200) {
       registerFrom.value.email = email.value;
@@ -118,8 +125,11 @@ const verifyEmail = () => {
       <input class="email" :class="{ error: emailError }" v-model="email" @input="emailError = false" placeholder="邮箱账号"
         type="text">
       <div v-if="emailError" class="error-message">{{ errorMessage }}</div>
-      <button @click="verifyEmail()" style="background-color: #00ad54;border-radius: 13px ;"
+      <button v-if="!isSending" @click="verifyEmail()" style="background-color: #00ad54;border-radius: 13px ;"
         class="sign-up">下一步</button>
+      <button v-if="isSending" style="background-color: #00ad54;border-radius: 13px ;" class="sign-up">{{ countdown }}
+        秒</button>
+
     </div>
   </div>
 </template>

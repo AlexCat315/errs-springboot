@@ -15,8 +15,6 @@ const selectTheme = ref(globalTheme);
 const clickShow = ref("Login");
 provide("globalAccountSelect", clickShow);
 
-
-
 // 组件映射表
 const componentMap = {
     Login: {
