@@ -51,7 +51,6 @@ export function register(
   Post(
     "/api/user/account/register",
     {
-      username: RegisterForm.username,
       password: RegisterForm.password,
       repeatPassword: RegisterForm.password_confirmation,
       email: RegisterForm.email,

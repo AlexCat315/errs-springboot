@@ -5,7 +5,7 @@ import CodePanle from "./panle/CodePanle.vue";
 import EmailPanle from "./panle/EmailPanle.vue";
 import PassWord from "./panle/PassWord.vue";
 
-const setup = ref(2)
+const setup = ref(1)
 provide("globalVerifyRegisterSetup", setup);
 interface RegisterForm {
   email: string;

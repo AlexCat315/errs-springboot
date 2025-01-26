@@ -14,4 +14,14 @@
     <!-- validateEmail -->
 
     <select id="validateEmail"> select a_id from account where email = #{email} </select>
+
+    <!-- register -->
+
+    <insert id="register">
+         insert into account (username, email, password, role, created_at, vip,
+           is_banned) values (#{username}, #{email}, #{password}, #{role},
+        #{createdAt}, #{vip},  #{isBanned}) 
+        
+        </insert>
+
 </mapper>

@@ -1,18 +1,32 @@
 package com.x.backend.controller.user;
 
+import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
-import com.x.backend.pojo.user.vo.request.ValidateEmailCode;
+import com.x.backend.pojo.user.dto.account.ValidateEmailCodeDTO;
+import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.account.LoginVo;
+import com.x.backend.pojo.user.vo.request.account.RegisterVo;
+import com.x.backend.pojo.user.vo.request.account.ValidateEmailCode;
 import com.x.backend.service.user.AccountService;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Date;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
-import com.x.backend.util.JWTUtils;;
+
+import com.x.backend.util.EncryptUtils;
+import com.x.backend.util.JWTUtils;
+
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;;
 
 @Slf4j
 @RestController("userAccountController")
@@ -23,6 +37,10 @@ public class AccountController {
     private AccountService accountService;
     @Resource
     private JWTUtils<Account> jwtUtils;
+    @Resource
+    private EncryptUtils encryptUtils;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
@@ -71,9 +89,53 @@ public class AccountController {
     }
 
     @PostMapping("validate/email-code")
-    public ResultEntity<String> ValidateEmailCode(@Valid @RequestBody ValidateEmailCode validateEmailCode) {
-        
-        return ResultEntity.success();
+    public ResultEntity<String> validateEmailCode(@Valid @RequestBody ValidateEmailCode validateEmailCode) {
+        ValidateEmailCodeDTO validateEmailCodeDTO = new ValidateEmailCodeDTO();
+        BeanUtils.copyProperties(validateEmailCode, validateEmailCodeDTO);
+        try {
+            return accountService.validateEmaiCode(validateEmailCodeDTO);
+        } catch (Exception exception) {
+            return ResultEntity.serverError();
+        }
+    }
+
+    @PostMapping("register")
+    public ResultEntity<String> register(@Valid @RequestBody RegisterVo registerVo) {
+        try {
+            String redisCode = redisTemplate.opsForValue()
+                    .get(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + registerVo.getEmail());
+            Boolean reslut = registerVo.getCode().equals(redisCode);
+            if (reslut) {
+                if (registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
+                    Account account = new UserAccount();
+                    Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+                    String id = snowflake.nextId() + "";
+                    account.setUsername(id);
+                    account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
+                    account.setEmail(registerVo.getEmail());
+                    account.setRole(RoleConstants.ROLE_USER);
+                    account.setCreatedAt(new Date());
+                    account.setIsBanned(false);
+                    return accountService.register(account);
+                }
+                return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
+            } else {
+                return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
+            }
+        } catch (DuplicateKeyException e) {
+            Account account = new UserAccount();
+            Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+            String id = snowflake.nextId() + "";
+            account.setUsername(id);
+            account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
+            account.setEmail(registerVo.getEmail());
+            account.setRole(RoleConstants.ROLE_USER);
+            account.setCreatedAt(new Date());
+            account.setIsBanned(false);
+            return accountService.register(account);
+        } catch (Exception exception) {
+            return ResultEntity.serverError();
+        }
     }
 
     @GetMapping("/test")

@@ -1,16 +1,12 @@
 package com.x.backend.pojo.common;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 
 @Data
-@Getter
-@Setter
 public class Account {
-    private Integer aId; // 对应 Kotlin 的 Int?
+    private Integer aId; 
     private String username;
     private String password;
     private String email;

@@ -6,6 +6,8 @@ import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.mapper.user.AccountMapper;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.common.Account;
+import com.x.backend.pojo.user.dto.account.ValidateEmailCodeDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.service.admin.EmailService;
@@ -18,11 +20,13 @@ import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component("userAccountService")
@@ -71,7 +75,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ResultEntity<String> validateEmail(String email) {
-        String key = BlockConstants.USER_REGISTER_VALIDATE_EMAIL + email;
+        String key = BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + email;
         Long expire = redisTemplate.getExpire(key, java.util.concurrent.TimeUnit.SECONDS);
         if (expire <= 0 || expire <= 520) {
             Integer reslut = accountMapper.validateEmail(email);
@@ -88,4 +92,23 @@ public class AccountServiceImpl implements AccountService {
         }
         return ResultEntity.failure(HttpMessageConstants.EMAIL_REGISTERED);
     }
+
+    @Override
+    public ResultEntity<String> validateEmaiCode(ValidateEmailCodeDTO validateEmailCodeDTO) {
+        String redisCode = redisTemplate.opsForValue()
+                .get(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + validateEmailCodeDTO.getEmail());
+        Boolean reslut = validateEmailCodeDTO.getCode().equals(redisCode);
+        if (reslut) {
+            return ResultEntity.success();
+        } else {
+            return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
+        }
+    }
+
+    @Override
+    public ResultEntity<String> register(Account account) throws DuplicateKeyException {
+        accountMapper.register(account);
+        return ResultEntity.success();
+    }
+
 }
