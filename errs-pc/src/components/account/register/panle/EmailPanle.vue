@@ -254,5 +254,6 @@ const verifyEmail = () => {
   margin-top: 30px;
   animation: moveUp 0.4s ease-in-out forwards;
   font-size: 13px;
+  border-radius: 8px;
 }
 </style>
