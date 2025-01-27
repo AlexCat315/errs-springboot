@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject, ref, reactive, onMounted, onBeforeUnmount } from "vue";
+import {inject, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import Explore from "./explore/Index.vue";
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -154,8 +155,7 @@ onBeforeUnmount(() => {
             </button>
         </div>
         <div>
-            <h1>1111</h1>
-            <h1>1111</h1>
+            <Explore />
             <!-- 省略其他内容 -->
         </div>
     </div>

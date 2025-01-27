@@ -1,11 +1,9 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import { onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, watch, watchEffect } from "vue";
-import { callConflateImg } from "./script/callConflateImg";
+import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
+import {callConflateImg} from "./script/callConflateImg";
 import RightPanel from "./pages/RightPanel.vue";
-
-import { provide } from 'vue';
-import { get_system_theme } from "./util/Theme";
+import {get_system_theme} from "./util/Theme";
 // 定义全局变量
 const globalSelect = ref(1);
 
@@ -204,5 +202,10 @@ textarea {
 @font-face {
   font-family: 'LXGWMarkerGothic-Regular';
   src: url('../src/assets/ttf/LXGWMarkerGothic-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'wenquanyimihei';
+    src: url('../src/assets/ttf/文泉驿微米黑.ttc');
 }
 </style>
