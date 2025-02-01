@@ -106,39 +106,33 @@ public class AccountController {
         try {
             String redisCode = redisTemplate.opsForValue()
                     .get(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + registerVo.getEmail());
-            Boolean reslut = registerVo.getCode().equals(redisCode);
-            if (reslut) {
+            boolean result = registerVo.getCode().equals(redisCode);
+            if (result) {
                 if (registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
-                    Account account = new UserAccount();
-                    Snowflake snowflake = IdUtil.getSnowflake(1, 1);
-                    String id = snowflake.nextId() + "";
-                    account.setUsername(id);
-                    account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
-                    account.setEmail(registerVo.getEmail());
-                    account.setRole(RoleConstants.ROLE_USER);
-                    account.setCreatedAt(new Date());
-                    account.setIsBanned(false);
-                    return accountService.register(account);
+                    return  creatAccount(registerVo);
                 }
                 return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
             } else {
                 return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
             }
         } catch (DuplicateKeyException e) {
-            Account account = new UserAccount();
-            Snowflake snowflake = IdUtil.getSnowflake(1, 1);
-            String id = snowflake.nextId() + "";
-            account.setUsername(id);
-            account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
-            account.setEmail(registerVo.getEmail());
-            account.setRole(RoleConstants.ROLE_USER);
-            account.setCreatedAt(new Date());
-            account.setIsBanned(false);
-            log.error(id, e);
-            return accountService.register(account);
+           return  creatAccount(registerVo);
         } catch (Exception exception) {
             return ResultEntity.serverError();
         }
+    }
+
+    private ResultEntity<String> creatAccount(RegisterVo registerVo) {
+        Account account = new UserAccount();
+        Snowflake snowflake = IdUtil.getSnowflake(1, 1);
+        String id = snowflake.nextId() + "";
+        account.setUsername(id);
+        account.setPassword(encryptUtils.encryptPassword(registerVo.getPassword()));
+        account.setEmail(registerVo.getEmail());
+        account.setRole(RoleConstants.ROLE_USER);
+        account.setCreatedAt(new Date());
+        account.setIsBanned(false);
+        return accountService.register(account);
     }
 
     @PostMapping("/forgot-password/send-code")
@@ -154,12 +148,12 @@ public class AccountController {
     }
 
     @PostMapping("/forgot-password")
-    public ResultEntity<String> forgotPassowrd(@Valid @RequestBody ForgotPassowrdVo forgotPassowrdVo) {
+    public ResultEntity<String> forgotPassword(@Valid @RequestBody ForgotPassowrdVo forgotPassowrdVo) {
         try {
             String redisCode = redisTemplate.opsForValue()
                     .get(BlockConstants.REDIS_USER_FORGOTPASSWORD_CODE + forgotPassowrdVo.getEmail());
-            Boolean reslut = forgotPassowrdVo.getCode().equals(redisCode);
-            if (reslut) {
+            boolean result = forgotPassowrdVo.getCode().equals(redisCode);
+            if (result) {
                 if (forgotPassowrdVo.getPassword().equals(forgotPassowrdVo.getRepeatPassword())) {
                     forgotPassowrdVo.setPassword(encryptUtils.encryptPassword(forgotPassowrdVo.getRepeatPassword()));
                     accountService.forgotPassword(forgotPassowrdVo);

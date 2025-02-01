@@ -8,6 +8,13 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+minio:
+  endpoint: http://127.0.0.1:9000
+  access-key: root   # 这里填 systemd 配置中的 MINIO_ROOT_USER
+  secret-key: 123456  # 这里填 systemd 配置中的 MINIO_ROOT_PASSWORD
+  bucket: errs  # 你要操作的存储桶
+  pub-bucket: public-errs
 spring:
   servlet:
     multipart:
@@ -46,6 +53,12 @@ spring:
     username: cyke0315@163.com
     password: AXYpKTnECGaRmspF
     protocol: smtp
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
+          auth: true
   web:
     cors:
       origin: '*'

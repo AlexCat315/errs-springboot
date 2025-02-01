@@ -26,7 +26,7 @@ public class FlowUtils {
      * @return 是否通过限流检查
      */
     public boolean limitOnceCheck(String key, int blockTime){
-        return this.internalCheck(key, 1, blockTime, (_) -> false);
+        return this.internalCheck(key, 1, blockTime, (ignored) -> false);
     }
 
     /**
