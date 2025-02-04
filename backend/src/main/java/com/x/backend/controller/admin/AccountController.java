@@ -1,5 +1,6 @@
 package com.x.backend.controller.admin;
 
+import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpCodeConstants;
 import com.x.backend.constants.HttpMessageConstants;
@@ -33,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RestController(value = "adminAccountController")
 @RequestMapping(value = "/api/admin/account")
+@RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
 public class AccountController {
 
     @Resource(name = "adminAccountService")

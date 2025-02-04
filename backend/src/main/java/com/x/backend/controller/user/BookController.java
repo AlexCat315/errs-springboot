@@ -20,6 +20,7 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping("/top-250")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<Book>> selectTop250BookInfo(@RequestParam(defaultValue = "0") int start) {
         try {
             // 默认查询 25 条数据

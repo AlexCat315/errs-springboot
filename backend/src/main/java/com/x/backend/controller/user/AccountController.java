@@ -1,5 +1,6 @@
 package com.x.backend.controller.user;
 
+import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
@@ -33,6 +34,7 @@ import cn.hutool.core.util.IdUtil;;
 @Slf4j
 @RestController("userAccountController")
 @RequestMapping("/api/user/account")
+@RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
 public class AccountController {
 
     @Resource(name = "userAccountService")

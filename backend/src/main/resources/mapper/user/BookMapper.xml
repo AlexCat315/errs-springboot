@@ -13,6 +13,7 @@
         select *
         from book
         where rating > 6
+        and users > 10000
         order by rating DESC
         LIMIT #{offset}, #{size}
     </select>
