@@ -17,4 +17,11 @@
         order by rating DESC
         LIMIT #{offset}, #{size}
     </select>
+    <select id="selectTopWelcomeBookInfo" resultType="com.x.backend.pojo.common.Book">
+        select *
+        from book
+        where rating > 6
+        order by users DESC
+        LIMIT #{offset}, #{size}
+    </select>
 </mapper>

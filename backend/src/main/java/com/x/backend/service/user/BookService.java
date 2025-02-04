@@ -8,4 +8,6 @@ public interface BookService {
     List<Book> selectTop250BookInfo(int page, int size);
 
     List<Book> selectTop50BookInfo(int page, int size);
+
+    List<Book> selectTopWelcomeBookInfo(int page, int size);
 }

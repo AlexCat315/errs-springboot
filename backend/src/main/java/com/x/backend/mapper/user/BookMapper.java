@@ -13,4 +13,6 @@ public interface BookMapper {
     List<Book> selectTop250BookInfo(@Param("offset") int offset, @Param("size") int size);
 
     List<Book> selectTop50BookInfo(int offset, int size);
+
+    List<Book> selectTopWelcomeBookInfo(int offset, int size);
 }

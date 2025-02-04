@@ -40,3 +40,24 @@ export function get_book_top50_info(
     }
   );
 }
+
+export function get_book_welcome_info(
+  start: number,
+  success: Function,
+  failure: Function,
+  error: Function
+) {
+  Get(
+    `/api/user/book/top-welcome?start=${start}`,
+    (data: any) => {
+      success(data);
+      console.log(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+    (message: string) => {
+      error(message);
+    }
+  );
+}
