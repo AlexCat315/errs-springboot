@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { inject, ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import Index from './books/Index.vue';
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -32,14 +33,12 @@ const handleScroll = (event: Event) => {
     <div class="title"
       :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#171717', color: selectTheme === 'light' ? '#525252' : '#e1e4e8' }"
       :class="{ show: showTitle }">
-      探索
+      图书
     </div>
 
 
     <div>
-      <h1>1111</h1>
-      <h1>1111</h1>
-      <!-- 省略其他内容 -->
+    <Index />
     </div>
   </div>
 </template>

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
-import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入get_book_top250_info方法
+import {
+    get_book_top250_info,
+    get_book_top50_info,
+} from "../../../net/explore/get_book"; // 导入get_book_top250_info方法
 
 interface EntertainmentItem {
     id: number;
@@ -24,11 +27,10 @@ interface Category {
 // 初始化 state
 const state = reactive({
     categories: [
-             { id: 1, name: "精典书籍推荐" },
-        { id: 2, name: "热门电影推荐" },
-        { id: 3, name: "精选游戏合集" },
-        { id: 4, name: "高分剧集榜单" },
- 
+        { id: 1, name: "经典 - 神作" },
+        { id: 2, name: "Top 50高分榜单" },
+        { id: 3, name: "大家都在看" },
+        { id: 4, name: "火出圈外🔥" },
     ] as Category[],
     items: [] as EntertainmentItem[], // 初始化为空数组
 });
@@ -39,7 +41,7 @@ const getItemsByCategory = (categoryId: number) => {
 };
 
 // 获取数据的方法
-const fetchItems = (start: number) => {
+const fetchItemsTop250 = (start: number) => {
     get_book_top250_info(
         start,
         (response: any) => {
@@ -67,9 +69,39 @@ const fetchItems = (start: number) => {
     );
 };
 
+// 获取数据的方法
+const fetchItemsTop50 = (start: number) => {
+    get_book_top50_info(
+        start,
+        (response: any) => {
+            // 检查返回的数据是否包含 `data` 字段，并且 `data` 是一个数组
+            if (response && Array.isArray(response.data)) {
+                // 给每个项目添加 categoryId 为 3，并只保留前6个项目
+                state.items = response.data
+                    .slice(0, 6) // 只取前6个项目
+                    .map((item: any) => ({
+                        ...item, // 保留原始数据
+                        categoryId: 2, // 添加 categoryId
+                    }));
+                console.log(state.items); // 查看添加后的数据
+            } else {
+                console.error("返回的数据格式错误", response);
+                state.items = []; // 如果数据格式不正确，设置为空数组
+            }
+        },
+        (errorMessage: string) => {
+            console.error(errorMessage); // 处理失败
+        },
+        (errorMessage: string) => {
+            console.error(errorMessage); // 处理错误
+        },
+    );
+};
+
 // 在组件加载时请求数据
 onMounted(() => {
-    fetchItems(0); // 假设请求第一页数据
+    fetchItemsTop250(0);
+    fetchItemsTop50(0);
 });
 
 const colors = [
@@ -85,8 +117,23 @@ const colors = [
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 </script>
 
-
 <template>
+    <!-- 顶部 -->
+    <div>
+        <div>
+            <p
+                style="
+                    font-size: 29px;
+                    font-family: Arial, Helvetica, sans-serif;
+                    font-weight: bold;
+                    margin-left: 30px;
+                "
+            >
+                图书
+            </p>
+            <div class="divider"></div>
+        </div>
+    </div>
     <div class="entertainment-container">
         <!-- 推荐分类区块 -->
         <div
@@ -95,7 +142,13 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
             class="category-section"
         >
             <div class="section-header">
-                <p style="font-size: 23px; font-family: yousu-title-black">
+                <p
+                    style="
+                        font-size: 19px;
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-weight: bold;
+                    "
+                >
                     {{ category.name }}
                 </p>
                 <a class="view-all" href="#">查看全部</a>
@@ -145,9 +198,8 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
                                         style="
                                             margin-top: -9px;
                                             color: #8a929b;
-                                            font-family:
-                                                Tahoma, Geneva, Verdana,
-                                                sans-serif;
+                                            font-family: Tahoma, Geneva,
+                                                Verdana, sans-serif;
                                         "
                                     >
                                         {{ item.author }}
@@ -211,8 +263,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
         </div>
     </div>
 </template>
-
-
 
 <style scoped>
 .entertainment-container {
@@ -384,7 +434,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     overflow: hidden; /* 必须，隐藏多余的内容 */
     text-overflow: ellipsis; /* 添加省略号 */
     max-height: calc(1.4em * 4); /* 设置高度为 6 行高度 */
-    font-family: wenquanyimihei;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     margin-top: -26px !important;
 }
@@ -404,7 +454,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
-      margin-top: -20px !important;
+    margin-top: -20px !important;
 }
 .get-btn:hover {
     background: #0063cc;
@@ -485,5 +535,11 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 .star {
     font-size: 0.9rem;
     color: #ffb400;
+}
+
+.divider {
+    height: 1px;
+    background-color: #ccc;
+    margin: 6px 0;
 }
 </style>
