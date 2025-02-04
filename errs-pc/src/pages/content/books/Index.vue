@@ -195,7 +195,33 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
                 >
                     <div class="card-inner">
                         <!-- 正面内容 -->
-                        <div class="card-front">
+                        <div class="card-front"
+                            :style="{
+                                backgroundImage: 'url(' + item.img + ')',
+                            }">
+                            <div class="overlay"></div>
+                            <div class="back-content">
+                                <h3 class="back-title">{{ item.name }}</h3>
+                                <p class="back-rating">
+                                    <span class="score">{{ item.rating }}</span>
+                                    <span class="stars">
+                                        {{
+                                            "★".repeat(
+                                                Math.round(item.rating / 2),
+                                            )
+                                        }}{{
+                                            "☆".repeat(
+                                                5 - Math.round(item.rating / 2),
+                                            )
+                                        }}
+                                    </span>
+                                </p>
+                                <button class="detail-btn">查看详情</button>
+                            </div>
+                        </div>
+
+                        <!-- 背面内容 -->
+                        <div class="card-back">
                             <div class="card-content">
                                 <div class="card-header">
                                     <span
@@ -262,34 +288,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
                                 </div>
                             </div>
                         </div>
-
-                        <!-- 背面内容 -->
-                        <div
-                            :style="{
-                                backgroundImage: 'url(' + item.img + ')',
-                            }"
-                            class="card-back"
-                        >
-                            <div class="overlay"></div>
-                            <div class="back-content">
-                                <h3 class="back-title">{{ item.name }}</h3>
-                                <p class="back-rating">
-                                    <span class="score">{{ item.rating }}</span>
-                                    <span class="stars">
-                                        {{
-                                            "★".repeat(
-                                                Math.round(item.rating / 2),
-                                            )
-                                        }}{{
-                                            "☆".repeat(
-                                                5 - Math.round(item.rating / 2),
-                                            )
-                                        }}
-                                    </span>
-                                </p>
-                                <button class="detail-btn">查看详情</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -335,8 +333,8 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     gap: 1rem;
     margin-top: -20px;
     transform-origin: center;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
-    overflow: hidden; /* 确保内容不会溢出边界 */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .recommend-card {
@@ -345,7 +343,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform: scale(0.8);
     cursor: pointer;
     border-radius: 9.6px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1) !important; /* 添加阴影效果 */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1) !important;
 }
 
 .card-inner {
@@ -374,22 +372,23 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 }
 
 .card-front {
-    background: white;
-    padding: 1.2rem;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-back {
-    /* background-size: cover; */
-    background-size: 100% 100%; /* 关键属性 */
+    background-size: 100% 100%;
     background-repeat: no-repeat;
     background-position: center;
-    transform: rotateY(180deg);
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
+      z-index: 2;
+}
+
+.card-back {
+    background: white;
+    padding: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    transform: rotateY(180deg);
+        z-index: 1;
 }
 
 .overlay {
@@ -414,6 +413,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     font-size: 1.5rem;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 2;
 }
 
 .back-rating {
@@ -426,6 +426,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 }
 .back-rating .stars {
     color: #ffb400;
+    justify-content: center !important;
 }
 
 .detail-btn {
@@ -442,7 +443,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* 公共样式 */
 .card-content {
     height: 110%;
     display: flex;
@@ -453,20 +453,19 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 .title {
     font-size: 1.2rem;
     color: #333;
-    /* margin: 0.5rem 0; */
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .description {
     color: #666;
     font-size: 0.95rem;
-    display: -webkit-box; /* 必须，开启弹性盒子布局 */
-    -webkit-line-clamp: 5; /* 设置显示的行数为 6 行 */
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
     line-clamp: 5;
-    -webkit-box-orient: vertical; /* 必须，设置盒子方向为垂直 */
-    overflow: hidden; /* 必须，隐藏多余的内容 */
-    text-overflow: ellipsis; /* 添加省略号 */
-    max-height: calc(1.4em * 4); /* 设置高度为 6 行高度 */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(1.4em * 4);
     font-family: Arial, Helvetica, sans-serif;
     font-size: 14px;
     margin-top: -26px !important;
@@ -516,33 +515,33 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 }
 
 .category-tag {
-    display: inline-block; /* 确保标签为块状元素 */
-    margin: 2px 4px; /* 设置标签的上下左右间距 */
-    padding: 4px 8px; /* 设置标签的内边距 */
-    background-color: #ec8236; /* 背景颜色，可根据需求调整 */
-    border-radius: 4px; /* 设置标签的圆角 */
-    font-size: 14px; /* 字体大小 */
-    color: #fff; /* 字体颜色 */
-    white-space: normal; /* 允许换行 */
-    text-align: center; /* 标签文字居中 */
+    display: inline-block;
+    margin: 2px 4px;
+    padding: 4px 8px;
+    background-color: #ec8236;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #fff;
+    white-space: normal;
+    text-align: center;
     margin-left: -5px;
 }
 
 .card-header {
-    display: flex; /* 使用 flex 布局 */
-    flex-wrap: wrap; /* 允许标签换行 */
-    gap: 8px; /* 设置标签之间的间距 */
-    align-items: center; /* 垂直对齐标签内容 */
-    background-color: #ffffff; /* 父级容器背景色，可调整 */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    background-color: #ffffff;
 }
 
 .card {
-    width: 100%; /* 父容器宽度，默认占满父级 */
-    max-width: 600px; /* 限制最大宽度 */
-    margin: 16px auto; /* 设置外边距，居中显示 */
-    border: 1px solid #e5e7eb; /* 设置边框颜色 */
-    border-radius: 8px; /* 设置容器圆角 */
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+    width: 100%;
+    max-width: 600px;
+    margin: 16px auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .rating {

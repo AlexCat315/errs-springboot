@@ -292,6 +292,8 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     padding: 1.2rem;
     display: flex;
     flex-direction: column;
+    transform: rotateY(180deg);
+    z-index: 2;
 }
 
 .card-back {
@@ -299,11 +301,12 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     background-size: 100% 100%; /* 关键属性 */
     background-repeat: no-repeat;
     background-position: center;
-    transform: rotateY(180deg);
+
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 12px;
+    z-index: 1;
 }
 
 .overlay {
@@ -339,7 +342,9 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     margin-right: 0.5rem;
 }
 .back-rating .stars {
-    color: #ffb400;
+    color: #ffb400;display: flex;
+    justify-content: center !important;
+    
 }
 
 .detail-btn {
