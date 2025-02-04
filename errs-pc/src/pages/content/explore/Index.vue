@@ -165,23 +165,23 @@ const getItemsByCategory = (categoryId: number) => {
 };
 
 // 获取数据的方法
-const fetchItems = (start: number) => {
+const fetchItemsTop250 = (start: number) => {
     get_book_top250_info(
         start,
         (response: any) => {
             // 检查返回的数据是否包含 `data` 字段，并且 `data` 是一个数组
             if (response && Array.isArray(response.data)) {
-                // 给每个项目添加 categoryId 为 3，并只保留前6个项目
-                state.items = response.data
+                // 给每个项目添加 categoryId 为 1，并只保留前6个项目
+                const newItems = response.data
                     .slice(0, 6) // 只取前6个项目
                     .map((item: any) => ({
                         ...item, // 保留原始数据
                         categoryId: 1, // 添加 categoryId
                     }));
+                state.items = [...state.items, ...newItems]; // 保留现有数据并添加新数据
                 console.log(state.items); // 查看添加后的数据
             } else {
                 console.error("返回的数据格式错误", response);
-                state.items = []; // 如果数据格式不正确，设置为空数组
             }
         },
         (errorMessage: string) => {
@@ -195,7 +195,7 @@ const fetchItems = (start: number) => {
 
 // 在组件加载时请求数据
 onMounted(() => {
-    fetchItems(0); // 假设请求第一页数据
+    fetchItemsTop250(0); // 假设请求第一页数据
 });
 
 const colors = [
