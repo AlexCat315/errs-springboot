@@ -1,3 +1,91 @@
+<script lang="ts" setup>
+import { onMounted, reactive } from "vue";
+import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入get_book_top250_info方法
+
+interface EntertainmentItem {
+    id: number;
+    name: string;
+    author: string;
+    category: string[];
+    description: string;
+    rating: number;
+    price?: number;
+    users?: number;
+    categoryId: number;
+    img: string;
+    introduction: string;
+}
+
+interface Category {
+    id: number;
+    name: string;
+}
+
+// 初始化 state
+const state = reactive({
+    categories: [
+             { id: 1, name: "精典书籍推荐" },
+        { id: 2, name: "热门电影推荐" },
+        { id: 3, name: "精选游戏合集" },
+        { id: 4, name: "高分剧集榜单" },
+ 
+    ] as Category[],
+    items: [] as EntertainmentItem[], // 初始化为空数组
+});
+
+// 根据类别筛选出推荐项
+const getItemsByCategory = (categoryId: number) => {
+    return state.items.filter((item) => item.categoryId === categoryId);
+};
+
+// 获取数据的方法
+const fetchItems = (start: number) => {
+    get_book_top250_info(
+        start,
+        (response: any) => {
+            // 检查返回的数据是否包含 `data` 字段，并且 `data` 是一个数组
+            if (response && Array.isArray(response.data)) {
+                // 给每个项目添加 categoryId 为 3，并只保留前6个项目
+                state.items = response.data
+                    .slice(0, 6) // 只取前6个项目
+                    .map((item: any) => ({
+                        ...item, // 保留原始数据
+                        categoryId: 1, // 添加 categoryId
+                    }));
+                console.log(state.items); // 查看添加后的数据
+            } else {
+                console.error("返回的数据格式错误", response);
+                state.items = []; // 如果数据格式不正确，设置为空数组
+            }
+        },
+        (errorMessage: string) => {
+            console.error(errorMessage); // 处理失败
+        },
+        (errorMessage: string) => {
+            console.error(errorMessage); // 处理错误
+        },
+    );
+};
+
+// 在组件加载时请求数据
+onMounted(() => {
+    fetchItems(0); // 假设请求第一页数据
+});
+
+const colors = [
+    "#ec8236",
+    "#f56c6c",
+    "#67c23a",
+    "#e6a23c",
+    "#409eff",
+    "#c239e6",
+    "black",
+    "#5941d3",
+];
+const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
+</script>
+
+
 <template>
     <div class="entertainment-container">
         <!-- 推荐分类区块 -->
@@ -124,92 +212,7 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-import { onMounted, reactive } from "vue";
-import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入validate_email方法
 
-interface EntertainmentItem {
-    id: number;
-    name: string;
-    author: string;
-    category: string[];
-    description: string;
-    rating: number;
-    price?: number;
-    users?: number;
-    categoryId: number;
-    img: string;
-    introduction: string;
-}
-
-interface Category {
-    id: number;
-    name: string;
-}
-
-// 初始化 state
-const state = reactive({
-    categories: [
-             { id: 1, name: "精典书籍推荐" },
-        { id: 2, name: "热门电影推荐" },
-        { id: 3, name: "精选游戏合集" },
-        { id: 4, name: "高分剧集榜单" },
- 
-    ] as Category[],
-    items: [] as EntertainmentItem[], // 初始化为空数组
-});
-
-// 根据类别筛选出推荐项
-const getItemsByCategory = (categoryId: number) => {
-    return state.items.filter((item) => item.categoryId === categoryId);
-};
-
-// 获取数据的方法
-const fetchItems = (start: number) => {
-    get_book_top250_info(
-        start,
-        (response: any) => {
-            // 检查返回的数据是否包含 `data` 字段，并且 `data` 是一个数组
-            if (response && Array.isArray(response.data)) {
-                // 给每个项目添加 categoryId 为 3，并只保留前6个项目
-                state.items = response.data
-                    .slice(0, 6) // 只取前6个项目
-                    .map((item: any) => ({
-                        ...item, // 保留原始数据
-                        categoryId: 1, // 添加 categoryId
-                    }));
-                console.log(state.items); // 查看添加后的数据
-            } else {
-                console.error("返回的数据格式错误", response);
-                state.items = []; // 如果数据格式不正确，设置为空数组
-            }
-        },
-        (errorMessage: string) => {
-            console.error(errorMessage); // 处理失败
-        },
-        (errorMessage: string) => {
-            console.error(errorMessage); // 处理错误
-        },
-    );
-};
-
-// 在组件加载时请求数据
-onMounted(() => {
-    fetchItems(0); // 假设请求第一页数据
-});
-
-const colors = [
-    "#ec8236",
-    "#f56c6c",
-    "#67c23a",
-    "#e6a23c",
-    "#409eff",
-    "#c239e6",
-    "black",
-    "#5941d3",
-];
-const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
-</script>
 
 <style scoped>
 .entertainment-container {
