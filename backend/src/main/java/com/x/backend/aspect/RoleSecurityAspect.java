@@ -50,7 +50,7 @@ public class RoleSecurityAspect {
                 if (role.equals(RoleConstants.ROLE_ADMIN)) {
                     return;
                 }
-                if (requiredRole.equals("*")) { // 允许所有角色访问
+                if (requiredRole.equals("*") || requiredRole.equals(RoleConstants.ROLE_ANONYMOUS)) { // 允许所有角色访问
                     return;
                 }
                 if (requiredRole.equals(role)) {
