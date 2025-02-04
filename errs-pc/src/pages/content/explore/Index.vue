@@ -212,6 +212,9 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 </script>
 
 <style scoped>
+* {
+    box-sizing: border-box;
+}
 .entertainment-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -292,7 +295,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     padding: 1.2rem;
     display: flex;
     flex-direction: column;
-    transform: rotateY(180deg);
     z-index: 2;
 }
 
@@ -301,7 +303,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     background-size: 100% 100%; /* 关键属性 */
     background-repeat: no-repeat;
     background-position: center;
-
+    transform: rotateY(180deg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -331,6 +333,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     font-size: 1.5rem;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+
 }
 
 .back-rating {

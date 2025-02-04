@@ -296,6 +296,9 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 </template>
 
 <style scoped>
+* {
+    box-sizing: border-box;
+}
 .entertainment-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -334,7 +337,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     margin-top: -20px;
     transform-origin: center;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+
 }
 
 .recommend-card {
@@ -343,7 +346,10 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform: scale(0.8);
     cursor: pointer;
     border-radius: 9.6px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1) !important;
+    z-index: 10;
+    box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ccc; /* 根据需要调整颜色和宽度 */
+    overflow: visible;
 }
 
 .card-inner {
@@ -354,6 +360,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform-style: preserve-3d;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+       transform-origin: center;
 }
 
 .recommend-card:hover .card-inner {
@@ -368,7 +375,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     backface-visibility: hidden;
     border-radius: 12px;
     overflow: hidden;
-    border-radius: 12px;
 }
 
 .card-front {
@@ -390,6 +396,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform: rotateY(180deg);
     z-index: 1;
 }
+
 
 .overlay {
     position: absolute;
