@@ -128,8 +128,6 @@ const fetchItemsWelcome = (start: number) => {
     );
 };
 
-
-
 // 在组件加载时请求数据
 onMounted(() => {
     fetchItemsTop250(0);
@@ -195,10 +193,12 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
                 >
                     <div class="card-inner">
                         <!-- 正面内容 -->
-                        <div class="card-front"
+                        <div
+                            class="card-front"
                             :style="{
                                 backgroundImage: 'url(' + item.img + ')',
-                            }">
+                            }"
+                        >
                             <div class="overlay"></div>
                             <div class="back-content">
                                 <h3 class="back-title">{{ item.name }}</h3>
@@ -379,7 +379,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     align-items: center;
     justify-content: center;
     border-radius: 12px;
-      z-index: 2;
+    z-index: 2;
 }
 
 .card-back {
@@ -388,7 +388,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     display: flex;
     flex-direction: column;
     transform: rotateY(180deg);
-        z-index: 1;
+    z-index: 1;
 }
 
 .overlay {
