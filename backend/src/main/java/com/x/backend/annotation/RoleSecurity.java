@@ -11,5 +11,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface RoleSecurity {
-    String[] value() default RoleConstants.ROLE_ANONYMOUS; // 默认角色为匿名
+    String[] value() default RoleConstants.ROLE_ADMIN; // 默认角色为匿名
 }
