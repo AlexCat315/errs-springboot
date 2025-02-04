@@ -95,7 +95,7 @@ public class AccountController {
         ValidateEmailCodeDTO validateEmailCodeDTO = new ValidateEmailCodeDTO();
         BeanUtils.copyProperties(validateEmailCode, validateEmailCodeDTO);
         try {
-            return accountService.validateEmaiCode(validateEmailCodeDTO);
+            return accountService.validateEmailCode(validateEmailCodeDTO);
         } catch (Exception exception) {
             return ResultEntity.serverError();
         }
@@ -138,7 +138,7 @@ public class AccountController {
     @PostMapping("/forgot-password/send-code")
     public ResultEntity<String> forGotPasswordSendCode(@RequestParam String email) {
         try {
-            accountService.sendCodeForgotPassord(email);
+            accountService.sendCodeForgotPassword(email);
             return ResultEntity.success();
         } catch (ForbiddenException exception) {
             return ResultEntity.failure(exception.getMessage());

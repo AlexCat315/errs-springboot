@@ -2,26 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x.backend.mapper.user.AccountMapper">
     <resultMap id="findAccountByUsernameMap" type="com.x.backend.pojo.user.entity.UserAccount">
-        <result property="aId" column="a_id" />
-        <result property="role" column="role" />
-        <result property="password" column="password" />
-        <result property="isBanned" column="is_banned" />
+        <result property="aId" column="a_id"/>
+        <result property="role" column="role"/>
+        <result property="password" column="password"/>
+        <result property="isBanned" column="is_banned"/>
     </resultMap>
     <!-- findAccountByUsername -->
-    <select id="findAccountByUsername" resultMap="findAccountByUsernameMap"> select a_id, role,
-        password, is_banned from account where email = #{username} or username = #{username} </select>
+    <select id="findAccountByUsername" resultMap="findAccountByUsernameMap">
+        select a_id,
+               role,
+               password,
+               is_banned
+        from account
+        where email = #{username}
+           or username = #{username}
+    </select>
 
     <!-- validateEmail -->
-    
-    <select id="validateEmail" resultType="java.lang.Integer"> SELECT a_id FROM account WHERE email = #{email} </select>
-    
+
+    <select id="validateEmail" resultType="java.lang.Integer">
+        SELECT a_id
+        FROM account
+        WHERE email = #{email}
+    </select>
+
     <!-- register -->
 
-    <insert id="register"> insert into account (username, email, password, role, created_at, vip,
-        is_banned) values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip},
-        #{isBanned}) </insert>
+    <insert id="register">
+        insert into account (username, email, password, role, created_at, vip,
+                             is_banned)
+        values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip},
+                #{isBanned})
+    </insert>
 
-    <!-- forgotPassowrd -->
 
-    <update id="forgotPassword"> update account set password = #{password}where email = #{email} </update>
+    <!-- forgotPassword -->
+    <update id="forgotPassword">
+        update account
+        set password = #{password}
+        where email = #{email}
+    </update>
 </mapper>

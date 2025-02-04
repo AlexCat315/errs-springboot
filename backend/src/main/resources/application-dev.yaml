@@ -10,9 +10,9 @@ server:
       force: true
 
 minio:
-  endpoint: http://127.0.0.1:9000
-  access-key: root   # 这里填 systemd 配置中的 MINIO_ROOT_USER
-  secret-key: 123456  # 这里填 systemd 配置中的 MINIO_ROOT_PASSWORD
+  endpoint: http://154.9.227.161:9000
+  access-key: alexcat315   # 这里填 systemd 配置中的 MINIO_ROOT_USER
+  secret-key: alexcat315_0315  # 这里填 systemd 配置中的 MINIO_ROOT_PASSWORD
   bucket: errs  # 你要操作的存储桶
   pub-bucket: public-errs
 spring:

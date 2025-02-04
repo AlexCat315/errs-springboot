@@ -1,6 +1,7 @@
 {
   "excludePaths": [
     "/api/admin/account/",
-    "/api/user/account/"
+    "/api/user/account/",
+    "/api/user/book/top-250"
   ]
 }

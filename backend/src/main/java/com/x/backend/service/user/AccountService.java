@@ -10,8 +10,8 @@ import com.x.backend.pojo.user.vo.request.account.LoginVo;
 public interface AccountService {
     ResultEntity<String> login(LoginVo loginVo);
     ResultEntity<String> validateEmail(String email);
-    ResultEntity<String> validateEmaiCode(ValidateEmailCodeDTO validateEmailCodeDTO);
+    ResultEntity<String> validateEmailCode(ValidateEmailCodeDTO validateEmailCodeDTO);
     ResultEntity<String> register(Account account);
-    void sendCodeForgotPassord(String email);
+    void sendCodeForgotPassword(String email);
     void forgotPassword(ForgotPassowrdVo forgotPassowrdVo);
 }

@@ -101,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public ResultEntity<String> validateEmaiCode(ValidateEmailCodeDTO validateEmailCodeDTO) {
+    public ResultEntity<String> validateEmailCode(ValidateEmailCodeDTO validateEmailCodeDTO) {
         String redisCode = redisTemplate.opsForValue()
                 .get(BlockConstants.REDIS_USER_REGISTER_VALIDATE_EMAIL + validateEmailCodeDTO.getEmail());
         Boolean reslut = validateEmailCodeDTO.getCode().equals(redisCode);
@@ -123,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void sendCodeForgotPassord(String email) {
+    public void sendCodeForgotPassword(String email) {
         Integer reslut = accountMapper.validateEmail(email);
         String key = BlockConstants.REDIS_USER_FORGOTPASSWORD_CODE + email;
         if (reslut != null && reslut > 0) {
