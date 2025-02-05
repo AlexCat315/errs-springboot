@@ -11,6 +11,7 @@ import Sidebar from "./components/Sidebar.vue";
 import BookList from "./components/BookList.vue";
 import ViewAll from "./components/ViewAll.vue";
 import Carousel from "./components/Carousel.vue"; // 引入轮播组件
+import BookDetail from "./components/BookDetail.vue";
 
 // 图片或视频及对应文字列表
 const mediaList = [
@@ -39,10 +40,9 @@ const textList = [
         description: "每个人出生都带着原罪。",
     },
 ];
-
+const currentIndex = inject<Ref<number>>("currentIndex");
 const handleCurrentIndexChange = (newIndex: number) => {
-    // 从0开始
-    console.log("当前索引", newIndex);
+    currentIndex.value = newIndex;
 };
 
 interface EntertainmentItem {
@@ -235,161 +235,174 @@ const showBookList = (id: Number) => {
 </script>
 
 <template>
-    <!-- 顶部 -->
-    <div v-if="!globalShowBookList">
-        <div>
+    <div v-if="currentIndex === null">
+        <!-- 顶部 -->
+        <div v-if="!globalShowBookList">
             <div>
-                <p
-                    style="
-                        font-size: 29px;
-                        font-family: Arial, Helvetica, sans-serif;
-                        font-weight: bold;
-                        margin-left: 30px;
-                    "
-                >
-                    图书
-                </p>
-            </div>
-            <div style="margin-top: 10px" class="divider-top"></div>
-        </div>
-        <!-- 轮播图或视频，左侧是文字，右侧是视频或者图片 -->
-        <Carousel
-            :mediaList="mediaList"
-            :textList="textList"
-            @currentIndexChanged="handleCurrentIndexChange"
-        />
-
-        <div class="entertainment-container">
-            <!-- 推荐分类区块 -->
-            <div
-                v-for="category in state.categories"
-                :key="category.id"
-                class="category-section"
-            >
-                <div class="section-header">
+                <div>
                     <p
                         style="
-                            font-size: 19px;
+                            font-size: 29px;
                             font-family: Arial, Helvetica, sans-serif;
                             font-weight: bold;
+                            margin-left: 30px;
                         "
                     >
-                        {{ category.name }}
+                        图书
                     </p>
-                    <ViewAll
-                        @click="showBookList(category.id)"
-                        class="view-all"
-                    />
                 </div>
-                <div class="recommend-grid">
-                    <div
-                        v-for="item in getItemsByCategory(category.id)"
-                        :key="item.id"
-                        class="recommend-card"
-                    >
-                        <div class="card-inner">
-                            <!-- 正面内容 -->
-                            <div
-                                class="card-front"
-                                :style="{
-                                    backgroundImage: 'url(' + item.img + ')',
-                                }"
-                            >
-                                <div class="overlay"></div>
-                                <div class="back-content">
-                                    <h3 class="back-title">{{ item.name }}</h3>
-                                    <p class="back-rating">
-                                        <span class="score">{{
-                                            item.rating
-                                        }}</span>
-                                        <span class="stars">
-                                            {{
-                                                "★".repeat(
-                                                    Math.round(item.rating / 2),
-                                                )
-                                            }}{{
-                                                "☆".repeat(
-                                                    5 -
-                                                        Math.round(
-                                                            item.rating / 2,
-                                                        ),
-                                                )
-                                            }}
-                                        </span>
-                                    </p>
-                                    <button class="detail-btn">查看详情</button>
-                                </div>
-                            </div>
+                <div style="margin-top: 10px" class="divider-top"></div>
+            </div>
+            <!-- 轮播图或视频，左侧是文字，右侧是视频或者图片 -->
+            <Carousel
+                :mediaList="mediaList"
+                :textList="textList"
+                @currentIndexChanged="handleCurrentIndexChange"
+            />
 
-                            <!-- 背面内容 -->
-                            <div class="card-back">
-                                <div class="card-content">
-                                    <div class="card-header">
-                                        <span
-                                            v-for="cat in item.category"
-                                            :key="cat"
-                                            :style="{
-                                                background: colorsRandom(),
-                                            }"
-                                            class="category-tag"
-                                            >{{ cat }}</span
-                                        >
-                                        <div class="rating">
+            <div class="entertainment-container">
+                <!-- 推荐分类区块 -->
+                <div
+                    v-for="category in state.categories"
+                    :key="category.id"
+                    class="category-section"
+                >
+                    <div class="section-header">
+                        <p
+                            style="
+                                font-size: 19px;
+                                font-family: Arial, Helvetica, sans-serif;
+                                font-weight: bold;
+                            "
+                        >
+                            {{ category.name }}
+                        </p>
+                        <ViewAll
+                            @click="showBookList(category.id)"
+                            class="view-all"
+                        />
+                    </div>
+                    <div class="recommend-grid">
+                        <div
+                            v-for="item in getItemsByCategory(category.id)"
+                            :key="item.id"
+                            class="recommend-card"
+                        >
+                            <div class="card-inner">
+                                <!-- 正面内容 -->
+                                <div
+                                    class="card-front"
+                                    :style="{
+                                        backgroundImage:
+                                            'url(' + item.img + ')',
+                                    }"
+                                >
+                                    <div class="overlay"></div>
+                                    <div class="back-content">
+                                        <h3 class="back-title">
+                                            {{ item.name }}
+                                        </h3>
+                                        <p class="back-rating">
                                             <span class="score">{{
                                                 item.rating
                                             }}</span>
-                                            <div class="stars">
-                                                <span
-                                                    v-for="n in 5"
-                                                    :key="n"
-                                                    class="star"
-                                                >
-                                                    {{
-                                                        n <=
+                                            <span class="stars">
+                                                {{
+                                                    "★".repeat(
                                                         Math.round(
                                                             item.rating / 2,
-                                                        )
-                                                            ? "★"
-                                                            : "☆"
-                                                    }}
-                                                </span>
+                                                        ),
+                                                    )
+                                                }}{{
+                                                    "☆".repeat(
+                                                        5 -
+                                                            Math.round(
+                                                                item.rating / 2,
+                                                            ),
+                                                    )
+                                                }}
+                                            </span>
+                                        </p>
+                                        <button class="detail-btn">
+                                            查看详情
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- 背面内容 -->
+                                <div class="card-back">
+                                    <div class="card-content">
+                                        <div class="card-header">
+                                            <span
+                                                v-for="cat in item.category"
+                                                :key="cat"
+                                                :style="{
+                                                    background: colorsRandom(),
+                                                }"
+                                                class="category-tag"
+                                                >{{ cat }}</span
+                                            >
+                                            <div class="rating">
+                                                <span class="score">{{
+                                                    item.rating
+                                                }}</span>
+                                                <div class="stars">
+                                                    <span
+                                                        v-for="n in 5"
+                                                        :key="n"
+                                                        class="star"
+                                                    >
+                                                        {{
+                                                            n <=
+                                                            Math.round(
+                                                                item.rating / 2,
+                                                            )
+                                                                ? "★"
+                                                                : "☆"
+                                                        }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div style="margin-top: -20px">
-                                        <h3 class="title">{{ item.name }}</h3>
-                                        <p
+                                        <div style="margin-top: -20px">
+                                            <h3 class="title">
+                                                {{ item.name }}
+                                            </h3>
+                                            <p
+                                                style="
+                                                    margin-top: -9px;
+                                                    color: #8a929b;
+                                                    font-family: Tahoma, Geneva,
+                                                        Verdana, sans-serif;
+                                                "
+                                            >
+                                                {{ item.author }}
+                                            </p>
+                                        </div>
+
+                                        <p class="description">
+                                            {{ item.description }}
+                                        </p>
+                                        <div
+                                            class="actions"
                                             style="
-                                                margin-top: -9px;
-                                                color: #8a929b;
-                                                font-family: Tahoma, Geneva,
-                                                    Verdana, sans-serif;
+                                                padding-right: 20px;
+                                                margin-bottom: 20px;
                                             "
                                         >
-                                            {{ item.author }}
-                                        </p>
-                                    </div>
-
-                                    <p class="description">
-                                        {{ item.description }}
-                                    </p>
-                                    <div
-                                        class="actions"
-                                        style="
-                                            padding-right: 20px;
-                                            margin-bottom: 20px;
-                                        "
-                                    >
-                                        <button class="get-btn">
-                                            {{
-                                                item.price
-                                                    ? `¥${item.price}`
-                                                    : "查看详情"
-                                            }}
-                                        </button>
-                                        <span v-if="item.users" class="users"
-                                            >{{ item.users }}人评价</span
-                                        >
+                                            <button class="get-btn">
+                                                {{
+                                                    item.price
+                                                        ? `¥${item.price}`
+                                                        : "查看详情"
+                                                }}
+                                            </button>
+                                            <span
+                                                v-if="item.users"
+                                                class="users"
+                                                >{{ item.users }}人评价</span
+                                            >
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -398,11 +411,15 @@ const showBookList = (id: Number) => {
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="app" v-if="globalShowBookList">
-        <Sidebar />
-        <BookList />
+        <div class="app" v-if="globalShowBookList">
+            <Sidebar />
+            <BookList />
+        </div>
+    </div>
+    <!-- 书籍基本页 -->
+    <div v-if="currentIndex !== null">
+        <BookDetail />
     </div>
 </template>
 

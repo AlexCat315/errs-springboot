@@ -29,6 +29,10 @@ const globalShowBookListSelect = ref(1);
 // 提供全局变量
 provide("globalShowBookListSelect", globalShowBookListSelect);
 
+const currentIndex = ref(null);
+
+provide("currentIndex", currentIndex);
+
 </script>
 
 <template>
