@@ -22,6 +22,7 @@ interface EntertainmentItem {
     categoryId: number;
     img: string;
     introduction: string;
+    recommend: number;
 }
 
 interface Category {
@@ -187,7 +188,10 @@ const globalShowBookListSelect = inject<Ref<Number>>(
 );
 
 const showBookList = (id: Number) => {
-    if (globalShowBookList !== undefined && globalShowBookListSelect !== undefined){
+    if (
+        globalShowBookList !== undefined &&
+        globalShowBookListSelect !== undefined
+    ) {
         globalShowBookList.value = true;
         globalShowBookListSelect.value = id;
         console.log(globalShowBookListSelect.value);

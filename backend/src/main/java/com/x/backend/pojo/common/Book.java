@@ -14,4 +14,5 @@ public class Book implements Serializable {
     private Long users;
     private String img;
     private String introduction;
+    private Double recommend;
 }

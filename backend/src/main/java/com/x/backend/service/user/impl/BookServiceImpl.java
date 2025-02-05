@@ -18,26 +18,22 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> selectTop250BookInfo(int page, int size) {
-        int offset = page * size;  // 根据页码计算偏移量
-        return bookMapper.selectTop250BookInfo(offset, size);
+        return bookMapper.selectTop250BookInfo(page, size);
     }
 
     @Override
     public List<Book> selectTop50BookInfo(int page, int size) {
-        int offset = page * size;  // 根据页码计算偏移量
-        return bookMapper.selectTop50BookInfo(offset, size);
+        return bookMapper.selectTop50BookInfo(page, size);
     }
 
     @Override
     public List<Book> selectTopWelcomeBookInfo(int page, int size) {
-        int offset = page * size;  // 根据页码计算偏移量
-        return bookMapper.selectTopWelcomeBookInfo(offset, size);
+        return bookMapper.selectTopWelcomeBookInfo(page, size);
     }
 
     @Override
     public List<Book> selectTopHotBookInfo(int page, int size) {
-        int offset = page * size;  // 根据页码计算偏移量
-        return bookMapper.selectTopHotBookInfo(offset, size);
+        return bookMapper.selectTopHotBookInfo(page, size);
     }
 
 }
