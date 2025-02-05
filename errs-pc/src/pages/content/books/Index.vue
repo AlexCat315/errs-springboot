@@ -224,7 +224,6 @@ const showBookList = (id: Number) => {
                 :key="category.id"
                 class="category-section"
             >
-                <div v-if="category.id !== 1" class="divider"></div>
                 <div class="section-header">
                     <p
                         style="
@@ -242,7 +241,6 @@ const showBookList = (id: Number) => {
                         >查看全部</a
                     >
                 </div>
-                <div class="divider-top"></div>
                 <div class="recommend-grid">
                     <div
                         v-for="item in getItemsByCategory(category.id)"
@@ -346,7 +344,7 @@ const showBookList = (id: Number) => {
                                             {{
                                                 item.price
                                                     ? `¥${item.price}`
-                                                    : "立即体验"
+                                                    : "查看详情"
                                             }}
                                         </button>
                                         <span v-if="item.users" class="users"
