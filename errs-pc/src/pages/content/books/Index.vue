@@ -162,8 +162,8 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
             >
                 图书
             </p>
-            <div class="divider"></div>
         </div>
+        <div style="margin-top: 10px" class="divider-top"></div>
     </div>
     <div class="entertainment-container">
         <!-- 推荐分类区块 -->
@@ -172,6 +172,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
             :key="category.id"
             class="category-section"
         >
+            <div v-if="category.id !== 1" class="divider"></div>
             <div class="section-header">
                 <p
                     style="
@@ -184,7 +185,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
                 </p>
                 <a class="view-all" href="#">查看全部</a>
             </div>
-
+            <div class="divider-top"></div>
             <div class="recommend-grid">
                 <div
                     v-for="item in getItemsByCategory(category.id)"
@@ -576,6 +577,13 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 .divider {
     height: 1px;
     background-color: #ccc;
-    margin: 6px 0;
+    margin-top: 40px;
+    margin-bottom: -20px;
+}
+.divider-top {
+    height: 1px;
+    background-color: #ccc;
+    margin-top: -30px;
+    margin-bottom: 50px;
 }
 </style>
