@@ -79,8 +79,7 @@ const goBack = () => {
 const getBookDetail = () => {
     // 获取书籍详情
     get_book_detail(currentIndex.value!, (data: any) => {
-        book.value = data;
-        console.log(book.value)
+        book.value = data.data;
     }, (failure: string) => {
         console.log(failure)
     }, (error: string) => {
@@ -124,7 +123,6 @@ onMounted(() => {
     overflow: hidden;
     width: 90%;
     margin: 20px auto;
-    height: 400px;
 }
 
 
