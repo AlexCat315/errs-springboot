@@ -64,18 +64,19 @@ const handleScroll = (event: Event) => {
   font-weight: bold;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  z-index: 10;
   opacity: 0;
   transform: translateY(-100%);
   transition: all 0.3s ease-in-out;
   border-radius: 8px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 15px;
+  z-index: 11;
 }
 
 .title.show {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) !important;
 }
 
 </style>
