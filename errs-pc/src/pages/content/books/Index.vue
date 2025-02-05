@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { inject, onMounted, reactive, Ref, ref, provide } from "vue";
+import { inject, onMounted, reactive, Ref, ref } from "vue";
 import {
     get_book_top250_info,
     get_book_top50_info,
@@ -10,6 +10,40 @@ import {
 import Sidebar from "./components/Sidebar.vue";
 import BookList from "./components/BookList.vue";
 import ViewAll from "./components/ViewAll.vue";
+import Carousel from "./components/Carousel.vue"; // 引入轮播组件
+
+// 图片或视频及对应文字列表
+const mediaList = [
+    {
+        type: "image",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/v2-b2a0002ce3b0703e98c29a6db9bc924d_r.jpg",
+    },
+    {
+        type: "video",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/浮世绘-21323131ddasdsadsa31123.mp4",
+    },
+    {
+        type: "image",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/2131232133131-maxresdefault.jpg",
+    },
+] as { type: "video" | "image"; src: string }[];
+
+const textList = [
+    {
+        title: "三体-科幻雨果奖",
+        description: "给岁月以文明，而不是给文明以岁月",
+    },
+    { title: "浮世绘", description: "日式美学新角度和切片。" },
+    {
+        title: "Les Misérables(悲惨世界)",
+        description: "每个人出生都带着原罪。",
+    },
+];
+
+const handleCurrentIndexChange = (newIndex: number) => {
+    // 从0开始
+    console.log("当前索引", newIndex);
+};
 
 interface EntertainmentItem {
     id: number;
@@ -218,6 +252,13 @@ const showBookList = (id: Number) => {
             </div>
             <div style="margin-top: 10px" class="divider-top"></div>
         </div>
+        <!-- 轮播图或视频，左侧是文字，右侧是视频或者图片 -->
+        <Carousel
+            :mediaList="mediaList"
+            :textList="textList"
+            @currentIndexChanged="handleCurrentIndexChange"
+        />
+
         <div class="entertainment-container">
             <!-- 推荐分类区块 -->
             <div
@@ -235,7 +276,10 @@ const showBookList = (id: Number) => {
                     >
                         {{ category.name }}
                     </p>
-                    <ViewAll  @click="showBookList(category.id)"  class="view-all"/>
+                    <ViewAll
+                        @click="showBookList(category.id)"
+                        class="view-all"
+                    />
                 </div>
                 <div class="recommend-grid">
                     <div
@@ -396,7 +440,6 @@ const showBookList = (id: Number) => {
     text-decoration: none;
     font-size: 11px;
     height: 40px;
-
 }
 
 .recommend-grid {

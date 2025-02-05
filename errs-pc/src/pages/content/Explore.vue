@@ -23,12 +23,9 @@ const handleScroll = (event: Event) => {
 // 轮播图数据和状态
 const images = reactive([
     "src/assets/img/title/title_01.png",
-    "src/assets/img/title/title_02.jpg",
-    "src/assets/img/title/title_03.webp",
     "src/assets/img/title/title_04.png",
     "src/assets/img/title/title_05.webp",
     "src/assets/img/title/title_06.png",
-    "src/assets/img/title/title_07.webp",
 ]);
 const currentIndex = ref(0);
 const transitioning = ref(false); // 控制过渡状态
@@ -225,7 +222,6 @@ onBeforeUnmount(() => {
 .carousel-img img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .prev-button,
