@@ -9,6 +9,7 @@ import {
 
 import Sidebar from "./components/Sidebar.vue";
 import BookList from "./components/BookList.vue";
+import ViewAll from "./components/ViewAll.vue";
 
 interface EntertainmentItem {
     id: number;
@@ -234,12 +235,7 @@ const showBookList = (id: Number) => {
                     >
                         {{ category.name }}
                     </p>
-                    <a
-                        class="view-all"
-                        @click="showBookList(category.id)"
-                        href="#"
-                        >查看全部</a
-                    >
+                    <ViewAll  @click="showBookList(category.id)"  class="view-all"/>
                 </div>
                 <div class="recommend-grid">
                     <div
@@ -396,9 +392,11 @@ const showBookList = (id: Number) => {
     color: #333;
 }
 .view-all {
-    color: #007aff;
+    font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
-    font-size: 0.95rem;
+    font-size: 11px;
+    height: 40px;
+
 }
 
 .recommend-grid {

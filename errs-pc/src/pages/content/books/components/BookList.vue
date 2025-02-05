@@ -274,6 +274,8 @@ const imgSrc = (book: Book) => {
 .book-list :hover {
     background-color: #e3f3ff;
     border-radius: 10px;
+    /* 设置鼠标移入样式为手型 */
+    cursor: pointer;
 }
 
 .book-cover {
