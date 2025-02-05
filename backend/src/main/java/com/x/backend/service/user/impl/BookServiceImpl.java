@@ -34,4 +34,10 @@ public class BookServiceImpl implements BookService {
         return bookMapper.selectTopWelcomeBookInfo(offset, size);
     }
 
+    @Override
+    public List<Book> selectTopHotBookInfo(int page, int size) {
+        int offset = page * size;  // 根据页码计算偏移量
+        return bookMapper.selectTopHotBookInfo(offset, size);
+    }
+
 }

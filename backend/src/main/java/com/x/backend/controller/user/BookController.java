@@ -62,7 +62,23 @@ public class BookController {
             // 调用服务层进行分页查询
             return ResultEntity.success(bookService.selectTopWelcomeBookInfo(page, size));
         } catch (RuntimeException e) {
-            log.error("top-50发生错误:{}", e.getMessage());
+            log.error("top-welcome发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @GetMapping("/top-hot")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<List<Book>> selectTopHotBookInfo(@RequestParam(defaultValue = "0") int start) {
+        try {
+            // 默认查询 25 条数据
+            int page = start / 10;  // 计算当前页数
+            int size = 10;  // 每页 10 条数据
+
+            // 调用服务层进行分页查询
+            return ResultEntity.success(bookService.selectTopHotBookInfo(page, size));
+        } catch (RuntimeException e) {
+            log.error("top-hot发生错误:{}", e.getMessage());
             return ResultEntity.failure(e.getMessage());
         }
     }
