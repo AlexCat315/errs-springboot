@@ -10,7 +10,7 @@
                 <p style="font-size: 23px; font-family: yousu-title-black">
                     {{ category.name }}
                 </p>
-                <a class="view-all" href="#">查看全部</a>
+                <ViewAll class="view-all" />
             </div>
 
             <div class="recommend-grid">
@@ -126,6 +126,7 @@
 <script lang="ts" setup>
 import { onMounted, reactive } from "vue";
 import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入validate_email方法
+import ViewAll from "./components/ViewAll.vue";
 
 interface EntertainmentItem {
     id: number;
@@ -486,5 +487,11 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 .star {
     font-size: 0.9rem;
     color: #ffb400;
+}
+.view-all {
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 40px;
+    color: #fff;
 }
 </style>
