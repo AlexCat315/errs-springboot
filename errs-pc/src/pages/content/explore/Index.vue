@@ -57,9 +57,8 @@
                                         style="
                                             margin-top: -9px;
                                             color: #8a929b;
-                                            font-family:
-                                                Tahoma, Geneva, Verdana,
-                                                sans-serif;
+                                            font-family: Tahoma, Geneva,
+                                                Verdana, sans-serif;
                                         "
                                     >
                                         {{ item.author }}
@@ -150,11 +149,10 @@ interface Category {
 // 初始化 state
 const state = reactive({
     categories: [
-             { id: 1, name: "精典书籍推荐" },
+        { id: 1, name: "精典书籍推荐" },
         { id: 2, name: "热门电影推荐" },
         { id: 3, name: "精选游戏合集" },
         { id: 4, name: "高分剧集榜单" },
- 
     ] as Category[],
     items: [] as EntertainmentItem[], // 初始化为空数组
 });
@@ -333,7 +331,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     font-size: 1.5rem;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-
 }
 
 .back-rating {
@@ -345,9 +342,9 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     margin-right: 0.5rem;
 }
 .back-rating .stars {
-    color: #ffb400;display: flex;
+    color: #ffb400;
+    display: flex;
     justify-content: center !important;
-    
 }
 
 .detail-btn {
@@ -409,7 +406,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
-      margin-top: -20px !important;
 }
 .get-btn:hover {
     background: #0063cc;

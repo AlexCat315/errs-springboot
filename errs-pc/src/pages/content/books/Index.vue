@@ -337,7 +337,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     margin-top: -20px;
     transform-origin: center;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-
 }
 
 .recommend-card {
@@ -360,7 +359,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform-style: preserve-3d;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-       transform-origin: center;
+    transform-origin: center;
 }
 
 .recommend-card:hover .card-inner {
@@ -396,7 +395,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     transform: rotateY(180deg);
     z-index: 1;
 }
-
 
 .overlay {
     position: absolute;
@@ -437,7 +435,7 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 }
 
 .detail-btn {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.2);
     border: 2px;
     color: white;
     padding: 8px 24px;
@@ -493,7 +491,6 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
-    margin-top: -20px !important;
 }
 .get-btn:hover {
     background: #0063cc;
