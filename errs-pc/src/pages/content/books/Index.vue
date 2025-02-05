@@ -5,7 +5,7 @@ import {
     get_book_top50_info,
     get_book_welcome_info,
     get_book_hot_info,
-} from "../../../net/explore/get_book"; // 导入get_book_top250_info方法
+} from "../../../net/book/get_book"; // 导入get_book_top250_info方法
 
 import Sidebar from "./components/Sidebar.vue";
 import BookList from "./components/BookList.vue";
@@ -41,8 +41,17 @@ const textList = [
     },
 ];
 const currentIndex = inject<Ref<number>>("currentIndex");
+if (currentIndex === undefined) {
+    throw new Error("currentIndex is undefined");
+}
 const handleCurrentIndexChange = (newIndex: number) => {
-    currentIndex.value = newIndex;
+    if (newIndex === 0) {
+        currentIndex.value = 36;
+    } else if (newIndex === 1) {
+        currentIndex.value = 71;
+    } else if (newIndex === 2) {
+        currentIndex.value = 72;
+    }
 };
 
 interface EntertainmentItem {
@@ -52,7 +61,6 @@ interface EntertainmentItem {
     category: string[];
     description: string;
     rating: number;
-    price?: number;
     users?: number;
     categoryId: number;
     img: string;
@@ -182,7 +190,6 @@ const fetchItemsHot = (start: number) => {
                         categoryId: 4, // 添加 categoryId
                     }));
                 state.items = [...state.items, ...newItems]; // 保留现有数据并添加新数据
-                console.log(state.items); // 查看添加后的数据
             } else {
                 console.error("返回的数据格式错误", response);
             }
@@ -240,63 +247,41 @@ const showBookList = (id: Number) => {
         <div v-if="!globalShowBookList">
             <div>
                 <div>
-                    <p
-                        style="
+                    <p style="
                             font-size: 29px;
                             font-family: Arial, Helvetica, sans-serif;
                             font-weight: bold;
                             margin-left: 30px;
-                        "
-                    >
+                        ">
                         图书
                     </p>
                 </div>
                 <div style="margin-top: 10px" class="divider-top"></div>
             </div>
             <!-- 轮播图或视频，左侧是文字，右侧是视频或者图片 -->
-            <Carousel
-                :mediaList="mediaList"
-                :textList="textList"
-                @currentIndexChanged="handleCurrentIndexChange"
-            />
+            <Carousel :mediaList="mediaList" :textList="textList" @currentIndexChanged="handleCurrentIndexChange" />
 
             <div class="entertainment-container">
                 <!-- 推荐分类区块 -->
-                <div
-                    v-for="category in state.categories"
-                    :key="category.id"
-                    class="category-section"
-                >
+                <div v-for="category in state.categories" :key="category.id" class="category-section">
                     <div class="section-header">
-                        <p
-                            style="
+                        <p style="
                                 font-size: 19px;
                                 font-family: Arial, Helvetica, sans-serif;
                                 font-weight: bold;
-                            "
-                        >
+                            ">
                             {{ category.name }}
                         </p>
-                        <ViewAll
-                            @click="showBookList(category.id)"
-                            class="view-all"
-                        />
+                        <ViewAll @click="showBookList(category.id)" class="view-all" />
                     </div>
                     <div class="recommend-grid">
-                        <div
-                            v-for="item in getItemsByCategory(category.id)"
-                            :key="item.id"
-                            class="recommend-card"
-                        >
+                        <div v-for="item in getItemsByCategory(category.id)" :key="item.id" class="recommend-card">
                             <div class="card-inner">
                                 <!-- 正面内容 -->
-                                <div
-                                    class="card-front"
-                                    :style="{
-                                        backgroundImage:
-                                            'url(' + item.img + ')',
-                                    }"
-                                >
+                                <div class="card-front" :style="{
+                                    backgroundImage:
+                                        'url(' + item.img + ')',
+                                }">
                                     <div class="overlay"></div>
                                     <div class="back-content">
                                         <h3 class="back-title">
@@ -305,7 +290,7 @@ const showBookList = (id: Number) => {
                                         <p class="back-rating">
                                             <span class="score">{{
                                                 item.rating
-                                            }}</span>
+                                                }}</span>
                                             <span class="stars">
                                                 {{
                                                     "★".repeat(
@@ -316,9 +301,9 @@ const showBookList = (id: Number) => {
                                                 }}{{
                                                     "☆".repeat(
                                                         5 -
-                                                            Math.round(
-                                                                item.rating / 2,
-                                                            ),
+                                                        Math.round(
+                                                            item.rating / 2,
+                                                        ),
                                                     )
                                                 }}
                                             </span>
@@ -333,34 +318,17 @@ const showBookList = (id: Number) => {
                                 <div class="card-back">
                                     <div class="card-content">
                                         <div class="card-header">
-                                            <span
-                                                v-for="cat in item.category"
-                                                :key="cat"
-                                                :style="{
-                                                    background: colorsRandom(),
-                                                }"
-                                                class="category-tag"
-                                                >{{ cat }}</span
-                                            >
+                                            <span v-for="cat in item.category" :key="cat" :style="{
+                                                background: colorsRandom(),
+                                            }" class="category-tag">{{ cat }}</span>
                                             <div class="rating">
                                                 <span class="score">{{
                                                     item.rating
-                                                }}</span>
+                                                    }}</span>
                                                 <div class="stars">
-                                                    <span
-                                                        v-for="n in 5"
-                                                        :key="n"
-                                                        class="star"
-                                                    >
+                                                    <span v-for="n in 5" :key="n" class="star">
                                                         {{
-                                                            n <=
-                                                            Math.round(
-                                                                item.rating / 2,
-                                                            )
-                                                                ? "★"
-                                                                : "☆"
-                                                        }}
-                                                    </span>
+                                                            n <= Math.round(item.rating / 2,) ? "★" : "☆" }} </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -368,14 +336,12 @@ const showBookList = (id: Number) => {
                                             <h3 class="title">
                                                 {{ item.name }}
                                             </h3>
-                                            <p
-                                                style="
+                                            <p style="
                                                     margin-top: -9px;
                                                     color: #8a929b;
                                                     font-family: Tahoma, Geneva,
                                                         Verdana, sans-serif;
-                                                "
-                                            >
+                                                ">
                                                 {{ item.author }}
                                             </p>
                                         </div>
@@ -383,25 +349,16 @@ const showBookList = (id: Number) => {
                                         <p class="description">
                                             {{ item.description }}
                                         </p>
-                                        <div
-                                            class="actions"
-                                            style="
+                                        <div class="actions" style="
                                                 padding-right: 20px;
                                                 margin-bottom: 20px;
-                                            "
-                                        >
+                                            ">
                                             <button class="get-btn">
                                                 {{
-                                                    item.price
-                                                        ? `¥${item.price}`
-                                                        : "查看详情"
+                                                    "查看详情"
                                                 }}
                                             </button>
-                                            <span
-                                                v-if="item.users"
-                                                class="users"
-                                                >{{ item.users }}人评价</span
-                                            >
+                                            <span v-if="item.users" class="users">{{ item.users }}人评价</span>
                                         </div>
                                     </div>
                                 </div>
@@ -427,6 +384,7 @@ const showBookList = (id: Number) => {
 * {
     box-sizing: border-box;
 }
+
 .entertainment-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -437,6 +395,7 @@ const showBookList = (id: Number) => {
     text-align: center;
     margin-bottom: 2rem;
 }
+
 .header p {
     color: #666;
     font-size: 1.1rem;
@@ -448,10 +407,12 @@ const showBookList = (id: Number) => {
     align-items: center;
     margin: 2rem 0;
 }
+
 .section-header h2 {
     font-size: 1.5rem;
     color: #333;
 }
+
 .view-all {
     font-family: Arial, Helvetica, sans-serif;
     text-decoration: none;
@@ -476,7 +437,8 @@ const showBookList = (id: Number) => {
     border-radius: 9.6px;
     z-index: 10;
     box-shadow: inset 0px 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ccc; /* 根据需要调整颜色和宽度 */
+    border: 1px solid #ccc;
+    /* 根据需要调整颜色和宽度 */
     overflow: visible;
 }
 
@@ -554,10 +516,12 @@ const showBookList = (id: Number) => {
     font-size: 1.2rem;
     margin: 1rem 0;
 }
+
 .back-rating .score {
     color: #ffb400;
     margin-right: 0.5rem;
 }
+
 .back-rating .stars {
     color: #ffb400;
     justify-content: center !important;
@@ -573,6 +537,7 @@ const showBookList = (id: Number) => {
     transition: all 0.3s;
     margin-top: 1.5rem;
 }
+
 .detail-btn:hover {
     background: rgba(255, 255, 255, 0.2);
 }
@@ -621,6 +586,7 @@ const showBookList = (id: Number) => {
     cursor: pointer;
     transition: background 0.2s;
 }
+
 .get-btn:hover {
     background: #0063cc;
 }
@@ -639,10 +605,12 @@ const showBookList = (id: Number) => {
     width: 50%;
     margin-left: 130px;
 }
+
 .score {
     font-size: 1.1rem;
     margin-right: 4px;
 }
+
 .stars {
     color: #ffb400;
 }
@@ -708,16 +676,20 @@ const showBookList = (id: Number) => {
     margin-top: 40px;
     margin-bottom: -20px;
 }
+
 .divider-top {
     height: 1px;
     background-color: #ccc;
     margin-top: -30px;
     margin-bottom: 50px;
 }
+
 .app {
     display: flex;
     height: 100%;
-    height: 100vh; /* 使用视口高度 */
-    overflow: hidden; /* 防止整个容器滚动 */
+    height: 100vh;
+    /* 使用视口高度 */
+    overflow: hidden;
+    /* 防止整个容器滚动 */
 }
 </style>

@@ -66,5 +66,15 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
+    @GetMapping("/detail")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<Book> selectBookDetail(@RequestParam int id) {
+        try {
+            return ResultEntity.success(bookService.selectBookDetail(id));
+        } catch (RuntimeException e) {
+            log.error("book/detail发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
 
 }

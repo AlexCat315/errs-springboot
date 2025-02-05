@@ -10,23 +10,13 @@
                 </p>
                 <div style="display: flex">
                     <p class="wr_bookList_item_reading">
-                        <span
-                            class="wr_bookList_item_readingText wr_bookList_item_readingCountText"
-                            ><span class="wr_bookList_item_reading_number"
-                                >{{ book.users}}</span
-                            >人评价</span
-                        ><span class="wr_bookList_item_reading_dep"></span
-                        ><span class="wr_bookList_item_readingText">
-                            {{ book.recommend }}% 推荐<span
-                                class="wr_bookList_item_reading_percent"
-                            ></span
-                        ></span>
+                        <span class="wr_bookList_item_readingText wr_bookList_item_readingCountText"><span
+                                class="wr_bookList_item_reading_number">{{ book.users }}</span>人评价</span><span
+                            class="wr_bookList_item_reading_dep"></span><span class="wr_bookList_item_readingText">
+                            {{ book.recommend }}% 推荐<span class="wr_bookList_item_reading_percent"></span></span>
                     </p>
-                    <img
-                        :src="imgSrc(book)"
-                        class="book_rating_item_label_number_image book_rating_item_label_ListItem"
-                        style="height: undefinedpx"
-                    />
+                    <img :src="imgSrc(book)" class="book_rating_item_label_number_image book_rating_item_label_ListItem"
+                        style="height: undefinedpx" />
                 </div>
 
                 <p class="wr_bookList_item_desc">
@@ -44,7 +34,7 @@ import {
     get_book_top50_info,
     get_book_welcome_info,
     get_book_hot_info,
-} from "../../../../net/explore/get_book";
+} from "../../../../net/book/get_book";
 
 interface Book {
     id: number;
@@ -53,7 +43,6 @@ interface Book {
     category: string[];
     description: string;
     rating: number;
-    price?: number;
     users?: number;
     img: string;
     introduction: string;
@@ -152,6 +141,9 @@ const fetchItemsHot = (start: number) => {
         },
     );
 };
+if (globalShowBookListSelect === undefined) {
+    throw new Error("globalShowBookListSelect is undefined");
+}
 
 // 在组件加载时请求数据
 onMounted(() => {
@@ -197,6 +189,8 @@ watch(globalShowBookListSelect, (value) => {
 const scrollContainer = ref(null);
 
 const handleScroll = () => {
+    if (!scrollContainer.value) return;
+
     const { scrollTop, scrollHeight, clientHeight } = scrollContainer.value;
     const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
 
@@ -419,6 +413,7 @@ wr_bookList_item_reading_dep {
     margin: 0 13px;
     background-color: #8a8c90;
 }
+
 .book_rating_item_label_number_image.book_rating_item_label_ListItem {
     height: 22px;
     margin-top: 5px;

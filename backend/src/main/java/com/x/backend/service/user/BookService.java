@@ -12,4 +12,6 @@ public interface BookService {
     List<Book> selectTopWelcomeBookInfo(int page, int size);
 
     List<Book> selectTopHotBookInfo(int page, int size);
+
+    Book selectBookDetail(int id);
 }

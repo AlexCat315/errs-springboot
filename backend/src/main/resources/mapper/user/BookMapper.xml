@@ -33,4 +33,9 @@
         ORDER BY (0.7 * rating + 0.3 * users / 102400) DESC
         LIMIT #{offset}, #{size}
     </select>
+    <select id="selectBookDetail" resultType="com.x.backend.pojo.common.Book">
+        select *
+        from book
+        where id = #{id}
+    </select>
 </mapper>

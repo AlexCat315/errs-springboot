@@ -36,4 +36,8 @@ public class BookServiceImpl implements BookService {
         return bookMapper.selectTopHotBookInfo(page, size);
     }
 
+    @Override
+    public Book selectBookDetail(int id) {
+        return bookMapper.selectBookDetail(id);
+    }
 }
