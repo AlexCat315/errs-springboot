@@ -4,7 +4,10 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
+import com.x.backend.pojo.user.dto.book.IsLikeBook;
+import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.service.user.BookService;
+import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,8 @@ public class BookController {
 
     @Resource(name = "userBookService")
     private BookService bookService;
+    @Resource
+    private JWTUtils<UserAccount> jwtUtils;
 
     @GetMapping("/top-250")
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
@@ -66,9 +71,10 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
+
     @GetMapping("/detail")
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
-    public ResultEntity<Book> selectBookDetail(@RequestParam int id) {
+    public ResultEntity<Book> selectBookDetail(@RequestParam Long id) {
         try {
             return ResultEntity.success(bookService.selectBookDetail(id));
         } catch (RuntimeException e) {
@@ -76,5 +82,20 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
+
+    @GetMapping("/validate/like")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<Boolean> validateLike(@RequestParam Long bId) {
+        try {
+            Integer uId = jwtUtils.getId();
+            IsLikeBook isLike = new IsLikeBook(bId, uId);
+            return ResultEntity.success(bookService.validateLike(isLike));
+        } catch (RuntimeException e) {
+            log.error("book/validate-like发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+
 
 }

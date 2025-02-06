@@ -7,7 +7,7 @@
         from book
         where rating > 6
         order by (rating + users / 102400) DESC
-        LIMIT #{offset}, #{size}
+            LIMIT #{offset}, #{size}
     </select>
     <select id="selectTop50BookInfo" resultType="com.x.backend.pojo.common.Book">
         select *
@@ -15,14 +15,14 @@
         where rating > 6
           and users > 10000
         order by rating DESC
-        LIMIT #{offset}, #{size}
+            LIMIT #{offset}, #{size}
     </select>
     <select id="selectTopWelcomeBookInfo" resultType="com.x.backend.pojo.common.Book">
         select *
         from book
         where rating > 6
         order by users DESC
-        LIMIT #{offset}, #{size}
+            LIMIT #{offset}, #{size}
     </select>
     <select id="selectTopHotBookInfo" resultType="com.x.backend.pojo.common.Book">
         SELECT *
@@ -31,11 +31,12 @@
           AND introduction IS NOT NULL
           AND introduction != ''
         ORDER BY (0.7 * rating + 0.3 * users / 102400) DESC
-        LIMIT #{offset}, #{size}
+            LIMIT #{offset}, #{size}
     </select>
     <select id="selectBookDetail" resultType="com.x.backend.pojo.common.Book">
         select *
         from book
         where id = #{id}
     </select>
+
 </mapper>

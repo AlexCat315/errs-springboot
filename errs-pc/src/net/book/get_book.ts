@@ -4,7 +4,7 @@ export function get_book_top250_info(
   start: number,
   success: Function,
   failure: Function,
-  error: Function
+  error: Function,
 ) {
   Get(
     `/api/user/book/top-250?start=${start}`,
@@ -16,7 +16,7 @@ export function get_book_top250_info(
     },
     (message: string) => {
       error(message);
-    }
+    },
   );
 }
 
@@ -24,7 +24,7 @@ export function get_book_top50_info(
   start: number,
   success: Function,
   failure: Function,
-  error: Function
+  error: Function,
 ) {
   Get(
     `/api/user/book/top-50?start=${start}`,
@@ -36,7 +36,7 @@ export function get_book_top50_info(
     },
     (message: string) => {
       error(message);
-    }
+    },
   );
 }
 
@@ -44,7 +44,7 @@ export function get_book_welcome_info(
   start: number,
   success: Function,
   failure: Function,
-  error: Function
+  error: Function,
 ) {
   Get(
     `/api/user/book/top-welcome?start=${start}`,
@@ -56,7 +56,7 @@ export function get_book_welcome_info(
     },
     (message: string) => {
       error(message);
-    }
+    },
   );
 }
 
@@ -64,7 +64,7 @@ export function get_book_hot_info(
   start: number,
   success: Function,
   failure: Function,
-  error: Function
+  error: Function,
 ) {
   Get(
     `/api/user/book/top-hot?start=${start}`,
@@ -76,7 +76,7 @@ export function get_book_hot_info(
     },
     (message: string) => {
       error(message);
-    }
+    },
   );
 }
 
@@ -84,7 +84,7 @@ export function get_book_detail(
   id: number,
   success: Function,
   failure: Function,
-  error: Function
+  error: Function,
 ) {
   Get(
     `/api/user/book/detail?id=${id}`,
@@ -94,6 +94,7 @@ export function get_book_detail(
     (message: string) => {
       failure(message);
     },
-    (message: string) => {}
+    (message: string) => {},
   );
 }
+

@@ -1,6 +1,7 @@
 package com.x.backend.service.user;
 
 import com.x.backend.pojo.common.Book;
+import com.x.backend.pojo.user.dto.book.IsLikeBook;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface BookService {
 
     List<Book> selectTopHotBookInfo(int page, int size);
 
-    Book selectBookDetail(int id);
+    Book selectBookDetail(Long id);
+
+    Boolean  validateLike(IsLikeBook isLike);
 }

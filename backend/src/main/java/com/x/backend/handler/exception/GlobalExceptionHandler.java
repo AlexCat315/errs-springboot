@@ -1,4 +1,4 @@
-package com.x.backend.exceptionhandler;
+package com.x.backend.handler.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.constants.HttpMessageConstants;

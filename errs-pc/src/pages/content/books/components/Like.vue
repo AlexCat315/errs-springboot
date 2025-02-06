@@ -1,96 +1,33 @@
 <script setup lang="ts">
-import { ref, inject, Ref } from "vue";
-import { validate_token } from "../../../../net/account/validate_token";
-import { show } from "@tauri-apps/api/app";
-import { onMounted } from "vue";
+import { inject, Ref } from "vue";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {
     throw new Error("Function not implemented.");
 }
-
-// 检查用户是否登录
-// 如果没有登录，显示的就是灰色的收藏按钮
-const showLike = ref(false);
-const isLogin = ref(false);
-
-onMounted(() => {
-    // 检测是否有token
-    const token = ref(localStorage.getItem("token"));
-    if (
-        token.value !== null &&
-        token.value !== "" &&
-        token.value !== undefined
-    ) {
-        validate_token(
-            token.value,
-            (data: any) => {
-                if (data.code === 200) {
-                    isLogin.value = true;
-                }
-                console.log("success:", data);
-            },
-            (message: string) => {
-                localStorage.removeItem("token");
-                console.log("failure:", message);
-            },
-            (message: string) => {
-                console.log("error:", message);
-            },
-        );
-    }
-});
 </script>
 
 <template>
     <button
-        v-if="showLike"
         :style="{
-            color: globalTheme === 'dark' ? '#FFF' : 'black',
-            '--svgColor': globalTheme === 'dark' ? '#FFF' : 'black',
+            color: globalTheme === 'dark' ? '#FFF' : '#515151',
         }"
         class="btn"
     >
         <svg
-            t="1738822558812"
+            t="1738825941798"
             class="icon"
-            viewBox="0 0 1024 1024"
+            viewBox="0 0 1025 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
-            p-id="4206"
-            width="20.625"
-            height="20.625"
+            p-id="5419"
+            width="11"
+            height="11"
         >
             <path
-                d="M669.781333 130.752c71.637333-11.093333 138.901333 11.477333 193.344 64.533333 55.317333 53.930667 81.834667 124.992 74.282667 199.530667-7.466667 73.642667-46.549333 146.368-112.32 210.474667-18.346667 17.898667-67.669333 66.218667-138.453333 135.637333-31.829333 31.232-65.706667 64.448-99.84 97.984L553.6 871.466667l-13.184 12.949333a40.554667 40.554667 0 0 1-56.832 0l-114.602667-112.64-24.213333-23.722667a677626.346667 677626.346667 0 0 0-145.856-142.762666C133.141333 541.184 94.08 468.48 86.613333 394.816c-7.552-74.538667 18.944-145.6 74.282667-199.530667 54.442667-53.056 121.706667-75.605333 193.344-64.533333 53.162667 8.213333 107.093333 34.688 157.781333 76.949333 50.709333-42.24 104.618667-68.736 157.781334-76.949333z"
+                d="M1020.85564 385.279248c-8.427984-26.487948-30.099941-45.751911-57.189888-49.965902l-83.075838-12.641975-171.569665-29.497942c-10.23398-1.805996-19.263962-8.427984-24.079953-18.059965l0-0.601999c-0.601999-2.407995-0.601999-4.213992-1.805996-6.621987L575.978509 41.537919c-3.009994-6.621987-7.223986-12.641975-11.437978-17.457966l0 0 0 0C550.694558 9.029982 532.634593 0 512.768632 0c-27.089947 0-51.1699 15.651969-63.209877 40.93592L329.158991 294.979424 60.667515 335.915344c-27.089947 4.213992-48.761905 22.875955-57.189888 49.965902-8.427984 27.089947-1.203998 55.985891 18.059965 75.249853l194.44562 197.455614-45.751911 278.725456c-4.815991 27.691946 6.019988 55.383892 28.293945 71.63786 21.671958 16.855967 50.567901 18.661964 74.045855 5.417989l240.197531-131.837743 240.197531 131.837743c10.23398 6.019988 21.671958 8.427984 32.507937 8.427984 14.447972 0 28.895944-4.815991 41.537919-14.447972 21.671958-16.855967 32.507937-43.945914 28.293945-71.63786l-45.751911-278.725456 194.44562-197.455614C1022.661636 441.265138 1029.283623 412.369195 1020.85564 385.279248z"
                 :fill="globalTheme === 'dark' ? '#FFF' : '#8a8a8a'"
-                p-id="4207"
-            ></path>
-        </svg>
-    </button>
-
-    <button
-        v-else
-        :style="{
-            color: globalTheme === 'dark' ? '#FFF' : 'black',
-            '--svgColor': globalTheme === 'dark' ? '#FFF' : 'black',
-        }"
-        class="btn"
-    >
-        <svg
-            t="1738822558812"
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            p-id="4206"
-            width="20.625"
-            height="20.625"
-        >
-            <path
-                d="M669.781333 130.752c71.637333-11.093333 138.901333 11.477333 193.344 64.533333 55.317333 53.930667 81.834667 124.992 74.282667 199.530667-7.466667 73.642667-46.549333 146.368-112.32 210.474667-18.346667 17.898667-67.669333 66.218667-138.453333 135.637333-31.829333 31.232-65.706667 64.448-99.84 97.984L553.6 871.466667l-13.184 12.949333a40.554667 40.554667 0 0 1-56.832 0l-114.602667-112.64-24.213333-23.722667a677626.346667 677626.346667 0 0 0-145.856-142.762666C133.141333 541.184 94.08 468.48 86.613333 394.816c-7.552-74.538667 18.944-145.6 74.282667-199.530667 54.442667-53.056 121.706667-75.605333 193.344-64.533333 53.162667 8.213333 107.093333 34.688 157.781333 76.949333 50.709333-42.24 104.618667-68.736 157.781334-76.949333z"
-                :fill="globalTheme === 'dark' ? '#FFF' : '#8a8a8a'"
-                p-id="4207"
+                p-id="5420"
             ></path>
         </svg>
     </button>
@@ -101,14 +38,14 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     border-radius: 10px;
     cursor: pointer;
     border: none;
     background-color: transparent;
     position: relative;
-    margin-top: 7px;
+    margin-top: 15px;
     margin-left: 100px;
 }
 
@@ -117,7 +54,7 @@ onMounted(() => {
     width: fit-content;
     height: fit-content;
     position: absolute;
-    font-size: 15px;
+    font-size: 11px;
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
         "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
     opacity: 0;
@@ -141,7 +78,7 @@ onMounted(() => {
 }
 
 .btn:hover > .icon path {
-    fill: #d81e06;
+    fill: #ffba00;
 }
 
 .btn:hover::after {
