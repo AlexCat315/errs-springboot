@@ -192,9 +192,29 @@ onBeforeUnmount(() => {
     padding: 10px;
     width: 100%;
     max-width: 1200px;
-    background-color: #232d;
-    /* filter: sepia(0.5) contrast(1.2) saturate(1.5); */
-    background-size: 20px 20px;
+    /* 设置背景色，例如可以使用纯色或其他你想要的颜色 */
+    background-color: #232d2d; /* 注意颜色码需要有效，这里用6位16进制 */
+    background-image: radial-gradient(
+            circle at 10% 20%,
+            rgba(255, 255, 255, 0.1) 15%,
+            transparent 16%
+        ),
+        radial-gradient(
+            circle at 70% 40%,
+            rgba(255, 255, 255, 0.1) 15%,
+            transparent 16%
+        ),
+        radial-gradient(
+            circle at 30% 80%,
+            rgba(255, 255, 255, 0.1) 15%,
+            transparent 16%
+        ),
+        radial-gradient(
+            circle at 80% 90%,
+            rgba(255, 255, 255, 0.1) 15%,
+            transparent 16%
+        );
+    background-size: 5px 5px;
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.5s ease;
