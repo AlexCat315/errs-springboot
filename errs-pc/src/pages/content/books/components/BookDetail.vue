@@ -5,6 +5,7 @@ import Like from "./Like.vue";
 import UnLike from "./UnLike.vue";
 import { validate_token } from "../../../../net/account/validate_token";
 import { validate_like } from "../../../../net/book/validate_like";
+import Star from "./Star.vue";
 
 interface Book {
     id: number;
@@ -177,25 +178,26 @@ const addLike = () => {
                     class="book_rating_item_label_number_image book_rating_item_label_ListItem"
                     style="height: undefinedpx"
                 />
-                <Like v-if="!showLike" @click="addLike()"/>
+                <Like v-if="!showLike" @click="addLike()" />
                 <UnLike v-if="showLike" @click="cancelLike()" />
             </div>
 
             <p class="author">{{ book.author }}</p>
             <p class="description">{{ book.description }}</p>
-            <div class="rating">
-                <span class="rating-score">{{ book.rating }}分</span>
-                <span class="rating-count">{{ book.users }} 人评价</span>
-            </div>
-            <div class="recommend">
-                <span>推荐指数：</span>
-                <span>{{ book.recommend }}</span>
+            <div style="display: flex;margin-bottom: 10px;">
+                          <Star :score="book.rating" style="margin-top:10px;" />
+                <div class="rating">
+                    <span class="rating-score">{{ book.rating }}分</span>
+                    <span class="rating-count">{{ book.users }} 人评价</span>
+                </div>
+                <div class="recommend">
+                    <span>推荐指数：</span>
+                    <span>{{ book.recommend }}%</span>
+                </div>
             </div>
         </div>
     </div>
 </template>
-
-
 
 <style scoped>
 .top-bar {
@@ -256,8 +258,9 @@ h3 {
 
 .author {
     color: #555;
-    font-size: 1.1rem;
-    margin-top: 5px;
+    font-size: 13px;
+    margin-top: -10px;
+    margin-bottom: 5px;
 }
 
 .category {
@@ -272,8 +275,8 @@ h3 {
     margin: 10px 0;
     line-height: 1.4;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -295,10 +298,14 @@ h3 {
     color: #888;
     font-size: 0.9rem;
 }
+.recommend {
+    margin-left: 10px;
+}
 
 .recommend span {
-    font-size: 1rem;
+    font-size: 13px;
     font-weight: 500;
+    margin-top: -2px;
 }
 .book-title-top {
     display: flex;
