@@ -212,7 +212,7 @@ const imgSrc = (book: Book) => {
             <p class="index">{{ index + 1 }}</p>
             <img :src="book.img" alt="Book cover" class="book-cover" />
             <div class="wr_bookList_item_info">
-                <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" class="wr_bookList_item_title">{{ book.name }}</p>
+                <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="font-family: Arial, Helvetica, sans-serif;" class="wr_bookList_item_title">{{ book.name }}</p>
                 <p class="wr_bookList_item_author">
                     <a>{{ book.author }}</a>
                 </p>
