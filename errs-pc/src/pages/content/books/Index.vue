@@ -13,6 +13,11 @@ import ViewAll from "./components/ViewAll.vue";
 import Carousel from "./components/Carousel.vue"; // 引入轮播组件
 import BookDetail from "./components/BookDetail.vue";
 
+const globalTheme = inject<string>("globalTheme");
+if (globalTheme === undefined) {
+    throw new Error("Function not implemented.");
+}
+
 // 图片或视频及对应文字列表
 const mediaList = [
     {
@@ -247,7 +252,7 @@ const showBookList = (id: Number) => {
         <div v-if="!globalShowBookList">
             <div>
                 <div>
-                    <p style="
+                    <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="
                             font-size: 29px;
                             font-family: Arial, Helvetica, sans-serif;
                             font-weight: bold;
@@ -265,7 +270,7 @@ const showBookList = (id: Number) => {
                 <!-- 推荐分类区块 -->
                 <div v-for="category in state.categories" :key="category.id" class="category-section">
                     <div class="section-header">
-                        <p style="
+                        <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="
                                 font-size: 19px;
                                 font-family: Arial, Helvetica, sans-serif;
                                 font-weight: bold;

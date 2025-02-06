@@ -7,7 +7,7 @@
             class="category-section"
         >
             <div class="section-header">
-                <p style="font-size: 23px; font-family: yousu-title-black">
+                <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="font-size: 23px; font-family: yousu-title-black">
                     {{ category.name }}
                 </p>
                 <ViewAll class="view-all" />
@@ -127,6 +127,12 @@
 import { onMounted, reactive } from "vue";
 import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入validate_email方法
 import ViewAll from "./components/ViewAll.vue";
+import { inject } from "vue";
+
+const globalTheme = inject<string>("globalTheme");
+if (globalTheme === undefined) {
+    throw new Error("Function not implemented.");
+}
 
 interface EntertainmentItem {
     id: number;

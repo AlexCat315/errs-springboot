@@ -1,32 +1,3 @@
-<template>
-    <div ref="scrollContainer" @scroll="handleScroll" class="book-list">
-        <div v-for="(book, index) in books" :key="index" class="book-item">
-            <p class="index">{{ index + 1 }}</p>
-            <img :src="book.img" alt="Book cover" class="book-cover" />
-            <div class="wr_bookList_item_info">
-                <p class="wr_bookList_item_title">{{ book.name }}</p>
-                <p class="wr_bookList_item_author">
-                    <a>{{ book.author }}</a>
-                </p>
-                <div style="display: flex">
-                    <p class="wr_bookList_item_reading">
-                        <span class="wr_bookList_item_readingText wr_bookList_item_readingCountText"><span
-                                class="wr_bookList_item_reading_number">{{ book.users }}</span>人评价</span><span
-                            class="wr_bookList_item_reading_dep"></span><span class="wr_bookList_item_readingText">
-                            {{ book.recommend }}% 推荐<span class="wr_bookList_item_reading_percent"></span></span>
-                    </p>
-                    <img :src="imgSrc(book)" class="book_rating_item_label_number_image book_rating_item_label_ListItem"
-                        style="height: undefinedpx" />
-                </div>
-
-                <p class="wr_bookList_item_desc">
-                    {{ book.description }}
-                </p>
-            </div>
-        </div>
-    </div>
-</template>
-
 <script lang="ts" setup>
 import { onMounted, ref, inject, Ref, watch } from "vue";
 import {
@@ -35,6 +6,11 @@ import {
     get_book_welcome_info,
     get_book_hot_info,
 } from "../../../../net/book/get_book";
+
+const globalTheme = inject<string>("globalTheme");
+if (globalTheme === undefined) {
+    throw new Error("Function not implemented.");
+}
 
 interface Book {
     id: number;
@@ -229,6 +205,37 @@ const imgSrc = (book: Book) => {
     }
 };
 </script>
+
+<template>
+    <div ref="scrollContainer" @scroll="handleScroll" class="book-list">
+        <div v-for="(book, index) in books" :key="index" class="book-item">
+            <p class="index">{{ index + 1 }}</p>
+            <img :src="book.img" alt="Book cover" class="book-cover" />
+            <div class="wr_bookList_item_info">
+                <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" class="wr_bookList_item_title">{{ book.name }}</p>
+                <p class="wr_bookList_item_author">
+                    <a>{{ book.author }}</a>
+                </p>
+                <div style="display: flex">
+                    <p class="wr_bookList_item_reading">
+                        <span class="wr_bookList_item_readingText wr_bookList_item_readingCountText"><span
+                                class="wr_bookList_item_reading_number">{{ book.users }}</span>人评价</span><span
+                            class="wr_bookList_item_reading_dep"></span><span class="wr_bookList_item_readingText">
+                            {{ book.recommend }}% 推荐<span class="wr_bookList_item_reading_percent"></span></span>
+                    </p>
+                    <img :src="imgSrc(book)" class="book_rating_item_label_number_image book_rating_item_label_ListItem"
+                        style="height: undefinedpx" />
+                </div>
+
+                <p class="wr_bookList_item_desc">
+                    {{ book.description }}
+                </p>
+            </div>
+        </div>
+    </div>
+</template>
+
+
 
 <style scoped>
 .book-list {
