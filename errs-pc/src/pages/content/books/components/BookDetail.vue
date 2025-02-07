@@ -6,6 +6,9 @@ import UnLike from "./UnLike.vue";
 import { validate_token } from "../../../../net/account/validate_token";
 import { validate_like } from "../../../../net/book/validate_like";
 import Star from "./Star.vue";
+import GoLink from "./GoLink.vue";
+import Score from "./Score.vue";
+import { open } from "@tauri-apps/plugin-shell";
 
 interface Book {
     id: number;
@@ -123,6 +126,12 @@ const cancelLike = () => {
 const addLike = () => {
     showLike.value = true;
 };
+
+const openLink = () => {
+    // console.log("open link");
+    open("https://weread.qq.com/");
+    // window.open('https://weread.qq.com/');
+};
 </script>
 
 <template>
@@ -172,20 +181,36 @@ const addLike = () => {
         </div>
         <div class="book-info">
             <div class="book-title-top">
-                <h4>{{ book.name }}</h4>
-                <img
-                    :src="imgSrc(book)"
-                    class="book_rating_item_label_number_image book_rating_item_label_ListItem"
-                    style="height: undefinedpx"
-                />
-                <Like v-if="!showLike" @click="addLike()" />
-                <UnLike v-if="showLike" @click="cancelLike()" />
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                <!-- 左边的元素 -->
+                <div style="display: flex; align-items: center;">
+                    <h4 style="margin-right: 10px; font-size: 18px; font-weight: bold;">{{ book.name }}</h4>
+                    <img
+                        :src="imgSrc(book)"
+                        class="book_rating_item_label_number_image book_rating_item_label_ListItem"
+                        style="height: 22px; margin-right: 10px;"
+                    />
+                </div>
+
+                <!-- 右边的元素 -->
+                <div style="display: flex; align-items: center; ">
+                    <Like v-if="!showLike" @click="addLike()" />
+                    <UnLike v-if="showLike" @click="cancelLike()" />
+                    <GoLink
+                        @click="openLink()"
+                        style="height: 40px; transform: scale(0.85);"
+                    />
+                    <Score
+                        style="height: 40px; transform: scale(0.7);"
+                    />
+                </div>
+            </div>
             </div>
 
             <p class="author">{{ book.author }}</p>
             <p class="description">{{ book.description }}</p>
-            <div style="display: flex;margin-bottom: 10px;">
-                          <Star :score="book.rating" style="margin-top:10px;" />
+            <div style="display: flex; margin-bottom: 10px">
+                <Star :score="book.rating" style="margin-top: 10px" />
                 <div class="rating">
                     <span class="rating-score">{{ book.rating }}分</span>
                     <span class="rating-count">{{ book.users }} 人评价</span>
@@ -312,7 +337,7 @@ h3 {
 }
 .book_rating_item_label_number_image.book_rating_item_label_ListItem {
     height: 22px;
-    margin-top: 21px;
+ 
 }
 
 .book_rating_item_label_number.book_rating_item_label_ListItem,

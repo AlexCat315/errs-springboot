@@ -45,8 +45,8 @@ if (globalTheme === undefined) {
     border: none;
     background-color: transparent;
     position: relative;
-    margin-top: 15px;
-    margin-left: 100px;
+    margin-top: -3px;
+    margin-right: -10px;
 }
 
 .btn::after {
