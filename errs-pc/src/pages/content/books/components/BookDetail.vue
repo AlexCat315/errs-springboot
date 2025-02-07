@@ -218,7 +218,7 @@ const scoreMessage = ref("评价");
                             style="height: 40px; transform: scale(0.85)"
                         />
                         <Score
-                            score="scoreMessage"
+                            :score="scoreMessage"
                             style="height: 40px; transform: scale(0.7)"
                         />
                     </div>
