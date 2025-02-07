@@ -132,6 +132,8 @@ const openLink = () => {
     open("https://weread.qq.com/");
     // window.open('https://weread.qq.com/');
 };
+
+const scoreMessage = ref("评价");
 </script>
 
 <template>
@@ -181,30 +183,46 @@ const openLink = () => {
         </div>
         <div class="book-info">
             <div class="book-title-top">
-            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
-                <!-- 左边的元素 -->
-                <div style="display: flex; align-items: center;">
-                    <h4 style="margin-right: 10px; font-size: 18px; font-weight: bold;">{{ book.name }}</h4>
-                    <img
-                        :src="imgSrc(book)"
-                        class="book_rating_item_label_number_image book_rating_item_label_ListItem"
-                        style="height: 22px; margin-right: 10px;"
-                    />
-                </div>
+                <div
+                    style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        width: 100%;
+                    "
+                >
+                    <!-- 左边的元素 -->
+                    <div style="display: flex; align-items: center">
+                        <h4
+                            style="
+                                margin-right: 10px;
+                                font-size: 18px;
+                                font-weight: bold;
+                            "
+                        >
+                            {{ book.name }}
+                        </h4>
+                        <img
+                            :src="imgSrc(book)"
+                            class="book_rating_item_label_number_image book_rating_item_label_ListItem"
+                            style="height: 22px; margin-right: 10px"
+                        />
+                    </div>
 
-                <!-- 右边的元素 -->
-                <div style="display: flex; align-items: center; ">
-                    <Like v-if="!showLike" @click="addLike()" />
-                    <UnLike v-if="showLike" @click="cancelLike()" />
-                    <GoLink
-                        @click="openLink()"
-                        style="height: 40px; transform: scale(0.85);"
-                    />
-                    <Score
-                        style="height: 40px; transform: scale(0.7);"
-                    />
+                    <!-- 右边的元素 -->
+                    <div style="display: flex; align-items: center">
+                        <Like v-if="!showLike" @click="addLike()" />
+                        <UnLike v-if="showLike" @click="cancelLike()" />
+                        <GoLink
+                            @click="openLink()"
+                            style="height: 40px; transform: scale(0.85)"
+                        />
+                        <Score
+                            score="scoreMessage"
+                            style="height: 40px; transform: scale(0.7)"
+                        />
+                    </div>
                 </div>
-            </div>
             </div>
 
             <p class="author">{{ book.author }}</p>
@@ -337,7 +355,6 @@ h3 {
 }
 .book_rating_item_label_number_image.book_rating_item_label_ListItem {
     height: 22px;
- 
 }
 
 .book_rating_item_label_number.book_rating_item_label_ListItem,
