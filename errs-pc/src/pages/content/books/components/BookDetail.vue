@@ -11,6 +11,7 @@ import Score from "./Score.vue";
 import StarScore from "./StarScore.vue";
 import Cancel from "./Cancel.vue";
 import { open } from "@tauri-apps/plugin-shell";
+import { show } from "@tauri-apps/api/app";
 
 interface Book {
     id: number;
@@ -146,6 +147,12 @@ const selectedScore = ref(null);
 const handleRatingChange = (value:number) => {
     selectedScore.value = value * 2;
     console.log("选中的评分:", selectedScore.value);
+    showStarScore.value = false;
+    showErrorpanle.value = true;
+    errorPanleMsg.value = "评分成功";
+    setTimeout(() => {
+        showErrorpanle.value = false;
+    }, 2000);
 };
 </script>
 
