@@ -28,7 +28,5 @@ public interface BookMapper {
     @Select("SELECT EXISTS (SELECT 1 FROM book_like WHERE a_id = #{aId} AND b_id = #{bId}) AS is_like")
     Boolean validateLike(IsLikeBook isLike);
 
-
-
     Boolean validateScore(ScoreDTO scoreDTO);
 }

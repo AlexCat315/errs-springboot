@@ -9,11 +9,11 @@
     </insert>
 
     <!--  给书籍评分  -->
-    <insert id="score">
+    <insert id="insertScore">
         insert into book_score (b_id, a_id, score)
         values (#{bId}, #{aId}, #{score})
     </insert>
-    <insert id="batchUpdateScore">
+    <insert id="batchInsertScore">
         INSERT INTO book_score (b_id, a_id, score) VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.bId}, #{item.aId}, #{item.score})
@@ -26,4 +26,15 @@
             users  = users + #{users}
         WHERE id = #{bId};
     </update>
+    <update id="updateBookUsers">
+        UPDATE book
+        SET users = users - 1
+        WHERE id = #{bId};
+    </update>
+    <delete id="deleteBookScore">
+        DELETE
+        FROM book_score
+        WHERE b_id = #{bId}
+          and a_id = #{aId};
+    </delete>
 </mapper>

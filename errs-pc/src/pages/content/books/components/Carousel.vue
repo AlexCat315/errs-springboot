@@ -153,7 +153,7 @@ const resetAutoSwitch = () => {
         if (!waitingForVideo.value) {
             nextImage();
         }
-    }, 5000);
+    }, 6000);
 };
 
 let autoSwitchInterval: ReturnType<typeof setInterval>;
@@ -163,7 +163,7 @@ onMounted(() => {
         if (!waitingForVideo.value) {
             nextImage();
         }
-    }, 5000);
+    }, 6000);
 });
 
 onBeforeUnmount(() => {

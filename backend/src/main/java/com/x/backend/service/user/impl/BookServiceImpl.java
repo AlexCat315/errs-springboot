@@ -16,9 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.beans.Transient;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Component("userBookService")
@@ -27,6 +25,8 @@ public class BookServiceImpl implements BookService {
 
     @Resource(name = "userBookMapper")
     private BookMapper bookMapper;
+    @Resource(name = "adminBookMapper")
+    private com.x.backend.mapper.admin.BookMapper adminBookMapper;
     @Resource()
     private JWTUtils<UserAccount> jwtUtils;
     @Resource
@@ -82,12 +82,19 @@ public class BookServiceImpl implements BookService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
-    public void score(ScoreVo scoreVo) {
+    public void insertScore(ScoreVo scoreVo) {
         try {
             ScoreDTO scoreDTO = new ScoreDTO();
             scoreDTO.setBId(scoreVo.getBId());
             scoreDTO.setScore(scoreVo.getScore());
             scoreDTO.setAId(jwtUtils.getId());
+            Boolean hasKey = redisTemplate.hasKey("book-score-user-" + scoreDTO.getAId() + "-" + scoreDTO.getBId());
+            if (hasKey) {
+                throw new RuntimeException("您已经评过分了");
+            }
+            if (bookMapper.validateScore(scoreDTO)) {
+                throw new RuntimeException("您已经评过分了");
+            }
             String userId = scoreDTO.getAId().toString();
             Long bookId = scoreVo.getBId();
             // 定义用于存储该书已评分用户的 key，例如："book-score-user-{userId}:{bookId}"
@@ -97,18 +104,60 @@ public class BookServiceImpl implements BookService {
             log.error("score error", e);
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
     public ResultEntity<Boolean> validateScore(ScoreDTO scoreDTO) {
         try {
-            if (bookMapper.validateScore(scoreDTO)) {
+            Boolean hasKey = redisTemplate.hasKey("book-score-user-" + scoreDTO.getAId() + "-" + scoreDTO.getBId());
+            if (hasKey) {
+                return ResultEntity.failure("您已经评过分了");
+            }
+            Boolean validated = bookMapper.validateScore(scoreDTO);
+            if (validated) {
                 return ResultEntity.failure("您已经评过分了");
             }
             return ResultEntity.success();
         } catch (RuntimeException e) {
             log.error("validateScore error", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateScore(ScoreVo scoreVo) {
+        try {
+            ScoreDTO scoreDTO = new ScoreDTO();
+            scoreDTO.setBId(scoreVo.getBId());
+            scoreDTO.setScore(scoreVo.getScore());
+            scoreDTO.setAId(jwtUtils.getId());
+            String userId = scoreDTO.getAId().toString();
+            Long bookId = scoreVo.getBId();
+            // 定义用于存储该书已评分用户的 key，例如："book-score-user-{userId}:{bookId}"
+            String userSetKey = "book-score-user-" + userId + "-" + bookId;
+            Boolean hasKey = redisTemplate.hasKey(userSetKey);
+            if (hasKey) {
+                redisTemplate.opsForValue().set(userSetKey, scoreDTO.getScore().toString());
+            }
+            if (bookMapper.validateScore(scoreDTO)) {
+                Integer i = adminBookMapper.deleteBookScore(scoreDTO);
+
+                log.info("i:{}", i);
+                if (i != 1) {
+                    throw new RuntimeException("更新失败");
+                } else {
+                    Integer bookUsers = adminBookMapper.updateBookUsers(scoreDTO);
+                    log.info("bookUsers:{}", bookUsers);
+                    if (bookUsers != 1) {
+                        throw new RuntimeException("更新失败");
+                    }
+                    redisTemplate.opsForValue().set(userSetKey, scoreDTO.getScore().toString());
+                }
+            }
+        } catch (RuntimeException e) {
+            log.error("score error", e);
             throw new RuntimeException(e);
         }
     }

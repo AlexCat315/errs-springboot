@@ -5,6 +5,7 @@ import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -21,7 +22,9 @@ public interface BookService {
 
     Boolean  validateLike(IsLikeBook isLike);
 
-    void score(ScoreVo scoreVo);
+    void insertScore(ScoreVo scoreVo);
 
     ResultEntity<Boolean> validateScore(ScoreDTO scoreDTO);
+
+    void updateScore( ScoreVo scoreVo);
 }

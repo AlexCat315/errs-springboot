@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Slf4j
 @RestController("userBookController")
@@ -100,27 +99,42 @@ public class BookController {
         }
     }
 
-    @PostMapping("/score")
+    @PostMapping("/insert/score")
     @RoleSecurity(RoleConstants.ROLE_USER)
-    public ResultEntity<String> score(@Valid @RequestBody ScoreVo scoreVo) {
+    public ResultEntity<String> insertScore(@Valid @RequestBody ScoreVo scoreVo) {
         try {
             if (scoreVo.getScore() < 0 || scoreVo.getScore() > 10) {
                 return ResultEntity.failure("评分范围为 0-10");
             }
-            bookService.score(scoreVo);
+            bookService.insertScore(scoreVo);
             return ResultEntity.success();
         } catch (RuntimeException e) {
-            log.error("book/score发生错误:{}", e.getMessage());
+            log.error("book/insertScore发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/update/score")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<String> updateScore(@Valid @RequestBody ScoreVo scoreVo) {
+        try {
+            if (scoreVo.getScore() < 0 || scoreVo.getScore() > 10) {
+                return ResultEntity.failure("评分范围为 0-10");
+            }
+            bookService.updateScore(scoreVo);
+            return ResultEntity.success();
+        } catch (RuntimeException e) {
+            log.error("book/updateScore发生错误:{}", e.getMessage());
             return ResultEntity.failure(e.getMessage());
         }
     }
 
     @GetMapping("/validate/score")
     @RoleSecurity(RoleConstants.ROLE_USER)
-    public ResultEntity<Boolean> validateScore(@RequestParam Long bId)  {
+    public ResultEntity<Boolean> validateScore(@RequestParam Long bId) {
         try {
             Integer uId = jwtUtils.getId();
-            ScoreDTO  scoreDTO = new ScoreDTO();
+            ScoreDTO scoreDTO = new ScoreDTO();
             scoreDTO.setBId(bId);
             scoreDTO.setAId(uId);
             return bookService.validateScore(scoreDTO);
@@ -129,10 +143,6 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
-
-
-
-
 
 
 }

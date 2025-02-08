@@ -1,16 +1,14 @@
 import { Get } from "../get";
 import { Post } from "../post";
 
-export function score(
+export function insert_score(
   bId: number,
   score: number,
   success: Function,
   failure: Function,
 ) {
-  console.log("bId: ", bId);
-  console.log("score: ", score);
   Post(
-    "/api/user/book/score",
+    "/api/user/book/insert/score",
     {
       score: score,
       bId: bId,
@@ -23,6 +21,30 @@ export function score(
     },
   );
 }
+
+export function update_score(
+  bId: number,
+  score: number,
+  success: Function,
+  failure: Function,
+) {
+  console.log("bId: ", bId);
+  console.log("score: ", score);
+  Post(
+    "/api/user/book/update/score",
+    {
+      score: score,
+      bId: bId,
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+  );
+}
+
 
 export function validate_score(
   bId: number,

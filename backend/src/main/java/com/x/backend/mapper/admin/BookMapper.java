@@ -12,8 +12,12 @@ import java.util.List;
 @Mapper
 public interface BookMapper {
     Integer insertBook(Book book);
-    Integer score(ScoreDTO scoreDTO);
-    void batchUpdateScore(List<ScoreDTO> scoreList);
+    Integer insertScore(ScoreDTO scoreDTO);
+    void batchInsertScore(List<ScoreDTO> scoreList);
 
     Integer updateBookRatingAndUsers(UpdateBookRatingDTO updateBookRatingDTO);
+
+    Integer deleteBookScore(ScoreDTO scoreDTO);
+
+    Integer updateBookUsers(ScoreDTO scoreDTO);
 }

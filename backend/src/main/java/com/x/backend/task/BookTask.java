@@ -27,7 +27,7 @@ public class BookTask {
 
 
     @Transactional(rollbackFor = RuntimeException.class)
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "* * 3 * * ?")
     public void updateBookRating() {
         try {
             // Redis中存入格式为 "book-score-user-{userId}-{bookId}"
@@ -71,7 +71,7 @@ public class BookTask {
             }
 
             log.info("更新书籍评分，更新条数：{}", scoreList.size());
-            bookMapper.batchUpdateScore(scoreList);
+            bookMapper.batchInsertScore(scoreList);
 
             // 更新书籍评分信息
             bookRatingMap.forEach((bookId, bookData) -> {
