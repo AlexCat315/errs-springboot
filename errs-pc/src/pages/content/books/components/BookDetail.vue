@@ -81,8 +81,7 @@ const imgSrc = (book: Book) => {
 // 检查用户是否登录
 // 如果没有登录，显示的就是灰色的收藏按钮
 const showLike = ref(false);
-
-onMounted(() => {
+const cheekToken = () => {
     // 检测是否有token
     const token = ref(localStorage.getItem("token"));
     if (
@@ -119,6 +118,11 @@ onMounted(() => {
             },
         );
     }
+};
+
+onMounted(() => {
+    cheekToken();
+    ValidateScore();
 });
 
 const cancelLike = () => {
@@ -176,11 +180,18 @@ const ValidateScore = () => {
     validate_score(
         currentIndex.value,
         (data: any) => {
-          scoreMessage.value = "已评价";
+            scoreMessage.value = "已评价";
         },
         (message: string) => {},
         (message: string) => {},
     );
+};
+const showEvaluated = () => {
+    showErrorpanle.value = true;
+    errorPanleMsg.value = "已评价";
+    setTimeout(() => {
+        showErrorpanle.value = false;
+    }, 2000);
 };
 </script>
 
@@ -272,7 +283,14 @@ const ValidateScore = () => {
                                 style="height: 40px; transform: scale(0.85)"
                             />
                             <Score
+                                v-if="scoreMessage === '评价'"
                                 @click="showStarScore = true"
+                                :score="scoreMessage"
+                                style="height: 40px; transform: scale(0.7)"
+                            />
+                            <Score
+                                @click="showEvaluated()"
+                                v-if="scoreMessage === '已评价'"
                                 :score="scoreMessage"
                                 style="height: 40px; transform: scale(0.7)"
                             />
@@ -475,5 +493,10 @@ h3 {
     animation: moveUp 0.4s ease-in-out forwards;
     font-size: 13px;
     border-radius: 8px;
+}
+:disabledscore {
+    pointer-events: none; /* 禁止鼠标事件 */
+    cursor: not-allowed; /* 改变鼠标指针样式 */
+    opacity: 0.6;
 }
 </style>
