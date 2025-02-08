@@ -2,7 +2,6 @@ package com.x.backend.mapper.user;
 
 
 import com.x.backend.pojo.common.Account;
-import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.account.ForgotPasswordDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import org.apache.ibatis.annotations.Mapper;

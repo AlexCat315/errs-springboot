@@ -158,16 +158,11 @@ public class MinioUtils {
 
     // 删除文件
     public void deleteFile(String fileName) throws Exception {
-        minioClient.removeObject(
-                RemoveObjectArgs.builder()
-                        .bucket(bucketName)
-                        .object(fileName)
-                        .build()
-        );
+        deleteFile(fileName, "private");
     }
 
     public void pubDeleteFile(String fileName) throws Exception {
-
+        deleteFile(fileName, "public");
     }
 
     private void deleteFile(String fileName, String accessibility) throws Exception {

@@ -6,7 +6,6 @@ import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.service.user.BookService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
