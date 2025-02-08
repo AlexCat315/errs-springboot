@@ -36,7 +36,8 @@ pub async fn post_request(
             request_builder = request_builder.header(&key, &value);
         }
     }
-
+    
+    println!("Received body: {:?}", body);
     if let Some(json_body) = body {
         request_builder = request_builder.json(&json_body);
     }

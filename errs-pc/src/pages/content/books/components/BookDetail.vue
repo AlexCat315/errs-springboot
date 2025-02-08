@@ -11,7 +11,7 @@ import Score from "./Score.vue";
 import StarScore from "./StarScore.vue";
 import Cancel from "./Cancel.vue";
 import { open } from "@tauri-apps/plugin-shell";
-import { show } from "@tauri-apps/api/app";
+import { score, validate_score } from "../../../../net/book/score";
 
 interface Book {
     id: number;
@@ -43,9 +43,7 @@ const currentIndex = inject<Ref<number | null>>("currentIndex");
 if (currentIndex === undefined) {
     throw new Error("Function not implemented.");
 }
-const goBack = () => {
-    currentIndex.value = null;
-};
+
 const getBookDetail = () => {
     // 获取书籍详情
     get_book_detail(
@@ -144,15 +142,45 @@ const showStarScore = ref(false);
 
 const selectedScore = ref(null);
 
-const handleRatingChange = (value:number) => {
+const handleRatingChange = (value: number) => {
     selectedScore.value = value * 2;
-    console.log("选中的评分:", selectedScore.value);
-    showStarScore.value = false;
-    showErrorpanle.value = true;
-    errorPanleMsg.value = "评分成功";
-    setTimeout(() => {
-        showErrorpanle.value = false;
-    }, 2000);
+    score(
+        currentIndex.value,
+        selectedScore.value,
+        (data: any) => {
+            console.log(data);
+            showStarScore.value = false;
+            showErrorpanle.value = true;
+            errorPanleMsg.value = "评分成功";
+            setTimeout(() => {
+                showErrorpanle.value = false;
+            }, 2000);
+        },
+        (message: string) => {
+            showStarScore.value = false;
+            showErrorpanle.value = true;
+            errorPanleMsg.value = "发生错误";
+            setTimeout(() => {
+                showErrorpanle.value = false;
+            }, 2000);
+            console.log("failure:", message);
+        },
+    );
+};
+
+const goBack = () => {
+    currentIndex.value = null;
+};
+
+const ValidateScore = () => {
+    validate_score(
+        currentIndex.value,
+        (data: any) => {
+          scoreMessage.value = "已评价";
+        },
+        (message: string) => {},
+        (message: string) => {},
+    );
 };
 </script>
 
@@ -268,7 +296,11 @@ const handleRatingChange = (value:number) => {
                             />
                             <Cancel
                                 @click="showStarScore = false"
-                                style="margin-left: -15px; margin-top: 8px;margin-right: 10px;"
+                                style="
+                                    margin-left: -15px;
+                                    margin-top: 8px;
+                                    margin-right: 10px;
+                                "
                             />
                         </div>
                     </div>

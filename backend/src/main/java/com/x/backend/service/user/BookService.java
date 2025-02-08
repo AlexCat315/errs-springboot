@@ -1,7 +1,10 @@
 package com.x.backend.service.user;
 
+import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
+import com.x.backend.pojo.user.dto.book.ScoreDTO;
+import com.x.backend.pojo.user.vo.request.book.ScoreVo;
 
 import java.util.List;
 
@@ -17,4 +20,8 @@ public interface BookService {
     Book selectBookDetail(Long id);
 
     Boolean  validateLike(IsLikeBook isLike);
+
+    void score(ScoreVo scoreVo);
+
+    ResultEntity<Boolean> validateScore(ScoreDTO scoreDTO);
 }

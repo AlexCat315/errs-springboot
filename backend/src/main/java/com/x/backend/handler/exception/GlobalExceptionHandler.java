@@ -11,6 +11,7 @@ import java.io.IOException;
 
 import java.util.stream.Collectors;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,13 +25,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SecurityException.class)
     public ResultEntity<String> handleSecurityException(SecurityException e) {
-        log.error("SecurityException: {}", e.getMessage());
+        log.error("SecurityException: ",e);
         return ResultEntity.failure(404, e.getMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResultEntity<String> handleRuntimeException(RuntimeException e) {
-        log.error("RuntimeException: {}", e.getMessage());
+        log.error("RuntimeException: ", e);
         return ResultEntity.failure(HttpMessageConstants.ERROR);
     }
 
@@ -47,7 +48,7 @@ public class GlobalExceptionHandler {
             HttpServletResponse response) throws IOException {
         // 1. 提取校验失败的错误消息
         String errorMsg = ex.getBindingResult().getFieldErrors().stream()
-                .map(fieldError -> fieldError.getDefaultMessage())
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(", "));
 
         // 2. 设置响应状态码和内容类型

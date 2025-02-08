@@ -39,4 +39,10 @@
         where id = #{id}
     </select>
 
+    <!--  查询用户是否评价过  -->
+    <select id="validateScore" resultType="java.lang.Boolean">
+        SELECT EXISTS (SELECT 1 FROM book_score WHERE a_id = #{aId} AND b_id = #{bId}) AS is_like
+    </select>
+
+
 </mapper>

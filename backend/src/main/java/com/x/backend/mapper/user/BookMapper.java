@@ -2,6 +2,9 @@ package com.x.backend.mapper.user;
 
 import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
+import com.x.backend.pojo.user.dto.book.ScoreDTO;
+import com.x.backend.pojo.user.dto.book.UpdateBookRatingDTO;
+import com.x.backend.pojo.user.vo.request.book.ScoreVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -22,6 +25,10 @@ public interface BookMapper {
 
     Book selectBookDetail(Long id);
 
-    @Select("SELECT EXISTS (SELECT 1 FROM like_book WHERE a_id = #{aId} AND b_id = #{bId}) AS is_like")
+    @Select("SELECT EXISTS (SELECT 1 FROM book_like WHERE a_id = #{aId} AND b_id = #{bId}) AS is_like")
     Boolean validateLike(IsLikeBook isLike);
+
+
+
+    Boolean validateScore(ScoreDTO scoreDTO);
 }

@@ -5,14 +5,18 @@ import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
+import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.book.ScoreVo;
 import com.x.backend.service.user.BookService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Scanner;
 
 @Slf4j
 @RestController("userBookController")
@@ -95,6 +99,39 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
+
+    @PostMapping("/score")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<String> score(@Valid @RequestBody ScoreVo scoreVo) {
+        try {
+            if (scoreVo.getScore() < 0 || scoreVo.getScore() > 10) {
+                return ResultEntity.failure("评分范围为 0-10");
+            }
+            bookService.score(scoreVo);
+            return ResultEntity.success();
+        } catch (RuntimeException e) {
+            log.error("book/score发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @GetMapping("/validate/score")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<Boolean> validateScore(@RequestParam Long bId)  {
+        try {
+            Integer uId = jwtUtils.getId();
+            ScoreDTO  scoreDTO = new ScoreDTO();
+            scoreDTO.setBId(bId);
+            scoreDTO.setAId(uId);
+            return bookService.validateScore(scoreDTO);
+        } catch (RuntimeException e) {
+            log.error("book/validate-score发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+
+
 
 
 
