@@ -8,6 +8,8 @@ import { validate_like } from "../../../../net/book/validate_like";
 import Star from "./Star.vue";
 import GoLink from "./GoLink.vue";
 import Score from "./Score.vue";
+import StarScore from "./StarScore.vue";
+import Cancel from "./Cancel.vue";
 import { open } from "@tauri-apps/plugin-shell";
 
 interface Book {
@@ -134,9 +136,22 @@ const openLink = () => {
 };
 
 const scoreMessage = ref("评价");
+
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
+const showStarScore = ref(false);
+
+const selectedScore = ref(null);
+
+const handleRatingChange = (value:number) => {
+    selectedScore.value = value * 2;
+    console.log("选中的评分:", selectedScore.value);
+};
 </script>
 
 <template>
+    <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+
     <div class="top-bar">
         <button class="top-button" @click="goBack()">
             <svg
@@ -211,16 +226,44 @@ const scoreMessage = ref("评价");
 
                     <!-- 右边的元素 -->
                     <div style="display: flex; align-items: center">
-                        <Like v-if="!showLike" @click="addLike()" />
-                        <UnLike v-if="showLike" @click="cancelLike()" />
-                        <GoLink
-                            @click="openLink()"
-                            style="height: 40px; transform: scale(0.85)"
-                        />
-                        <Score
-                            :score="scoreMessage"
-                            style="height: 40px; transform: scale(0.7)"
-                        />
+                        <div
+                            v-if="!showStarScore"
+                            style="display: flex; align-items: center"
+                        >
+                            <Like v-if="!showLike" @click="addLike()" />
+                            <UnLike v-if="showLike" @click="cancelLike()" />
+                            <GoLink
+                                @click="openLink()"
+                                style="height: 40px; transform: scale(0.85)"
+                            />
+                            <Score
+                                @click="showStarScore = true"
+                                :score="scoreMessage"
+                                style="height: 40px; transform: scale(0.7)"
+                            />
+                        </div>
+                        <div
+                            v-if="showStarScore"
+                            style="
+                                display: flex;
+                                align-items: center;
+                                background-color: #fff;
+                                border-radius: 60px;
+                                box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+                                height: 38px;
+                                margin-top: 4px;
+                                padding-bottom: 4px;
+                            "
+                        >
+                            <StarScore
+                                @update:modelValue="handleRatingChange"
+                                style="transform: scale(0.7)"
+                            />
+                            <Cancel
+                                @click="showStarScore = false"
+                                style="margin-left: -15px; margin-top: 8px;margin-right: 10px;"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -362,5 +405,36 @@ h3 {
 .book_rating_item_label_text.book_rating_item_label_ListItem {
     flex-shrink: 0;
     margin-left: 8px;
+}
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+.error-msg {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
 }
 </style>
