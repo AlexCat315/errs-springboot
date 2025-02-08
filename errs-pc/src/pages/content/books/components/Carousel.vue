@@ -22,9 +22,9 @@
                     controls
                     :key="currentIndex"
                     autoplay
-                    @play="onVideoPlay"
-                    @ended="onVideoEnded"
-                    @waiting="onVideoPlay"
+                    @play="onVideoPlay()"
+                    @ended="onVideoEnded()"
+                    @canplay="onVideoPlay()"
                     muted
                     ref="videoPlayer"
                 >
