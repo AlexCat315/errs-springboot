@@ -26,16 +26,23 @@
                 >
                     <div class="card-inner">
                         <!-- 正面内容 -->
-                        <div class="card-front">
+                        <div
+                            :style="{
+                                background:
+                                    globalTheme === 'dark' ? '#3e3838' : '#fff',
+                            }"
+                            class="card-front"
+                        >
                             <div class="card-content">
-                                <div class="card-header">
-                                    <span
-                                        v-for="cat in item.category"
-                                        :key="cat"
-                                        :style="{ background: colorsRandom() }"
-                                        class="category-tag"
-                                        >{{ cat }}</span
-                                    >
+                                <div
+                                    :style="{
+                                        background:
+                                            globalTheme === 'dark'
+                                                ? '#3e3838'
+                                                : '#fff',
+                                    }"
+                                    class="card-header"
+                                >
                                     <div class="rating">
                                         <span class="score">{{
                                             item.rating
@@ -57,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div style="margin-top: -20px">
-                                    <h3 class="title">{{ item.name }}</h3>
+                                    <h3 :style="{color: globalTheme === 'dark'?'#FFF':'#333'}" class="title">{{ item.name }}</h3>
                                     <p
                                         style="
                                             margin-top: -9px;
@@ -70,7 +77,7 @@
                                     </p>
                                 </div>
 
-                                <p class="description">
+                                <p :style="{color: globalTheme === 'dark'?'#767676':'#333'}" class="description">
                                     {{ item.description }}
                                 </p>
                                 <div
@@ -134,7 +141,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 书籍基本页 -->
     <div v-if="currentIndex !== null">
         <BookDetail />

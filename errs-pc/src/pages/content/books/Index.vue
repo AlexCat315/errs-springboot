@@ -256,41 +256,70 @@ const showBookList = (id: Number) => {
         <div v-if="!globalShowBookList">
             <div>
                 <div>
-                    <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="
+                    <p
+                        :style="{
+                            color: globalTheme === 'dark' ? '#FFF' : 'black',
+                        }"
+                        style="
                             font-size: 29px;
                             font-family: Arial, Helvetica, sans-serif;
                             font-weight: bold;
                             margin-left: 30px;
-                        ">
+                        "
+                    >
                         图书
                     </p>
                 </div>
                 <div style="margin-top: 10px" class="divider-top"></div>
             </div>
             <!-- 轮播图或视频，左侧是文字，右侧是视频或者图片 -->
-            <Carousel :mediaList="mediaList" :textList="textList" @currentIndexChanged="handleCurrentIndexChange" />
+            <Carousel
+                :mediaList="mediaList"
+                :textList="textList"
+                @currentIndexChanged="handleCurrentIndexChange"
+            />
 
             <div class="entertainment-container">
                 <!-- 推荐分类区块 -->
-                <div v-for="category in state.categories" :key="category.id" class="category-section">
+                <div
+                    v-for="category in state.categories"
+                    :key="category.id"
+                    class="category-section"
+                >
                     <div class="section-header">
-                        <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="
+                        <p
+                            :style="{
+                                color:
+                                    globalTheme === 'dark' ? '#FFF' : 'black',
+                            }"
+                            style="
                                 font-size: 19px;
                                 font-family: Arial, Helvetica, sans-serif;
                                 font-weight: bold;
-                            ">
+                            "
+                        >
                             {{ category.name }}
                         </p>
-                        <ViewAll @click="showBookList(category.id)" class="view-all" />
+                        <ViewAll
+                            @click="showBookList(category.id)"
+                            class="view-all"
+                        />
                     </div>
                     <div class="recommend-grid">
-                        <div v-for="item in getItemsByCategory(category.id)" :key="item.id" class="recommend-card">
+                        <div
+                            v-for="item in getItemsByCategory(category.id)"
+                            :key="item.id"
+                            class="recommend-card"
+                        >
                             <div class="card-inner">
                                 <!-- 正面内容 -->
-                                <div class="card-front" :style="{
-                                    backgroundImage:
-                                        'url(' + item.img + ')',
-                                }">
+                                <div
+                                    class="card-front"
+                                    :style="{
+                                        backgroundImage:
+                                            'url(' + item.img + ')',
+                                    }"
+                                >
                                     <div class="overlay"></div>
                                     <div class="back-content">
                                         <h3 class="back-title">
@@ -299,7 +328,7 @@ const showBookList = (id: Number) => {
                                         <p class="back-rating">
                                             <span class="score">{{
                                                 item.rating
-                                                }}</span>
+                                            }}</span>
                                             <span class="stars">
                                                 {{
                                                     "★".repeat(
@@ -310,64 +339,101 @@ const showBookList = (id: Number) => {
                                                 }}{{
                                                     "☆".repeat(
                                                         5 -
-                                                        Math.round(
-                                                            item.rating / 2,
-                                                        ),
+                                                            Math.round(
+                                                                item.rating / 2,
+                                                            ),
                                                     )
                                                 }}
                                             </span>
                                         </p>
-                                        <button @click="goDetail(item.id)" class="detail-btn">
+                                        <button
+                                            @click="goDetail(item.id)"
+                                            class="detail-btn"
+                                        >
                                             查看详情
                                         </button>
                                     </div>
                                 </div>
 
                                 <!-- 背面内容 -->
-                                <div class="card-back">
+                                <div
+                                    :style="{
+                                        background:
+                                            globalTheme === 'dark'
+                                                ? '#3e3838'
+                                                : '#fff',
+                                    }"
+                                    class="card-back"
+                                >
                                     <div class="card-content">
-                                        <div class="card-header">
-                                            <span v-for="cat in item.category" :key="cat" :style="{
-                                                background: colorsRandom(),
-                                            }" class="category-tag">{{ cat }}</span>
+                                        <div
+                                            :style="{
+                                                background:
+                                                    globalTheme === 'dark'
+                                                        ? '#3e3838'
+                                                        : '#fff',
+                                            }"
+                                            class="card-header"
+                                        >
                                             <div class="rating">
                                                 <span class="score">{{
                                                     item.rating
-                                                    }}</span>
+                                                }}</span>
                                                 <div class="stars">
-                                                    <span v-for="n in 5" :key="n" class="star">
+                                                    <span
+                                                        v-for="n in 5"
+                                                        :key="n"
+                                                        class="star"
+                                                    >
                                                         {{
-                                                            n <= Math.round(item.rating / 2,) ? "★" : "☆" }} </span>
+                                                            n <=
+                                                            Math.round(
+                                                                item.rating / 2,
+                                                            )
+                                                                ? "★"
+                                                                : "☆"
+                                                        }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div style="margin-top: -20px">
-                                            <h3 class="title">
+                                            <h3 :style="{color: globalTheme === 'dark'?'#FFF':'#333'}" class="title">
                                                 {{ item.name }}
                                             </h3>
-                                            <p style="
+                                            <p
+                                                style="
                                                     margin-top: -9px;
                                                     color: #8a929b;
                                                     font-family: Tahoma, Geneva,
                                                         Verdana, sans-serif;
-                                                ">
+                                                "
+                                            >
                                                 {{ item.author }}
                                             </p>
                                         </div>
 
-                                        <p class="description">
+                                        <p :style="{color: globalTheme === 'dark'?'#767676':'#333'}" class="description">
                                             {{ item.description }}
                                         </p>
-                                        <div class="actions" style="
+                                        <div
+                                            class="actions"
+                                            style="
                                                 padding-right: 20px;
                                                 margin-bottom: 20px;
-                                            ">
-                                            <button @click="goDetail(item.id)" class="get-btn">
-                                                {{
-                                                    "查看详情"
-                                                }}
+                                            "
+                                        >
+                                            <button
+                                                @click="goDetail(item.id)"
+                                                class="get-btn"
+                                            >
+                                                {{ "查看详情" }}
                                             </button>
-                                            <span v-if="item.users" class="users">{{ item.users }}人评价</span>
+                                            <span
+                                                v-if="item.users"
+                                                class="users"
+                                                >{{ item.users }}人评价</span
+                                            >
                                         </div>
                                     </div>
                                 </div>
