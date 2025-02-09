@@ -48,7 +48,7 @@ import ViewAll from "./components/games/ViewAll.vue";
     margin-right: 20px;
 }
 .gard {
-    display: grid;
+
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 1rem;
     margin-top: -20px;
@@ -60,12 +60,10 @@ import ViewAll from "./components/games/ViewAll.vue";
     margin-bottom: 20px;
 }
 .card {
-
     height: 130px;
-    transform: scale(0.8);
     cursor: pointer;
-    border-radius: 9.6px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1) !important; /* 添加阴影效果 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    width: 100%;
 
 }
 </style>
