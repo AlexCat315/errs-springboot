@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { ref, inject, Ref, onMounted } from "vue";
-import { get_book_detail } from "../../../../net/book/get_book";
+import {inject, onMounted, Ref, ref} from "vue";
+import {get_book_detail} from "../../../../../net/book/get_book";
 import Like from "./Like.vue";
 import UnLike from "./UnLike.vue";
-import { validate_token } from "../../../../net/account/validate_token";
-import { validate_like } from "../../../../net/book/validate_like";
+import {validate_token} from "../../../../../net/account/validate_token";
+import {validate_like} from "../../../../../net/book/validate_like";
 import Star from "./Star.vue";
 import GoLink from "./GoLink.vue";
 import Score from "./Score.vue";
 import StarScore from "./StarScore.vue";
 import Cancel from "./Cancel.vue";
-import { open } from "@tauri-apps/plugin-shell";
-import { insert_score, validate_score } from "../../../../net/book/score";
+import {open} from "@tauri-apps/plugin-shell";
+import {insert_score, validate_score} from "../../../../../net/book/score";
 import UpdateStar from "./UpdateStar.vue";
 import Comment from "./Comment.vue";
 import EditComment from "./EditComment.vue";

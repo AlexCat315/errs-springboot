@@ -86,8 +86,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
-import { defineEmits } from "vue";
+import {computed, defineEmits, onBeforeUnmount, onMounted, ref} from "vue";
 
 // 使用 emit 触发自定义事件
 const emit = defineEmits();

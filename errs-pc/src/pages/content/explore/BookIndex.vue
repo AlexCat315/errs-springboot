@@ -167,11 +167,10 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, Ref } from "vue";
-import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入validate_email方法
-import ViewAll from "./components/ViewAll.vue";
-import { inject } from "vue";
-import BookDetail from "./components/BookDetail.vue";
+import {inject, onMounted, reactive, Ref} from "vue";
+import {get_book_top250_info} from "../../../net/explore/get_book"; // 导入validate_email方法
+import ViewAll from "./components/book/ViewAll.vue";
+import BookDetail from "./components/book/BookDetail.vue";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {

@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject, onMounted, ref, Ref } from "vue";
+import {inject, onMounted, ref, Ref} from "vue";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {

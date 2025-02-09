@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject } from "vue";
+import {inject} from "vue";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {
@@ -15,19 +15,19 @@ if (globalTheme === undefined) {
         class="btn"
     >
         <svg
-            t="1739071317766"
+            t="1738922873354"
             class="icon"
             viewBox="0 0 1024 1024"
             version="1.1"
             xmlns="http://www.w3.org/2000/svg"
-            p-id="12496"
-            width="11"
-            height="11"
+            p-id="14663"
+            width="25"
+            height="25"
         >
             <path
-                d="M544.568 463.452L144.384 46.438a64.655 64.655 0 0 0-94.141 0 71.5 71.5 0 0 0 0 98.187l353.024 367.943L50.243 880.415a71.613 71.613 0 0 0 0 98.196 64.681 64.681 0 0 0 94.141 0l400.18-416.952a71.5 71.5 0 0 0 0.004-98.207z m434.34 0L578.73 46.438a64.655 64.655 0 0 0-94.147 0 71.5 71.5 0 0 0 0 98.187l353.024 367.943-353.024 367.847a71.613 71.613 0 0 0 0 98.196 64.681 64.681 0 0 0 94.147 0l400.18-416.952a71.5 71.5 0 0 0 0-98.207z"
-                :fill="globalTheme === 'dark' ? '#FFF' : '#8a8a8a'"
-                p-id="12497"
+                d="M512 182.857143c-181.638095 0-329.142857 147.504762-329.142857 329.142857s147.504762 329.142857 329.142857 329.142857 329.142857-147.504762 329.142857-329.142857-147.504762-329.142857-329.142857-329.142857z m37.790476 448.609524V560.761905s-163.352381-4.87619-256 114.590476c43.885714-227.961905 256-284.038095 256-284.038095v-67.047619l182.857143 151.161904-182.857143 156.038096z"
+                fill="#ff6d00"
+                p-id="14664"
             ></path>
         </svg>
     </button>
@@ -38,18 +38,18 @@ if (globalTheme === undefined) {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 35px;
-    height: 35px;
+    width:  60px;
+    height: 60px;
     border-radius: 10px;
     cursor: pointer;
     border: none;
     background-color: transparent;
     position: relative;
-    margin-top: 10%;
+    margin-right: -10px;
 }
 
 .btn::after {
-    content: "查看全部";
+    content: "分享";
     width: fit-content;
     height: fit-content;
     position: absolute;
@@ -63,8 +63,8 @@ if (globalTheme === undefined) {
 }
 
 .icon {
-    width: 30px;
-    height: 30px;
+    width: 45px;
+    height: 45px;
     transition: 0.2s linear;
 }
 
@@ -77,7 +77,7 @@ if (globalTheme === undefined) {
 }
 
 .btn:hover > .icon path {
-    fill: #1296db;
+    fill: #fc607b;
 }
 
 .btn:hover::after {

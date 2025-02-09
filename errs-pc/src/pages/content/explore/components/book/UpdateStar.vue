@@ -149,10 +149,10 @@
 </template>
 
 <script setup lang="ts">
-import { inject, Ref, ref } from "vue";
-import { update_score } from "../../../../net/book/score";
+import {inject, Ref, ref} from "vue";
+import {update_score} from "../../../../../net/book/score";
 import StarScore from "./StarScore.vue";
-import { debounce } from "lodash";
+import {debounce} from "lodash";
 
 const currentIndex = inject<Ref<number | null>>("currentIndex");
 if (currentIndex === undefined) {

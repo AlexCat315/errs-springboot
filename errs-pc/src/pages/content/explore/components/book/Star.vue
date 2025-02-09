@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, computed } from 'vue';
+import {computed, defineProps} from 'vue';
 
 const props = defineProps({
   score: {

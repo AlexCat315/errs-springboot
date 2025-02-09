@@ -437,7 +437,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import {inject} from "vue";
 
 const globalTheme = inject<string>("globalTheme");
 </script>

@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { onMounted, ref, inject, Ref, watch } from "vue";
+import {inject, onMounted, ref, Ref, watch} from "vue";
 import {
-    get_book_top250_info,
-    get_book_top50_info,
-    get_book_welcome_info,
-    get_book_hot_info,
-} from "../../../../net/book/get_book";
+  get_book_hot_info,
+  get_book_top250_info,
+  get_book_top50_info,
+  get_book_welcome_info,
+} from "../../../../../net/book/get_book";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {
