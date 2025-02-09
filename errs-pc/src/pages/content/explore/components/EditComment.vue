@@ -250,9 +250,27 @@
 </style>
 
 <template>
-    <div class="text-box">
-        <div class="box-container">
-            <textarea style="width: 98%;" placeholder="撰写您的想法💡"></textarea>
+    <div
+        :style="{
+            background: globalTheme === 'dark' ? '#100f0f' : '#fff',
+        }"
+        class="text-box"
+    >
+        <div
+            :style="{
+                color: globalTheme === 'dark' ? '#898989' : '#5f6064',
+                background: globalTheme === 'dark' ? '#3d3d44' : '#fff',
+            }"
+            class="box-container"
+        >
+            <textarea
+                :style="{
+                    color: globalTheme === 'dark' ? '#898989' : '#5f6064',
+                    background: globalTheme === 'dark' ? '#3d3d44' : '#fff',
+                }"
+                style="width: 98%"
+                placeholder="撰写您的想法💡"
+            ></textarea>
             <div>
                 <div class="formatting">
                     <button type="button">
@@ -417,3 +435,9 @@
         </div>
     </div>
 </template>
+
+<script setup lang="ts">
+import { inject } from "vue";
+
+const globalTheme = inject<string>("globalTheme");
+</script>
