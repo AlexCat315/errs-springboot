@@ -1,5 +1,5 @@
 <template>
-    <div class="entertainment-container">
+    <div v-if="currentIndex === null" class="entertainment-container">
         <!-- 推荐分类区块 -->
         <div
             v-for="category in state.categories"
@@ -7,7 +7,12 @@
             class="category-section"
         >
             <div class="section-header">
-                <p :style="{color: globalTheme === 'dark' ? '#FFF' : 'black'}" style="font-size: 23px; font-family: yousu-title-black">
+                <p
+                    :style="{
+                        color: globalTheme === 'dark' ? '#FFF' : 'black',
+                    }"
+                    style="font-size: 23px; font-family: yousu-title-black"
+                >
                     {{ category.name }}
                 </p>
                 <ViewAll class="view-all" />
@@ -75,7 +80,10 @@
                                         margin-bottom: 20px;
                                     "
                                 >
-                                    <button class="get-btn">
+                                    <button
+                                        @click="goDetail(item.id)"
+                                        class="get-btn"
+                                    >
                                         {{
                                             item.price
                                                 ? `¥${item.price}`
@@ -113,7 +121,12 @@
                                         }}
                                     </span>
                                 </p>
-                                <button class="detail-btn">查看详情</button>
+                                <button
+                                    @click="goDetail(item.id)"
+                                    class="detail-btn"
+                                >
+                                    查看详情
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -121,18 +134,33 @@
             </div>
         </div>
     </div>
+    
+    <!-- 书籍基本页 -->
+    <div v-if="currentIndex !== null">
+        <BookDetail />
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, Ref } from "vue";
 import { get_book_top250_info } from "../../../net/explore/get_book"; // 导入validate_email方法
 import ViewAll from "./components/ViewAll.vue";
 import { inject } from "vue";
+import BookDetail from "./components/BookDetail.vue";
 
 const globalTheme = inject<string>("globalTheme");
 if (globalTheme === undefined) {
     throw new Error("Function not implemented.");
 }
+
+const currentIndex = inject<Ref<number>>("currentIndex");
+if (currentIndex === undefined) {
+    throw new Error("currentIndex is undefined");
+}
+const goDetail = (id: number) => {
+    console.log("goDetail", id);
+    currentIndex.value = id;
+};
 
 interface EntertainmentItem {
     id: number;

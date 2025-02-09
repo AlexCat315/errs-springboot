@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import {inject, onBeforeUnmount, onMounted, reactive, ref} from "vue";
+import { inject, onBeforeUnmount, onMounted, reactive, Ref, ref } from "vue";
 import Explore from "./explore/Index.vue";
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
 const showTitle = ref(false); // 控制标题显示状态
+
+const currentIndexDetil = inject<Ref<number>>("currentIndex");
+if (currentIndexDetil === undefined) {
+    throw new Error("currentIndex is undefined");
+}
 
 // 定义一个 ref 来存储滚动的 Y 轴距离
 const scrollY = ref(0);
@@ -107,6 +112,7 @@ onBeforeUnmount(() => {
 
         <!-- 轮播图 -->
         <div
+            v-if="currentIndexDetil === null"
             class="carousel"
             @mouseenter="showButtons = true"
             @mouseleave="showButtons = false"
@@ -153,7 +159,6 @@ onBeforeUnmount(() => {
         </div>
         <div>
             <Explore />
-            <!-- 省略其他内容 -->
         </div>
     </div>
 </template>
