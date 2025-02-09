@@ -59,6 +59,10 @@ const handleCurrentIndexChange = (newIndex: number) => {
     }
 };
 
+const goDetail = (id: number) => {
+    currentIndex.value = id;
+};
+
 interface EntertainmentItem {
     id: number;
     name: string;
@@ -313,7 +317,7 @@ const showBookList = (id: Number) => {
                                                 }}
                                             </span>
                                         </p>
-                                        <button class="detail-btn">
+                                        <button @click="goDetail(item.id)" class="detail-btn">
                                             查看详情
                                         </button>
                                     </div>
@@ -358,7 +362,7 @@ const showBookList = (id: Number) => {
                                                 padding-right: 20px;
                                                 margin-bottom: 20px;
                                             ">
-                                            <button class="get-btn">
+                                            <button @click="goDetail(item.id)" class="get-btn">
                                                 {{
                                                     "查看详情"
                                                 }}

@@ -12,6 +12,14 @@ if (globalTheme === undefined) {
     throw new Error("Function not implemented.");
 }
 
+const currentIndex = inject<Ref<number>>("currentIndex");
+if (currentIndex === undefined) {
+    throw new Error("currentIndex is undefined");
+}
+const goDetail = (id: number) => {
+    currentIndex.value = id;
+};
+
 interface Book {
     id: number;
     name: string;
@@ -208,7 +216,7 @@ const imgSrc = (book: Book) => {
 
 <template>
     <div ref="scrollContainer" @scroll="handleScroll" class="book-list">
-        <div v-for="(book, index) in books" :key="index" class="book-item">
+        <div @click="goDetail(book.id)" v-for="(book, index) in books" :key="index" class="book-item">
             <p class="index">{{ index + 1 }}</p>
             <img :src="book.img" alt="Book cover" class="book-cover" />
             <div class="wr_bookList_item_info">
