@@ -13,6 +13,9 @@ import Cancel from "./Cancel.vue";
 import { open } from "@tauri-apps/plugin-shell";
 import { insert_score, validate_score } from "../../../../net/book/score";
 import UpdateStar from "./UpdateStar.vue";
+import Comment from "./Comment.vue";
+import EditComment from "./EditComment.vue";
+import LookAll from "./LookAll.vue";
 
 interface Book {
     id: number;
@@ -212,10 +215,7 @@ const updateScore = (value: boolean) => {
         <div v-if="showLoading" class="loading-overlay">
             <UpdateStar
                 @update:modelValue="updateScore"
-                style="
-                    margin-left: 200px;
-                    margin-top: -120px;
-                "
+                style="margin-left: 200px; margin-top: -120px"
             />
         </div>
         <div class="top-bar">
@@ -362,6 +362,17 @@ const updateScore = (value: boolean) => {
                 </div>
             </div>
         </div>
+
+        <!-- 书籍评论 -->
+        <div class="comment-card">
+            <Comment class="comment-comment" />
+            <Comment class="comment-comment" />
+            <LookAll />
+        </div>
+
+        <div style="display: flex">
+            <EditComment />
+        </div>
     </div>
 </template>
 
@@ -396,6 +407,19 @@ const updateScore = (value: boolean) => {
     width: 88%;
     margin: 20px auto;
     font-family: Arial, Helvetica, sans-serif;
+}
+.comment-card {
+    display: flex;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    width: 88%;
+    margin: 20px auto;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.comment-comment {
+    margin: 20px;
 }
 
 .book-cover img {
