@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onBeforeUnmount, onMounted, reactive, Ref, ref } from "vue";
-import Explore from "./explore/Index.vue";
+import BookIndex from "./explore/BookIndex.vue";
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -158,7 +158,9 @@ onBeforeUnmount(() => {
             </button>
         </div>
         <div>
-            <Explore />
+            <!-- 书籍 -->
+            <BookIndex />
+            <!-- 游戏 -->
         </div>
     </div>
 </template>

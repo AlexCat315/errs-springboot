@@ -64,7 +64,17 @@
                                     </div>
                                 </div>
                                 <div style="margin-top: -20px">
-                                    <h3 :style="{color: globalTheme === 'dark'?'#FFF':'#333'}" class="title">{{ item.name }}</h3>
+                                    <h3
+                                        :style="{
+                                            color:
+                                                globalTheme === 'dark'
+                                                    ? '#FFF'
+                                                    : '#333',
+                                        }"
+                                        class="title"
+                                    >
+                                        {{ item.name }}
+                                    </h3>
                                     <p
                                         style="
                                             margin-top: -9px;
@@ -77,7 +87,15 @@
                                     </p>
                                 </div>
 
-                                <p :style="{color: globalTheme === 'dark'?'#767676':'#333'}" class="description">
+                                <p
+                                    :style="{
+                                        color:
+                                            globalTheme === 'dark'
+                                                ? '#767676'
+                                                : '#333',
+                                    }"
+                                    class="description"
+                                >
                                     {{ item.description }}
                                 </p>
                                 <div
@@ -190,12 +208,7 @@ interface Category {
 
 // 初始化 state
 const state = reactive({
-    categories: [
-        { id: 1, name: "精典书籍推荐" },
-        { id: 2, name: "热门电影推荐" },
-        { id: 3, name: "精选游戏合集" },
-        { id: 4, name: "高分剧集榜单" },
-    ] as Category[],
+    categories: [{ id: 1, name: "精典书籍推荐" }] as Category[],
     items: [] as EntertainmentItem[], // 初始化为空数组
 });
 
@@ -238,17 +251,6 @@ onMounted(() => {
     fetchItemsTop250(0); // 假设请求第一页数据
 });
 
-const colors = [
-    "#ec8236",
-    "#f56c6c",
-    "#67c23a",
-    "#e6a23c",
-    "#409eff",
-    "#c239e6",
-    "black",
-    "#5941d3",
-];
-const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 </script>
 
 <style scoped>
