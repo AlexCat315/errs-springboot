@@ -158,7 +158,7 @@ onBeforeUnmount(() => {
       <!-- 书籍 -->
       <BookIndex/>
       <!-- 游戏 -->
-      <GamesIndex/>
+      <GamesIndex v-if="currentIndexDetil === null"/>
     </div>
   </div>
 </template>
