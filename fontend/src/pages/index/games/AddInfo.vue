@@ -48,6 +48,7 @@ const gameCategories = ref([
     "射击",
     "格斗",
 ]);
+const selectGameCategories = ref([])
 
 const platformOptions = ref([
     "PC",
@@ -58,6 +59,16 @@ const platformOptions = ref([
     "Android",
     "VR",
 ]);
+const selectFormOptions = ref([])
+
+const selectGameCategoriestDropdownMenu = (select:string) =>{
+    // 添加进 selectGameCategories.value
+  selectGameCategories.value.push(select);
+}
+const selectPlatformOptions = (select:string) =>{
+    // 添加进 selectGameCategories.value
+  selectFormOptions.value.push(select);
+}
 
 // 当输入框变化时，确保下拉菜单同步
 const updateSelect = () => {
@@ -89,6 +100,7 @@ function handleVisible2(visible: any) {
         dropdown1.value.handleOpen();
     }
 }
+
 function showClick() {
     if (!dropdown1.value) return;
     dropdown1.value.handleOpen();
@@ -171,13 +183,14 @@ function showClick() {
                             required
                             style="width: 113px"
                             type="number"
+                            placeholder="10分制"
                         />
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="gameCategory">游戏分类：</label>
                     <el-input-tag
-                        v-model="gameCategory"
+                        v-model="selectGameCategories"
                         :tag-type="tagType()"
                         class="input-field"
                         placeholder="点击 Enter 键生成标签"
@@ -214,19 +227,9 @@ function showClick() {
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item
-                                        >Action 1</el-dropdown-item
-                                    >
-                                    <el-dropdown-item
-                                        >Action 2</el-dropdown-item
-                                    >
-                                    <el-dropdown-item
-                                        >Action 3</el-dropdown-item
-                                    >
-                                    <el-dropdown-item disabled
-                                        >Action 4</el-dropdown-item
-                                    >
-                                    <el-dropdown-item divided
-                                        >Action 5</el-dropdown-item
+                                    v-for="item in gameCategories"
+                                      @click="selectGameCategoriestDropdownMenu(item)"
+                                        >{{item}}</el-dropdown-item
                                     >
                                 </el-dropdown-menu>
                             </template>
@@ -237,7 +240,7 @@ function showClick() {
                 <div class="form-group" style="margin-top: -30px;">
                     <label for="gameCategory">运行平台</label>
                     <el-input-tag
-                        v-model="platformOptions"
+                        v-model="selectFormOptions"
                         :tag-type="tagType()"
                         class="input-field"
                         placeholder="点击 Enter 键生成标签"
@@ -272,15 +275,7 @@ function showClick() {
                         </el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item>Action 1</el-dropdown-item>
-                                <el-dropdown-item>Action 2</el-dropdown-item>
-                                <el-dropdown-item>Action 3</el-dropdown-item>
-                                <el-dropdown-item disabled
-                                    >Action 4</el-dropdown-item
-                                >
-                                <el-dropdown-item divided
-                                    >Action 5</el-dropdown-item
-                                >
+                                <el-dropdown-item v-for="item in platformOptions" @click="selectPlatformOptions(item)">{{item}}</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
