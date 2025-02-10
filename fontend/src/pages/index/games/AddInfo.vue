@@ -2,25 +2,25 @@
 import {ref} from "vue";
 import type {DropdownInstance, TagProps} from "element-plus";
 
-const gameName = ref("");
-const gameCategory = ref("");
-const gameScore = ref<number | null>(null);
-const gameDeveloper = ref("");
-const gamePlatforms = ref<string[]>([]);
-const releaseDate = ref("");
-const gameDescription = ref("");
-const gameCover = ref<string | null>(null);
+const gameName = ref("");  // 游戏名
+const gameScore = ref<number | null>(null);  // 分数
+const gameDeveloper = ref(""); //开发商
+const releaseDate = ref(""); //游戏发行时间
+const gameDescription = ref(""); //游戏简介
+const gameCover = ref<string | null>(null); //游戏封面
+const selectGameCategories = ref([]) //游戏类别
+const selectFormOptions = ref([]) // 游戏平台
 
 const handleSubmit = () => {
     console.log({
         gameName: gameName.value,
-        gameCategory: gameCategory.value,
         gameScore: gameScore.value,
         gameDeveloper: gameDeveloper.value,
-        gamePlatforms: gamePlatforms.value,
+        gamePlatforms: selectFormOptions.value,
         releaseDate: releaseDate.value,
         gameDescription: gameDescription.value,
         gameCover: gameCover.value,
+        gameCategories: selectGameCategories.value
     });
 };
 
@@ -48,7 +48,7 @@ const gameCategories = ref([
     "射击",
     "格斗",
 ]);
-const selectGameCategories = ref([])
+
 
 const platformOptions = ref([
     "PC",
@@ -59,7 +59,7 @@ const platformOptions = ref([
     "Android",
     "VR",
 ]);
-const selectFormOptions = ref([])
+
 
 const selectGameCategoriestDropdownMenu = (select:string) =>{
     // 添加进 selectGameCategories.value
