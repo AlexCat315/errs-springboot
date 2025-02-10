@@ -70,12 +70,6 @@ const selectPlatformOptions = (select:string) =>{
   selectFormOptions.value.push(select);
 }
 
-// 当输入框变化时，确保下拉菜单同步
-const updateSelect = () => {
-    if (!gameCategories.value.includes(gameCategory.value)) {
-        gameCategory.value = ""; // 如果输入的内容不在选项中，清空选择
-    }
-};
 
 const type: Array<TagProps["type"]> = [
     "primary",
@@ -92,19 +86,7 @@ const tagType = () => {
 };
 
 const dropdown1 = ref<DropdownInstance>();
-function handleVisible2(visible: any) {
-    if (!dropdown1.value) return;
-    if (visible) {
-        dropdown1.value.handleClose();
-    } else {
-        dropdown1.value.handleOpen();
-    }
-}
 
-function showClick() {
-    if (!dropdown1.value) return;
-    dropdown1.value.handleOpen();
-}
 </script>
 
 <template>
@@ -168,7 +150,6 @@ function showClick() {
                             class="input-field date-input"
                             required
                             style="width: 300px;padding-right: 0;"
-                            
                             type="date"
                         />
                     </div>
