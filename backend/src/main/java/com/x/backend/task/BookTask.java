@@ -6,16 +6,14 @@ import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.dto.book.UpdateBookRatingDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-
-import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.ScanOptions;
 
 @Slf4j
 @Component
@@ -27,7 +25,7 @@ public class BookTask {
 
 
     @Transactional(rollbackFor = RuntimeException.class)
-    @Scheduled(cron = "* * 3 * * ?")
+    @Scheduled(cron = "0 */30 * * * ?")
     public void updateBookRating() {
         try {
             // Redis中存入格式为 "book-score-user-{userId}-{bookId}"
