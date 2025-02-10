@@ -59,7 +59,9 @@ watch(selectIndex, (newValue, oldValue) => {
     if (newValue === oldValue) return;
     globalSelect.value = newValue;
     if (newValue === '3-1'){
-      tag.value = '  游戏管理 - 基本信息'
+      tag.value = '游戏管理 - 基本信息';
+    }else if (newValue === '3-2') {
+      tag.value = '游戏管理 - 添加信息';
     }
     
 });
@@ -290,5 +292,6 @@ const tag = ref("")
     font-size: 11px;
     color: #8a8a8a;
     margin-top: -15px;
+    margin-left: 10px;
 }
 </style>
