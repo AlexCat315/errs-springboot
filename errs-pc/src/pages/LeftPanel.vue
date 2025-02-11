@@ -6,12 +6,11 @@ const menuItems = [
   { key: 1, name: '探索', icon: new URL('../assets/icons/探索.svg', import.meta.url).href },
   { key: 2, name: '游戏', icon: new URL('../assets/icons/游戏.svg', import.meta.url).href },
   { key: 3, name: '图书', icon: new URL('../assets/icons/图书.svg', import.meta.url).href },
-  { key: 4, name: '新闻', icon: new URL('../assets/icons/新闻.svg', import.meta.url).href },
-  { key: 5, name: '视频', icon: new URL('../assets/icons/视频.svg', import.meta.url).href },
+  { key: 4, name: '音乐', icon: new URL('../assets/icons/音乐.svg', import.meta.url).href },
+  { key: 5, name: '电影', icon: new URL('../assets/icons/视频.svg', import.meta.url).href },
 ];
 
 const bottomMenuItems = [
-  { key: 6, name: '收藏', icon: new URL('../assets/icons/收藏.svg', import.meta.url).href },
   { key: 7, name: '设置', icon: new URL('../assets/icons/设置.svg', import.meta.url).href },
 
 ];
