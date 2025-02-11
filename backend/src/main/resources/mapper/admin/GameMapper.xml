@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.backend.mapper.admin.GameMapper">
+
+    <insert id="insertGame">
+        INSERT INTO games (game_name, game_score, game_developer, release_date, game_description, game_categories,
+                           game_platforms, game_image_url)
+        VALUES (#{gameName}, #{gameScore}, #{gameDeveloper}, #{releaseDate}, #{gameDescription}, #{gameCategories},
+                #{gamePlatforms}, #{gameImageUrl})
+    </insert>
+</mapper>

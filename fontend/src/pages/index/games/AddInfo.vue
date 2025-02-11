@@ -1,40 +1,79 @@
 <script lang="ts" setup>
+
 import { ref } from "vue";
+import { postFormData, defaultFailure } from '../../../net/post'; // 导入封装的方法
 import type { DropdownInstance, TagProps } from "element-plus";
 
+// 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
-const gameDeveloper = ref(""); //开发商
-const releaseDate = ref(""); //游戏发行时间
-const gameDescription = ref(""); //游戏简介
-const gameCover = ref<string | null>(null); //游戏封面
-const selectGameCategories = ref([]); //游戏类别
+const gameDeveloper = ref(""); // 开发商
+const releaseDate = ref(""); // 游戏发行时间
+const gameDescription = ref(""); // 游戏简介
+const gameCover = ref<string | null>(null); // 游戏封面
+const selectGameCategories = ref([]); // 游戏类别
 const selectFormOptions = ref([]); // 游戏平台
 
-const handleSubmit = () => {
-    console.log({
-        gameName: gameName.value,
-        gameScore: gameScore.value,
-        gameDeveloper: gameDeveloper.value,
-        gamePlatforms: selectFormOptions.value,
-        releaseDate: releaseDate.value,
-        gameDescription: gameDescription.value,
-        gameCover: gameCover.value,
-        gameCategories: selectGameCategories.value,
-    });
+// 提交表单
+const handleSubmit = async () => {
+    // 创建 FormData 对象
+    const formData = new FormData();
+
+    // 添加文本数据
+    formData.append("gameName", gameName.value);
+    formData.append("gameScore", gameScore.value?.toString() || "");
+    formData.append("gameDeveloper", gameDeveloper.value);
+    formData.append("releaseDate", releaseDate.value);
+    formData.append("gameDescription", gameDescription.value);
+    formData.append("gameCategories", JSON.stringify(selectGameCategories.value)); // 数组需要序列化
+    formData.append("gamePlatforms", JSON.stringify(selectFormOptions.value)); // 数组需要序列化
+
+    // 添加图片文件
+    if (gameCover.value && gameCover.value.startsWith("data:image")) {
+        const file = dataURLtoFile(gameCover.value, "gameCover.png"); // 将 base64 转为文件
+        formData.append("file", file); // 文件字段名需要与后端一致
+    }
+
+    // 使用封装的 postFormData 方法发送请求
+    postFormData(
+        "/api/admin/game/insert/score", // 请求地址
+        formData, // FormData 数据
+        (response :any) => {
+            console.log("提交成功", response);
+            // 可以在这里添加成功后的逻辑，例如跳转页面或提示用户
+        },
+        (message :string, code:number, url:string) => {
+            defaultFailure(message, code, url); // 使用默认的失败处理逻辑
+        }
+    );
 };
 
+// 处理文件选择
 const handleFileChange = (event: Event) => {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files[0]) {
         const file = fileInput.files[0];
         const reader = new FileReader();
         reader.onload = () => {
-            gameCover.value = reader.result as string;
+            gameCover.value = reader.result as string; // 存储为 base64 用于预览
         };
         reader.readAsDataURL(file);
     }
 };
+
+// 将 base64 转为 File 对象
+const dataURLtoFile = (dataURL: string, filename: string): File => {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, { type: mime });
+};
+
 
 //预定义选项数据
 const gameCategories = ref([

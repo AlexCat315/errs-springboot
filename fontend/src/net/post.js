@@ -52,23 +52,56 @@ function internalPost(url, data, header, success, failure, error = defaultError)
 }
 
 function accessHeader() {
-    if (localStorage.getItem('token') !== null) {
-        return {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+    const headers = {
+        'Authorization': localStorage.getItem('token') 
+            ? `Bearer ${localStorage.getItem('token')}` 
+            : sessionStorage.getItem('token') 
+                ? `Bearer ${sessionStorage.getItem('token')}` 
+                : null,
+    };
+
+    // 如果已经设置了 Content-Type，则不覆盖
+    if (!headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
     }
-    if (sessionStorage.getItem('token') !== null) {
-        return {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${sessionStorage.getItem('token')}`
-        }
-    }
-    return {
-        'Content-Type': 'application/json'
-    }
+
+    return headers;
 }
 
+/**
+ * 内部方法：发送 multipart/form-data 请求
+ * @param {string} url - 请求地址
+ * @param {FormData} data - FormData 对象
+ * @param {Object} header - 请求头
+ * @param {Function} success - 成功回调
+ * @param {Function} failure - 失败回调
+ * @param {Function} error - 错误处理函数
+ */
+function internalPostFormData(url, data, header, success, failure, error = defaultError) {
+    axios.post(url, data, {
+        headers: {
+            ...header, // 合并自定义请求头
+            'Content-Type': 'multipart/form-data', // 强制设置 Content-Type
+        },
+    }).then(({ data }) => {
+        if (data.code === 200) {
+            success(data.data);
+        } else {
+            failure(data.message, data.code, url);
+        }
+    }).catch(err => error(err));
+}
+
+/**
+ * 发送 multipart/form-data 请求
+ * @param {string} url - 请求地址
+ * @param {FormData} data - FormData 对象
+ * @param {Function} success - 成功回调
+ * @param {Function} failure - 失败回调
+ */
+export function postFormData(url, data, success, failure = defaultFailure) {
+    internalPostFormData(url, data, accessHeader(), success, failure);
+}
 
 export function post(url, data, success, failure = defaultFailure) {
     internalPost(url, data, accessHeader(), success, failure)
