@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装的方法
 import { ElMessage, type DropdownInstance, type TagProps } from "element-plus";
-import { Eleme } from '@element-plus/icons-vue'
 // 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
