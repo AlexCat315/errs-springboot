@@ -30,7 +30,7 @@ const getTop50Info = () => {
         0,
         (data: any) => {
             // 返回的数据结构是 { code, data,message }，将 data 赋值给 gamesList
-            gamesList.value = data.data; // 赋值返回的游戏数组
+            gamesList.value = data.data.slice(0, 6); // 赋值返回的游戏数组
         },
         (message: string) => {
             // 错误回调
