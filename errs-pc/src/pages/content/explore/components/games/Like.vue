@@ -50,7 +50,7 @@ if (globalTheme === undefined) {
 }
 
 .btn::after {
-    content: "收藏";
+    content: "喜欢";
     width: fit-content;
     height: fit-content;
     position: absolute;

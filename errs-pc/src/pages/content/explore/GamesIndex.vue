@@ -3,6 +3,8 @@ import { inject, onMounted, ref } from "vue";
 import ViewAll from "./components/games/ViewAll.vue";
 import Like from "./components/games/Like.vue";
 import { get_game_top50_info } from "../../../net/games/get_top";
+
+
 const globalTheme = inject<string>("globalTheme");
 
 if (globalTheme === undefined) {
