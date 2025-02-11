@@ -102,6 +102,7 @@ onMounted(() => {
                         <div  style="display: flex; align-items: center;" class="text-with-tags app-title">
                            <div style="display: flex; align-items: center;">
                             <svg
+                               v-if="item.gameScore >= 9"
                                 t="1739285518314"
                                 class="icon"
                                 viewBox="0 0 1024 1024"
