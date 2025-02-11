@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue";
 import ViewAll from "./components/games/ViewAll.vue";
-import Tooltip from "./components/games/Tooltip.vue"
+import Like from "./components/games/Like.vue";
 import { get_game_top50_info } from "../../../net/games/get_top";
 const globalTheme = inject<string>("globalTheme");
 
@@ -83,16 +83,16 @@ onMounted(() => {
         <div class="gard">
             <div v-for="(item, index) in gamesList" class="card">
                 <div style="display: flex">
-                    <p class="rank-index">{{ index + 1 }}</p>
+                    <p :style="{color : globalTheme === 'dark' ? '#CCC' : 'black'}" class="rank-index">{{ index + 1 }}</p>
                     <img
                         alt="cover"
                         class="games-img"
                         :src="item.gameImageUrl"
                     />
-                    <div style="width: 90%;">
+                    <div style="width: 90%">
                         <!-- 名字 -->
                         <div class="text-with-tags app-title">
-                            <span class="text text-default--size">{{
+                            <span :style="{color : globalTheme === 'dark' ? '#CCC' : 'black'}" class="text text-default--size">{{
                                 item.gameName
                             }}</span>
                             <button
@@ -137,7 +137,7 @@ onMounted(() => {
                                     {{ item.gameScore }}
                                 </div>
                             </div>
-                 
+
                             <div
                                 class="tap-label-tag-group flex tap-ellipsis group--adjust game-cell__tags"
                             >
@@ -210,13 +210,11 @@ onMounted(() => {
                         </div>
                     </div>
 
-                    <div>
-                      <Tooltip />
+                    <div style="display: flex">
+                        <Like style="margin-right: 10px; margin-top: 10px" />
                     </div>
                 </div>
-     
             </div>
-        
         </div>
     </div>
 </template>
@@ -249,7 +247,7 @@ onMounted(() => {
     width: 92%;
     margin-left: 30px;
     margin-bottom: 20px;
-    z-index:1;
+    z-index: 1;
     overflow: visible;
 }
 .card {
