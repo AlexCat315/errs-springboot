@@ -10,6 +10,7 @@ import com.x.backend.service.admin.GameService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,8 @@ public class GameController {
     private MinioUtils minioUtils;
     @Resource(name = "adminGameService")
     private GameService gameService;
+    @Value("${minio.handler-pub-url}")
+    private String pubHandlerUrl;
 
     @PostMapping(value = "/insert/score", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Transactional(rollbackFor = Exception.class)
@@ -67,18 +70,16 @@ public class GameController {
         if (file != null && !file.isEmpty()) {
             try {
                 String uploadFile = minioUtils.pubUploadFile(file);
-                uploadFile = "www.alexcat.it.com/" + uploadFile;
+                uploadFile = pubHandlerUrl + uploadFile;
                 request.setGameImageUrl(uploadFile);
                 gameService.createGame(request);
+                return ResultEntity.success();
             } catch (Exception e) {
                 log.error("上传文件失败", e);
                 return ResultEntity.serverError();
             }
         }
-
-        // 这里添加业务逻辑（如保存到数据库）
-
-        return ResultEntity.success();
+        return ResultEntity.failure("上传文件失败");
     }
 
     @RequestMapping("/test")

@@ -15,6 +15,8 @@ minio:
   secret-key: alexcat315_0315  # 这里填 systemd 配置中的 MINIO_ROOT_PASSWORD
   bucket: errs  # 你要操作的存储桶
   pub-bucket: public-errs
+  handler-url: https://www.alexcat.it.com/minio-api/-errs/
+  handler-pub-url: https://www.alexcat.it.com/minio-api/public-errs/
 spring:
   servlet:
     multipart:
@@ -87,8 +89,8 @@ logging:
   level:
     root: INFO
     org:
-     springframework: INFO
-     mybatis: TRACE
+      springframework: INFO
+      mybatis: TRACE
 
 
 

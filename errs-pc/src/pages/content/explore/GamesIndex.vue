@@ -35,7 +35,7 @@ if (globalTheme === undefined) {
                     <img
                         alt="cover"
                         class="games-img"
-                        src="../../../assets/img//games/appicon_m.png"
+                        src="https://www.alexcat.it.com/minio-api/public-errs/1889211833475272704-gameCover.png"
                     />
                     <div>
                         <!-- 名字 -->

@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-
 import { ref } from "vue";
-import { postFormData, defaultFailure } from '../../../net/post'; // 导入封装的方法
-import type { DropdownInstance, TagProps } from "element-plus";
+import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装的方法
+import { ElMessage, type DropdownInstance, type TagProps } from "element-plus";
 
 // 表单数据
 const gameName = ref(""); // 游戏名
@@ -25,7 +24,10 @@ const handleSubmit = async () => {
     formData.append("gameDeveloper", gameDeveloper.value);
     formData.append("releaseDate", releaseDate.value);
     formData.append("gameDescription", gameDescription.value);
-    formData.append("gameCategories", JSON.stringify(selectGameCategories.value)); // 数组需要序列化
+    formData.append(
+        "gameCategories",
+        JSON.stringify(selectGameCategories.value),
+    ); // 数组需要序列化
     formData.append("gamePlatforms", JSON.stringify(selectFormOptions.value)); // 数组需要序列化
 
     // 添加图片文件
@@ -38,14 +40,27 @@ const handleSubmit = async () => {
     postFormData(
         "/api/admin/game/insert/score", // 请求地址
         formData, // FormData 数据
-        (response :any) => {
+        (response: any) => {
             console.log("提交成功", response);
-            // 可以在这里添加成功后的逻辑，例如跳转页面或提示用户
+            ElMessage.success("提交成功！");
+            // 删除表单数据
+            clearFrom();
         },
-        (message :string, code:number, url:string) => {
+        (message: string, code: number, url: string) => {
             defaultFailure(message, code, url); // 使用默认的失败处理逻辑
-        }
+        },
     );
+};
+
+const clearFrom = () => {
+    gameName.value = "";
+    gameScore.value = null;
+    gameDeveloper.value = "";
+    releaseDate.value = "";
+    gameDescription.value = "";
+    gameCover.value = "";
+    selectGameCategories.value = [];
+    selectFormOptions.value = [];
 };
 
 // 处理文件选择
@@ -74,9 +89,9 @@ const dataURLtoFile = (dataURL: string, filename: string): File => {
     return new File([u8arr], filename, { type: mime });
 };
 
-
 //预定义选项数据
 const gameCategories = ref([
+    "单机",
     "动作",
     "冒险",
     "角色扮演",
@@ -86,6 +101,10 @@ const gameCategories = ref([
     "益智",
     "射击",
     "格斗",
+    "开放世界",
+    "赛博朋克",
+    "科幻",
+    "二次元",
 ]);
 
 const platformOptions = ref([
@@ -155,7 +174,7 @@ const onLeave = () => {
 
                     <div class="form-group">
                         <label class="file-label" for="gameCover">
-                            <span style="margin-left: -70px;">上传封面</span>
+                            <span style="margin-left: -70px">上传封面</span>
                             <input
                                 id="gameCover"
                                 accept="image/*"
@@ -428,7 +447,7 @@ label {
     border-color: #4a9eff;
     color: #4a9eff;
 }
-/* 
+/*
 .image-preview {
     margin-top: 1rem;
     border-radius: 6px;
@@ -447,7 +466,6 @@ label {
     margin-top: -100px;
     transform: scale(0.7);
 }
-
 
 .submit-btn {
     width: 100%;
