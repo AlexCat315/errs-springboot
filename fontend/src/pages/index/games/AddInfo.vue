@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-import {ref} from "vue";
-import type {DropdownInstance, TagProps} from "element-plus";
+import { ref } from "vue";
+import type { DropdownInstance, TagProps } from "element-plus";
 
-const gameName = ref("");  // 游戏名
-const gameScore = ref<number | null>(null);  // 分数
+const gameName = ref(""); // 游戏名
+const gameScore = ref<number | null>(null); // 分数
 const gameDeveloper = ref(""); //开发商
 const releaseDate = ref(""); //游戏发行时间
 const gameDescription = ref(""); //游戏简介
 const gameCover = ref<string | null>(null); //游戏封面
-const selectGameCategories = ref([]) //游戏类别
-const selectFormOptions = ref([]) // 游戏平台
+const selectGameCategories = ref([]); //游戏类别
+const selectFormOptions = ref([]); // 游戏平台
 
 const handleSubmit = () => {
     console.log({
@@ -20,7 +20,7 @@ const handleSubmit = () => {
         releaseDate: releaseDate.value,
         gameDescription: gameDescription.value,
         gameCover: gameCover.value,
-        gameCategories: selectGameCategories.value
+        gameCategories: selectGameCategories.value,
     });
 };
 
@@ -49,7 +49,6 @@ const gameCategories = ref([
     "格斗",
 ]);
 
-
 const platformOptions = ref([
     "PC",
     "PlayStation 5",
@@ -60,16 +59,14 @@ const platformOptions = ref([
     "VR",
 ]);
 
-
-const selectGameCategoriestDropdownMenu = (select:string) =>{
+const selectGameCategoriestDropdownMenu = (select: string) => {
     // 添加进 selectGameCategories.value
-  selectGameCategories.value.push(select);
-}
-const selectPlatformOptions = (select:string) =>{
+    selectGameCategories.value.push(select);
+};
+const selectPlatformOptions = (select: string) => {
     // 添加进 selectGameCategories.value
-  selectFormOptions.value.push(select);
-}
-
+    selectFormOptions.value.push(select);
+};
 
 const type: Array<TagProps["type"]> = [
     "primary",
@@ -87,6 +84,15 @@ const tagType = () => {
 
 const dropdown1 = ref<DropdownInstance>();
 
+const buttonState = ref(false); // 初始值
+
+const onHover = () => {
+    buttonState.value = true; // 当鼠标悬停时改变值
+};
+
+const onLeave = () => {
+    buttonState.value = false; // 当鼠标离开时恢复值
+};
 </script>
 
 <template>
@@ -110,7 +116,7 @@ const dropdown1 = ref<DropdownInstance>();
 
                     <div class="form-group">
                         <label class="file-label" for="gameCover">
-                            <span>上传封面</span>
+                            <span style="margin-left: -70px;">上传封面</span>
                             <input
                                 id="gameCover"
                                 accept="image/*"
@@ -141,15 +147,15 @@ const dropdown1 = ref<DropdownInstance>();
                     />
                 </div>
 
-                <div  style="display: flex;">
-                    <div  class="form-group">
+                <div style="display: flex">
+                    <div class="form-group">
                         <label for="releaseDate">发行时间：</label>
                         <input
                             id="releaseDate"
                             v-model="releaseDate"
                             class="input-field date-input"
                             required
-                            style="width: 300px;padding-right: 0;"
+                            style="width: 300px; padding-right: 0"
                             type="date"
                         />
                     </div>
@@ -165,6 +171,7 @@ const dropdown1 = ref<DropdownInstance>();
                             style="width: 113px"
                             type="number"
                             placeholder="10分制"
+                            step="0.01"
                         />
                     </div>
                 </div>
@@ -208,9 +215,13 @@ const dropdown1 = ref<DropdownInstance>();
                             <template #dropdown>
                                 <el-dropdown-menu>
                                     <el-dropdown-item
-                                    v-for="item in gameCategories"
-                                      @click="selectGameCategoriestDropdownMenu(item)"
-                                        >{{item}}</el-dropdown-item
+                                        v-for="item in gameCategories"
+                                        @click="
+                                            selectGameCategoriestDropdownMenu(
+                                                item,
+                                            )
+                                        "
+                                        >{{ item }}</el-dropdown-item
                                     >
                                 </el-dropdown-menu>
                             </template>
@@ -218,7 +229,7 @@ const dropdown1 = ref<DropdownInstance>();
                     </div>
                 </div>
 
-                <div class="form-group" style="margin-top: -30px;">
+                <div class="form-group" style="margin-top: -30px">
                     <label for="gameCategory">运行平台</label>
                     <el-input-tag
                         v-model="selectFormOptions"
@@ -256,7 +267,11 @@ const dropdown1 = ref<DropdownInstance>();
                         </el-icon>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item v-for="item in platformOptions" @click="selectPlatformOptions(item)">{{item}}</el-dropdown-item>
+                                <el-dropdown-item
+                                    v-for="item in platformOptions"
+                                    @click="selectPlatformOptions(item)"
+                                    >{{ item }}</el-dropdown-item
+                                >
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -329,7 +344,7 @@ label {
     border-radius: 6px;
     font-size: 0.95rem;
     transition: all 0.3s ease;
-    padding-right: 50px
+    padding-right: 50px;
 }
 
 .input-field:focus {
@@ -350,6 +365,7 @@ label {
     position: relative;
     margin-top: 28px;
     margin-left: 100px;
+    max-height: 50px;
 }
 
 .file-input {
@@ -373,19 +389,26 @@ label {
     border-color: #4a9eff;
     color: #4a9eff;
 }
-
+/* 
 .image-preview {
     margin-top: 1rem;
     border-radius: 6px;
     overflow: hidden;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
+
+} */
 
 .preview-image {
     width: 100%;
     height: 150px;
     object-fit: cover;
+    position: relative;
+    padding-left: 50px;
+    z-index: 100;
+    margin-top: -100px;
+    transform: scale(0.7);
 }
+
 
 .submit-btn {
     width: 100%;
