@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装的方法
 import { ElMessage, type DropdownInstance, type TagProps } from "element-plus";
-
+import { Eleme } from '@element-plus/icons-vue'
 // 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
@@ -13,8 +13,12 @@ const gameCover = ref<string | null>(null); // 游戏封面
 const selectGameCategories = ref([]); // 游戏类别
 const selectFormOptions = ref([]); // 游戏平台
 
+const buttonLoadingState = ref(false); // 初始值
+
+
 // 提交表单
 const handleSubmit = async () => {
+  buttonLoadingState.value = true;
     // 创建 FormData 对象
     const formData = new FormData();
 
@@ -45,9 +49,11 @@ const handleSubmit = async () => {
             ElMessage.success("提交成功！");
             // 删除表单数据
             clearFrom();
+            buttonLoadingState.value = false;
         },
         (message: string, code: number, url: string) => {
             defaultFailure(message, code, url); // 使用默认的失败处理逻辑
+            buttonLoadingState.value = false;
         },
     );
 };
@@ -142,15 +148,8 @@ const tagType = () => {
 
 const dropdown1 = ref<DropdownInstance>();
 
-const buttonState = ref(false); // 初始值
 
-const onHover = () => {
-    buttonState.value = true; // 当鼠标悬停时改变值
-};
 
-const onLeave = () => {
-    buttonState.value = false; // 当鼠标离开时恢复值
-};
 </script>
 
 <template>
@@ -345,7 +344,28 @@ const onLeave = () => {
                     ></textarea>
                 </div>
             </div>
-            <button class="submit-btn" type="submit">提交</button>
+            <button v-if="!buttonLoadingState" class="submit-btn"  type="submit">提交</button>
+            <el-button v-if="buttonLoadingState" class="submit-btn" type="primary" loading>
+                <template #loading>
+                  <div class="custom-loading">
+                    <svg class="circular" viewBox="-10, -10, 50, 50">
+                      <path
+                        class="path"
+                        d="
+                        M 30 15
+                        L 28 17
+                        M 25.61 25.61
+                        A 15 15, 0, 0, 1, 15 30
+                        A 15 15, 0, 1, 1, 27.99 7.5
+                        L 15 15
+                      "
+                        style="stroke-width: 4px; fill: rgba(0, 0, 0, 0)"
+                      />
+                    </svg>
+                  </div>
+                </template>
+                提交
+              </el-button>
         </form>
     </div>
 </template>
@@ -447,14 +467,20 @@ label {
     border-color: #4a9eff;
     color: #4a9eff;
 }
-/*
-.image-preview {
-    margin-top: 1rem;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-
-} */
+.el-button .custom-loading .circular {
+  margin-right: 6px;
+  width: 18px;
+  height: 18px;
+  animation: loading-rotate 2s linear infinite;
+}
+.el-button .custom-loading .circular .path {
+  animation: loading-dash 1.5s ease-in-out infinite;
+  stroke-dasharray: 90, 150;
+  stroke-dashoffset: 0;
+  stroke-width: 2;
+  stroke: var(--el-button-text-color);
+  stroke-linecap: round;
+}
 
 .preview-image {
     width: 100%;
@@ -469,6 +495,7 @@ label {
 
 .submit-btn {
     width: 100%;
+    height: 50px;
     padding: 1rem;
     background: linear-gradient(135deg, #4a9eff, #357abd);
     color: white;
