@@ -3,7 +3,7 @@ package com.x.backend.service.admin.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.admin.GameMapper;
-import com.x.backend.pojo.admin.entity.Game;
+import com.x.backend.pojo.common.Game;
 import com.x.backend.pojo.admin.vo.request.game.GameCreateRequest;
 import com.x.backend.service.admin.GameService;
 import jakarta.annotation.Resource;

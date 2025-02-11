@@ -1,12 +1,52 @@
 <script lang="ts" setup>
-import {inject} from "vue";
+import { inject, onMounted, ref } from "vue";
 import ViewAll from "./components/games/ViewAll.vue";
-
+import { get_game_top50_info } from "../../../net/games/get_top";
 const globalTheme = inject<string>("globalTheme");
 
 if (globalTheme === undefined) {
     throw new Error("Function not implemented.");
 }
+
+// 定义 Game 类型
+interface Game {
+    id: number;
+    gameName: string;
+    gameScore: number;
+    gameDeveloper: string;
+    releaseDate: string;
+    gameDescription: string;
+    gameCategories: string[];
+    gamePlatforms: string[];
+    gameImageUrl: string;
+}
+
+// 用于存储游戏数据的 ref
+const gamesList = ref<Game[]>([]); // 使用一个数组来存储多个游戏数据
+
+// 获取前 50 个游戏
+const getTop50Info = () => {
+    get_game_top50_info(
+        0,
+        (data: any) => {
+            // 返回的数据结构是 { code, data,message }，将 data 赋值给 gamesList
+            gamesList.value = data.data; // 赋值返回的游戏数组
+        },
+        (message: string) => {
+            // 错误回调
+            console.error(message);
+        },
+        (message: string) => {
+            // 错误回调
+            console.error(message);
+        },
+    );
+};
+
+// 在组件挂载时获取数据
+onMounted(() => {
+    getTop50Info();
+});
 </script>
 
 <template>
@@ -29,20 +69,20 @@ if (globalTheme === undefined) {
         </div>
 
         <div class="gard">
-            <div v-for="index in 6" class="card">
+            <div v-for="(item, index) in gamesList" class="card">
                 <div style="display: flex">
-                    <p class="rank-index">{{ index }}</p>
+                    <p class="rank-index">{{ index + 1 }}</p>
                     <img
                         alt="cover"
                         class="games-img"
-                        src="https://www.alexcat.it.com/minio-api/public-errs/1889211833475272704-gameCover.png"
+                        :src="item.gameImageUrl"
                     />
                     <div>
                         <!-- 名字 -->
                         <div class="text-with-tags app-title">
-                            <span class="text text-default--size"
-                                >音乐世界 Cytus II</span
-                            >
+                            <span class="text text-default--size">{{
+                                item.gameName
+                            }}</span>
                         </div>
                         <!-- 分数-类别 -->
                         <div class="flex-center--y">
@@ -62,7 +102,7 @@ if (globalTheme === undefined) {
                                 <div
                                     class="tap-rating__number rate-number-font"
                                 >
-                                    7.6
+                                    {{ item.gameScore }}
                                 </div>
                             </div>
                             <!---->
@@ -70,25 +110,16 @@ if (globalTheme === undefined) {
                                 class="tap-label-tag-group flex tap-ellipsis group--adjust game-cell__tags"
                             >
                                 <a
+                                    v-for="itemCategories in item.gameCategories"
                                     class="tap-router tap-router__prefetched tap-label-tag tap-label-tag--small text-hover tap-label-tag--left-point"
                                     itemprop="genre"
-                                    >单机</a
-                                ><a
-                                    class="tap-router tap-router__prefetched tap-label-tag tap-label-tag--small text-hover tap-label-tag--left-point"
-                                    itemprop="genre"
-                                    >休闲</a
-                                ><a
-                                    class="tap-router tap-router__prefetched tap-label-tag tap-label-tag--small text-hover tap-label-tag--left-point"
-                                    itemprop="genre"
-                                    >卡通</a
+                                    >{{ itemCategories }}</a
                                 >
                             </div>
                         </div>
                         <!-- 开发商 -->
                         <div>
-                           <span> 
-                             
-                           </span>
+                            <span> </span>
                         </div>
                     </div>
                 </div>

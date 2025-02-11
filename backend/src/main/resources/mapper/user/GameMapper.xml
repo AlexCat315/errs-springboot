@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.backend.mapper.user.GameMapper">
+
+
+    <resultMap id="Game" type="com.x.backend.pojo.common.Game">
+        <id property="id" column="id"/>
+        <result property="gameName" column="game_name"/>
+        <result property="gameScore" column="game_score"/>
+        <result property="gameDeveloper" column="game_developer"/>
+        <result property="releaseDate" column="release_date" jdbcType="DATE"/>
+        <result property="gameDescription" column="game_description"/>
+        <result property="gameCategories" column="game_categories" jdbcType="VARCHAR"/>
+        <result property="gamePlatforms" column="game_platforms" jdbcType="VARCHAR"/>
+        <result property="gameImageUrl" column="game_image_url"/>
+    </resultMap>
+
+
+    <select id="getTop50" resultMap="Game">
+        SELECT *
+        FROM games
+        ORDER BY game_score DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+</mapper>

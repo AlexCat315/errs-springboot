@@ -1,20 +1,19 @@
-package com.x.backend.pojo.admin.entity;
+package com.x.backend.pojo.user.vo.responses.game;
 
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
-public class Game  implements Serializable {
+public class GameResponsesVO {
     private Integer id;
     private String gameName;
     private Double gameScore;
     private String gameDeveloper;
     private LocalDate releaseDate;
     private String gameDescription;
-    private String gameCategories;
-    private String gamePlatforms;
+    private List<String> gameCategories;
+    private List<String> gamePlatforms;
     private String gameImageUrl;
 }
-

@@ -1,6 +1,6 @@
 package com.x.backend.mapper.admin;
 
-import com.x.backend.pojo.admin.entity.Game;
+import com.x.backend.pojo.common.Game;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
