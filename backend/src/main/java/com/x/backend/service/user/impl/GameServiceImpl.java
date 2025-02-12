@@ -83,6 +83,110 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    @Override
+    public List<GameResponsesVO> getHighestRated(int start, int size) {
+        try {
+            // 获取 Game 列表
+            List<Game> games = gameMapper.getHighestRated(start, size);
+
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 存储转换后的结果
+            List<GameResponsesVO> gameResponsesVOList = new ArrayList<>();
+
+            // 遍历 Game 列表并转换
+            for (Game game : games) {
+                // 转换 gameCategories
+                List<String> gameCategories = null;
+                try {
+                    gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Error parsing gameCategories JSON", e);
+                }
+
+                // 转换 gamePlatforms
+                List<String> gamePlatforms = null;
+                try {
+                    gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Error parsing gamePlatforms JSON", e);
+                }
+
+                // 创建 GameResponsesVO 对象并复制属性
+                GameResponsesVO gameResponsesVO = new GameResponsesVO();
+                BeanUtils.copyProperties(game, gameResponsesVO);
+
+                // 设置转换后的列表
+                gameResponsesVO.setGameCategories(gameCategories);
+                gameResponsesVO.setGamePlatforms(gamePlatforms);
+
+                // 将 gameResponsesVO 添加到列表
+                gameResponsesVOList.add(gameResponsesVO);
+            }
+
+            return gameResponsesVOList;
+        } catch (Exception e) {
+            log.error("Error getting getHighestRated games", e);
+            throw new RuntimeException("Error getting getHighestRated games", e);
+        }
+    }
+
+    @Override
+    public List<GameResponsesVO> getMostReviewed(int start, int size) {
+        try {
+            // 获取 Game 列表
+            List<Game> games = gameMapper.getMostReviewed(start, size);
+
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 存储转换后的结果
+            List<GameResponsesVO> gameResponsesVOList = new ArrayList<>();
+
+            // 遍历 Game 列表并转换
+            for (Game game : games) {
+                // 转换 gameCategories
+                List<String> gameCategories = null;
+                try {
+                    gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Error parsing gameCategories JSON", e);
+                }
+
+                // 转换 gamePlatforms
+                List<String> gamePlatforms = null;
+                try {
+                    gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Error parsing gamePlatforms JSON", e);
+                }
+
+                // 创建 GameResponsesVO 对象并复制属性
+                GameResponsesVO gameResponsesVO = new GameResponsesVO();
+                BeanUtils.copyProperties(game, gameResponsesVO);
+
+                // 设置转换后的列表
+                gameResponsesVO.setGameCategories(gameCategories);
+                gameResponsesVO.setGamePlatforms(gamePlatforms);
+
+                // 将 gameResponsesVO 添加到列表
+                gameResponsesVOList.add(gameResponsesVO);
+            }
+
+            return gameResponsesVOList;
+        } catch (Exception e) {
+            log.error("Error getting getHighestRated games", e);
+            throw new RuntimeException("Error getting getHighestRated games", e);
+        }
+    }
+
+
+
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public Boolean addRantingComment(GameRantingCommentVO gameRantingCommentVO) {

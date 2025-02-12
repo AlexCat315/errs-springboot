@@ -34,6 +34,30 @@ public class GameController {
         }
     }
 
+    @GetMapping("/get/highest-rated")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<List<GameResponsesVO>> getHighestRated(@RequestParam(defaultValue = "0") int start) {
+        try {
+            int size = 25;  // 每页 25 条数据
+            return ResultEntity.success(gameService.getHighestRated(start, size));
+        } catch (RuntimeException e) {
+            log.error("/get/highest-rated发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @GetMapping("/get/most-reviewed")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<List<GameResponsesVO>> getMostReviewed(@RequestParam(defaultValue = "0") int start) {
+        try {
+            int size = 25;  // 每页 25 条数据
+            return ResultEntity.success(gameService.getMostReviewed(start, size));
+        } catch (RuntimeException e) {
+            log.error("/get/most-reviewed发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
     @PostMapping("/add/ranting-comment")
     @RoleSecurity(RoleConstants.ROLE_USER)
     public ResultEntity<Boolean> addRantingComment(@RequestBody GameRantingCommentVO gameRantingCommentVO) {

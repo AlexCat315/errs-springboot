@@ -11,4 +11,8 @@ public interface GameService {
     List<GameResponsesVO> getTop50(int start, int size);
 
     Boolean addRantingComment(GameRantingCommentVO gameRantingCommentVO);
+
+    List<GameResponsesVO> getHighestRated(int start, int size);
+
+    List<GameResponsesVO> getMostReviewed(int start, int size);
 }

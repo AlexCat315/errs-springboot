@@ -22,8 +22,7 @@
 
     <update id="updateRanting">
         update games
-        set
-            game_score = (game_score * game_users + #{score}) / (game_users + 1),
+        set game_score = (game_score * game_users + #{score}) / (game_users + 1),
             game_users = game_users + 1
         where id = #{id}
     </update>
@@ -32,9 +31,27 @@
     <select id="getTop50" resultMap="Game">
         SELECT *
         FROM games
-        where game_score > 6 and game_users > 10000
+        where game_score > 6
+          and game_users > 10000
         ORDER BY (game_score * (game_score / 10) * game_users) -
                  ((10 - game_score) * ((10 - game_score) / 10) * game_users) DESC
+        LIMIT #{offset}, #{size}
+    </select>
+    <select id="getHighestRated" resultMap="Game">
+        SELECT *
+        FROM games
+        where game_score > 6
+          and game_users > 10000
+        ORDER BY game_score DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="getMostReviewed" resultType="com.x.backend.pojo.common.Game">
+        SELECT *
+        FROM games
+        where game_score > 6
+          and game_users > 10000
+        ORDER BY game_score * game_users - (10 - game_score) * game_users DESC
         LIMIT #{offset}, #{size}
     </select>
 

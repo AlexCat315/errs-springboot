@@ -1,8 +1,13 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue";
-import ViewAll from "./components/games/ViewAll.vue";
+import Favorites from "./components/games/Favorites.vue";
+import FavoritesTrue from "./components/games/FavoritesTrue.vue";
 import Like from "./components/games/Like.vue";
-import { get_game_top50_info } from "../../../net/games/get_top";
+import {
+    get_game_top50_info,
+    get_game_highest_rated,
+    get_game_most_reviewed,
+} from "../../../net/games/get_top";
 import RatingCard from "./components/games/RatingCard.vue";
 
 const globalTheme = inject<string>("globalTheme");
@@ -25,40 +30,150 @@ interface Game {
     gameUsers: "";
 }
 
+// 添加不同榜单类型
+enum ListType {
+    TOP50 = "top50",
+    MOST_REVIEWED = "mostReviewed",
+    HIGHEST_RATED = "highestRated",
+}
+
+const currentTab = ref<ListType>(ListType.TOP50);
+const tabs = {
+    [ListType.TOP50]: { title: "Top50榜单", apiParam: 0 },
+    [ListType.MOST_REVIEWED]: { title: "最多评价", apiParam: 1 },
+    [ListType.HIGHEST_RATED]: { title: "好评最高", apiParam: 2 },
+};
+
 // 用于存储游戏数据的 ref
-const gamesList = ref<Game[]>([]); // 使用一个数组来存储多个游戏数据
+const gamesList = ref<Game[]>([]);
 function formatNumber(num: number) {
     if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + "m+"; // 百万单位
+        return (num / 1000000).toFixed(1) + "m+";
     } else if (num >= 10000) {
-        return (num / 10000).toFixed(1) + "w+"; // 万单位
+        return (num / 10000).toFixed(1) + "w+";
     } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + "k+"; // 千单位
+        return (num / 1000).toFixed(1) + "k+";
     }
     return num.toString();
 }
-// 获取前 50 个游戏
-const getTop50Info = () => {
+
+// 通用获取游戏数据方法
+const fetchGames = (listType: ListType) => {
     get_game_top50_info(
         0,
         (data: any) => {
-            // 返回的数据结构是 { code, data,message }，将 data 赋值给 gamesList
-            // // 遍历 gamesList 格式化 gameUsers
             data.data.forEach((game: any) => {
                 game.gameUsers = formatNumber(game.gameUsers);
                 game.gameScore = parseFloat(game.gameScore.toFixed(1));
             });
-            gamesList.value = data.data.slice(0, 6); // 赋值返回的游戏数组
+            gamesList.value = data.data;
         },
         (message: string) => {
-            // 错误回调
             console.error(message);
         },
         (message: string) => {
-            // 错误回调
             console.error(message);
         },
     );
+};
+// 获取数据
+const fetchGamesStart = (listType: ListType, start: number) => {
+    console.log(listType);
+    get_game_top50_info(
+        0,
+        (data: any) => {
+            data.data.forEach((game: any) => {
+                game.gameUsers = formatNumber(game.gameUsers);
+                game.gameScore = parseFloat(game.gameScore.toFixed(1));
+            });
+            gamesList.value = data.data;
+        },
+        (message: string) => {
+            console.error(message);
+        },
+        (message: string) => {
+            console.error(message);
+        },
+    );
+};
+
+const getGameTop50Info = (start: number) => {
+    get_game_top50_info(
+        start,
+        (data: any) => {
+            data.data.forEach((game: any) => {
+                game.gameUsers = formatNumber(game.gameUsers);
+                game.gameScore = parseFloat(game.gameScore.toFixed(1));
+            });
+            gamesList.value = data.data;
+        },
+        (message: string) => {
+            console.error(message);
+        },
+        (message: string) => {
+            console.error(message);
+        },
+    );
+};
+const getGameHighestRated = (start: number) => {
+    get_game_highest_rated(
+        start,
+        (data: any) => {
+            data.data.forEach((game: any) => {
+                game.gameUsers = formatNumber(game.gameUsers);
+                game.gameScore = parseFloat(game.gameScore.toFixed(1));
+            });
+            gamesList.value = data.data;
+        },
+        (message: string) => {
+            console.error(message);
+        },
+        (message: string) => {
+            console.error(message);
+        },
+    );
+};
+
+const getGameMostReviewed = (start: number) => {
+    get_game_most_reviewed(
+        start,
+        (data: any) => {
+            data.data.forEach((game: any) => {
+                game.gameUsers = formatNumber(game.gameUsers);
+                game.gameScore = parseFloat(game.gameScore.toFixed(1));
+            });
+            gamesList.value = data.data;
+        },
+        (message: string) => {
+            console.error(message);
+        },
+        (message: string) => {
+            console.error(message);
+        },
+    );
+};
+
+const switchFetch = (listType: ListType, start: number) => {
+    switch (listType) {
+        case ListType.TOP50: {
+            getGameTop50Info(start);
+            break;
+        }
+        case ListType.HIGHEST_RATED: {
+            getGameHighestRated(start);
+            break;
+        }
+        case ListType.MOST_REVIEWED: {
+            getGameMostReviewed(start);
+            break;
+        }
+    }
+};
+
+const switchTab = (tab: ListType) => {
+    currentTab.value = tab;
+    fetchGames(tab);
+    switchFetch(tab, 0);
 };
 
 const colors = [
@@ -72,10 +187,10 @@ const colors = [
 ];
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 
-// 在组件挂载时获取数据
 onMounted(() => {
-    getTop50Info();
+    fetchGames(currentTab.value);
 });
+
 const showErrorpanle = ref(false);
 const errorPanleMsg = ref("");
 const showLoading = ref(false);
@@ -87,12 +202,16 @@ const showRatingCard = (gameId: number) => {
     showLoading.value = true;
     gameID.value = gameId;
 };
+const isFavorites = ref(false);
+
+const changeFavorites = () => {
+    isFavorites.value = !isFavorites.value;
+};
 </script>
 
 <template>
     <div>
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
-        <!-- Loading 遮罩层 -->
         <div v-if="showLoading" class="loading-overlay">
             <RatingCard
                 :ID="gameID"
@@ -101,20 +220,40 @@ const showRatingCard = (gameId: number) => {
             />
         </div>
         <div class="section-header">
-            <p
-                :style="{
-                    color: globalTheme === 'dark' ? '#FFF' : 'black',
-                }"
-                style="
-                    font-size: 23px;
-                    font-family: yousu-title-black;
-                    margin-left: 30px;
-                    margin-top: 30px;
-                "
-            >
-                高品质游戏
-            </p>
-            <ViewAll style="margin-top: 25px" class="view-all" />
+            <div style="display: flex; align-items: center">
+                <p
+                    :style="{
+                        color: globalTheme === 'dark' ? '#FFF' : 'black',
+                    }"
+                    style="
+                        font-size: 23px;
+                        font-family: yousu-title-black;
+                        margin-left: 30px;
+                        margin-top: 30px;
+                    "
+                >
+                    {{ tabs[currentTab].title }}
+                </p>
+                <div style="display: flex; margin-left: 20px; margin-top: 30px">
+                    <button
+                        v-for="(tab, key) in tabs"
+                        :key="key"
+                        @click="switchTab(key as ListType)"
+                        :style="{
+                            color: currentTab === key ? '#409eff' : '#8a8a8a',
+                            fontWeight: currentTab === key ? 'bold' : 'normal',
+                            textDecoration:
+                                currentTab === key ? 'underline' : 'none',
+                            marginRight: '15px',
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                        }"
+                    >
+                        {{ tab.title }}
+                    </button>
+                </div>
+            </div>
         </div>
 
         <div class="gard">
@@ -343,6 +482,16 @@ const showRatingCard = (gameId: number) => {
                     </div>
 
                     <div style="display: flex">
+                        <Favorites
+                            v-if="!isFavorites"
+                            @click="changeFavorites()"
+                            style="margin-top: 10px; margin-right: -1px"
+                        />
+                        <FavoritesTrue
+                            v-if="isFavorites"
+                            @click="changeFavorites()"
+                            style="margin-top: 10px; margin-right: -1px"
+                        />
                         <Like
                             @click="showRatingCard(item.id)"
                             style="margin-right: 10px; margin-top: 10px"

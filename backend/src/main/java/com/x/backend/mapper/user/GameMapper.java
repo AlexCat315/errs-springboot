@@ -18,4 +18,8 @@ public interface GameMapper {
     Integer updateRanting(GameRantingCommentDTO gameRantingCommentDTO);
 
     Integer insertRantingComment(GameRantingCommentDTO gameRantingCommentDTO);
+
+    List<Game> getHighestRated(int start, int size);
+
+    List<Game> getMostReviewed(int start, int size);
 }
