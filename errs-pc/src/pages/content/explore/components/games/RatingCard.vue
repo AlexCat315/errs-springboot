@@ -3,13 +3,16 @@
         :style="{ background: globalTheme === 'dark' ? 'black' : '#fff' }"
         class="survey-card"
     >
-        <Cancel @click="sendMessage()" style="margin-left: 96%;margin-top: -25px;" />
-        <p style="margin-top: -20px;" class="title">评分</p>
+        <Cancel
+            @click="sendMessage()"
+            style="margin-left: 96%; margin-top: -25px"
+        />
+        <p style="margin-top: -20px" class="title">评分</p>
         <div class="rating">
             <button
                 v-for="n in 5"
                 :key="n"
-                :class="['star-button', { active: rating >= n }]"
+                :class="['star-button', { active: score >= n }]"
                 @click="setRating(n)"
             >
                 ★
@@ -19,10 +22,9 @@
         <div>
             <textarea
                 id="gameDescription"
-                v-model="gameComment"
+                v-model="addRantingFrom.comment"
                 class="textarea-field"
                 placeholder="游戏评价"
-                required
             ></textarea>
         </div>
         <button @click="submitRating" class="submit-button">提交</button>
@@ -32,6 +34,7 @@
 <script setup lang="ts">
 import { ref, inject } from "vue";
 import Cancel from "../games/Cancel.vue";
+import { add_ranting_comment } from "../../../../../net/games/insert";
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -40,35 +43,47 @@ if (globalTheme === undefined) {
 }
 
 const props = defineProps<{
-  ID: number;
+    ID: number;
 }>();
-
-const rating = ref<number>(0);
-
+const score = ref(0);
 const setRating = (value: number) => {
-    rating.value = value;
-    console.log(rating.value);
+    score.value = value;
+    addRantingFrom.value.score = value * 2;
 };
+interface RantingComment {
+    gameID: number;
+    score: number;
+    comment: string;
+}
+const addRantingFrom = ref<RantingComment>({
+    gameID: 0, // 默认值
+    score: 0, // 默认值
+    comment: "", // 默认值
+});
 
 const submitRating = () => {
-    if (rating.value === 0) {
-        alert("请先选择评分");
-    } else {
-        alert(`您提交的评分是：${rating.value}`);
-    }
+    addRantingFrom.value.gameID = props.ID;
+    add_ranting_comment(
+        addRantingFrom.value,
+        (data) => {
+            emit("updateShowRating", false);
+        },
+        (message: string) => {
+            console.log(message);
+        },
+    );
 };
 
-const gameComment = ref("");
-import { defineEmits } from 'vue';
+import { defineEmits } from "vue";
 
 // 定义触发的事件和参数类型
 const emit = defineEmits<{
-  (event: 'updateShowRating', newMessage: boolean): void;
+    (event: "updateShowRating", newMessage: boolean): void;
 }>();
 
 // 通过点击按钮向父组件传递消息
 const sendMessage = () => {
-  emit('updateShowRating', false);
+    emit("updateShowRating", false);
 };
 </script>
 

@@ -22,9 +22,9 @@
 
     <update id="updateRanting">
         update games
-        set game_score = (game_score * game_users + #{score}) / game_users + 1
-            and
-                         game_users = game_users + 1
+        set
+            game_score = (game_score * game_users + #{score}) / (game_users + 1),
+            game_users = game_users + 1
         where id = #{id}
     </update>
 
