@@ -3,6 +3,7 @@ import { inject, onMounted, ref } from "vue";
 import ViewAll from "./components/games/ViewAll.vue";
 import Like from "./components/games/Like.vue";
 import { get_game_top50_info } from "../../../net/games/get_top";
+import RatingCard from "./components/games/RatingCard.vue";
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -21,17 +22,31 @@ interface Game {
     gameCategories: string[];
     gamePlatforms: string[];
     gameImageUrl: string;
+    gameUsers: "";
 }
 
 // 用于存储游戏数据的 ref
 const gamesList = ref<Game[]>([]); // 使用一个数组来存储多个游戏数据
-
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + "m+"; // 百万单位
+    } else if (num >= 10000) {
+        return (num / 10000).toFixed(1) + "w+"; // 万单位
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + "k+"; // 千单位
+    }
+    return num.toString();
+}
 // 获取前 50 个游戏
 const getTop50Info = () => {
     get_game_top50_info(
         0,
         (data: any) => {
             // 返回的数据结构是 { code, data,message }，将 data 赋值给 gamesList
+            // // 遍历 gamesList 格式化 gameUsers
+            data.data.forEach((game:any) => {
+                game.gameUsers = formatNumber(game.gameUsers);
+            });
             gamesList.value = data.data.slice(0, 6); // 赋值返回的游戏数组
         },
         (message: string) => {
@@ -60,10 +75,30 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 onMounted(() => {
     getTop50Info();
 });
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
+const showLoading = ref(false);
+const handleUpdateShowRating = (value: boolean) => {
+    showLoading.value = value;
+};
+const gameID = ref();
+const showRatingCard = (gameId: number) => {
+    showLoading.value = true;
+    gameID.value = gameId;
+};
 </script>
 
 <template>
     <div>
+        <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+        <!-- Loading 遮罩层 -->
+        <div v-if="showLoading" class="loading-overlay">
+            <RatingCard
+                :ID="gameID"
+                @updateShowRating="handleUpdateShowRating"
+                style="margin-left: 200px; margin-top: -20px"
+            />
+        </div>
         <div class="section-header">
             <p
                 :style="{
@@ -284,9 +319,18 @@ onMounted(() => {
                                     margin-top: 1px;
                                     color: #8a8a8a;
                                 "
+                                >{{ item.gameDeveloper }} ·著</span
                             >
-                                {{ item.gameDeveloper }} ·著
-                            </span>
+                            <span
+                                style="
+                                    margin-left: 8px;
+                                    font-family: Arial, Helvetica, sans-serif;
+                                    font-size: 13px;
+                                    margin-top: 1px;
+                                    color: #8a8a8a;
+                                "
+                                >{{ item.gameUsers }} 评价</span
+                            >
                         </div>
 
                         <!-- 简介 -->
@@ -298,7 +342,10 @@ onMounted(() => {
                     </div>
 
                     <div style="display: flex">
-                        <Like style="margin-right: 10px; margin-top: 10px" />
+                        <Like
+                            @click="showRatingCard(item.id)"
+                            style="margin-right: 10px; margin-top: 10px"
+                        />
                     </div>
                 </div>
             </div>
@@ -512,5 +559,21 @@ input {
     margin-top: 5px !important;
     margin-left: 15px;
     margin-right: 40px;
+}
+
+/* Loading 遮罩层 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(58, 58, 58, 0.8);
+    /* 半透明背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* 确保遮罩层在最上层 */
 }
 </style>

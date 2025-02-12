@@ -3,6 +3,7 @@ package com.x.backend.controller.user;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.user.vo.request.game.GameRantingCommentVO;
 import com.x.backend.pojo.user.vo.responses.game.GameResponsesVO;
 import com.x.backend.service.user.GameService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,17 @@ public class GameController {
             return ResultEntity.success(gameService.getTop50(start, size));
         } catch (RuntimeException e) {
             log.error("/get/top50发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/add/ranting-comment")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<Boolean> addRantingComment(@RequestBody GameRantingCommentVO gameRantingCommentVO) {
+        try {
+            return ResultEntity.success(gameService.addRantingComment(gameRantingCommentVO));
+        } catch (RuntimeException e) {
+            log.error("/add/ranting-comment发生错误:{}", e.getMessage());
             return ResultEntity.failure(e.getMessage());
         }
     }

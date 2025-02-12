@@ -13,13 +13,28 @@
         <result property="gameCategories" column="game_categories" jdbcType="VARCHAR"/>
         <result property="gamePlatforms" column="game_platforms" jdbcType="VARCHAR"/>
         <result property="gameImageUrl" column="game_image_url"/>
+        <result property="gameUsers" column="game_users" jdbcType="INTEGER"/>
     </resultMap>
+    <insert id="insertRantingComment">
+        insert into game_comments (game_id, user_id, comment, comment_date)
+        values (#{id}, #{userID}, #{comment}, #{date})
+    </insert>
+
+    <update id="updateRanting">
+        update games
+        set game_score = (game_score * game_users + #{score}) / game_users + 1
+            and
+                         game_users = game_users + 1
+        where id = #{id}
+    </update>
 
 
     <select id="getTop50" resultMap="Game">
         SELECT *
         FROM games
-        ORDER BY game_score DESC
+        where game_score > 6 and game_users > 10000
+        ORDER BY (game_score * (game_score / 10) * game_users) -
+                 ((10 - game_score) * ((10 - game_score) / 10) * game_users) DESC
         LIMIT #{offset}, #{size}
     </select>
 

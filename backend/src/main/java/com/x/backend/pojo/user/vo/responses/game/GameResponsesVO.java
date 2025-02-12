@@ -16,4 +16,5 @@ public class GameResponsesVO {
     private List<String> gameCategories;
     private List<String> gamePlatforms;
     private String gameImageUrl;
+    private Integer gameUsers;
 }

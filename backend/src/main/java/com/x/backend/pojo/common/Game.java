@@ -16,5 +16,6 @@ public class Game  implements Serializable {
     private String gameCategories;
     private String gamePlatforms;
     private String gameImageUrl;
+    private Integer gameUsers;
 }
 

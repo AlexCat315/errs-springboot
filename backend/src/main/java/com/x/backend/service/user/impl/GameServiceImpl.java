@@ -1,17 +1,24 @@
 package com.x.backend.service.user.impl;
 
+import cn.hutool.core.date.DateTime;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.user.GameMapper;
 import com.x.backend.pojo.common.Game;
+import com.x.backend.pojo.user.dto.game.GameRantingCommentDTO;
+import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.game.GameRantingCommentVO;
 import com.x.backend.pojo.user.vo.responses.game.GameResponsesVO;
 import com.x.backend.service.user.GameService;
+import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +28,8 @@ public class GameServiceImpl implements GameService {
 
     @Resource(name = "userGameMapper")
     private GameMapper gameMapper;
+    @Resource
+    private JWTUtils<UserAccount> accountUtils;
 
 
     @Override
@@ -40,7 +49,8 @@ public class GameServiceImpl implements GameService {
                 // 转换 gameCategories
                 List<String> gameCategories = null;
                 try {
-                    gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {});
+                    gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {
+                    });
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException("Error parsing gameCategories JSON", e);
                 }
@@ -48,7 +58,8 @@ public class GameServiceImpl implements GameService {
                 // 转换 gamePlatforms
                 List<String> gamePlatforms = null;
                 try {
-                    gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {});
+                    gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {
+                    });
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException("Error parsing gamePlatforms JSON", e);
                 }
@@ -72,6 +83,27 @@ public class GameServiceImpl implements GameService {
         }
     }
 
-
-
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public Boolean addRantingComment(GameRantingCommentVO gameRantingCommentVO) {
+        Integer id = accountUtils.getId();
+        GameRantingCommentDTO gameRantingCommentDTO = new GameRantingCommentDTO();
+        BeanUtils.copyProperties(gameRantingCommentVO, gameRantingCommentDTO);
+        gameRantingCommentDTO.setUserID(id);
+        gameRantingCommentDTO.setDate(new DateTime(LocalDateTime.now()));
+        try {
+            Integer updateRanting = gameMapper.updateRanting(gameRantingCommentDTO);
+            if (updateRanting == 1) {
+                Integer insertRantingComment = gameMapper.insertRantingComment(gameRantingCommentDTO);
+                if (insertRantingComment != 1) {
+                    throw new RuntimeException("Error adding ranting comment");
+                }
+                return true;
+            }
+            return false;
+        } catch (RuntimeException e) {
+            log.error("Error adding ranting comment", e);
+            throw new RuntimeException("Error adding ranting comment", e);
+        }
+    }
 }
