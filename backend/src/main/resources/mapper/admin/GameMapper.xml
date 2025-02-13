@@ -8,4 +8,38 @@
         VALUES (#{gameName}, #{gameScore}, #{gameDeveloper}, #{releaseDate}, #{gameDescription}, #{gameCategories},
                 #{gamePlatforms}, #{gameImageUrl})
     </insert>
+
+
+    <resultMap id="Game" type="com.x.backend.pojo.common.Game">
+        <id property="id" column="id"/>
+        <result property="gameName" column="game_name"/>
+        <result property="gameScore" column="game_score"/>
+        <result property="gameDeveloper" column="game_developer"/>
+        <result property="releaseDate" column="release_date" jdbcType="DATE"/>
+        <result property="gameDescription" column="game_description"/>
+        <result property="gameCategories" column="game_categories" jdbcType="VARCHAR"/>
+        <result property="gamePlatforms" column="game_platforms" jdbcType="VARCHAR"/>
+        <result property="gameImageUrl" column="game_image_url"/>
+        <result property="gameUsers" column="game_users" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <select id="getGameInfoById" resultMap="Game">
+        SELECT *
+        FROM games
+        WHERE id = #{gameId}
+    </select>
+
+    <select id="getGameInfoBySearch" resultMap="Game">
+        SELECT *
+        FROM games
+        WHERE game_name LIKE CONCAT('%', #{searchText}, '%')
+           OR game_developer LIKE CONCAT('%', #{searchText}, '%')
+           OR game_description LIKE CONCAT('%', #{searchText}, '%')
+           OR game_categories LIKE CONCAT('%', #{searchText}, '%')
+           OR game_platforms LIKE CONCAT('%', #{searchText}, '%')
+        Limit #{start} , #{size}
+    </select>
+
+
 </mapper>

@@ -1,15 +1,22 @@
 package com.x.backend.service.admin.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.admin.GameMapper;
+import com.x.backend.pojo.admin.dto.game.SearchDTO;
+import com.x.backend.pojo.admin.vo.request.game.SearchVO;
+import com.x.backend.pojo.admin.vo.responses.game.GameResponsesVO;
 import com.x.backend.pojo.common.Game;
 import com.x.backend.pojo.admin.vo.request.game.GameCreateRequest;
 import com.x.backend.service.admin.GameService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service("adminGameService")
@@ -50,4 +57,70 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+
+    @Override
+    public GameResponsesVO getGameInfoById(Integer gameId) {
+        try {
+            // 查询数据库获取游戏信息
+            Game game = gameMapper.getGameInfoById(gameId);
+            if (game == null) {
+                throw new RuntimeException("Game not found with ID: " + gameId);
+            }
+
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 解析 gameCategories 和 gamePlatforms
+            List<String> gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {});
+            List<String> gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {});
+
+            // 创建 GameResponsesVO 对象并复制属性
+            GameResponsesVO gameResponsesVO = new GameResponsesVO();
+            BeanUtils.copyProperties(game, gameResponsesVO);
+            gameResponsesVO.setGameCategories(gameCategories);
+            gameResponsesVO.setGamePlatforms(gamePlatforms);
+
+            return gameResponsesVO;
+        } catch (Exception e) {
+            log.error("Error getting game info by ID: {}", gameId, e);
+            throw new RuntimeException("Error getting game info by ID: " + gameId, e);
+        }
+    }
+
+    @Override
+    public List<GameResponsesVO> getGameInfoBySearch(SearchVO searchVO) {
+        try {
+            // 查询数据库获取游戏信息
+            SearchDTO searchDTO = new SearchDTO();
+            BeanUtils.copyProperties(searchVO, searchDTO);
+            searchDTO.setStart((searchVO.getPage() - 1) * searchVO.getSize());
+            List<Game> games = gameMapper.getGameInfoBySearch(searchDTO);
+
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            // 解析 gameCategories 和 gamePlatforms
+            // 创建 GameResponsesVO 对象并复制属性
+            return games.stream().map(game -> {
+                try {
+                    List<String> gameCategories = objectMapper.readValue(game.getGameCategories(), new TypeReference<List<String>>() {});
+                    List<String> gamePlatforms = objectMapper.readValue(game.getGamePlatforms(), new TypeReference<List<String>>() {});
+
+                    // 创建 GameResponsesVO 对象并复制属性
+                    GameResponsesVO gameResponsesVO = new GameResponsesVO();
+                    BeanUtils.copyProperties(game, gameResponsesVO);
+                    gameResponsesVO.setGameCategories(gameCategories);
+                    gameResponsesVO.setGamePlatforms(gamePlatforms);
+
+                    return gameResponsesVO;
+                } catch (Exception e) {
+                    log.error("Error getting game info by search: {}", searchVO, e);
+                    throw new RuntimeException("Error getting game info by search: " + searchVO, e);
+                }
+            }).toList();
+        } catch (Exception e) {
+            log.error("Error getting game info by search: {}", searchVO, e);
+            throw new RuntimeException("Error getting game info by search: " + searchVO, e);
+        }
+    }
 }

@@ -2,6 +2,13 @@
 import { ref } from "vue";
 import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装的方法
 import { ElMessage, type DropdownInstance, type TagProps } from "element-plus";
+import Search from "./components/Seach.vue";
+import Cancel from "./components/Cancel.vue";
+import SearchGame from "./components/SeachGame.vue";
+import GameCard from "./components/GameCard.vue";
+import GameCardSmart from "./components/GameCardSmart.vue";
+
+
 // 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
@@ -146,15 +153,36 @@ const tagType = () => {
 
 const dropdown1 = ref<DropdownInstance>();
 
-const showUpdatePanel = ref(true);
+const showUpdatePanel = ref(false);
+const showSeach = ref(false);
 
+const seachValue = ref("")
 
+const handleGameCardUpdate = (value:boolean) =>{
+  
+}
+const handleSearchGame = (value:string) =>{
+  seachValue.value = value;
+}
 </script>
 
 <template>
     <div>
         <div>
+            <Search @click="showSeach = true" style="margin-left: 400px" />
         </div>
+        <div v-if="showSeach" style="overflow-y: auto;" class="loading-overlay">
+            <div style="margin-left: 400px; display: flex; margin-top: 50px">
+                <Cancel @click="showSeach = false"  />
+                <SearchGame @update:modelValue="handleSearchGame" style="margin-left: 20px; margin-top: -5px" />
+            </div>
+            <div style="margin-left: 310px;">
+                <GameCard :modelValue="seachValue"
+                      @update:modelValue="handleGameCardUpdate" style="margin-top: 50px" />
+            </div>
+        </div>
+        
+        <GameCardSmart />
 
         <div v-if="showUpdatePanel" class="card">
             <h2 class="card-title">修改信息</h2>
@@ -389,6 +417,18 @@ const showUpdatePanel = ref(true);
 </template>
 
 <style scoped>
+/* Loading 遮罩层 */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(58, 58, 58);
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
 .card {
     width: 600px;
     margin: 2rem auto;

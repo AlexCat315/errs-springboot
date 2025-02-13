@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.vo.request.game.GameCreateRequest;
+import com.x.backend.pojo.admin.vo.request.game.SearchVO;
+import com.x.backend.pojo.admin.vo.responses.game.GameResponsesVO;
 import com.x.backend.service.admin.GameService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
@@ -15,10 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
@@ -80,6 +79,27 @@ public class GameController {
             }
         }
         return ResultEntity.failure("上传文件失败");
+    }
+
+
+    @PostMapping("/get/info")
+    public ResultEntity<GameResponsesVO> getGameInfoById(@RequestParam("gameId") Integer gameId) {
+        try {
+            return ResultEntity.success(gameService.getGameInfoById(gameId));
+        } catch (RuntimeException e) {
+            log.error("获取游戏信息失败", e);
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/get/info/search")
+    public ResultEntity<List<GameResponsesVO>> getGameInfoBySearch(@RequestBody SearchVO searchVO) {
+        try {
+            return ResultEntity.success(gameService.getGameInfoBySearch(searchVO));
+        } catch (RuntimeException e) {
+            log.error("获取游戏信息失败", e);
+            return ResultEntity.failure(e.getMessage());
+        }
     }
 
     @RequestMapping("/test")
