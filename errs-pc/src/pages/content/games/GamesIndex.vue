@@ -139,11 +139,18 @@ const getGameMostReviewed = (start: number) => {
     get_game_most_reviewed(
         start,
         (data: any) => {
-            data.data.forEach((game: any) => {
-                game.gameUsers = formatNumber(game.gameUsers);
-                game.gameScore = parseFloat(game.gameScore.toFixed(1));
-            });
-            gamesList.value = data.data;
+          const newGames = data.data.map((game: any) => {
+              game.gameUsers = formatNumber(game.gameUsers);
+              game.gameScore = parseFloat(game.gameScore.toFixed(1));
+              return game;
+          });
+
+          // 去重逻辑
+          const uniqueGames = [...gamesList.value, ...newGames].filter(
+              (game, index, self) =>
+                  self.findIndex((g) => g.id === game.id) === index,
+          );
+          gamesList.value = uniqueGames;
         },
         (message: string) => {
             console.error(message);
