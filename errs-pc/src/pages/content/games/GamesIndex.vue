@@ -9,9 +9,6 @@ import {
     get_game_most_reviewed,
 } from "../../../net/games/get_top";
 import RatingCard from "./components/games/RatingCard.vue";
-import { add_favorites_game } from "../../../net/games/insert";
-import { delete_favorites_game } from "../../../net/games/delete";
-import { get_state_favorites_game } from "../../../net/games/get";
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -216,43 +213,6 @@ const showRatingCard = (gameId: number) => {
     gameID.value = gameId;
 };
 
-const changeFavorites = (bid: number) => {
-    if (isFavoritesState(bid)) {
-        delete_favorites_game(
-            bid,
-            () => {
-                
-            },
-            (message: string) => {
-                console.log(message);
-            },
-        );
-    } else {
-        add_favorites_game(
-            bid,
-            () => {
-               
-            },
-            (message: string) => {
-                console.log(message);
-            },
-        );
-    }
-};
-const isFavoritesState = (bid: number): Promise<boolean> => {
-  return new Promise((resolve) => {
-    get_state_favorites_game(
-      bid,
-      (data: any) => {
-        console.log(data.data);
-        resolve(data.data);
-      },
-      () => {
-        resolve(false);
-      },
-    );
-  });
-};
 
 onMounted(() => {
     fetchGames(currentTab.value);
@@ -532,16 +492,6 @@ onMounted(() => {
                     </div>
 
                     <div style="display: flex">
-                        <Favorites
-                            v-if="!isFavoritesState(item.id)"
-                            @click="changeFavorites(item.id)"
-                            style="margin-top: 10px; margin-right: -1px"
-                        />
-                        <FavoritesTrue
-                            v-if="isFavoritesState(item.id)"
-                            @click="changeFavorites(item.id)"
-                            style="margin-top: 10px; margin-right: -1px"
-                        />
                         <Like
                             @click="showRatingCard(item.id)"
                             style="margin-right: 10px; margin-top: 10px"
