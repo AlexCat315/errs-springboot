@@ -107,17 +107,22 @@ const handleScroll = () => {
     if (!container) return;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
-    const isBottom = scrollTop + clientHeight >= scrollHeight - 30;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
 
     if (isBottom) {
-        console.log(currentPage.value);
-        fetchGames(currentPage.value + 1);
+        currentPage.value = currentPage.value + 1;
+        fetchGames(currentPage.value);
     }
 };
 const gameID = ref();
+// 定义向父组件传递事件
+const emit = defineEmits(['update:modelValue']);
+
 const showRatingCard = (gameId: number) => {
-    gameID.value = gameId;
+  emit('update:modelValue', gameId);
 };
+
+
 </script>
 
 <template>

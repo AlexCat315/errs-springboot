@@ -26,3 +26,20 @@ export function get_game_info_by_seach(
     failure,
   );
 }
+
+export function get_game_info_all(
+  page:number,
+  size:number,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    '/api/admin/game/get/info/all',
+    {
+      page: page,
+      size: size,
+    },
+    success,
+    failure,
+  );
+}

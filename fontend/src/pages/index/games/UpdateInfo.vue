@@ -8,7 +8,6 @@ import SearchGame from "./components/SeachGame.vue";
 import GameCard from "./components/GameCard.vue";
 import GameCardSmart from "./components/GameCardSmart.vue";
 
-
 // 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
@@ -156,35 +155,48 @@ const dropdown1 = ref<DropdownInstance>();
 const showUpdatePanel = ref(false);
 const showSeach = ref(false);
 
-const seachValue = ref("")
+const seachValue = ref("");
 
-const handleGameCardUpdate = (value:boolean) =>{
-  
-}
-const handleSearchGame = (value:string) =>{
-  seachValue.value = value;
-}
+const handleGameCardUpdate = (value: number) => {
+    if (value !== undefined && value !== null) {
+        showUpdatePanel.value = true;
+    }
+};
+
+const handleSearchGame = (value: string) => {
+    seachValue.value = value;
+};
 </script>
 
 <template>
     <div>
         <div>
-            <Search @click="showSeach = true" style="margin-left: 400px" />
+            <Search @click="showSeach = true; showUpdatePanel = false" style="margin-left: 400px" />
         </div>
-        <div v-if="showSeach" style="overflow-y: auto;" class="loading-overlay">
+        <div
+            v-if="showSeach && !showUpdatePanel"
+            style="overflow-y: auto"
+            class="loading-overlay"
+        >
             <div style="margin-left: 400px; display: flex; margin-top: 50px">
-                <Cancel @click="showSeach = false"  />
-                <SearchGame @update:modelValue="handleSearchGame" style="margin-left: 20px; margin-top: -5px" />
+                <Cancel @click="showSeach = false" />
+                <SearchGame
+                    @update:modelValue="handleSearchGame"
+                    style="margin-left: 20px; margin-top: -5px"
+                />
             </div>
-            <div style="margin-left: 310px;">
-                <GameCard :modelValue="seachValue"
-                      @update:modelValue="handleGameCardUpdate" style="margin-top: 50px" />
+            <div style="margin-left: 310px">
+                <GameCard
+                    :modelValue="seachValue"
+                    @update:modelValue="handleGameCardUpdate"
+                    style="margin-top: 50px"
+                />
             </div>
         </div>
-        
-        <GameCardSmart />
 
-        <div v-if="showUpdatePanel" class="card">
+        <GameCardSmart @update:modelValue="handleGameCardUpdate" v-if="!showUpdatePanel" />
+
+        <div v-if="showUpdatePanel" class="card" style="transform: scale(0.8);">
             <h2 class="card-title">修改信息</h2>
             <form @submit.prevent="handleSubmit">
                 <div class="form-grid">
@@ -431,8 +443,9 @@ const handleSearchGame = (value:string) =>{
 }
 .card {
     width: 600px;
-    margin: 2rem auto;
     padding: 2rem;
+    margin-top: -70px;
+    margin-left: 240px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);

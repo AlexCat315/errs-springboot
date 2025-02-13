@@ -8,6 +8,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.vo.request.game.GameCreateRequest;
 import com.x.backend.pojo.admin.vo.request.game.SearchVO;
 import com.x.backend.pojo.admin.vo.responses.game.GameResponsesVO;
+import com.x.backend.pojo.common.PageSize;
 import com.x.backend.service.admin.GameService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
@@ -96,6 +97,16 @@ public class GameController {
     public ResultEntity<List<GameResponsesVO>> getGameInfoBySearch(@RequestBody SearchVO searchVO) {
         try {
             return ResultEntity.success(gameService.getGameInfoBySearch(searchVO));
+        } catch (RuntimeException e) {
+            log.error("获取游戏信息失败", e);
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/get/info/all")
+    public ResultEntity<List<GameResponsesVO>> getAllGameInfo(@RequestBody PageSize pageSize) {
+        try {
+            return ResultEntity.success(gameService.getAllGameInfo(pageSize));
         } catch (RuntimeException e) {
             log.error("获取游戏信息失败", e);
             return ResultEntity.failure(e.getMessage());

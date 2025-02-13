@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
-import { get_game_info_by_seach } from "../../../../net/game/get";
+import { get_game_info_all } from "../../../../net/game/get";
 import Edit from "./Edit.vue";
 
 // 定义 Game 类型
@@ -42,8 +42,7 @@ const colors = [
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 
 onMounted(() => {
-    get_game_info_by_seach(
-        "动作",
+    get_game_info_all(
         1,
         6,
         (data: any) => {
@@ -64,8 +63,7 @@ const scrollContainer = ref<HTMLElement | null>(null);
 
 // 封装请求函数
 const fetchGames = (page = 1, size = 10) => {
-    get_game_info_by_seach(
-        "冒",
+    get_game_info_all(
         page,
         size,
         (data: any[]) => {
@@ -90,16 +88,31 @@ const fetchGames = (page = 1, size = 10) => {
 };
 
 
+// 滚动加载逻辑
+const handleScroll = () => {
+    const container = scrollContainer.value;
+    if (!container) return;
 
+    const { scrollTop, scrollHeight, clientHeight } = container;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
+
+    if (isBottom) {
+      currentPage.value = currentPage.value + 1;
+      fetchGames(currentPage.value);
+    }
+};
 const gameID = ref();
+// 定义向父组件传递事件
+const emit = defineEmits(['update:modelValue']);
+
 const showRatingCard = (gameId: number) => {
-    gameID.value = gameId;
+  emit('update:modelValue', gameId);
 };
 </script>
 
 <template>
     <div class="container">
-        <div class="gard">
+        <div ref="scrollContainer" @scroll="handleScroll" class="gard">
             <div v-for="(item, index) in gamesList" class="card">
                 <div style="display: flex">
                     <p class="rank-index">
