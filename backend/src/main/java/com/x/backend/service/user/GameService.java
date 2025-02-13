@@ -15,4 +15,10 @@ public interface GameService {
     List<GameResponsesVO> getHighestRated(int start, int size);
 
     List<GameResponsesVO> getMostReviewed(int start, int size);
+
+    void addFavoritesGame(Integer gameId);
+
+    void deleteFavoritesGame(Integer gameId);
+
+    Boolean getStateFavoritesGame(Integer gameId);
 }

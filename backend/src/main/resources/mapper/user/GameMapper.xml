@@ -20,12 +20,24 @@
         values (#{id}, #{userID}, #{comment}, #{date})
     </insert>
 
+
+    <insert id="addFavoritesGame">
+        insert into game_favorites (g_id, a_id)
+        values (#{gameId}, #{userId})
+    </insert>
+
     <update id="updateRanting">
         update games
         set game_score = (game_score * game_users + #{score}) / (game_users + 1),
             game_users = game_users + 1
         where id = #{id}
     </update>
+    <delete id="deleteFavoritesGame">
+        delete
+        from game_favorites
+        where g_id = #{gameId}
+          and a_id = #{userId}
+    </delete>
 
 
     <select id="getTop50" resultMap="Game">
@@ -53,6 +65,11 @@
           and game_users > 10000
         ORDER BY (game_score * game_users) - ((10 - game_score) * game_users) DESC
         LIMIT #{offset}, #{size}
+    </select>
+    <select id="getStateFavoritesGame" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM game_favorites
+        where g_id = #{gameId}
     </select>
 
 </mapper>

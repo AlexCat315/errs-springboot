@@ -69,6 +69,43 @@ public class GameController {
         }
     }
 
+    @PostMapping("/get/state/favorites_game")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<Boolean> getStateFavoritesGame(@RequestParam(name = "game_id") Integer gameId) {
+        try {
+            return ResultEntity.success(gameService.getStateFavoritesGame(gameId));
+        } catch (RuntimeException e) {
+            log.error("/get/state/favorites_game_发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+
+    @PostMapping("/add/favorites_game")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<String> addFavoritesGame(@RequestParam(name = "game_id") Integer gameId) {
+        try {
+            gameService.addFavoritesGame(gameId);
+            return ResultEntity.success();
+        } catch (RuntimeException e) {
+            log.error("/add/favorites_game发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/delete/favorites_game")
+    @RoleSecurity(RoleConstants.ROLE_USER)
+    public ResultEntity<String> deleteFavoritesGame(@RequestParam(name = "game_id") Integer gameId) {
+        try {
+            gameService.deleteFavoritesGame(gameId);
+            return ResultEntity.success();
+        } catch (RuntimeException e) {
+            log.error("/delete/favorites_game发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+
     @RequestMapping("/test")
     public ResultEntity<String> test() {
         return ResultEntity.success("test");

@@ -26,3 +26,21 @@ export function add_ranting_comment(
     },
   );
 }
+
+export function add_favorites_game(
+  gId: number,
+  success: Function,
+  failure: Function,
+){
+  Post(
+    `/api/user/game/add/favorites_game?game_id=${gId}`,
+    {
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+  );
+}

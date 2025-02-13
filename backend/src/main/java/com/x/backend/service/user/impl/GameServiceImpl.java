@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.user.GameMapper;
 import com.x.backend.pojo.common.Game;
+import com.x.backend.pojo.user.dto.game.FavoritesGameDTO;
 import com.x.backend.pojo.user.dto.game.GameRantingCommentDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.game.GameRantingCommentVO;
@@ -186,7 +187,6 @@ public class GameServiceImpl implements GameService {
     }
 
 
-
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public Boolean addRantingComment(GameRantingCommentVO gameRantingCommentVO) {
@@ -208,6 +208,48 @@ public class GameServiceImpl implements GameService {
         } catch (RuntimeException e) {
             log.error("Error adding ranting comment", e);
             throw new RuntimeException("Error adding ranting comment", e);
+        }
+    }
+
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void addFavoritesGame(Integer gameId) {
+        try {
+            Integer id = accountUtils.getId();
+            Integer i = gameMapper.addFavoritesGame(new FavoritesGameDTO(gameId, id));
+            if (i != 1) {
+                throw new RuntimeException("Error adding favorites game");
+            }
+        } catch (RuntimeException e) {
+            log.error("Error adding favorites game", e);
+            throw new RuntimeException("Error adding favorites game", e);
+        }
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void deleteFavoritesGame(Integer gameId) {
+        try {
+            Integer id = accountUtils.getId();
+            Integer i = gameMapper.deleteFavoritesGame(new FavoritesGameDTO(gameId, id));
+            if (i != 1) {
+                throw new RuntimeException("Error removing favorites game");
+            }
+        } catch (RuntimeException e) {
+            log.error("Error removing favorites game", e);
+            throw new RuntimeException("Error removing favorites game", e);
+        }
+    }
+
+    @Override
+    public Boolean getStateFavoritesGame(Integer gameId) {
+        try {
+            Integer id = accountUtils.getId();
+            return gameMapper.getStateFavoritesGame(new FavoritesGameDTO(gameId, id)) == 1;
+        } catch (Exception e) {
+            log.error("Error getting favorites game state", e);
+            throw new RuntimeException("Error getting favorites game state", e);
         }
     }
 }
