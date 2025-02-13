@@ -7,6 +7,9 @@ import Cancel from "./components/Cancel.vue";
 import SearchGame from "./components/SeachGame.vue";
 import GameCard from "./components/GameCard.vue";
 import GameCardSmart from "./components/GameCardSmart.vue";
+import CancelUpdatePanel from "./components/CancelUpdatePanel.vue"
+import { watch } from "vue";
+import { get_game_info_by_id } from "../../../net/game/get";
 
 // 表单数据
 const gameName = ref(""); // 游戏名
@@ -49,7 +52,6 @@ const handleSubmit = async () => {
         "/api/admin/game/insert/score", // 请求地址
         formData, // FormData 数据
         (response: any) => {
-            console.log("提交成功", response);
             ElMessage.success("提交成功！");
             // 删除表单数据
             clearFrom();
@@ -61,6 +63,40 @@ const handleSubmit = async () => {
         },
     );
 };
+const gameID = ref<number>(0);
+
+watch(
+    () => gameID.value,
+    async (newValue) => {
+        if (newValue !== undefined && newValue !== null && newValue !== 0) {
+            try {
+                // 获取游戏数据
+                await get_game_info_by_id(
+                    newValue,
+                    (data: any) => {
+                        // 赋值后台返回的数据
+                        gameName.value = data.gameName;
+                        gameScore.value = data.gameScore;
+                        gameDeveloper.value = data.gameDeveloper;
+                        releaseDate.value = data.releaseDate;
+                        gameDescription.value = data.gameDescription;
+                        gameCover.value = data.gameImageUrl;
+                        selectGameCategories.value = data.gameCategories;
+                        selectFormOptions.value = data.gamePlatforms;
+                    },
+                    (message: string) => {
+                        console.log(message);
+                        ElMessage.warning("发生错误");
+                    },
+                );
+            } catch (error) {
+                console.error("获取游戏信息失败", error);
+                ElMessage.warning("游戏信息加载失败");
+            }
+        }
+    },
+    { immediate: true }, // 立即执行一次
+);
 
 const clearFrom = () => {
     gameName.value = "";
@@ -160,6 +196,8 @@ const seachValue = ref("");
 const handleGameCardUpdate = (value: number) => {
     if (value !== undefined && value !== null) {
         showUpdatePanel.value = true;
+        gameID.value = value;
+        console.log(gameID.value);
     }
 };
 
@@ -171,7 +209,13 @@ const handleSearchGame = (value: string) => {
 <template>
     <div>
         <div>
-            <Search @click="showSeach = true; showUpdatePanel = false" style="margin-left: 400px" />
+            <Search
+                @click="
+                    showSeach = true;
+                    showUpdatePanel = false;
+                "
+                style="margin-left: 400px"
+            />
         </div>
         <div
             v-if="showSeach && !showUpdatePanel"
@@ -194,9 +238,13 @@ const handleSearchGame = (value: string) => {
             </div>
         </div>
 
-        <GameCardSmart @update:modelValue="handleGameCardUpdate" v-if="!showUpdatePanel" />
+        <GameCardSmart
+            @update:modelValue="handleGameCardUpdate"
+            v-if="!showUpdatePanel"
+        />
 
-        <div v-if="showUpdatePanel" class="card" style="transform: scale(0.8);">
+        <div v-if="showUpdatePanel" class="card" style="transform: scale(0.8);margin-top: -60px;" >
+            <CancelUpdatePanel @click="showUpdatePanel =false" style="margin-left: 95%;" />
             <h2 class="card-title">修改信息</h2>
             <form @submit.prevent="handleSubmit">
                 <div class="form-grid">
@@ -227,7 +275,7 @@ const handleSearchGame = (value: string) => {
                                 <div v-if="gameCover" class="image-preview">
                                     <img
                                         :src="gameCover"
-                                        alt="游戏封面预览"
+                                        alt="封面预览"
                                         class="preview-image"
                                     />
                                 </div>
@@ -444,7 +492,7 @@ const handleSearchGame = (value: string) => {
 .card {
     width: 600px;
     padding: 2rem;
-    margin-top: -70px;
+    margin-top: 40px;
     margin-left: 240px;
     background: #ffffff;
     border-radius: 12px;
@@ -463,6 +511,7 @@ const handleSearchGame = (value: string) => {
     margin-bottom: 1.5rem;
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #eee;
+    margin-top: -25px;
 }
 
 .form-grid {

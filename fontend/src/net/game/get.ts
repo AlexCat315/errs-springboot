@@ -1,6 +1,6 @@
 import { defaultFailure, post } from "../post.js";
 
-export function get_game_info_by_id(
+export async function get_game_info_by_id(
   game_id: number,
   success: Function,
   failure = defaultFailure,
