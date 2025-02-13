@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from "vue";
-import Favorites from "./components/games/Favorites.vue";
-import FavoritesTrue from "./components/games/FavoritesTrue.vue";
 import Like from "./components/games/Like.vue";
 import {
     get_game_top50_info,
