@@ -87,6 +87,8 @@ const showRatingCard = (gameId: number) => {
     showLoading.value = true;
     gameID.value = gameId;
 };
+
+const globalSelect = inject("globalSelect");
 </script>
 
 <template>
@@ -114,7 +116,7 @@ const showRatingCard = (gameId: number) => {
             >
                 高品质游戏
             </p>
-            <ViewAll style="margin-top: 25px" class="view-all" />
+            <ViewAll  @Click="globalSelect = 2" style="margin-top: 25px" class="view-all" />
         </div>
 
         <div class="gard">
