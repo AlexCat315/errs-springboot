@@ -46,12 +46,12 @@
         LIMIT #{offset}, #{size}
     </select>
 
-    <select id="getMostReviewed" resultType="com.x.backend.pojo.common.Game">
+    <select id="getMostReviewed" resultMap="Game">
         SELECT *
         FROM games
         where game_score > 6
           and game_users > 10000
-        ORDER BY game_score * game_users - (10 - game_score) * game_users DESC
+        ORDER BY (game_score * game_users) - ((10 - game_score) * game_users) DESC
         LIMIT #{offset}, #{size}
     </select>
 

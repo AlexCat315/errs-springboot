@@ -42,7 +42,7 @@ const handleScroll = (event: Event) => {
         </div>
 
         <div>
-            <GamesIndex />
+            <GamesIndex/>
         </div>
     </div>
 </template>

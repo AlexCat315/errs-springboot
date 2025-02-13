@@ -27,7 +27,7 @@ interface Game {
     gameCategories: string[];
     gamePlatforms: string[];
     gameImageUrl: string;
-    gameUsers: "";
+    gameUsers: string;
 }
 
 // 添加不同榜单类型
@@ -62,31 +62,18 @@ const fetchGames = (listType: ListType) => {
     get_game_top50_info(
         0,
         (data: any) => {
-            data.data.forEach((game: any) => {
+            const newGames = data.data.map((game: any) => {
                 game.gameUsers = formatNumber(game.gameUsers);
                 game.gameScore = parseFloat(game.gameScore.toFixed(1));
+                return game;
             });
-            gamesList.value = data.data;
-        },
-        (message: string) => {
-            console.error(message);
-        },
-        (message: string) => {
-            console.error(message);
-        },
-    );
-};
-// 获取数据
-const fetchGamesStart = (listType: ListType, start: number) => {
-    console.log(listType);
-    get_game_top50_info(
-        0,
-        (data: any) => {
-            data.data.forEach((game: any) => {
-                game.gameUsers = formatNumber(game.gameUsers);
-                game.gameScore = parseFloat(game.gameScore.toFixed(1));
-            });
-            gamesList.value = data.data;
+
+            // 去重逻辑
+            const uniqueGames = [...gamesList.value, ...newGames].filter(
+                (game, index, self) =>
+                    self.findIndex((g) => g.id === game.id) === index,
+            );
+            gamesList.value = uniqueGames;
         },
         (message: string) => {
             console.error(message);
@@ -101,11 +88,18 @@ const getGameTop50Info = (start: number) => {
     get_game_top50_info(
         start,
         (data: any) => {
-            data.data.forEach((game: any) => {
+            const newGames = data.data.map((game: any) => {
                 game.gameUsers = formatNumber(game.gameUsers);
                 game.gameScore = parseFloat(game.gameScore.toFixed(1));
+                return game;
             });
-            gamesList.value = data.data;
+
+            // 去重逻辑
+            const uniqueGames = [...gamesList.value, ...newGames].filter(
+                (game, index, self) =>
+                    self.findIndex((g) => g.id === game.id) === index,
+            );
+            gamesList.value = uniqueGames;
         },
         (message: string) => {
             console.error(message);
@@ -119,11 +113,18 @@ const getGameHighestRated = (start: number) => {
     get_game_highest_rated(
         start,
         (data: any) => {
-            data.data.forEach((game: any) => {
+            const newGames = data.data.map((game: any) => {
                 game.gameUsers = formatNumber(game.gameUsers);
                 game.gameScore = parseFloat(game.gameScore.toFixed(1));
+                return game;
             });
-            gamesList.value = data.data;
+
+            // 去重逻辑
+            const uniqueGames = [...gamesList.value, ...newGames].filter(
+                (game, index, self) =>
+                    self.findIndex((g) => g.id === game.id) === index,
+            );
+            gamesList.value = uniqueGames;
         },
         (message: string) => {
             console.error(message);
@@ -172,8 +173,21 @@ const switchFetch = (listType: ListType, start: number) => {
 
 const switchTab = (tab: ListType) => {
     currentTab.value = tab;
-    fetchGames(tab);
+    gamesList.value = []
     switchFetch(tab, 0);
+};
+
+const scrollContainer = ref(null);
+
+const handleScroll = () => {
+    if (!scrollContainer.value) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer.value;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
+
+    if (isBottom) {
+        switchFetch(currentTab.value, gamesList.value.length);
+    }
 };
 
 const colors = [
@@ -210,7 +224,7 @@ const changeFavorites = () => {
 </script>
 
 <template>
-    <div>
+    <div ref="scrollContainer" @scroll="handleScroll" class="game">
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div v-if="showLoading" class="loading-overlay">
             <RatingCard
@@ -504,6 +518,10 @@ const changeFavorites = () => {
 </template>
 
 <style scoped>
+.game {
+    overflow-y: auto;
+    height: 100vh;
+}
 .section-header {
     display: flex;
     justify-content: space-between;

@@ -26,7 +26,7 @@ public class GameController {
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getTop50(@RequestParam(defaultValue = "0") int start) {
         try {
-            int size = 25;  // 每页 25 条数据
+            int size = 10;  // 每页 10 条数据
             return ResultEntity.success(gameService.getTop50(start, size));
         } catch (RuntimeException e) {
             log.error("/get/top50发生错误:{}", e.getMessage());
@@ -38,7 +38,7 @@ public class GameController {
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getHighestRated(@RequestParam(defaultValue = "0") int start) {
         try {
-            int size = 25;  // 每页 25 条数据
+            int size = 10;  // 每页 10 条数据
             return ResultEntity.success(gameService.getHighestRated(start, size));
         } catch (RuntimeException e) {
             log.error("/get/highest-rated发生错误:{}", e.getMessage());
@@ -50,7 +50,7 @@ public class GameController {
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getMostReviewed(@RequestParam(defaultValue = "0") int start) {
         try {
-            int size = 25;  // 每页 25 条数据
+            int size = 10;  // 每页 10 条数据
             return ResultEntity.success(gameService.getMostReviewed(start, size));
         } catch (RuntimeException e) {
             log.error("/get/most-reviewed发生错误:{}", e.getMessage());

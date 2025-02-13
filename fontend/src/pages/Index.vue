@@ -52,24 +52,24 @@ const selectIndex = ref(globalSelect);
 
 const handleSelect = (index) => {
     selectIndex.value = index;
-    console.log(index)
+    console.log(index);
 };
 // 监听全局变量变化
 watch(selectIndex, (newValue, oldValue) => {
     if (newValue === oldValue) return;
     globalSelect.value = newValue;
-    if (newValue === '3-1'){
-      tag.value = '游戏管理 - 基本信息';
-    }else if (newValue === '3-2') {
-      tag.value = '游戏管理 - 添加信息';
+    if (newValue === "3-1") {
+        tag.value = "游戏管理 - 基本信息";
+    } else if (newValue === "3-2") {
+        tag.value = "游戏管理 - 添加信息";
+    } else if (newValue === "3-3") {
+        tag.value = "游戏管理 - 修改信息";
     }
-    
 });
 const toMyInfo = () => {
     selectIndex.value = "5";
 };
-const tag = ref("")
-
+const tag = ref("");
 </script>
 
 <template>
@@ -191,9 +191,10 @@ const tag = ref("")
                             </el-icon>
                             <span> 游戏管理 </span>
                         </template>
-                        <el-menu-item-group >
+                        <el-menu-item-group>
                             <el-menu-item index="3-1">基本信息</el-menu-item>
                             <el-menu-item index="3-2">添加信息</el-menu-item>
+                            <el-menu-item index="3-3">更新信息</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                 </el-menu>
@@ -219,12 +220,12 @@ const tag = ref("")
                             :icon="Fold"
                             plain
                             round
-                            style="transform: scale(0.8);"
+                            style="transform: scale(0.8)"
                             type="info"
                             @click="collapse"
-                            >
+                        >
                         </el-button>
-                        <span class="tag">{{tag}}</span>
+                        <span class="tag">{{ tag }}</span>
                     </div>
                     <el-dropdown style="width: 70px; cursor: pointer">
                         <el-button

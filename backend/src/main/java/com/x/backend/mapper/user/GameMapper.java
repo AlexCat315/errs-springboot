@@ -19,7 +19,7 @@ public interface GameMapper {
 
     Integer insertRantingComment(GameRantingCommentDTO gameRantingCommentDTO);
 
-    List<Game> getHighestRated(int start, int size);
+    List<Game> getHighestRated(@Param("offset") int offset, @Param("size")int size);
 
-    List<Game> getMostReviewed(int start, int size);
+    List<Game> getMostReviewed(@Param("offset") int offset, @Param("size")int size);
 }
