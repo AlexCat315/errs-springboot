@@ -15,4 +15,8 @@ public interface GameService {
     List<GameResponsesVO> getGameInfoBySearch(SearchVO searchVO);
 
     List<GameResponsesVO> getAllGameInfo(PageSize pageSize);
+
+    String getGameImageUrl(Integer gameId);
+
+    void updateGame(GameCreateRequest request);
 }

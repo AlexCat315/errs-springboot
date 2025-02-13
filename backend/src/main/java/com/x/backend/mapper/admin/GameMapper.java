@@ -20,4 +20,8 @@ public interface GameMapper {
     List<Game> getGameInfoBySearch(SearchDTO searchDTO);
 
     List<Game> getAllGameInfo(PageSize pageSize);
+
+    String getGameImageUrl(Integer gameId);
+
+    int updateGame(Game game);
 }

@@ -160,5 +160,45 @@ public class GameServiceImpl implements GameService {
         }).toList();
     }
 
+    @Override
+    public String getGameImageUrl(Integer gameId) {
+        // 查询数据库获取游戏图片 URL
+        String gameImageUrl = gameMapper.getGameImageUrl(gameId);
+        if (gameImageUrl != null) {
+            return gameImageUrl;
+        } else {
+            throw new RuntimeException("Game image not found with ID: " + gameId);
+        }
+    }
 
+    @Override
+    public void updateGame(GameCreateRequest request) {
+        // 创建一个新的 Game 实体对象
+        Game game = new Game();
+
+        // 设置 Game 对象的属性
+        game.setId(request.getGameId());
+        game.setGameName(request.getGameName());
+        game.setGameScore(request.getGameScore());
+        game.setGameDeveloper(request.getGameDeveloper());
+        game.setReleaseDate(request.getReleaseDate());
+        game.setGameDescription(request.getGameDescription());
+
+        // 使用 Jackson 将 List 转换为 JSON 字符串
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            // 将 List 转换为 JSON 字符串
+            game.setGameCategories(objectMapper.writeValueAsString(request.getGameCategories()));
+            game.setGamePlatforms(objectMapper.writeValueAsString(request.getGamePlatforms()));
+        } catch (JsonProcessingException e) {
+            log.error("转换 GameCategories 或 GamePlatforms 时发生错误:{}", e.getMessage(), e);
+        }
+
+        game.setGameImageUrl(request.getGameImageUrl());
+        // 调用 Mapper 的更新方法
+        int updateGame = gameMapper.updateGame(game);
+        if (updateGame != 1) {
+            throw new RuntimeException("更新 Game 数据失败");
+        }
+    }
 }

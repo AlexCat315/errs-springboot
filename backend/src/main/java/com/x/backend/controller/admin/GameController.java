@@ -113,6 +113,59 @@ public class GameController {
         }
     }
 
+    @PostMapping(value = "/update/info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Transactional(rollbackFor = Exception.class)
+    public ResultEntity<String> updateGame(
+            @RequestParam("gameId") Integer gameId,
+            @RequestParam("gameName") String gameName,
+            @RequestParam(value = "gameScore", required = false) Double gameScore,
+            @RequestParam("gameDeveloper") String gameDeveloper,
+            @RequestParam("releaseDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate releaseDate,
+            @RequestParam("gameDescription") String gameDescription,
+            @RequestParam("gameCategories") String gameCategories,
+            @RequestParam("gamePlatforms") String gamePlatforms,
+            @RequestParam(value = "file", required = false) MultipartFile file) throws JsonProcessingException {
+
+        // 处理 JSON 数组
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> categories = objectMapper.readValue(gameCategories, new TypeReference<>() {
+        });
+        List<String> platforms = objectMapper.readValue(gamePlatforms, new TypeReference<>() {
+        });
+
+        // 构建请求对象
+        GameCreateRequest request = new GameCreateRequest();
+        request.setGameName(gameName);
+        request.setGameScore(gameScore);
+        request.setGameDeveloper(gameDeveloper);
+        request.setReleaseDate(releaseDate);
+        request.setGameDescription(gameDescription);
+        request.setGameCategories(categories);
+        request.setGamePlatforms(platforms);
+        request.setGameId(gameId);
+
+        // 处理文件上传
+        if (file != null && !file.isEmpty()) {
+            try {
+                String uploadFile = minioUtils.pubUploadFile(file);
+                uploadFile = pubHandlerUrl + uploadFile;
+                request.setGameImageUrl(uploadFile);
+                // 查找出此游戏的封面URL
+                String oldImageUrl = gameService.getGameImageUrl(gameId);
+                // 删除旧的封面图片
+                if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                    minioUtils.deleteFile(oldImageUrl.replace(pubHandlerUrl, ""));
+                }
+                gameService.updateGame(request);
+                return ResultEntity.success();
+            } catch (Exception e) {
+                log.error("上传文件失败", e);
+                return ResultEntity.serverError();
+            }
+        }
+        return ResultEntity.failure("上传文件失败");
+    }
+
     @RequestMapping("/test")
     public ResultEntity<String> test() {
         return ResultEntity.success("test");

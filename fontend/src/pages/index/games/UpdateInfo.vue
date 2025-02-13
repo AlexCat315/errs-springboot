@@ -7,10 +7,10 @@ import Cancel from "./components/Cancel.vue";
 import SearchGame from "./components/SeachGame.vue";
 import GameCard from "./components/GameCard.vue";
 import GameCardSmart from "./components/GameCardSmart.vue";
-import CancelUpdatePanel from "./components/CancelUpdatePanel.vue"
+import CancelUpdatePanel from "./components/CancelUpdatePanel.vue";
 import { watch } from "vue";
 import { get_game_info_by_id } from "../../../net/game/get";
-
+const gameID = ref<number>(0);
 // 表单数据
 const gameName = ref(""); // 游戏名
 const gameScore = ref<number | null>(null); // 分数
@@ -30,6 +30,7 @@ const handleSubmit = async () => {
     const formData = new FormData();
 
     // 添加文本数据
+    formData.append("gameId", gameID.value.toString());
     formData.append("gameName", gameName.value);
     formData.append("gameScore", gameScore.value?.toString() || "");
     formData.append("gameDeveloper", gameDeveloper.value);
@@ -49,10 +50,10 @@ const handleSubmit = async () => {
 
     // 使用封装的 postFormData 方法发送请求
     postFormData(
-        "/api/admin/game/insert/score", // 请求地址
+        "/api/admin/game/update/info", // 请求地址
         formData, // FormData 数据
         (response: any) => {
-            ElMessage.success("提交成功！");
+            ElMessage.success("数据更新成功！");
             // 删除表单数据
             clearFrom();
             buttonLoadingState.value = false;
@@ -63,7 +64,7 @@ const handleSubmit = async () => {
         },
     );
 };
-const gameID = ref<number>(0);
+
 
 watch(
     () => gameID.value,
@@ -243,8 +244,15 @@ const handleSearchGame = (value: string) => {
             v-if="!showUpdatePanel"
         />
 
-        <div v-if="showUpdatePanel" class="card" style="transform: scale(0.8);margin-top: -60px;" >
-            <CancelUpdatePanel @click="showUpdatePanel =false" style="margin-left: 95%;" />
+        <div
+            v-if="showUpdatePanel"
+            class="card"
+            style="transform: scale(0.8); margin-top: -60px"
+        >
+            <CancelUpdatePanel
+                @click="showUpdatePanel = false"
+                style="margin-left: 95%"
+            />
             <h2 class="card-title">修改信息</h2>
             <form @submit.prevent="handleSubmit">
                 <div class="form-grid">
@@ -440,7 +448,7 @@ const handleSearchGame = (value: string) => {
                     class="submit-btn"
                     type="submit"
                 >
-                    提交
+                    更新
                 </button>
                 <el-button
                     v-if="buttonLoadingState"
@@ -469,7 +477,7 @@ const handleSearchGame = (value: string) => {
                             </svg>
                         </div>
                     </template>
-                    提交
+                    更新
                 </el-button>
             </form>
         </div>

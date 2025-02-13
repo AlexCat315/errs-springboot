@@ -7,6 +7,7 @@ import java.util.List;
 
 @Data
 public class GameCreateRequest {
+    private Integer gameId;
     private String gameName;
     private Double gameScore;
     private String gameDeveloper;

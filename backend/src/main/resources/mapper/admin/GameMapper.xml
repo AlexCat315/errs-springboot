@@ -9,6 +9,19 @@
                 #{gamePlatforms}, #{gameImageUrl})
     </insert>
 
+    <update id="updateGame">
+        UPDATE games
+        SET game_name        = #{gameName},
+            game_score       = #{gameScore},
+            game_developer   = #{gameDeveloper},
+            release_date     = #{releaseDate},
+            game_description = #{gameDescription},
+            game_categories  = #{gameCategories},
+            game_platforms   = #{gamePlatforms},
+            game_image_url   = #{gameImageUrl}
+        WHERE id = #{id}
+    </update>
+
 
     <resultMap id="Game" type="com.x.backend.pojo.common.Game">
         <id property="id" column="id"/>
@@ -46,6 +59,11 @@
         FROM games
         ORDER BY game_score DESC
         LIMIT #{start} , #{size}
+    </select>
+    <select id="getGameImageUrl" resultType="java.lang.String">
+        SELECT game_image_url
+        FROM games
+        WHERE id = #{gameId}
     </select>
 
 

@@ -194,7 +194,7 @@ const tag = ref("");
                         <el-menu-item-group>
                             <el-menu-item index="3-1">基本信息</el-menu-item>
                             <el-menu-item index="3-2">添加信息</el-menu-item>
-                            <el-menu-item index="3-3">更新信息</el-menu-item>
+                            <el-menu-item index="3-3">修改信息</el-menu-item>
                         </el-menu-item-group>
                     </el-sub-menu>
                 </el-menu>
