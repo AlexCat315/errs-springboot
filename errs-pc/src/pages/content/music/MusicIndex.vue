@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 import Card from "./components/Card.vue";
 import MusicPlay from "./components/MusicPlay.vue";
 import LikePanel from "./components/LikePanle.vue";
@@ -29,10 +29,12 @@ const handleUpdateShowLikePanel = (value: boolean) => {
             "
         >
             <Card
+                @updateShowLikePanel="handleUpdateShowLikePanel"
                 :icon="'https://www.alexcat.it.com/minio-api/public-errs/网易云音乐.png'"
                 :iconName="'网易云音乐'"
             />
             <Card
+                @updateShowLikePanel="handleUpdateShowLikePanel"
                 :icon="'https://www.alexcat.it.com/minio-api/public-errs/QQ音乐.png'"
                 :iconName="'QQ音乐'"
             />

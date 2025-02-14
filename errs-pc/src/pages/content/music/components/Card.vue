@@ -165,7 +165,7 @@
                 </p>
             </div>
 
-            <Like style="margin-left: auto;margin-top: 10px;" />
+            <Like @click="sendMessage" style="margin-left: auto;margin-top: 10px;" />
         </div>
     </div>
 </template>
@@ -264,4 +264,14 @@ const props = defineProps<{
     icon?: string;
     iconName: string;
 }>();
+
+// 定义触发的事件和参数类型
+const emit = defineEmits<{
+    (event: "updateShowLikePanel", newMessage: boolean): void;
+}>();
+
+// 通过点击按钮向父组件传递消息
+const sendMessage = () => {
+    emit("updateShowLikePanel", true);
+};
 </script>
