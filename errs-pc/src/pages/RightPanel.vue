@@ -4,8 +4,8 @@ import Setting from "./content/Setting.vue";
 import Explore from "./content/Explore.vue";
 import Games from "./content/Games.vue";
 import Books from "./content/Books.vue";
-import News from "./content/News.vue";
 import Videos from "./content/Videos.vue";
+import Music from "./content/Music.vue";
 
 // 接收全局状态
 const globalSelect = inject("globalSelect");
@@ -16,7 +16,7 @@ const componentMap = {
     1: Explore,
     2: Games,
     3: Books,
-    4: News,
+    4: Music,
     5: Videos,
     7: Setting,
 };

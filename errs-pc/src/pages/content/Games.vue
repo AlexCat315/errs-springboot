@@ -13,7 +13,8 @@ const scrollY = ref(0);
 const handleScroll = (event: Event) => {
     const target = event.target as HTMLElement;
     scrollY.value = target.scrollTop;
-    if (scrollY.value > 100) {
+    console.log(scrollY.value);
+    if (scrollY.value > 10) {
         showTitle.value = true;
     } else {
         showTitle.value = false;
@@ -24,7 +25,6 @@ const handleScroll = (event: Event) => {
 <template>
     <div
         class="explore_content"
-        @scroll="handleScroll"
         :style="{
             backgroundColor: selectTheme === 'light' ? '#FFF' : '#202327',
         }"
@@ -42,7 +42,7 @@ const handleScroll = (event: Event) => {
         </div>
 
         <div>
-            <GamesIndex/>
+            <GamesIndex @scroll="handleScroll" style="height: 100vh" />
         </div>
     </div>
 </template>
