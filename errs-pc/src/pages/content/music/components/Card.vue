@@ -147,14 +147,14 @@
             <div class="song">
                 <div style="display: flex">
                     <p class="name">{{ song.name }}</p>
-                    <Rating :score="song.score" :users="song.users" style="margin-left: 5px" />
                 </div>
                 <p style="margin-top: -15px" class="artist">
                     {{ song.artist }}
                 </p>
             </div>
+            <Rating :score="song.score" :users="song.users" style="margin-left:auto" />
 
-            <Like @click="sendMessage" style="margin-left: auto;margin-top: 10px;" />
+            <Like @click="sendMessage" style="margin-top: 11px;" />
         </div>
     </div>
 </template>
