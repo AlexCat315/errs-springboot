@@ -135,11 +135,7 @@
             <p class="heading">{{ props.iconName }}</p>
         </div>
         <div v-for="(song, index) in songs" :key="index" class="loader">
-            <div
-                @click="currentSong = null"
-                v-if="currentSong === song"
-                class="loading"
-            >
+            <div @click="currentSong = null" v-if="currentSong === song" class="loading">
                 <div class="load" :class="{ playing: !audio?.paused }"></div>
                 <div class="load" :class="{ playing: !audio?.paused }"></div>
                 <div class="load" :class="{ playing: !audio?.paused }"></div>
@@ -147,18 +143,11 @@
                 <div class="load" :class="{ playing: !audio?.paused }"></div>
             </div>
             <div @click="playSong(song)" v-else class="play"></div>
-            <div
-                class="albumcover"
-                :style="{ backgroundImage: `url(${song.coverUrl})` }"
-            ></div>
+            <div class="albumcover" :style="{ backgroundImage: `url(${song.coverUrl})` }"></div>
             <div class="song">
                 <div style="display: flex">
                     <p class="name">{{ song.name }}</p>
-                    <Rating
-                        :score="song.score"
-                        :users="song.users"
-                        style="margin-left: 5px"
-                    />
+                    <Rating :score="song.score" :users="song.users" style="margin-left: 5px" />
                 </div>
                 <p style="margin-top: -15px" class="artist">
                     {{ song.artist }}
@@ -185,6 +174,7 @@ interface Song {
     audioUrl: string;
     tags: string[];
     users: string;
+    score: number;
 }
 
 const songs = ref<Song[]>([]);

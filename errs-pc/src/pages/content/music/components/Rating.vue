@@ -89,7 +89,7 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-    score?: string;
+    score?: number;
     users: string;
 }>();
 </script>
