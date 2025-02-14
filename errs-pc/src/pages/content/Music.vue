@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { inject, ref, reactive, onMounted, onBeforeUnmount } from 'vue';
+import { inject, ref } from 'vue';
+import MusicIndex from './music/MusicIndex.vue';
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -37,9 +38,7 @@ const handleScroll = (event: Event) => {
 
 
     <div>
-      <h1>1111</h1>
-      <h1>1111</h1>
-      <!-- 省略其他内容 -->
+      <MusicIndex />
     </div>
   </div>
 </template>

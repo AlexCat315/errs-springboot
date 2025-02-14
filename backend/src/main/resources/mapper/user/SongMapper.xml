@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x.backend.mapper.user.SongMapper">
+
+    <resultMap id="SongResultMap" type="com.x.backend.pojo.common.Song">
+        <id property="id" column="id"/>
+        <result property="artist" column="artist"/>
+        <result property="coverUrl" column="cover_url"/>
+        <result property="audioUrl" column="audio_url"/>
+        <result property="score" column="score"/>
+        <result property="tags" column="tags"/>
+        <result property="users" column="users"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="SongResultMap">
+        SELECT *
+        FROM song
+        ORDER BY score DESC
+        LIMIT #{start}, #{size}
+    </select>
+
+</mapper>

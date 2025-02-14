@@ -6,8 +6,8 @@ import lombok.Data;
 @Data
 public class PageSize {
     @NotNull
-    private int size;
+    private int size = 10;
     @NotNull
-    private int page;
+    private int page = 1;
     private int start;
 }

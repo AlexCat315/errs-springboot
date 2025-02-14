@@ -5,6 +5,7 @@
 
 <template>
   <div style="
+  background:#c6dbcf;
         max-width: 100%;
         height: 100vh;
         display: flex;
