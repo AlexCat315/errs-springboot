@@ -131,8 +131,8 @@
 <template>
     <div class="main">
         <div class="currentplaying">
-          <img style="width: 30px;height: 30px;" :src="props.icon" />
-            <p class="heading">{{props.iconName}}</p>
+            <img style="width: 30px; height: 30px" :src="props.icon" />
+            <p class="heading">{{ props.iconName }}</p>
         </div>
         <div v-for="(song, index) in songs" :key="index" class="loader">
             <div
@@ -152,9 +152,20 @@
                 :style="{ backgroundImage: `url(${song.coverUrl})` }"
             ></div>
             <div class="song">
-                <p class="name">{{ song.name }}</p>
-                <p class="artist">{{ song.artist }}</p>
+                <div style="display: flex">
+                    <p class="name">{{ song.name }}</p>
+                    <Rating
+                        :score="song.score"
+                        :users="song.users"
+                        style="margin-left: 5px"
+                    />
+                </div>
+                <p style="margin-top: -15px" class="artist">
+                    {{ song.artist }}
+                </p>
             </div>
+
+            <Like style="margin-left: auto;margin-top: 10px;" />
         </div>
     </div>
 </template>
@@ -162,6 +173,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { get_music_all } from "../../../../net/music/get";
+import Like from "./Like.vue";
+import Rating from "./Rating.vue";
+import { forEach } from "lodash";
 
 interface Song {
     id: number;
@@ -170,13 +184,23 @@ interface Song {
     coverUrl: string;
     audioUrl: string;
     tags: string[];
-    users: number;
+    users: string;
 }
 
 const songs = ref<Song[]>([]);
 const currentSong = ref<Song | null>(null);
 const audio = ref<HTMLAudioElement | null>(null);
 
+function formatNumber(num: number) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + "m+";
+    } else if (num >= 10000) {
+        return (num / 10000).toFixed(1) + "w+";
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + "k+";
+    }
+    return num.toString();
+}
 onMounted(async () => {
     try {
         audio.value = new Audio();
@@ -186,7 +210,12 @@ onMounted(async () => {
             (data: any) => {
                 console.log(data);
                 // 随机排序
-                songs.value = data.data.slice(0, 6).sort(() => Math.random() - 0.5);
+                songs.value = data.data
+                    .slice(0, 5)
+                    .sort(() => Math.random() - 0.5);
+                forEach(songs.value, (song) => {
+                    song.users = formatNumber(Number(song.users));
+                });
             },
             (err: string) => {
                 console.log(err);
@@ -232,9 +261,7 @@ const playSong = (song: Song) => {
 };
 
 const props = defineProps<{
-  icon?: string
-  iconName: string,
-}
->()
-
+    icon?: string;
+    iconName: string;
+}>();
 </script>
