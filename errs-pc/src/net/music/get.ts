@@ -37,3 +37,22 @@ export function get_music_by_id(
     },
   );
 }
+
+export function get_music_is_like(
+  id: number,
+  success: Function,
+  failure: Function,
+) {
+  Post(
+    `/api/user/song/get/is/like?id=${id}`,
+    {},
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+  );
+}
+
+

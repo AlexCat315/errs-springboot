@@ -3,7 +3,9 @@ package com.x.backend.mapper.user;
 
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
+import com.x.backend.pojo.user.dto.song.UpdateSongScoreUserDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,4 +17,15 @@ public interface SongMapper {
     List<Song> selectAll(PageSize pageSize);
 
     Song selectById(Long id);
+
+    int updateSongScoreUsers(UpdateSongScoreUserDTO updateSongScoreUserDTO);
+
+    int deleteSongScoreUsers(UpdateSongScoreUserDTO updateSongScoreUserDTO);
+
+    int insertSongScoreUser(UpdateSongScoreUserDTO updateSongScoreUserDTO);
+
+    int deleteSongScoreUser(UpdateSongScoreUserDTO updateSongScoreUserDTO);
+
+    Integer isSongLiked(@Param("accountId") Integer accountId, @Param("songId") Long id);
+
 }

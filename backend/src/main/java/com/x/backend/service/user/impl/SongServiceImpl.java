@@ -7,12 +7,17 @@ import com.x.backend.mapper.user.SongMapper;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
+import com.x.backend.pojo.user.dto.song.UpdateSongScoreUserDTO;
+import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.song.UpdateSongScoreUsersVO;
 import com.x.backend.pojo.user.vo.responses.song.SongVO;
 import com.x.backend.service.user.SongService;
+import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +28,8 @@ public class SongServiceImpl implements SongService {
 
     @Resource(name = "userSongMapper")
     private SongMapper songMapper;
+    @Resource()
+    private JWTUtils<UserAccount> userAccountJWTUtils;
 
 
     @Override
@@ -64,7 +71,7 @@ public class SongServiceImpl implements SongService {
         BeanUtils.copyProperties(song, songVO);
         // 将string类型的artist转换为List<String>
         ObjectMapper objectMapper = new ObjectMapper();
-        List<String> songTags = null;
+        List<String> songTags;
         try {
             songTags = objectMapper.readValue(song.getTags(), new TypeReference<>() {
             });
@@ -75,4 +82,58 @@ public class SongServiceImpl implements SongService {
         songVO.setTags(songTags);
         return ResultEntity.success(songVO);
     }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateSong(UpdateSongScoreUsersVO updateSongScoreUsersVO) {
+        try {
+            Integer id = userAccountJWTUtils.getId();
+            UpdateSongScoreUserDTO updateSongScoreUserDTO = new UpdateSongScoreUserDTO();
+            updateSongScoreUserDTO.setAccountId(id);
+            updateSongScoreUserDTO.setSongId(updateSongScoreUsersVO.getId());
+            if (updateSongScoreUsersVO.getIsLiked()) {
+                int i = songMapper.updateSongScoreUsers(updateSongScoreUserDTO);
+                if (i == 1) {
+                    int insertSongScoreUser = songMapper.insertSongScoreUser(updateSongScoreUserDTO);
+                    if (insertSongScoreUser != 1) {
+                        throw new RuntimeException("insert song score user failed");
+                    }
+                } else {
+                    throw new RuntimeException("update song score user failed");
+                }
+
+            } else {
+                int i = songMapper.deleteSongScoreUsers(updateSongScoreUserDTO);
+                if (i == 1) {
+                    int deleteSongScoreUser = songMapper.deleteSongScoreUser(updateSongScoreUserDTO);
+                    if (deleteSongScoreUser != 1) {
+                        throw new RuntimeException("delete song score user failed");
+                    }
+                } else {
+                    throw new RuntimeException("delete song score user failed");
+                }
+            }
+        } catch (RuntimeException e) {
+            log.error("RuntimeException", e);
+            throw e;
+        }
+    }
+
+    @Override
+    public ResultEntity<Boolean> getIsLike(Long id) {
+        try {
+            Integer accountId = userAccountJWTUtils.getId();
+            Integer songLiked = songMapper.isSongLiked(accountId, id);
+            if (songLiked == 1) {
+                return ResultEntity.success(true);
+            } else {
+                return ResultEntity.success(false);
+            }
+        } catch (RuntimeException e) {
+            log.error("RuntimeException", e);
+            throw e;
+        }
+    }
+
+
 }

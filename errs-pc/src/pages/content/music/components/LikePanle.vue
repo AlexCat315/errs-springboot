@@ -26,6 +26,27 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+.loading,
+.error {
+    text-align: center;
+    padding: 20px;
+    color: #999;
+}
+
+.error {
+    color: #ff4444;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
 .like-dislike-container:hover {
     box-shadow: var(--shadow-active);
 }
@@ -338,58 +359,75 @@
 </style>
 
 <template>
-    <div class="like-dislike-container">
-        <div class="tool-box">
-            <button @click="sendMessage" class="btn-close">×</button>
-        </div>
-        <p class="text-content">你享受<br>这首音乐吗?</p>
-        <div class="icons-box">
-            <div class="icons">
-                <label class="btn-label" for="like-checkbox">
-                    <span class="like-text-content">{{ songLikeUsers }}</span>
-                    <input class="input-box" id="like-checkbox" type="checkbox">
-                    <svg class="svgs" id="icon-like-solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z">
-                        </path>
-                    </svg>
-                    <svg class="svgs" id="icon-like-regular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M323.8 34.8c-38.2-10.9-78.1 11.2-89 49.4l-5.7 20c-3.7 13-10.4 25-19.5 35l-51.3 56.4c-8.9 9.8-8.2 25 1.6 33.9s25 8.2 33.9-1.6l51.3-56.4c14.1-15.5 24.4-34 30.1-54.1l5.7-20c3.6-12.7 16.9-20.1 29.7-16.5s20.1 16.9 16.5 29.7l-5.7 20c-5.7 19.9-14.7 38.7-26.6 55.5c-5.2 7.3-5.8 16.9-1.7 24.9s12.3 13 21.3 13L448 224c8.8 0 16 7.2 16 16c0 6.8-4.3 12.7-10.4 15c-7.4 2.8-13 9-14.9 16.7s.1 15.8 5.3 21.7c2.5 2.8 4 6.5 4 10.6c0 7.8-5.6 14.3-13 15.7c-8.2 1.6-15.1 7.3-18 15.1s-1.6 16.7 3.6 23.3c2.1 2.7 3.4 6.1 3.4 9.9c0 6.7-4.2 12.6-10.2 14.9c-11.5 4.5-17.7 16.9-14.4 28.8c.4 1.3 .6 2.8 .6 4.3c0 8.8-7.2 16-16 16H286.5c-12.6 0-25-3.7-35.5-10.7l-61.7-41.1c-11-7.4-25.9-4.4-33.3 6.7s-4.4 25.9 6.7 33.3l61.7 41.1c18.4 12.3 40 18.8 62.1 18.8H384c34.7 0 62.9-27.6 64-62c14.6-11.7 24-29.7 24-50c0-4.5-.5-8.8-1.3-13c15.4-11.7 25.3-30.2 25.3-51c0-6.5-1-12.8-2.8-18.7C504.8 273.7 512 257.7 512 240c0-35.3-28.6-64-64-64l-92.3 0c4.7-10.4 8.7-21.2 11.8-32.2l5.7-20c10.9-38.2-11.2-78.1-49.4-89zM32 192c-17.7 0-32 14.3-32 32V448c0 17.7 14.3 32 32 32H96c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H32z">
-                        </path>
-                    </svg>
-                    <div class="fireworks">
-                        <div class="checked-like-fx"></div>
-                    </div>
-                </label>
+    <Transition name="fade">
+        <div class="like-dislike-container">
+            <div v-if="loading" class="loading">
+                加载中...
             </div>
-            <div class="icons">
-                <label class="btn-label" for="dislike-checkbox">
-                    <input class="input-box" id="dislike-checkbox" type="checkbox">
-                    <div class="fireworks">
-                        <div class="checked-dislike-fx"></div>
-                    </div>
-                    <svg class="svgs" id="icon-dislike-solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                        <path
-                            d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z">
-                        </path>
-                    </svg>
-                    <svg class="svgs" id="icon-dislike-regular" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 512 512">
-                        <path
-                            d="M323.8 34.8c-38.2-10.9-78.1 11.2-89 49.4l-5.7 20c-3.7 13-10.4 25-19.5 35l-51.3 56.4c-8.9 9.8-8.2 25 1.6 33.9s25 8.2 33.9-1.6l51.3-56.4c14.1-15.5 24.4-34 30.1-54.1l5.7-20c3.6-12.7 16.9-20.1 29.7-16.5s20.1 16.9 16.5 29.7l-5.7 20c-5.7 19.9-14.7 38.7-26.6 55.5c-5.2 7.3-5.8 16.9-1.7 24.9s12.3 13 21.3 13L448 224c8.8 0 16 7.2 16 16c0 6.8-4.3 12.7-10.4 15c-7.4 2.8-13 9-14.9 16.7s.1 15.8 5.3 21.7c2.5 2.8 4 6.5 4 10.6c0 7.8-5.6 14.3-13 15.7c-8.2 1.6-15.1 7.3-18 15.1s-1.6 16.7 3.6 23.3c2.1 2.7 3.4 6.1 3.4 9.9c0 6.7-4.2 12.6-10.2 14.9c-11.5 4.5-17.7 16.9-14.4 28.8c.4 1.3 .6 2.8 .6 4.3c0 8.8-7.2 16-16 16H286.5c-12.6 0-25-3.7-35.5-10.7l-61.7-41.1c-11-7.4-25.9-4.4-33.3 6.7s-4.4 25.9 6.7 33.3l61.7 41.1c18.4 12.3 40 18.8 62.1 18.8H384c34.7 0 62.9-27.6 64-62c14.6-11.7 24-29.7 24-50c0-4.5-.5-8.8-1.3-13c15.4-11.7 25.3-30.2 25.3-51c0-6.5-1-12.8-2.8-18.7C504.8 273.7 512 257.7 512 240c0-35.3-28.6-64-64-64l-92.3 0c4.7-10.4 8.7-21.2 11.8-32.2l5.7-20c10.9-38.2-11.2-78.1-49.4-89zM32 192c-17.7 0-32 14.3-32 32V448c0 17.7 14.3 32 32 32H96c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H32z">
-                        </path>
-                    </svg>
-                    <span class="dislike-text-content">{{ songDontLikeUsers }}</span>
-                </label>
+            <div v-else-if="error" class="error">
+                {{ error }}
             </div>
+            <template v-else>
+                <div class="tool-box">
+                    <button @click="sendMessage" class="btn-close">×</button>
+                </div>
+                <p class="text-content">你享受<br>这首音乐吗?</p>
+                <div class="icons-box">
+                    <div class="icons">
+                        <label @click="debouncedLike" class="btn-label" for="like-checkbox">
+                            <span class="like-text-content">{{ songLikeUsers }}</span>
+                            <input class="input-box" id="like-checkbox" type="checkbox" :checked="likeStatus.liked">
+                            <svg class="svgs" id="icon-like-solid" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512">
+                                <path
+                                    d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z">
+                                </path>
+                            </svg>
+                            <svg class="svgs" id="icon-like-regular" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512">
+                                <path
+                                    d="M323.8 34.8c-38.2-10.9-78.1 11.2-89 49.4l-5.7 20c-3.7 13-10.4 25-19.5 35l-51.3 56.4c-8.9 9.8-8.2 25 1.6 33.9s25 8.2 33.9-1.6l51.3-56.4c14.1-15.5 24.4-34 30.1-54.1l5.7-20c3.6-12.7 16.9-20.1 29.7-16.5s20.1 16.9 16.5 29.7l-5.7 20c-5.7 19.9-14.7 38.7-26.6 55.5c-5.2 7.3-5.8 16.9-1.7 24.9s12.3 13 21.3 13L448 224c8.8 0 16 7.2 16 16c0 6.8-4.3 12.7-10.4 15c-7.4 2.8-13 9-14.9 16.7s.1 15.8 5.3 21.7c2.5 2.8 4 6.5 4 10.6c0 7.8-5.6 14.3-13 15.7c-8.2 1.6-15.1 7.3-18 15.1s-1.6 16.7 3.6 23.3c2.1 2.7 3.4 6.1 3.4 9.9c0 6.7-4.2 12.6-10.2 14.9c-11.5 4.5-17.7 16.9-14.4 28.8c.4 1.3 .6 2.8 .6 4.3c0 8.8-7.2 16-16 16H286.5c-12.6 0-25-3.7-35.5-10.7l-61.7-41.1c-11-7.4-25.9-4.4-33.3 6.7s-4.4 25.9 6.7 33.3l61.7 41.1c18.4 12.3 40 18.8 62.1 18.8H384c34.7 0 62.9-27.6 64-62c14.6-11.7 24-29.7 24-50c0-4.5-.5-8.8-1.3-13c15.4-11.7 25.3-30.2 25.3-51c0-6.5-1-12.8-2.8-18.7C504.8 273.7 512 257.7 512 240c0-35.3-28.6-64-64-64l-92.3 0c4.7-10.4 8.7-21.2 11.8-32.2l5.7-20c10.9-38.2-11.2-78.1-49.4-89zM32 192c-17.7 0-32 14.3-32 32V448c0 17.7 14.3 32 32 32H96c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H32z">
+                                </path>
+                            </svg>
+                            <div class="fireworks">
+                                <div class="checked-like-fx"></div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="icons">
+                        <label @click="debouncedDontLike" class="btn-label" for="dislike-checkbox">
+                            <input class="input-box" id="dislike-checkbox" type="checkbox"
+                                :checked="likeStatus.disliked">
+                            <div class="fireworks">
+                                <div class="checked-dislike-fx"></div>
+                            </div>
+                            <svg class="svgs" id="icon-dislike-solid" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512">
+                                <path
+                                    d="M313.4 32.9c26 5.2 42.9 30.5 37.7 56.5l-2.3 11.4c-5.3 26.7-15.1 52.1-28.8 75.2H464c26.5 0 48 21.5 48 48c0 18.5-10.5 34.6-25.9 42.6C497 275.4 504 288.9 504 304c0 23.4-16.8 42.9-38.9 47.1c4.4 7.3 6.9 15.8 6.9 24.9c0 21.3-13.9 39.4-33.1 45.6c.7 3.3 1.1 6.8 1.1 10.4c0 26.5-21.5 48-48 48H294.5c-19 0-37.5-5.6-53.3-16.1l-38.5-25.7C176 420.4 160 390.4 160 358.3V320 272 247.1c0-29.2 13.3-56.7 36-75l7.4-5.9c26.5-21.2 44.6-51 51.2-84.2l2.3-11.4c5.2-26 30.5-42.9 56.5-37.7zM32 192H96c17.7 0 32 14.3 32 32V448c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32V224c0-17.7 14.3-32 32-32z">
+                                </path>
+                            </svg>
+                            <svg class="svgs" id="icon-dislike-regular" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512">
+                                <path
+                                    d="M323.8 34.8c-38.2-10.9-78.1 11.2-89 49.4l-5.7 20c-3.7 13-10.4 25-19.5 35l-51.3 56.4c-8.9 9.8-8.2 25 1.6 33.9s25 8.2 33.9-1.6l51.3-56.4c14.1-15.5 24.4-34 30.1-54.1l5.7-20c3.6-12.7 16.9-20.1 29.7-16.5s20.1 16.9 16.5 29.7l-5.7 20c-5.7 19.9-14.7 38.7-26.6 55.5c-5.2 7.3-5.8 16.9-1.7 24.9s12.3 13 21.3 13L448 224c8.8 0 16 7.2 16 16c0 6.8-4.3 12.7-10.4 15c-7.4 2.8-13 9-14.9 16.7s.1 15.8 5.3 21.7c2.5 2.8 4 6.5 4 10.6c0 7.8-5.6 14.3-13 15.7c-8.2 1.6-15.1 7.3-18 15.1s-1.6 16.7 3.6 23.3c2.1 2.7 3.4 6.1 3.4 9.9c0 6.7-4.2 12.6-10.2 14.9c-11.5 4.5-17.7 16.9-14.4 28.8c.4 1.3 .6 2.8 .6 4.3c0 8.8-7.2 16-16 16H286.5c-12.6 0-25-3.7-35.5-10.7l-61.7-41.1c-11-7.4-25.9-4.4-33.3 6.7s-4.4 25.9 6.7 33.3l61.7 41.1c18.4 12.3 40 18.8 62.1 18.8H384c34.7 0 62.9-27.6 64-62c14.6-11.7 24-29.7 24-50c0-4.5-.5-8.8-1.3-13c15.4-11.7 25.3-30.2 25.3-51c0-6.5-1-12.8-2.8-18.7C504.8 273.7 512 257.7 512 240c0-35.3-28.6-64-64-64l-92.3 0c4.7-10.4 8.7-21.2 11.8-32.2l5.7-20c10.9-38.2-11.2-78.1-49.4-89zM32 192c-17.7 0-32 14.3-32 32V448c0 17.7 14.3 32 32 32H96c17.7 0 32-14.3 32-32V224c0-17.7-14.3-32-32-32H32z">
+                                </path>
+                            </svg>
+                            <span class="dislike-text-content">{{ songDontLikeUsers }}</span>
+                        </label>
+                    </div>
+                </div>
+            </template>
         </div>
-    </div>
+    </Transition>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue"
-import { get_music_by_id } from "../../../../net/music/get"
+import { onMounted, ref, watch } from "vue";
+import { get_music_by_id, get_music_is_like } from "../../../../net/music/get";
+import { update_music_likes } from "../../../../net/music/update";
+import { useLocalStorage } from "@vueuse/core";
+import { debounce } from "lodash";
 
 // 定义触发的事件和参数类型
 const emit = defineEmits<{
@@ -400,6 +438,7 @@ const emit = defineEmits<{
 const sendMessage = () => {
     emit("updateShowLikePanel", false);
 };
+
 interface Song {
     id: number;
     name: string;
@@ -410,6 +449,7 @@ interface Song {
     users: string;
     score: number;
 }
+
 interface SongLike {
     id: number;
     name: string;
@@ -422,14 +462,29 @@ interface SongLike {
     likeUsers: number;
     dontLikeUsers: number;
 }
-const props = defineProps<
-    {
-        song: Song
-    }
->();
+
+const props = defineProps<{
+    song: Song;
+}>();
+
 const songLike = ref<SongLike>();
-const songLikeUsers = ref('')
-const songDontLikeUsers = ref('')
+const songLikeUsers = ref("");
+const songDontLikeUsers = ref("");
+const loading = ref(false);
+const error = ref("");
+
+const likeStatus = ref({
+    liked: false,
+    disliked: false,
+});
+
+// 使用本地存储记住用户选择
+const userLikeHistory = useLocalStorage(`music-${props.song.id}-like`, {
+    liked: false,
+    disliked: false,
+});
+
+
 function formatNumber(num: number) {
     if (num >= 1000000) {
         return (num / 1000000).toFixed(1) + "m+";
@@ -440,16 +495,99 @@ function formatNumber(num: number) {
     }
     return num.toString();
 }
-onMounted(() => {
-    get_music_by_id(props.song.id, (data: any) => {
-        songLikeUsers.value = formatNumber(data.data.likeUsers);
-        songDontLikeUsers.value = formatNumber(data.data.dontLikeUsers);
-        songLike.value = data.data;
-    }, () => {
 
-    })
-})
+const updateMusicLikes = (musicId: number, isLike: boolean) => {
+    update_music_likes(
+        musicId,
+        isLike,
+        (res: any) => {
+            console.log("更新成功");
+        },
+        (err: any) => {
+            console.error("更新失败:", err);
+        }
+    );
+};
 
+const handleLike = () => {
+    if (likeStatus.value.liked) return;
+    if (likeStatus.value.disliked) {
+        songLike.value!.dontLikeUsers -= 1;
+        songDontLikeUsers.value = formatNumber(songLike.value!.dontLikeUsers);
+        likeStatus.value.disliked = false;
+    }
+    songLike.value!.likeUsers += 1;
+    songLikeUsers.value = formatNumber(songLike.value!.likeUsers);
+    likeStatus.value.liked = true;
 
+    updateMusicLikes(props.song.id, true);
+};
 
+const handleDontLike = () => {
+    if (likeStatus.value.disliked) return;
+    if (likeStatus.value.liked) {
+        songLike.value!.likeUsers -= 1;
+        songLikeUsers.value = formatNumber(songLike.value!.likeUsers);
+        likeStatus.value.liked = false;
+    }
+    songLike.value!.dontLikeUsers += 1;
+    songDontLikeUsers.value = formatNumber(songLike.value!.dontLikeUsers);
+    likeStatus.value.disliked = true;
+
+    updateMusicLikes(props.song.id, false);
+};
+
+// 防抖处理
+const debouncedLike = debounce(handleLike, 300);
+const debouncedDontLike = debounce(handleDontLike, 300);
+
+onMounted(async () => {
+    loading.value = true;
+    try {
+        get_music_by_id(
+            props.song.id,
+            (data: any) => {
+                songLikeUsers.value = formatNumber(data.data.likeUsers);
+                songDontLikeUsers.value = formatNumber(data.data.dontLikeUsers);
+                songLike.value = data.data;
+            },
+            (err: any) => {
+                console.error(err);
+                error.value = "获取数据失败";
+            }
+        );
+        get_music_is_like(props.song.id, (data: any) => {
+            if (data.data) {
+                likeStatus.value.liked = data.data.liked;
+                likeStatus.value.disliked = data.data.disliked;
+            }
+        }, (err: any) => {
+            error.value = "获取数据失败";
+            console.error(err);
+            setTimeout(() => {
+                error.value = null;
+                sendMessage();
+            }, 2000);
+        });
+    } catch (err) {
+        error.value = "获取数据失败";
+        console.error(err);
+        setTimeout(() => {
+            error.value = null;
+            sendMessage();
+        }, 2000);
+    } finally {
+        loading.value = false;
+    };
+
+});
+
+// 监听状态变化,更新本地存储
+watch(
+    likeStatus,
+    (newValue) => {
+        userLikeHistory.value = newValue;
+    },
+    { deep: true }
+);
 </script>

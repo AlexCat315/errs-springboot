@@ -13,6 +13,29 @@
         <result property="likeUsers" column="like_users" />
         <result property="dontLikeUsers" column="dont_like_users" />
     </resultMap>
+    <insert id="insertSongScoreUser">
+        insert into song_like (song_id, account_id) values (#{songId}, #{accountId})
+    </insert>
+
+    <update id="updateSongScoreUsers">
+        UPDATE song
+        SET score = (score * users + 10 ) / (song.users + 1),
+            users = users + 1,
+            like_users = like_users + 1
+        WHERE id = #{songId}
+    </update>
+
+    <delete id="deleteSongScoreUsers">
+        UPDATE song
+        SET score = (score * users - 10 ) / (song.users - 1),
+            users = users - 1,
+            like_users = like_users - 1
+        WHERE id = #{songId}
+    </delete>
+    <delete id="deleteSongScoreUser">
+        DELETE FROM song_like WHERE song_id = #{songId} AND account_id = #{accountId}
+    </delete>
+
 
     <select id="selectAll" resultMap="SongResultMap">
         SELECT *
@@ -23,6 +46,9 @@
 
     <select id="selectById" resultMap="SongResultMap">
         SELECT * from song WHERE id = #{id}
+    </select>
+    <select id="isSongLiked" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM song_like WHERE song_id = #{songId} AND account_id = #{accountId}
     </select>
 
 </mapper>
