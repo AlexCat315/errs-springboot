@@ -153,7 +153,7 @@ const cardList = [
                     margin-left: 30px;
                     margin-top: 30px;
                 ">
-                高品质游戏
+                最懂你的音乐
             </p>
             <ViewAll @Click="globalSelect = 4" style="margin-top: 25px" class="view-all" />
         </div>
