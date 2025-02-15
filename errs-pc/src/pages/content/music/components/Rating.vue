@@ -59,7 +59,7 @@
                     </g>
                 </g>
             </svg>
-            <p  class="count">{{ props.score }}</p>
+            <p  class="count">{{  props.score.toFixed(1)  }}</p>
         </div>
 
         <div style="margin-left: 3px; margin-top: -3px" class="bottom-wrapper">
