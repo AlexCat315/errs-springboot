@@ -52,6 +52,10 @@ const selectButtomItem = (key) => {
     selectIndex.value = key;
 };
 
+watch(() => globalSelect.value, (newValue) => {
+    selectIndex.value = newValue;
+});
+
 const searchValue = reactive({ value: "" });
 
 const props = defineProps({
