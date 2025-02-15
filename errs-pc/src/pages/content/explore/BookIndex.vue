@@ -276,10 +276,12 @@ onMounted(() => {
     justify-content: space-between;
     align-items: center;
     margin: 2rem 0;
+    margin-top: -30px;
 }
 .section-header h2 {
     font-size: 1.5rem;
     color: #333;
+    
 }
 .view-all {
     color: #007aff;

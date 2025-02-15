@@ -2,6 +2,7 @@
 import { inject, onBeforeUnmount, onMounted, reactive, Ref, ref } from "vue";
 import BookIndex from "./explore/BookIndex.vue";
 import GamesIndex from "./explore/GamesIndex.vue";
+import MusicIndex from "./explore/MusicIndex.vue";
 
 const globalTheme = inject<string>("globalTheme");
 const selectTheme = ref(globalTheme);
@@ -157,8 +158,10 @@ onBeforeUnmount(() => {
         <div>
             <!-- 游戏 -->
             <GamesIndex v-if="currentIndexDetil === null" />
+            <MusicIndex v-if="currentIndexDetil === null" />
             <!-- 书籍 -->
             <BookIndex />
+            
         </div>
     </div>
 </template>
