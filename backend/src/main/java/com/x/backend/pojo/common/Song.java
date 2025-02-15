@@ -23,4 +23,8 @@ public class Song {
     private String tags;
 
     private Integer users;
+
+    private Integer likeUsers;
+
+    private Integer dontLikeUsers;
 }

@@ -10,6 +10,8 @@
         <result property="score" column="score"/>
         <result property="tags" column="tags"/>
         <result property="users" column="users"/>
+        <result property="likeUsers" column="like_users" />
+        <result property="dontLikeUsers" column="dont_like_users" />
     </resultMap>
 
     <select id="selectAll" resultMap="SongResultMap">
@@ -17,6 +19,10 @@
         FROM song
         ORDER BY score DESC
         LIMIT #{start}, #{size}
+    </select>
+
+    <select id="selectById" resultMap="SongResultMap">
+        SELECT * from song WHERE id = #{id}
     </select>
 
 </mapper>

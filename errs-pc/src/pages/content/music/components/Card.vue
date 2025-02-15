@@ -147,7 +147,7 @@
                 </p>
             </div>
             <Rating :score="song.score" :users="song.users" style="margin-left:auto" />
-            <Like  @click.stop="sendMessage" style="margin-top: 11px;" />
+            <Like  @click.stop="sendMessage(song)" style="margin-top: 11px;" />
         </div>
     </div>
 </template>
@@ -186,8 +186,8 @@ function formatNumber(num: number) {
 }
 
 const emit = defineEmits<{
-    (event: "updateShowLikePanel", newMessage: boolean): void;
-    (event: "play-song", data: { song: Song, playlist: Song[] }): void;
+    (event: "updateShowLikePanel", data: [Song, boolean]): void;
+    (event: "play-song", data: { song: Song; playlist: Song[] }): void;
 }>();
 
 onMounted(async () => {
@@ -239,7 +239,7 @@ const props = defineProps<{
     isPlaying: boolean;
 }>();
 
-const sendMessage = () => {
-    emit("updateShowLikePanel", true);
+const sendMessage = (song:Song) => {
+    emit("updateShowLikePanel",[song, true]);
 };
 </script>

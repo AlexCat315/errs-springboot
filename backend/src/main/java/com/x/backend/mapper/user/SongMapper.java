@@ -13,4 +13,6 @@ import java.util.List;
 public interface SongMapper {
 
     List<Song> selectAll(PageSize pageSize);
+
+    Song selectById(Long id);
 }

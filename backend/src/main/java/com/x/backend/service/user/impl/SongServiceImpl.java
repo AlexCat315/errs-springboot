@@ -53,4 +53,26 @@ public class SongServiceImpl implements SongService {
         }
         return ResultEntity.success(songVOS);
     }
+
+    @Override
+    public ResultEntity<SongVO> getById(Long id) {
+        Song song = songMapper.selectById(id);
+        if (song == null) {
+            return ResultEntity.failure("Song not found");
+        }
+        SongVO songVO = new SongVO();
+        BeanUtils.copyProperties(song, songVO);
+        // 将string类型的artist转换为List<String>
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<String> songTags = null;
+        try {
+            songTags = objectMapper.readValue(song.getTags(), new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            log.error("JsonProcessingException", e);
+            throw new RuntimeException(e);
+        }
+        songVO.setTags(songTags);
+        return ResultEntity.success(songVO);
+    }
 }

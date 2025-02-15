@@ -6,7 +6,13 @@ import LikePanel from "./components/LikePanle.vue";
 const showErrorpanle = ref(false);
 const errorPanleMsg = ref("");
 const showLikePanel = ref(false);
-const handleUpdateShowLikePanel = (value: boolean) => {
+const showLikeSong = ref();
+const handleUpdateShowLikePanel = (value: [Song, boolean]) => {
+    showLikePanel.value = value[1];
+    showLikeSong.value = value[0];
+};
+const handleUpdateShowLikeFalsePanel = (value: boolean) => {
+    console.log(value);
     showLikePanel.value = value;
 };
 interface Song {
@@ -67,17 +73,17 @@ const handleClose = () => {
     // 先移除错误监听器
     const errorHandler = audioPlayer.value.onerror;
     audioPlayer.value.onerror = null;
-    
+
     // 暂停播放
     audioPlayer.value.pause();
     // 清除音频源
     // audioPlayer.value.src = '';
-    
+
     // 重置状态
     isPlaying.value = false;
     currentSong.value = null;
     currentIndex.value = -1;
-    
+
     // 恢复错误监听器
     setTimeout(() => {
         audioPlayer.value.onerror = errorHandler;
@@ -142,7 +148,7 @@ const cardList = [
     <div>
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div v-if="showLikePanel" class="loading-overlay">
-            <LikePanel @updateShowLikePanel="handleUpdateShowLikePanel" />
+            <LikePanel :song="showLikeSong" @updateShowLikePanel="handleUpdateShowLikeFalsePanel" />
         </div>
 
         <!-- 使用grid布局来实现每行两个卡片 -->
@@ -205,6 +211,7 @@ const cardList = [
         transform: translateY(-20px);
     }
 }
+
 .error-msg {
     background-color: rgba(0, 0, 0, 0.7);
     color: #fff;

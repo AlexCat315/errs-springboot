@@ -22,4 +22,8 @@ public class SongVO {
     private List<String> tags;
 
     private Integer users;
+
+    private Integer likeUsers;
+
+    private Integer dontLikeUsers;
 }

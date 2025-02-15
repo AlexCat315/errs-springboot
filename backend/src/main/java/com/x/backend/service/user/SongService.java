@@ -10,4 +10,6 @@ import java.util.List;
 public interface SongService {
 
     ResultEntity<List<SongVO>> getAll(PageSize pageSize);
+
+    ResultEntity<SongVO> getById(Long id);
 }

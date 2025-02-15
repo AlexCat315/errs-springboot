@@ -32,4 +32,14 @@ public class SongController {
         }
     }
 
+    @PostMapping("/get/by/id")
+    public ResultEntity<SongVO> getById(@RequestParam("id") Long id) {
+        try {
+            return songService.getById(id);
+        } catch (RuntimeException e) {
+            log.error("get song by id error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
 }
