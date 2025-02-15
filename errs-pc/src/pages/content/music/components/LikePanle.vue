@@ -501,10 +501,17 @@ const updateMusicLikes = (musicId: number, isLike: boolean) => {
         musicId,
         isLike,
         (res: any) => {
-            console.log("更新成功");
+            console.log("更新成功", res);
+            sendMessage();
+
         },
         (err: any) => {
             console.error("更新失败:", err);
+            error.value = '更新失败';
+            setTimeout(() => {
+                error.value = '';
+                sendMessage();
+            }, 1500);
         }
     );
 };
