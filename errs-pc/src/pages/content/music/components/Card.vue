@@ -147,7 +147,7 @@
                 </p>
             </div>
             <Rating :score="song.score" :users="song.users" style="margin-left:auto" />
-            <Like @click="sendMessage" style="margin-top: 11px;" />
+            <Like  @click.stop="sendMessage" style="margin-top: 11px;" />
         </div>
     </div>
 </template>

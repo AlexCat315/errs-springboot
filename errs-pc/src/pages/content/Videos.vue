@@ -21,10 +21,6 @@ const handleScroll = (event: Event) => {
 
 </script>
 
-
-
-
-
 <template>
   <div class="explore_content" @scroll="handleScroll"
     :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#202327' }">
@@ -32,7 +28,7 @@ const handleScroll = (event: Event) => {
     <div class="title"
       :style="{ backgroundColor: selectTheme === 'light' ? '#FFF' : '#171717', color: selectTheme === 'light' ? '#525252' : '#e1e4e8' }"
       :class="{ show: showTitle }">
-      探索
+      电影
     </div>
 
 

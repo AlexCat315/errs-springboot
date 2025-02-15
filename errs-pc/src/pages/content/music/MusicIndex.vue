@@ -119,6 +119,22 @@ const cardList = [
         icon: 'https://www.alexcat.it.com/minio-api/public-errs/QQ音乐.png',
         iconName: 'QQ音乐'
     },
+    {
+        icon: 'https://www.alexcat.it.com/minio-api/public-errs/酷狗音乐.png',
+        iconName: '酷狗音乐'
+    },
+    {
+        icon: 'https://www.alexcat.it.com/minio-api/public-errs/酷我音乐.png',
+        iconName: '酷我音乐'
+    },
+    {
+        icon: 'https://www.alexcat.it.com/minio-api/public-errs/虾米音乐.png',
+        iconName: '虾米音乐'
+    },
+    {
+        icon: 'https://www.alexcat.it.com/minio-api/public-errs/咪咕音乐.png',
+        iconName: '咪咕音乐'
+    },
 ];
 </script>
 
