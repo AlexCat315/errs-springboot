@@ -155,7 +155,7 @@
     gap: 10px;
     padding: 8px;
     box-sizing: border-box;
-     z-index: 10 !important;
+    z-index: 10 !important;
 }
 
 .card__lenght,
@@ -414,6 +414,7 @@
     visibility: visible;
     opacity: 1;
 }
+
 :deep(.vjs-volume-panel) {
     margin-right: 10px;
 }
@@ -447,6 +448,7 @@
     visibility: visible;
     opacity: 1;
 }
+
 @keyframes moveUp {
     0% {
         transform: translateY(0);
@@ -456,6 +458,7 @@
         transform: translateY(-20px);
     }
 }
+
 .error-msg {
     background-color: rgba(0, 0, 0, 0.7);
     color: #fff;
@@ -478,13 +481,21 @@
     font-size: 13px;
     border-radius: 8px;
 }
+
 .loading-overlay {
     position: fixed;
     top: 0;
     right: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(58, 58, 58, 0.8);
+    background-color: #99d1ff;
+    background-image: radial-gradient(at 21% 94%, hsla(270, 95%, 76%, 1) 0px, transparent 50%),
+        radial-gradient(at 56% 5%, hsla(252, 65%, 79%, 1) 0px, transparent 50%),
+        radial-gradient(at 67% 94%, hsla(194, 81%, 67%, 1) 0px, transparent 50%),
+        radial-gradient(at 15% 72%, hsla(304, 97%, 77%, 1) 0px, transparent 50%),
+        radial-gradient(at 63% 56%, hsla(38, 98%, 63%, 1) 0px, transparent 50%),
+        radial-gradient(at 41% 67%, hsla(321, 61%, 77%, 1) 0px, transparent 50%),
+        radial-gradient(at 68% 68%, hsla(263, 67%, 69%, 1) 0px, transparent 50%);
     /* 半透明背景 */
     display: flex;
     align-items: center;
@@ -495,51 +506,57 @@
 </style>
 
 <template>
-<p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
-<div v-if="isShowLikePanel" class="loading-overlay">
-   <h1> 23123312</h1>
-</div>
-    <div class="card">
-        <div class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
-            <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="background-image"
-                :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
-            <div class="video-player" :class="{ active: isPlaying }">
-                <div class="video-container" :class="{ active: isPlaying }">
-                    <video  ref="videoPlayer" class="video-js vjs-default-skin" :poster="movieForm.cover" preload="auto">
-                        <source :src="movieForm.video" type="video/mp4">
-                    </video>
-                </div>
-            </div>
-            <div class="card__view__data">
-                <p class="card__view__preview">预览</p>
-                <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
-            </div>
+    <div ref="scrollContainer" @scroll="handleScroll" class="game">
+        <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+        <div v-if="isShowLikePanel" class="loading-overlay">
+           <Rating />
         </div>
-        <div class="card__content">
-            <div style="display: flex;">
-                <p class="channel__video__name">{{ movieForm.name }}</p>
-                <div style="margin-top: 30px;" class="channel__subdata">
-                    <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{ formatDate(movieForm.year)
-                    }}年</p>
-                    <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
+
+        <div v-if="!isShowLikePanel" class="card">
+            <div class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
+                <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="background-image"
+                    :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
+                <div class="video-player" :class="{ active: isPlaying }">
+                    <div class="video-container" :class="{ active: isPlaying }">
+                        <video ref="videoPlayer" class="video-js vjs-default-skin" :poster="movieForm.cover"
+                            preload="auto">
+                            <source :src="movieForm.video" type="video/mp4">
+                        </video>
+                    </div>
                 </div>
-                <Like @click.stop="ShowLikePanel()" style="margin-left: 25px;margin-top: 6px;" />
+                <div class="card__view__data">
+                    <p class="card__view__preview">预览</p>
+                    <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
+                </div>
             </div>
-            <div class="channel__data">
-                <div class="channel__data__text">
-                    <p style="color:#797979;" class="channel__name">导演: {{ movieForm.director }}</p>
-                    <p style="margin-top: -5px;color: #797979;" class="channel__name">主演: {{ movieForm.actor }}</p>
-                    <p class="description">
-                        {{ movieForm.summary }}
-                    </p>
-                    <div class="tags">
-                        <span :style="{ color: colorsRandom() }" v-for="tag in movieForm.types" :key="tag"
-                            class="tag">{{
-                                tag }}</span>
+            <div class="card__content">
+                <div style="display: flex;">
+                    <p class="channel__video__name">{{ movieForm.name }}</p>
+                    <div style="margin-top: 30px;" class="channel__subdata">
+                        <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{
+                            formatDate(movieForm.year)
+                            }}年</p>
+                        <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
+                    </div>
+                    <Like @click.stop="ShowLikePanel()" style="margin-left: 25px;margin-top: 6px;" />
+                </div>
+                <div class="channel__data">
+                    <div class="channel__data__text">
+                        <p style="color:#797979;" class="channel__name">导演: {{ movieForm.director }}</p>
+                        <p style="margin-top: -5px;color: #797979;" class="channel__name">主演: {{ movieForm.actor }}</p>
+                        <p class="description">
+                            {{ movieForm.summary }}
+                        </p>
+                        <div class="tags">
+                            <span :style="{ color: colorsRandom() }" v-for="tag in movieForm.types" :key="tag"
+                                class="tag">{{
+                                    tag }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+ 
     </div>
 </template>
 
@@ -548,6 +565,8 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import Like from './Like.vue';
+import Rating from './Rating.vue'
+
 interface MovieForm {
     name: string;
     director: string;
@@ -683,7 +702,19 @@ const errorPanleMsg = ref("");
 // 展示喜欢面板
 const isShowLikePanel = ref(false);
 const ShowLikePanel = () => {
-  isShowLikePanel.value = true;
+    isShowLikePanel.value = true;
 };
 
+const scrollContainer = ref(null);
+
+const handleScroll = () => {
+    if (!scrollContainer.value) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer.value;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
+
+    if (isBottom) {
+        console.log("Reached bottom");
+    }
+};
 </script>
