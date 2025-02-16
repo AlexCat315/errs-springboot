@@ -90,9 +90,33 @@ const handleClose = () => {
     }, 0);
 };
 
+// 创建一个函数来处理音频错误
+const handleAudioError = (e: Event) => {
+    console.error('Audio error:', e);
+    showErrorpanle.value = true;
+    errorPanleMsg.value = "音频加载失败";
+};
+
+
 onUnmounted(() => {
+    // 清理所有事件监听器
+    audioPlayer.value.removeEventListener('play', () => {
+        isPlaying.value = true;
+    });
+    audioPlayer.value.removeEventListener('pause', () => {
+        isPlaying.value = false;
+    });
+    audioPlayer.value.removeEventListener('ended', playNext);
+    audioPlayer.value.removeEventListener('error', handleAudioError);
+    
+    // 暂停播放并清除源
     audioPlayer.value.pause();
     audioPlayer.value.src = '';
+    
+    // 重置状态
+    isPlaying.value = false;
+    currentSong.value = null;
+    currentIndex.value = -1;
 });
 
 onMounted(() => {
@@ -109,12 +133,9 @@ onMounted(() => {
         playNext();
     });
 
-    audioPlayer.value.addEventListener('error', (e) => {
-        console.error('Audio error:', e);
-        showErrorpanle.value = true;
-        errorPanleMsg.value = "音频加载失败";
-    });
+    audioPlayer.value.addEventListener('error', handleAudioError);
 });
+
 
 const cardList = [
     {

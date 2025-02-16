@@ -51,6 +51,19 @@
     background-size: cover;
 }
 
+.video-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2 !important;
+}
+
+/*
+.video-player.active {
+    display: block;
+} */
 
 .card:hover .preview__video {
     opacity: 100;
@@ -61,10 +74,9 @@
     opacity: 0;
 }
 
-
 .card__content {
     position: absolute;
-    z-index: 2;
+    z-index: 2 !important;
     width: 100%;
     height: 40%;
     left: 0;
@@ -76,18 +88,17 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    top: 150px;
+    top: 200px;
     font-family: Arial, Helvetica, sans-serif;
 }
 
 .channel__video__name {
-    font-size: 0.8em;
+    font-size: 1.1em;
     margin-bottom: 10px;
-    max-height: 50%;
-    overflow: hidden;
     text-overflow: ellipsis;
     font-weight: bold;
-    color: #000;
+    color: #494949;
+    margin-top: 10px;
 }
 
 .channel__data {
@@ -97,28 +108,6 @@
     gap: 10px;
     margin-bottom: 8px;
 }
-
-/* .channel__img {
-    --size-channel: 35px;
-    --rounded: 50%;
-    --duration: 300ms;
-    min-width: var(--size-channel);
-    min-height: var(--size-channel);
-    border-radius: var(--rounded);
-    transition: transform var(--duration);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: #99cfff;
-    background-image: radial-gradient(at 6% 14%, hsla(234, 90%, 72%, 1) 0px, transparent 50%),
-        radial-gradient(at 9% 73%, hsla(298, 79%, 64%, 1) 0px, transparent 50%),
-        radial-gradient(at 50% 38%, hsla(196, 72%, 75%, 1) 0px, transparent 50%),
-        radial-gradient(at 61% 82%, hsla(288, 92%, 79%, 1) 0px, transparent 50%),
-        radial-gradient(at 91% 67%, hsla(170, 86%, 66%, 1) 0px, transparent 50%),
-        radial-gradient(at 83% 29%, hsla(289, 73%, 63%, 1) 0px, transparent 50%),
-        radial-gradient(at 93% 34%, hsla(191, 88%, 75%, 1) 0px, transparent 50%);
-} */
-
-
 
 .channel__data__text {
     display: flex;
@@ -130,17 +119,31 @@
 .channel__subdata {
     display: flex;
     gap: 10px;
+    color: #888888;
 }
 
 .channel__name {
-    font-size: 1.2em;
+    font-size: 0.8em;
     transition: color 400ms;
-    margin-top: 40px;
+    margin-top: -5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(1.4em * 4);
+    font-family: wenquanyimihei;
+    font-size: 11px;
+    margin-top: -8px !important;
+    margin-left: 3px;
+    margin-right: 20px;
 }
 
 .channel__views,
 .channel__date {
-    font-size: 0.6em;
+    font-size: 0.8em;
+    margin-top: -10px;
 }
 
 .card__view__data {
@@ -152,7 +155,7 @@
     gap: 10px;
     padding: 8px;
     box-sizing: border-box;
-    pointer-events: none;
+     z-index: 2;
 }
 
 .card__lenght,
@@ -164,6 +167,7 @@
     font-size: 0.6em;
     font-weight: bold;
     color: rgba(255, 255, 255, 0.7);
+    margin-top: 10px;
 }
 
 .card__play__icon {
@@ -171,11 +175,13 @@
     justify-content: center;
     align-items: center;
     min-width: 30px;
+    position: relative;
+    cursor: pointer;
 }
 
 .card__view__preview {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-20px);
     transition: opacity 900ms, transform 900ms;
 }
 
@@ -245,37 +251,33 @@
 .card__view {
     position: absolute;
     height: 55%;
-    /* 图片区域高度 */
     width: 100%;
-    /* 图片区域宽度 */
-    background-image: url(https://www.alexcat.it.com/minio-api/public-errs/MoveTest.jpg);
     background-size: cover;
-    /* 图片覆盖整个区域，可能裁剪 */
     background-position: center;
-    /* 图片居中显示 */
     background-repeat: no-repeat;
-    /* 防止图片重复 */
-    /* filter: blur(4px) brightness(0.9); */
 }
 
 .card__view:hover {
-    /* 一秒之后 不再模糊 */
     transition: filter 1s;
     filter: blur(0px) brightness(1);
 }
 
 .rating-high {
-    color: #ffd700; /* 金色 */
+    color: #ffd700;
 }
+
 .rating-good {
-    color: #52c41a; /* 绿色 */
+    color: #52c41a;
 }
+
 .rating-medium {
-    color: #fa8c16; /* 橙色 */
+    color: #fa8c16;
 }
+
 .rating-low {
-    color: #f5222d; /* 红色 */
+    color: #f5222d;
 }
+
 .recommend-tag {
     position: absolute;
     top: 10px;
@@ -287,42 +289,204 @@
     font-size: 0.8em;
     z-index: 3;
 }
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: -4px;
+}
+
+.tag {
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7em;
+}
+
+.description {
+    color: #666;
+    font-size: 0.95rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: calc(1.4em * 4);
+    font-family: wenquanyimihei;
+    font-size: 11px;
+    margin-top: -8px !important;
+    margin-left: 3px;
+    margin-right: 20px;
+}
+
+:deep(.video-js) {
+    width: 100%;
+    height: 100%;
+}
+
+:deep(.vjs-poster) {
+    background-size: cover;
+}
+
+.video-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3 !important;
+}
+
+.video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3 !important;
+}
+
+/* Video.js 自定义样式 */
+:deep(.video-js) {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 3 !important;
+}
+
+:deep(.vjs-poster) {
+    background-size: cover;
+}
+
+:deep(.vjs-big-play-button) {
+    display: none;
+    /* 隐藏默认的大播放按钮 */
+}
+
+/* 自定义播放按钮样式 */
+.custom-controls {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 2;
+}
+
+.play-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.play-button:hover {
+    transform: scale(1.1);
+}
+
+/* 控制栏样式优化 */
+:deep(.vjs-control-bar) {
+    z-index: 4;
+    background-color: rgba(0, 0, 0, 0.7);
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s;
+}
+
+.video-container:hover :deep(.vjs-control-bar) {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* 播放时的样式 */
+.video-container.active :deep(.vjs-control-bar) {
+    visibility: visible;
+    opacity: 1;
+}
+:deep(.vjs-volume-panel) {
+    margin-right: 10px;
+}
+
+:deep(.vjs-volume-control.vjs-control.vjs-volume-vertical) {
+    position: absolute;
+    bottom: 3em;
+    height: 8em;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 4px;
+    visibility: visible;
+}
+
+:deep(.vjs-volume-bar.vjs-slider-vertical) {
+    height: 100px;
+    margin: 0;
+}
+
+:deep(.vjs-volume-level) {
+    background-color: #fff;
+}
+
+:deep(.vjs-mute-control) {
+    width: 2em;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* 悬停时显示音量控制条 */
+:deep(.vjs-volume-panel:hover .vjs-volume-control.vjs-volume-vertical) {
+    visibility: visible;
+    opacity: 1;
+}
 </style>
 
 <template>
     <div class="card">
-        <div class="card__view">
-            <!-- 推荐标签 -->
-            <div v-if="isRecommended" class="recommend-tag">编辑推荐</div>
-            
+        <div class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
+            <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="background-image"
+                :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
+            <div class="video-player" :class="{ active: isPlaying }">
+                <div class="video-container" :class="{ active: isPlaying }">
+                    <video  ref="videoPlayer" class="video-js vjs-default-skin" :poster="movieForm.cover" preload="auto">
+                        <source :src="movieForm.video" type="video/mp4">
+                    </video>
+                </div>
+            </div>
             <div class="card__view__data">
                 <p class="card__view__preview">预览</p>
-                <p class="card__play__icon" @click.stop="toggleVideo">
-                    <!-- 播放/暂停图标 -->
-                    <svg v-if="!isPlaying" width="8" height="8" viewBox="-0.5 0 7 7">
-                        <path fill="#EAECEE" d="M296.494737,3608.57322 L292.500752,3606.14219 C291.83208,3605.73542 291,3606.25002 291,3607.06891 L291,3611.93095 C291,3612.7509 291.83208,3613.26444 292.500752,3612.85767 L296.494737,3610.42771 C297.168421,3610.01774 297.168421,3608.98319 296.494737,3608.57322"/>
-                    </svg>
-                    <svg v-else t="1739637325113" viewBox="0 0 1024 1024" width="14" height="14">
-                        <path d="M512 64C264.64 64 64 264.64 64 512c0 247.424 200.64 448 448 448 247.424 0 448-200.576 448-448C960 264.64 759.424 64 512 64zM448 635.584c0 23.552-18.432 42.688-41.216 42.624-22.656 0.064-41.088-19.072-41.088-42.56L365.696 383.04c0-23.68 18.432-42.688 41.152-42.688C429.568 340.224 448 359.488 448 382.976L448 635.584zM658.24 635.584c0 23.552-18.432 42.688-41.216 42.624C594.368 678.272 576 659.136 576 635.648L576 383.04c0-23.68 18.432-42.688 41.152-42.688 22.656-0.128 41.152 19.136 41.152 42.624L658.304 635.584z" fill="#FFF"/>
-                    </svg>
-                </p>
-                <!-- 动态时长显示 -->
-                <p class="card__lenght">{{ formatDuration(duration) }}</p>
-                <!-- 动态评分颜色 -->
-                <div class="rating" :class="ratingClass">{{ rating.toFixed(1) }}</div>
+
+                <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
             </div>
         </div>
         <div class="card__content">
-            <p class="channel__video__name">{{ title }}</p>
-            <div class="channel__data">
-                <div class="channel__img">
-                    <img :src="poster" :alt="title" style="width:77px;height:108px;margin-top:40px;">
+            <div style="display: flex;">
+                <p class="channel__video__name">{{ movieForm.name }}</p>
+                <div style="margin-top: 30px;" class="channel__subdata">
+                    <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{ formatDate(movieForm.year)
+                    }}年</p>
+                    <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
                 </div>
+            </div>
+            <div class="channel__data">
                 <div class="channel__data__text">
-                    <p class="channel__name">{{ director }}</p>
-                    <div class="channel__subdata">
-                        <p class="channel__views">{{ formatViews(views) }}次观看</p>
-                        <p class="channel__date">{{ releaseDate }}</p>
+                    <p style="color:#797979;" class="channel__name">导演: {{ movieForm.director }}</p>
+                    <p style="margin-top: -5px;color: #797979;" class="channel__name">主演: {{ movieForm.actor }}</p>
+                    <p class="description">
+                        {{ movieForm.summary }}
+                    </p>
+                    <div class="tags">
+                        <span :style="{ color: colorsRandom() }" v-for="tag in movieForm.types" :key="tag"
+                            class="tag">{{
+                                tag }}</span>
                     </div>
                 </div>
             </div>
@@ -331,52 +495,137 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
+interface MovieForm {
+    name: string;
+    director: string;
+    actor: string;
+    year: Date;
+    language: string;
+    summary: string;
+    cover: string;
+    video: string;
+    rating: number;
+    types: string[];
+    users: number;
+}
 
-const props = defineProps({
-    title: { type: String, required: true },
-    rating: { type: Number, default: 0 },
-    releaseDate: { type: String, required: true },
-    views: { type: Number, default: 0 },
-    duration: { type: Number, default: 0 }, // 单位：秒
-    poster: { type: String, required: true },
-    videoUrl: { type: String },
-    director: { type: String, required: true },
-    isRecommended: { type: Boolean, default: false }
-});
+const props = defineProps<{
+    movieForm: MovieForm;
+    isRecommended?: boolean;
+}>();
 
+const videoPlayer = ref<any>(null);
+const player = ref<any>(null);
 const isPlaying = ref(false);
 
-// 评分颜色逻辑
+onMounted(() => {
+    // 初始化 Video.js
+    player.value = videojs(videoPlayer.value, {
+        controls: true,
+        autoplay: false,
+        preload: 'auto',
+        fluid: true,
+        responsive: true,
+        playsinline: true,
+        aspectRatio: '16:9',
+        userActions: {
+            hotkeys: true // 启用键盘快捷键
+        },
+        controlBar: {
+            volumePanel: {
+                inline: false,
+                vertical: true // 垂直音量控制
+            },
+            children: [
+                'playToggle',
+                'volumePanel',
+                'progressControl',
+                'currentTimeDisplay',
+                'timeDivider',
+                'durationDisplay',
+                'fullscreenToggle',
+            ]
+        }
+    });
+
+    // 监听播放状态
+    player.value.on('play', () => {
+        isPlaying.value = true;
+    });
+
+    player.value.on('pause', () => {
+        isPlaying.value = false;
+    });
+
+    player.value.on('ended', () => {
+        isPlaying.value = false;
+    });
+});
+
+onBeforeUnmount(() => {
+    if (player.value) {
+        player.value.dispose();
+    }
+});
+
 const ratingClass = computed(() => {
-    if (props.rating >= 9) return 'rating-high';
-    if (props.rating >= 8) return 'rating-good';
-    if (props.rating >= 6) return 'rating-medium';
+    if (props.movieForm.rating >= 9) return 'rating-high';
+    if (props.movieForm.rating >= 8) return 'rating-good';
+    if (props.movieForm.rating >= 6) return 'rating-medium';
     return 'rating-low';
 });
 
-// 播放控制
 const toggleVideo = () => {
-    isPlaying.value = !isPlaying.value;
-    // 这里可以添加实际视频控制逻辑
-    if (isPlaying.value) {
-        console.log('开始播放:', props.videoUrl);
+    if (!player.value) return;
+
+    if (player.value.paused()) {
+        player.value.play();
     } else {
-        console.log('暂停播放');
+        player.value.pause();
     }
 };
 
-// 格式化观看次数
+const autoPlayVideo = () => {
+    if (!player.value) return;
+
+    player.value.play()
+        .then(() => {
+            isPlaying.value = true;
+        })
+        .catch((error: any) => {
+            console.error("视频播放失败:", error);
+            isPlaying.value = false;
+        });
+};
+
+const pauseVideo = () => {
+    if (!player.value) return;
+
+    player.value.pause();
+    isPlaying.value = false;
+};
+
 const formatViews = (views: number) => {
     if (views >= 1e8) return (views / 1e8).toFixed(1) + '亿';
     if (views >= 1e4) return (views / 1e4).toFixed(1) + '万';
     return views;
 };
 
-// 格式化时长
-const formatDuration = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+const formatDate = (date: Date) => {
+    return new Date(date).getFullYear();
 };
+
+const colors = [
+    "#ec8236",
+    "#f56c6c",
+    "#67c23a",
+    "#e6a23c",
+    "#409eff",
+    "#c239e6",
+    "#5941d3",
+];
+const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 </script>

@@ -9,5 +9,5 @@ public class PageSize {
     private int size = 10;
     @NotNull
     private int page = 1;
-    private int start;
+    private int start=0;
 }
