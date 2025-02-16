@@ -447,9 +447,58 @@
     visibility: visible;
     opacity: 1;
 }
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+.error-msg {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
+}
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(58, 58, 58, 0.8);
+    /* 半透明背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* 确保遮罩层在最上层 */
+}
 </style>
 
 <template>
+<p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+<div v-if="isShowLikePanel" class="loading-overlay">
+   <h1> 23123312</h1>
+</div>
     <div class="card">
         <div class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
             <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="background-image"
@@ -474,7 +523,7 @@
                     }}年</p>
                     <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
                 </div>
-                <Like style="margin-left: 25px;margin-top: 6px;" />
+                <Like @click.stop="ShowLikePanel()" style="margin-left: 25px;margin-top: 6px;" />
             </div>
             <div class="channel__data">
                 <div class="channel__data__text">
@@ -629,4 +678,12 @@ const colors = [
     "#5941d3",
 ];
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
+// 展示喜欢面板
+const isShowLikePanel = ref(false);
+const ShowLikePanel = () => {
+  isShowLikePanel.value = true;
+};
+
 </script>
