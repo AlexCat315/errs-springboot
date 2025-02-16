@@ -155,7 +155,7 @@
     gap: 10px;
     padding: 8px;
     box-sizing: border-box;
-     z-index: 2;
+     z-index: 10 !important;
 }
 
 .card__lenght,
@@ -236,7 +236,7 @@
 
 .rating {
     position: absolute;
-    top: -120px;
+    top: -130px;
     right: 10px;
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
@@ -244,7 +244,7 @@
     border-radius: 5px;
     font-size: 1.2em;
     font-weight: bold;
-    z-index: 3;
+    z-index: 9999 !important;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -463,7 +463,6 @@
             </div>
             <div class="card__view__data">
                 <p class="card__view__preview">预览</p>
-
                 <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
             </div>
         </div>
@@ -475,6 +474,7 @@
                     }}年</p>
                     <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
                 </div>
+                <Like style="margin-left: 25px;margin-top: 6px;" />
             </div>
             <div class="channel__data">
                 <div class="channel__data__text">
@@ -498,6 +498,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
+import Like from './Like.vue';
 interface MovieForm {
     name: string;
     director: string;
