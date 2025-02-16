@@ -19,6 +19,42 @@ const handleScroll = (event: Event) => {
         showTitle.value = false;
     }
 };
+interface MovieForm {
+    name: string;
+    director: string;
+    actor: string;
+    year: Date;
+    language: string;
+    summary: string;
+    coverUrl: string;
+    videoUrl: string;
+    cover: File | null;
+    video: File | null;
+    rating: number;
+    tags: string[];
+    users: number;
+}
+
+const movieForm = reactive<MovieForm>({
+    name: "",
+    director: "",
+    actor: "",
+    year: new Date(),
+    language: "",
+    summary: "",
+    coverUrl: "",
+    videoUrl: "",
+    cover: null,
+    video: null,
+    rating: 0,
+    tags: [],
+    users: 0
+});
+
+onMounted(() => {
+    console.log('mounted');
+});
+
 
 </script>
 
@@ -32,9 +68,9 @@ const handleScroll = (event: Event) => {
             电影
         </div>
 
-
         <div>
-            <VideoIndex />
+            <VideoIndex title="哪吒之魔童闹海" :rating="9.8" release-date="2025-01-29" :views="1154100000" :duration="619"
+                poster="path/to/poster.jpg" video-url="path/to/trailer.mp4" director="饺子" :is-recommended="true" />
         </div>
     </div>
 </template>

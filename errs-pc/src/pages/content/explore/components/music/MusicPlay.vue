@@ -372,7 +372,7 @@
                 <div class="air"></div>
 
                 <!-- 喜欢按钮 -->
-                <svg @click="toggleLike" style="margin-top: 6px;margin-left: -50px;" width="24" height="20"
+                <svg  style="margin-top: 6px;margin-left: -50px;" width="24" height="20"
                     :fill="isLiked ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="2"
                     viewBox="0 0 24 24">
                     <path

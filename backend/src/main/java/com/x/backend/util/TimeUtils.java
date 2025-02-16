@@ -3,6 +3,8 @@ package com.x.backend.util;
 import com.x.backend.exception.ForbiddenException;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class TimeUtils {
     /**
@@ -17,6 +19,21 @@ public class TimeUtils {
      */
     public String timestamp2Date(long timestamp) {
         return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date(timestamp));
+    }
+
+    public Date string2Date(String dateStr) {
+        try {
+            if (dateStr == null) {
+                throw new ForbiddenException();
+            }
+            if (dateStr.length() == 10) {
+                // yyyy-MM-dd
+                return new java.text.SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+            }
+            return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStr);
+        } catch (Exception e) {
+            throw new ForbiddenException("Invalid date format, should be yyyy-MM-dd HH:mm:ss");
+        }
     }
 
     /**

@@ -346,7 +346,7 @@ const resetForm = () => {
     // 延时显示组件，确保组件被销毁并重新创建
     setTimeout(() => {
         isUploadVisible.value = true;
-    }, 0);
+    }, 10);
 };
 </script>
 

@@ -1,5 +1,4 @@
 <style scoped>
-/* In this section you start by assigning a shape to the letter and an assigned size. */
 .card {
     --rounded: 20px;
     --size: 360px;
@@ -12,7 +11,6 @@
     cursor: pointer;
 }
 
-/* With the before property assigns the gradient that will be used as background for the chart. */
 .card::before {
     --size: 100%;
     --blur: 20px;
@@ -31,7 +29,6 @@
         radial-gradient(at 56% 52%, hsla(109, 71%, 61%, 1) 0px, transparent 50%);
 }
 
-/* Cover the chart with a light white tone, this helps the gradient colors to be less aggressive. */
 .card::after {
     --size: 100%;
     content: "";
@@ -41,9 +38,6 @@
     background: rgba(255, 255, 255, 0.5);
 }
 
-/*
-  In this section you define where the video cover will be displayed.
-  Modify the background-image with the address of the cover to use. */
 .card__view {
     position: absolute;
     height: 55%;
@@ -57,10 +51,7 @@
     background-size: cover;
 }
 
-/* When hovering over the element you can see the video preview. */
-/* Place in the HTML an "iframe" tag with the address of the youtube video to show as preview.
-     The iframe tag must be a child of the div with the class "card__view".
-     Also place a class with name "preview__video". */
+
 .card:hover .preview__video {
     opacity: 100;
 }
@@ -71,7 +62,6 @@
 }
 
 
-/* In this section you define the size and position of the section that will contain the video content. */
 .card__content {
     position: absolute;
     z-index: 2;
@@ -86,6 +76,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    top: 150px;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .channel__video__name {
@@ -106,8 +98,7 @@
     margin-bottom: 8px;
 }
 
-/* In this section you assign the image of the channel that owns the video, modify the parameter "background-image" by the address of the channel cover. */
-.channel__img {
+/* .channel__img {
     --size-channel: 35px;
     --rounded: 50%;
     --duration: 300ms;
@@ -125,11 +116,9 @@
         radial-gradient(at 91% 67%, hsla(170, 86%, 66%, 1) 0px, transparent 50%),
         radial-gradient(at 83% 29%, hsla(289, 73%, 63%, 1) 0px, transparent 50%),
         radial-gradient(at 93% 34%, hsla(191, 88%, 75%, 1) 0px, transparent 50%);
-}
+} */
 
-.channel__img:hover {
-    transform: scale(1.08);
-}
+
 
 .channel__data__text {
     display: flex;
@@ -144,8 +133,9 @@
 }
 
 .channel__name {
-    font-size: 0.8em;
+    font-size: 1.2em;
     transition: color 400ms;
+    margin-top: 40px;
 }
 
 .channel__views,
@@ -194,7 +184,6 @@
     transform: translateY(0px);
 }
 
-/* List of other colors you can use */
 .card:nth-child(2n)::before {
     background-color: #ffd399;
     background-image: radial-gradient(at 15% 65%, hsla(249, 84%, 60%, 1) 0px, transparent 50%),
@@ -266,7 +255,7 @@
     /* 图片居中显示 */
     background-repeat: no-repeat;
     /* 防止图片重复 */
-    filter: blur(4px) brightness(0.9);
+    /* filter: blur(4px) brightness(0.9); */
 }
 
 .card__view:hover {
@@ -274,52 +263,66 @@
     transition: filter 1s;
     filter: blur(0px) brightness(1);
 }
+
+.rating-high {
+    color: #ffd700; /* 金色 */
+}
+.rating-good {
+    color: #52c41a; /* 绿色 */
+}
+.rating-medium {
+    color: #fa8c16; /* 橙色 */
+}
+.rating-low {
+    color: #f5222d; /* 红色 */
+}
+.recommend-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff4d4f;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    z-index: 3;
+}
 </style>
 
 <template>
     <div class="card">
-        <div :style="{
-
-        }" class="card__view">
+        <div class="card__view">
+            <!-- 推荐标签 -->
+            <div v-if="isRecommended" class="recommend-tag">编辑推荐</div>
+            
             <div class="card__view__data">
                 <p class="card__view__preview">预览</p>
-                <!-- 播放icon -->
-                <p class="card__play__icon">
-                    <svg @click="playVideo" v-if="!isPlayStatus" width="8px" height="8px" viewBox="-0.5 0 7 7"
-                        version="1.1">
-                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g id="Dribbble-Light-Preview" transform="translate(-347.000000, -3766.000000)"
-                                fill="#000000">
-                                <g id="icons" transform="translate(56.000000, 160.000000)">
-                                    <path fill="#EAECEE"
-                                        d="M296.494737,3608.57322 L292.500752,3606.14219 C291.83208,3605.73542 291,3606.25002 291,3607.06891 L291,3611.93095 C291,3612.7509 291.83208,3613.26444 292.500752,3612.85767 L296.494737,3610.42771 C297.168421,3610.01774 297.168421,3608.98319 296.494737,3608.57322"
-                                        id="play-[#1003]"></path>
-                                </g>
-                            </g>
-                        </g>
+                <p class="card__play__icon" @click.stop="toggleVideo">
+                    <!-- 播放/暂停图标 -->
+                    <svg v-if="!isPlaying" width="8" height="8" viewBox="-0.5 0 7 7">
+                        <path fill="#EAECEE" d="M296.494737,3608.57322 L292.500752,3606.14219 C291.83208,3605.73542 291,3606.25002 291,3607.06891 L291,3611.93095 C291,3612.7509 291.83208,3613.26444 292.500752,3612.85767 L296.494737,3610.42771 C297.168421,3610.01774 297.168421,3608.98319 296.494737,3608.57322"/>
                     </svg>
-                    <svg @click="pauseVideo" v-else t="1739637325113" class="icon" viewBox="0 0 1024 1024" version="1.1"
-                        xmlns="http://www.w3.org/2000/svg" p-id="5842" width="14px" height="14px">
-                        <path
-                            d="M512 64C264.64 64 64 264.64 64 512c0 247.424 200.64 448 448 448 247.424 0 448-200.576 448-448C960 264.64 759.424 64 512 64zM448 635.584c0 23.552-18.432 42.688-41.216 42.624-22.656 0.064-41.088-19.072-41.088-42.56L365.696 383.04c0-23.68 18.432-42.688 41.152-42.688C429.568 340.224 448 359.488 448 382.976L448 635.584zM658.24 635.584c0 23.552-18.432 42.688-41.216 42.624C594.368 678.272 576 659.136 576 635.648L576 383.04c0-23.68 18.432-42.688 41.152-42.688 22.656-0.128 41.152 19.136 41.152 42.624L658.304 635.584z"
-                            fill="#FFF" p-id="5843"></path>
+                    <svg v-else t="1739637325113" viewBox="0 0 1024 1024" width="14" height="14">
+                        <path d="M512 64C264.64 64 64 264.64 64 512c0 247.424 200.64 448 448 448 247.424 0 448-200.576 448-448C960 264.64 759.424 64 512 64zM448 635.584c0 23.552-18.432 42.688-41.216 42.624-22.656 0.064-41.088-19.072-41.088-42.56L365.696 383.04c0-23.68 18.432-42.688 41.152-42.688C429.568 340.224 448 359.488 448 382.976L448 635.584zM658.24 635.584c0 23.552-18.432 42.688-41.216 42.624C594.368 678.272 576 659.136 576 635.648L576 383.04c0-23.68 18.432-42.688 41.152-42.688 22.656-0.128 41.152 19.136 41.152 42.624L658.304 635.584z" fill="#FFF"/>
                     </svg>
                 </p>
-                <!-- 总时长 -->
-                <p class="card__lenght">10:19</p>
-                <!-- 评分 -->
-                <div class="rating">8.5</div>
+                <!-- 动态时长显示 -->
+                <p class="card__lenght">{{ formatDuration(duration) }}</p>
+                <!-- 动态评分颜色 -->
+                <div class="rating" :class="ratingClass">{{ rating.toFixed(1) }}</div>
             </div>
         </div>
         <div class="card__content">
-            <p class="channel__video__name"></p>
+            <p class="channel__video__name">{{ title }}</p>
             <div class="channel__data">
-                <div class="channel__img "></div>
+                <div class="channel__img">
+                    <img :src="poster" :alt="title" style="width:77px;height:108px;margin-top:40px;">
+                </div>
                 <div class="channel__data__text">
-                    <p class="channel__name">SmarterEveryDay</p>
+                    <p class="channel__name">{{ director }}</p>
                     <div class="channel__subdata">
-                        <p class="channel__views">519.7K Views</p>
-                        <p class="channel__date">3 months ago</p>
+                        <p class="channel__views">{{ formatViews(views) }}次观看</p>
+                        <p class="channel__date">{{ releaseDate }}</p>
                     </div>
                 </div>
             </div>
@@ -328,15 +331,52 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, computed } from "vue";
 
-const isPlayStatus = ref(false);
+const props = defineProps({
+    title: { type: String, required: true },
+    rating: { type: Number, default: 0 },
+    releaseDate: { type: String, required: true },
+    views: { type: Number, default: 0 },
+    duration: { type: Number, default: 0 }, // 单位：秒
+    poster: { type: String, required: true },
+    videoUrl: { type: String },
+    director: { type: String, required: true },
+    isRecommended: { type: Boolean, default: false }
+});
 
-const playVideo = () => {
-  isPlayStatus.value = true;
-}
+const isPlaying = ref(false);
 
-const pauseVideo = () => {
-  isPlayStatus.value = false
-}
+// 评分颜色逻辑
+const ratingClass = computed(() => {
+    if (props.rating >= 9) return 'rating-high';
+    if (props.rating >= 8) return 'rating-good';
+    if (props.rating >= 6) return 'rating-medium';
+    return 'rating-low';
+});
+
+// 播放控制
+const toggleVideo = () => {
+    isPlaying.value = !isPlaying.value;
+    // 这里可以添加实际视频控制逻辑
+    if (isPlaying.value) {
+        console.log('开始播放:', props.videoUrl);
+    } else {
+        console.log('暂停播放');
+    }
+};
+
+// 格式化观看次数
+const formatViews = (views: number) => {
+    if (views >= 1e8) return (views / 1e8).toFixed(1) + '亿';
+    if (views >= 1e4) return (views / 1e4).toFixed(1) + '万';
+    return views;
+};
+
+// 格式化时长
+const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
 </script>
