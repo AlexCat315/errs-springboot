@@ -24,7 +24,7 @@ public class GameController {
     }
 
     @GetMapping("/get/top50")
-
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getTop50(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据
@@ -36,7 +36,7 @@ public class GameController {
     }
 
     @GetMapping("/get/highest-rated")
-    @RoleSecurity(RoleConstants.ROLE_USER)
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getHighestRated(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据
@@ -48,7 +48,7 @@ public class GameController {
     }
 
     @GetMapping("/get/most-reviewed")
-    @RoleSecurity(RoleConstants.ROLE_USER)
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<GameResponsesVO>> getMostReviewed(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据

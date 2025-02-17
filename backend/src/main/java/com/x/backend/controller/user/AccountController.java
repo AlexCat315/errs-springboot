@@ -14,11 +14,13 @@ import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.pojo.user.vo.request.account.RegisterVo;
 import com.x.backend.pojo.user.vo.request.account.ValidateEmailCode;
 import com.x.backend.service.user.AccountService;
+import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
@@ -45,6 +47,8 @@ public class AccountController {
     private EncryptUtils encryptUtils;
     @Resource
     private RedisTemplate<String, String> redisTemplate;
+    @Resource
+    private TimeUtils timeUtils;
 
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
@@ -167,6 +171,20 @@ public class AccountController {
 
         } catch (Exception exception) {
             return ResultEntity.serverError();
+        }
+    }
+
+    @PostMapping("/logout")
+    public ResultEntity<String> logout() {
+        try {
+            String jwt = jwtUtils.getToken();
+            Integer id = jwtUtils.getId(jwt);
+            Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
+            // 向Redis中保存该用户的token，为黑名单
+            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+            return ResultEntity.success();
+        } catch (Exception e) {
+            return ResultEntity.failure(e.getMessage());
         }
     }
 

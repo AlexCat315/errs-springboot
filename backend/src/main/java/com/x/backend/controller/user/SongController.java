@@ -28,6 +28,7 @@ public class SongController {
 
 
     @PostMapping("get/all")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<SongVO>> getAll(PageSize pageSize) {
         try {
             return songService.getAll(pageSize);
@@ -38,6 +39,7 @@ public class SongController {
     }
 
     @PostMapping("/get/by/id")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<SongVO> getById(@RequestParam("id") Long id) {
         try {
             return songService.getById(id);

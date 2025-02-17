@@ -29,6 +29,7 @@ public class MovieController {
 
 
     @PostMapping("/get/all")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
     public ResultEntity<List<MovieResponsesVO>> getAllMoves(@RequestBody PageSize pageSize) {
         return movieService.getAllMoves(pageSize);
     }

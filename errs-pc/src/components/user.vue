@@ -1,6 +1,8 @@
 <script setup lang="js">
 import { inject, ref } from "vue";
 import { validate_token } from "../net/account/validate_token";
+import { logout_user } from "../net/account/logout";
+
 const globalTheme = inject("globalTheme");
 const isLogin = ref(false);
 const globalShowSetting = inject("globalShowSetting");
@@ -24,30 +26,52 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
         console.log("error:", message);
     })
 }
+const fetch = ref(true);
+// 退出
+const logoutClick = () => {
+    logout_user(() => {
+        localStorage.removeItem('token');
+        isLogin.value = false;
+        fetch.value = false;
+        setTimeout(() => {
+            fetch.value = true;
+        }, 10);
+    }, () => {
+        console.log("logout failure")
+    })
+}
 
 
 </script>
 <template>
-    <!-- 已登录 -->
-    <button v-if="isLogin" id="btn-message" style="--online-status: #93e200;"
-        :style="{ backgroundColor: globalTheme === 'dark' ? '#212121' : '#f5f5f5' }" class="button-message">
-        <div class="content-avatar">
-            <div class="status-user"></div>
-            <div class="avatar">
-                <svg class="user-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path
-                        d="M12,12.5c-3.04,0-5.5,1.73-5.5,3.5s2.46,3.5,5.5,3.5,5.5-1.73,5.5-3.5-2.46-3.5-5.5-3.5Zm0-.5c1.66,0,3-1.34,3-3s-1.34-3-3-3-3,1.34-3,3,1.34,3,3,3Z">
-                    </path>
-                </svg>
+    <!-- 下拉列表卡片 -->
+    <div v-if="fetch" class="dropdown">
+        <!-- 已登录 -->
+        <button class="dropdown-btn button-message" v-if="isLogin" id="btn-message" style="--online-status: #93e200;"
+            :style="{ backgroundColor: globalTheme === 'dark' ? '#212121' : '#f5f5f5' }">
+            <div class="content-avatar">
+                <div class="status-user"></div>
+                <div class="avatar">
+                    <svg class="user-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path
+                            d="M12,12.5c-3.04,0-5.5,1.73-5.5,3.5s2.46,3.5,5.5,3.5,5.5-1.73,5.5-3.5-2.46-3.5-5.5-3.5Zm0-.5c1.66,0,3-1.34,3-3s-1.34-3-3-3-3,1.34-3,3,1.34,3,3,3Z">
+                        </path>
+                    </svg>
+                </div>
             </div>
-        </div>
-        <div class="notice-content">
-            <div>
-                <div :style="{ 'color': globalTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">
-                    Message<span class="number-message">3</span></div>
+            <div class="notice-content">
+                <div>
+                    <div :style="{ 'color': globalTheme === 'dark' ? '#fff' : '#212121' }" class="lable-message">
+                        用户中心<span class="number-message">3</span></div>
+                </div>
             </div>
+        </button>
+
+        <div class="dropdown-content">
+            <a style="cursor: pointer;font-family: Arial, Helvetica, sans-serif;">用户中心</a>
+            <a @click="logoutClick()" style="cursor: pointer; font-family: Arial, Helvetica, sans-serif;">退出登录</a>
         </div>
-    </button>
+    </div>
     <!-- 未登录 -->
     <button @click="loginClick()" v-if="!isLogin" id="btn-message"
         :style="{ '--bg-color': globalTheme === 'dark' ? '#212121' : '#f5f5f5' }" style="--online-status: red;"
@@ -198,5 +222,53 @@ if (token.value !== null && token.value !== '' && token.value !== undefined) {
     height: 16px;
     background-color: var(--bg-color-sup);
     border-radius: 20px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+    z-index: 1;
+    border-radius: 10px;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    padding-left: 50px;
+    border-radius: 10px;
+}
+
+/* 鼠标悬停时改变背景颜色 */
+.dropdown-content a:hover {
+    background-color: #ccc;
+}
+
+/* 鼠标悬停时显示下拉菜单 */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* 鼠标悬停时改变按钮背景色 */
+.dropdown:hover .dropdown-btn {
+    background-color: #3e8e41;
 }
 </style>
