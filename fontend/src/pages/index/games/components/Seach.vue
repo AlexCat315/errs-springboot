@@ -117,6 +117,6 @@
       ></path>
     </svg>
 
-    <input class="search" type="text" placeholder="智能搜索" />
+    <input  readonly  class="search" type="text" placeholder="智能搜索" />
   </div>
 </template>
