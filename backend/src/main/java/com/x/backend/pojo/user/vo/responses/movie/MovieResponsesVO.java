@@ -1,4 +1,4 @@
-package com.x.backend.pojo.user.vo.responses.move;
+package com.x.backend.pojo.user.vo.responses.movie;
 
 import lombok.Data;
 
@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class MoveResponsesVO {
+public class MovieResponsesVO {
     private Integer id; // 电影ID
     private String name; // 电影名称
     private String director; // 导演

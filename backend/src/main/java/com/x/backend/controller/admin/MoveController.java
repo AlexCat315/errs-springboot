@@ -6,14 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
-import com.x.backend.pojo.common.Move;
-import com.x.backend.service.admin.MoveService;
+import com.x.backend.pojo.common.Movie;
+import com.x.backend.service.admin.MovieService;
 import com.x.backend.util.MinioUtils;
 import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -33,7 +30,7 @@ public class MoveController {
 
 
     @Resource(name = "adminMoveService")
-    private MoveService moveService;
+    private MovieService movieService;
     @Resource
     private MinioUtils minioUtils;
     @Value("${minio.handler-pub-url}")
@@ -61,23 +58,23 @@ public class MoveController {
             String uploadCoverUrlFile = pubHandlerUrl + minioUtils.pubUploadFile(cover);
 
             // 创建电影记录
-            Move move = new Move();
+            Movie movie = new Movie();
 
-            move.setName(name);
-            move.setVideo(uploadvideoUrlFile);
-            move.setCover(uploadCoverUrlFile);
-            move.setDirector(director);
-            move.setActor(actor);
-            move.setRating(rating);
-            move.setYear(timeUtils.string2Date(year));
-            move.setLanguage(language);
-            move.setSummary(summary);
-            move.setUsers(users);
+            movie.setName(name);
+            movie.setVideo(uploadvideoUrlFile);
+            movie.setCover(uploadCoverUrlFile);
+            movie.setDirector(director);
+            movie.setActor(actor);
+            movie.setRating(rating);
+            movie.setYear(timeUtils.string2Date(year));
+            movie.setLanguage(language);
+            movie.setSummary(summary);
+            movie.setUsers(users);
             // 使用 Jackson 将 List 转换为 JSON 字符串
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                move.setTypes(objectMapper.writeValueAsString(type));
-                moveService.createMove(move);
+                movie.setTypes(objectMapper.writeValueAsString(type));
+                movieService.createMove(movie);
             } catch (JsonProcessingException e) {
                 log.error("转换 List 或 JSON 字符串 时发生错误:{}", e.getMessage(), e);
                 throw new RuntimeException("转换 List 或 JSON 字符串 时发生错误:" + e.getMessage());

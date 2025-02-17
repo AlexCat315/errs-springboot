@@ -5,8 +5,8 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
-import com.x.backend.pojo.user.vo.responses.move.MoveResponsesVO;
-import com.x.backend.service.user.MoveService;
+import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
+import com.x.backend.service.user.MovieService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +24,12 @@ public class MoveController {
 
 
     @Resource(name = "userMoveService")
-    private MoveService moveService;
+    private MovieService movieService;
 
 
     @PostMapping("/get/all")
-    public ResultEntity<List<MoveResponsesVO>> getAllMoves(@RequestBody PageSize pageSize) {
-        return moveService.getAllMoves(pageSize);
+    public ResultEntity<List<MovieResponsesVO>> getAllMoves(@RequestBody PageSize pageSize) {
+        return movieService.getAllMoves(pageSize);
     }
 
 }

@@ -2,12 +2,11 @@ package com.x.backend.pojo.common;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 
 @Data
-public class Move {
+public class Movie {
     private Integer id; // 电影ID
     private String name; // 电影名称
     private String director; // 导演

@@ -1,11 +1,11 @@
 package com.x.backend.mapper.admin;
 
-import com.x.backend.pojo.common.Move;
+import com.x.backend.pojo.common.Movie;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
 @Mapper
 @Component("adminMoveMapper")
-public interface MoveMapper {
-    Integer createMove(Move move);
+public interface MovieMapper {
+    Integer createMove(Movie movie);
 }
