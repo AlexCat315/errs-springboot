@@ -3,7 +3,7 @@
         <el-card class="form-card">
             <template #header>
                 <div class="card-header">
-                    <h2>上传电影信息</h2>
+                    <h2>修改电影信息</h2>
                 </div>
             </template>
 
@@ -67,33 +67,21 @@
                     </el-form-item>
                 </div>
                 <div style="display: flex">
-                <el-form-item label="评分" prop="rating">
-                    <div style="display: flex; align-items: center">
-                        <el-rate 
-                            v-model="movieForm.rating" 
-                            :max="5" 
-                            :allow-half="true" 
-                            show-score
-                            @change="handleRateChange" 
-                        />
-                        <el-input-number 
-                            v-model="movieForm.rating" 
-                            :min="0" 
-                            :max="5" 
-                            :step="0.1"  
-                            :precision="1"  
-                            style="margin-left: 20px" 
-                            @change="handleInputChange" 
-                        />
-                    </div>
-                </el-form-item>
+                    <el-form-item label="评分" prop="rating">
+                        <div style="display: flex; align-items: center">
+                            <el-rate v-model="movieForm.rating" :max="5" :allow-half="true" show-score
+                                @change="handleRateChange" />
+                            <el-input-number v-model="movieForm.rating" :min="0" :max="5" :step="0.1" :precision="1"
+                                style="margin-left: 20px" @change="handleInputChange" />
+                        </div>
+                    </el-form-item>
                     <el-form-item style="margin-left: 70px" label="评价人数" prop="users">
                         <el-input-number v-model="movieForm.users" :min="0" />
                     </el-form-item>
                 </div>
 
                 <el-form-item label="电影类型" prop="tags">
-                    <el-select v-model="movieForm.tags" multiple filterable allow-create default-first-option
+                    <el-select v-model="movieForm.types" multiple filterable allow-create default-first-option
                         placeholder="请选择或输入电影类型">
                         <el-option v-for="tag in defaultTags" :key="tag" :label="tag" :value="tag" />
                     </el-select>
@@ -136,6 +124,8 @@ import type { FormInstance, FormRules, UploadFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { postFormData, defaultFailure } from "../../../../net/post"; // 导入封装方法
 import { ElMessage } from "element-plus";
+import { onMounted } from "vue";
+import { get_movie_info_by_id } from "../../../../net/movie/get";
 
 interface MovieForm {
     name: string;
@@ -149,9 +139,37 @@ interface MovieForm {
     cover: File | null;
     video: File | null;
     rating: number;
-    tags: string[];
+    types: string[];
     users: number;
 }
+
+const poros = defineProps({
+    movieId: {
+        type: Number,
+        required: true
+    }
+});
+
+onMounted(() => {
+    get_movie_info_by_id(poros.movieId, (data: any) => {
+        movieForm.name = data.name;
+        movieForm.director = data.director;
+        movieForm.actor = data.actor;
+        movieForm.year = data.year;
+        movieForm.language = data.language;
+        movieForm.summary = data.summary;
+        // 直接设置 URL，不需要创建 File 对象
+        movieForm.coverUrl = data.cover;  // 假设后端返回的是完整的图片 URL
+        movieForm.videoUrl = data.video;  // 假设后端返回的是完整的视频 URL
+        movieForm.rating = data.rating ? (data.rating / 2) : 0;
+        movieForm.types = data.types;
+        movieForm.users = data.users;
+    }, (message: string) => {
+        console.log(message);
+    });
+});
+
+
 
 const formRef = ref<FormInstance>();
 const buttonLoadingState = ref(false); // 新增加载状态
@@ -169,19 +187,39 @@ const movieForm = reactive<MovieForm>({
     cover: null,
     video: null,
     rating: 0,
-    tags: [],
+    types: [],
     users: 0
 });
 
 const defaultTags = ["动作", "喜剧", "爱情", "科幻", "恐怖", "动画"];
 
-// 修改验证规则
 const rules = reactive<FormRules<MovieForm>>({
     name: [{ required: true, message: "请输入电影名称", trigger: "blur" }],
     director: [{ required: true, message: "请输入导演名称", trigger: "blur" }],
     actor: [{ required: true, message: "请输入主演名称", trigger: "blur" }],
-    cover: [{ required: true, message: "请上传封面图片", trigger: "change" }],
-    video: [{ required: true, message: "请上传视频文件", trigger: "change" }],
+    // 只有当没有现有文件时才验证
+    cover: [{ 
+        required: true, 
+        validator: (rule, value, callback) => {
+            if (!movieForm.cover && !movieForm.coverUrl) {
+                callback(new Error('请上传封面图片'));
+            } else {
+                callback();
+            }
+        }, 
+        trigger: "change" 
+    }],
+    video: [{ 
+        required: true, 
+        validator: (rule, value, callback) => {
+            if (!movieForm.video && !movieForm.videoUrl) {
+                callback(new Error('请上传视频文件'));
+            } else {
+                callback();
+            }
+        }, 
+        trigger: "change" 
+    }],
 });
 
 const handleCoverChange = (uploadFile: UploadFile) => {
@@ -250,6 +288,7 @@ const submitForm = async () => {
         buttonLoadingState.value = true;
 
         const formData = new FormData();
+        formData.append("id", poros.movieId.toString());
         formData.append("name", movieForm.name);
         formData.append("director", movieForm.director);
         formData.append("actor", movieForm.actor);
@@ -257,22 +296,29 @@ const submitForm = async () => {
         formData.append("year", formattedDate);
         formData.append("language", movieForm.language);
         formData.append("summary", movieForm.summary);
-        if (movieForm.video) formData.append("video", movieForm.video);
-        if (movieForm.cover) formData.append("cover", movieForm.cover);
+        
+        // 只有当选择了新文件时才附加到 FormData
+        if (movieForm.video) {
+            formData.append("video", movieForm.video);
+        }
+        if (movieForm.cover) {
+            formData.append("cover", movieForm.cover);
+        }
+        
         formData.append("rating", (movieForm.rating * 2).toString());
-        formData.append("type", movieForm.tags.toString());
+        formData.append("type", movieForm.types.toString());
         formData.append("users", movieForm.users.toString());
 
         postFormData(
-            "/api/admin/movie/create", // 修改接口地址
+            "/api/admin/movie/update/info",
             formData,
             () => {
-                ElMessage.success("电影上传成功");
+                ElMessage.success("电影更新成功");
                 setTimeout(() => {
                     resetForm();
                     buttonLoadingState.value = false;
+                    showMovieListCard();
                 }, 1400);
-
             },
             (message: string, code: number, url: string) => {
                 defaultFailure(message, code, url);
@@ -286,6 +332,12 @@ const submitForm = async () => {
             buttonLoadingState.value = false;
         }, 1400);
     }
+};
+
+const emit = defineEmits(['update:modelValue']);
+
+const showMovieListCard = () => {
+    emit('update:modelValue', false);
 };
 
 const isUploadVisible = ref(true);

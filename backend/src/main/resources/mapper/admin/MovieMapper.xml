@@ -6,4 +6,23 @@
         INSERT INTO movie (name,director,actor , types, cover,year,language,rating,users,summary,video)
         VALUES (#{name}, #{director}, #{actor}, #{types}, #{cover}, #{year}, #{language}, #{rating}, #{users}, #{summary}, #{video})
     </insert>
+    <update id="updateMovie">
+        UPDATE movie
+        SET name = #{name}, director = #{director}, actor = #{actor}, types = #{types}, cover = #{cover}, year = #{year}, language = #{language}, rating = #{rating}, users = #{users}, summary = #{summary}, video = #{video}
+        WHERE id = #{id}
+    </update>
+
+    <select id="getAllMovieInfo" resultType="com.x.backend.pojo.common.Movie">
+        SELECT * FROM movie
+        ORDER BY rating DESC
+        LIMIT #{start}, #{size}
+    </select>
+    <select id="getMovieInfoById" resultType="com.x.backend.pojo.common.Movie">
+        SELECT * FROM movie
+        WHERE id = #{id}
+    </select>
+    <select id="selectById" resultType="com.x.backend.pojo.common.Movie">
+        SELECT * FROM movie
+        WHERE id = #{id}
+    </select>
 </mapper>

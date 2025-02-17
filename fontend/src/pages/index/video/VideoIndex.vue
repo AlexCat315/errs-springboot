@@ -2,7 +2,8 @@
 import Search from "./components/Serach.vue";
 import { onMounted, Ref } from "vue";
 import { inject } from "vue";
-import AddInfo from "./components/AddInfo.vue";
+import AddInfo from "./AddInfo.vue";
+import UpdateIndex from "./UpdateIndex.vue";
 
 const globalSelect = inject<Ref<string>>("globalSelect");
 if (!globalSelect) {
@@ -34,6 +35,7 @@ onMounted(() => {
         </el-menu>
     </div>
     <AddInfo v-if="globalSelect === '5-2'" />
+    <UpdateIndex v-if="globalSelect === '5-4'" />
 </template>
 
 <style scoped></style>
