@@ -99,6 +99,12 @@
     font-weight: bold;
     color: #494949;
     margin-top: 10px;
+    width: 14ch;
+    /* 限制宽度为8个字符 */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 .channel__data {
@@ -148,7 +154,7 @@
 
 .card__view__data {
     position: absolute;
-    bottom: 0;
+    bottom: 50px;
     width: 100%;
     display: flex;
     justify-content: flex-end;
@@ -156,6 +162,8 @@
     padding: 8px;
     box-sizing: border-box;
     z-index: 10 !important;
+    margin-left: auto;
+    display: flex;
 }
 
 .card__lenght,
@@ -183,6 +191,7 @@
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 900ms, transform 900ms;
+
 }
 
 .card:hover .card__view__preview {
@@ -236,8 +245,9 @@
 
 .rating {
     position: absolute;
-    top: -130px;
+    top: -80px;
     right: 10px;
+    left: 310px;
     background: rgba(0, 0, 0, 0.7);
     color: #fff;
     padding: 5px 10px;
@@ -255,6 +265,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+
 }
 
 .card__view:hover {
@@ -449,72 +460,13 @@
     opacity: 1;
 }
 
-@keyframes moveUp {
-    0% {
-        transform: translateY(0);
-    }
 
-    100% {
-        transform: translateY(-20px);
-    }
-}
-
-.error-msg {
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
-    width: 150px;
-    height: 30px;
-    /* 建议显式设置高度 */
-    display: flex;
-    /* 启用 Flex 布局 */
-    align-items: center;
-    /* 垂直居中 */
-    justify-content: center;
-    /* 水平居中 */
-    font-family: Arial, Helvetica, sans-serif;
-    position: fixed;
-    z-index: 4;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 30px;
-    animation: moveUp 0.4s ease-in-out forwards;
-    font-size: 13px;
-    border-radius: 8px;
-}
-
-.loading-overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #99d1ff;
-    background-image: radial-gradient(at 21% 94%, hsla(270, 95%, 76%, 1) 0px, transparent 50%),
-        radial-gradient(at 56% 5%, hsla(252, 65%, 79%, 1) 0px, transparent 50%),
-        radial-gradient(at 67% 94%, hsla(194, 81%, 67%, 1) 0px, transparent 50%),
-        radial-gradient(at 15% 72%, hsla(304, 97%, 77%, 1) 0px, transparent 50%),
-        radial-gradient(at 63% 56%, hsla(38, 98%, 63%, 1) 0px, transparent 50%),
-        radial-gradient(at 41% 67%, hsla(321, 61%, 77%, 1) 0px, transparent 50%),
-        radial-gradient(at 68% 68%, hsla(263, 67%, 69%, 1) 0px, transparent 50%);
-    /* 半透明背景 */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    /* 确保遮罩层在最上层 */
-}
 </style>
 
 <template>
-    <div ref="scrollContainer" @scroll="handleScroll" class="game">
-        <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
-        <div v-if="isShowLikePanel" class="loading-overlay">
-            <Rating />
-        </div>
-
-        <div v-if="!isShowLikePanel" class="card">
-            <div class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
-                <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="background-image"
+        <div  class="card">
+            <div  @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
+                <div class="background-image"
                     :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
                 <div class="video-player" :class="{ active: isPlaying }">
                     <div class="video-container" :class="{ active: isPlaying }">
@@ -523,11 +475,12 @@
                             <source :src="movieForm.video" type="video/mp4">
                         </video>
                     </div>
+                    <div style="pointer-events: none;" class="card__view__data">
+                        <p style="top: -100px;" class="card__view__preview">预览</p>
+                        <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
+                    </div>
                 </div>
-                <div class="card__view__data">
-                    <p class="card__view__preview">预览</p>
-                    <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
-                </div>
+
             </div>
             <div class="card__content">
                 <div style="display: flex; justify-content: space-between;">
@@ -540,7 +493,7 @@
                             </p>
                         </div>
                     </div>
-                    <Like @click.stop="ShowLikePanel()" style="margin-top: 6px;margin-right: 15px;" />
+                    <Like @click="handleLike" style="margin-top: 6px;margin-right: 15px;" />
                 </div>
                 <div class="channel__data">
                     <div class="channel__data__text">
@@ -559,7 +512,6 @@
             </div>
         </div>
 
-    </div>
 </template>
 
 <script setup lang="ts">
@@ -567,7 +519,6 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import Like from './Like.vue';
-import Rating from './Rating.vue'
 
 interface MovieForm {
     name: string;
@@ -699,24 +650,10 @@ const colors = [
     "#5941d3",
 ];
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
-const showErrorpanle = ref(false);
-const errorPanleMsg = ref("");
-// 展示喜欢面板
-const isShowLikePanel = ref(false);
-const ShowLikePanel = () => {
-    isShowLikePanel.value = true;
-};
+// 定义一个emit 事件，向父组件传递事件
+const emit = defineEmits(['liked'])
 
-const scrollContainer = ref(null);
-
-const handleScroll = () => {
-    if (!scrollContainer.value) return;
-
-    const { scrollTop, scrollHeight, clientHeight } = scrollContainer.value;
-    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
-
-    if (isBottom) {
-        console.log("Reached bottom");
-    }
-};
+const handleLike = () => {
+    emit('liked', true)
+}
 </script>

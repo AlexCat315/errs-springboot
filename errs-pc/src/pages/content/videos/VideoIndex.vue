@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref,  onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { get_move_all } from '../...../../../../net/movie/get';
 import VideoCard from './components/VideoCard.vue';
+import Rating from "./components/Rating.vue"
+
 interface MovieForm {
     name: string;
     director: string;
@@ -16,7 +18,18 @@ interface MovieForm {
     users: number;
 }
 const movies = ref<MovieForm[]>([]);
+const scrollContainer = ref(null);
 
+const handleScroll = () => {
+    if (!scrollContainer.value) return;
+
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainer.value;
+    const isBottom = scrollTop + clientHeight >= scrollHeight - 5;
+
+    if (isBottom) {
+        console.log("Reached bottom");
+    }
+};
 
 onMounted(() => {
     get_move_all(
@@ -29,12 +42,27 @@ onMounted(() => {
 
     );
 });
+
+const showErrorpanle = ref(false);
+const errorPanleMsg = ref("");
+// 展示喜欢面板
+const isShowLikePanel = ref(false);
+const ShowLikePanel = (value: true) => {
+    isShowLikePanel.value = value;
+};
+
 </script>
 
 <template>
-    <div class="recommend-grid">
-        <VideoCard v-for="movie in movies" :key="movie.name" :movieForm="movie" :isRecommended="movie.rating >= 9"
-            style="margin-top: 30px;" />
+    <div ref="scrollContainer" @scroll="handleScroll">
+        <p v-show="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
+        <div v-show="isShowLikePanel" class="loading-overlay">
+            <Rating @liked="ShowLikePanel" />
+        </div>
+        <div v-show="!isShowLikePanel" class="recommend-grid">
+            <VideoCard @liked="ShowLikePanel" v-for="movie in movies" :key="movie.name" :movieForm="movie"
+                :isRecommended="movie.rating >= 9" style="margin-top: 30px;" />
+        </div>
     </div>
 </template>
 
@@ -74,5 +102,60 @@ onMounted(() => {
         grid-template-columns: 1fr;
         padding: 0 8px;
     }
+}
+
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+
+.error-msg {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #99d1ff;
+    background-image: radial-gradient(at 21% 94%, hsla(270, 95%, 76%, 1) 0px, transparent 50%),
+        radial-gradient(at 56% 5%, hsla(252, 65%, 79%, 1) 0px, transparent 50%),
+        radial-gradient(at 67% 94%, hsla(194, 81%, 67%, 1) 0px, transparent 50%),
+        radial-gradient(at 15% 72%, hsla(304, 97%, 77%, 1) 0px, transparent 50%),
+        radial-gradient(at 63% 56%, hsla(38, 98%, 63%, 1) 0px, transparent 50%),
+        radial-gradient(at 41% 67%, hsla(321, 61%, 77%, 1) 0px, transparent 50%),
+        radial-gradient(at 68% 68%, hsla(263, 67%, 69%, 1) 0px, transparent 50%);
+    /* 半透明背景 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    /* 确保遮罩层在最上层 */
 }
 </style>

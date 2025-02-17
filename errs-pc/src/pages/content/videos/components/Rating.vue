@@ -1,6 +1,7 @@
 <template>
   <div class="movie-card">
-    <div class="card-header">
+  <Cancel style="margin-left: 98%;margin-top: -30px;" @click="handleLike" />
+    <div style="margin-top: -30px;" class="card-header">
       <h2 class="title">观影评价</h2>
       <div class="rating">
         <span class="prompt">评分：</span>
@@ -62,7 +63,7 @@
 
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
-
+import Cancel from './Cancel.vue'
 interface Review {
   username: string
   avatar: string
@@ -110,6 +111,13 @@ const formatTime = (timestamp: number) => {
     hour: '2-digit',
     minute: '2-digit'
   })
+}
+
+// 定义一个emit 事件，向父组件传递事件
+const emit = defineEmits(['liked'])
+
+const handleLike = () => {
+    emit('liked', false)
 }
 </script>
 
