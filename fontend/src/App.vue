@@ -19,7 +19,7 @@ const verifyTimer = setInterval(() => {
     }
   }
   verifyToken();
-}, 3000);  //3s
+}, 10000);  //10s
 
 // 定时器用于刷新token
 const refreshTimer = setInterval(() => {
@@ -31,7 +31,7 @@ const refreshTimer = setInterval(() => {
     }
   }
   verifyToken(true);
-}, 60000); //60s
+}, 60000 * 3); //3 minutes
 
 // 组件销毁时清除定时器
 onBeforeUnmount(() => {

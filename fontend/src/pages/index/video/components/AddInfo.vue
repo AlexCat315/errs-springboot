@@ -21,7 +21,7 @@
                 </el-form-item>
 
                 <el-form-item label="上映时间" prop="year">
-                    <el-date-picker v-model="movieForm.year" type="date" placeholder="选择上映时间" :editable="false"
+                    <el-date-picker v-model="movieForm.year" type="date" placeholder="选择上映时间" :editable="true"
                         :clearable="false" />
                 </el-form-item>
 
@@ -67,14 +67,26 @@
                     </el-form-item>
                 </div>
                 <div style="display: flex">
-                    <el-form-item label="评分" prop="rating">
-                        <div style="display: flex; align-items: center">
-                            <el-rate v-model="movieForm.rating" :max="5" :allow-half="true" show-score
-                                @change="handleRateChange" />
-                            <el-input-number v-model="movieForm.rating" :min="0" :max="5" :step="0.5"
-                                style="margin-left: 20px" @change="handleInputChange" />
-                        </div>
-                    </el-form-item>
+                <el-form-item label="评分" prop="rating">
+                    <div style="display: flex; align-items: center">
+                        <el-rate 
+                            v-model="movieForm.rating" 
+                            :max="5" 
+                            :allow-half="true" 
+                            show-score
+                            @change="handleRateChange" 
+                        />
+                        <el-input-number 
+                            v-model="movieForm.rating" 
+                            :min="0" 
+                            :max="5" 
+                            :step="0.1"  
+                            :precision="1"  
+                            style="margin-left: 20px" 
+                            @change="handleInputChange" 
+                        />
+                    </div>
+                </el-form-item>
                     <el-form-item style="margin-left: 70px" label="评价人数" prop="users">
                         <el-input-number v-model="movieForm.users" :min="0" />
                     </el-form-item>
@@ -225,7 +237,8 @@ const handleRateChange = (value: number) => {
 const handleInputChange = (value: number) => {
     if (value < 0) movieForm.rating = 0;
     if (value > 5) movieForm.rating = 5;
-    movieForm.rating = Math.round(value * 2) / 2;
+    // 移除四舍五入到0.5的逻辑
+    movieForm.rating = parseFloat(value.toFixed(1)); // 保留一位小数
 };
 
 const submitForm = async () => {

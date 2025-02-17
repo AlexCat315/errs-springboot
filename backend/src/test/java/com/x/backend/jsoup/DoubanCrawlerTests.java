@@ -1,12 +1,21 @@
 package com.x.backend.jsoup;
 
 import com.x.backend.mapper.admin.BookMapper;
+import com.x.backend.pojo.common.Book;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @SpringBootTest
@@ -18,13 +27,88 @@ public class DoubanCrawlerTests {
     private BookMapper bookMapper;
 
     @Test
-    void movieTop250Test() throws IOException {
-
+    void movieTop250Test() throws Exception {
+//        for (int start = 0; start < 250; start += 25) {
+//            String url = "https://movie.douban.com/top250?start=" + start;
+//            Document doc = Jsoup.connect(url)
+//                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+//                    .header("Accept-Language", "zh-CN,zh;q=0.9")
+//                    .timeout(15000)
+//                    .get();
+//
+//            Elements movies = doc.select(".item");
+//            System.out.println("本页获取电影数量：" + movies.size());
+//
+//            for (Element movie : movies) {
+//                // 提取基础信息
+//                String title = movie.select(".title").first().text();
+//                String rating = movie.select(".rating_num").text();
+//                String inq = movie.select(".inq").text();
+//                String coverUrl = movie.select("img").attr("src");
+//
+//                // 处理评分人数
+//                String ratingCountText = movie.select(".star").text();
+//                Pattern pattern = Pattern.compile("(\\d+)人评价");
+//                Matcher matcher = pattern.matcher(ratingCountText);
+//                String ratingCount = matcher.find() ? matcher.group(1) : "0";
+//
+//                // 处理详细信息
+//                Element infoElement = movie.select(".bd p").first();
+//                String[] infoParts = infoElement.html().split("<br>");
+//                String directorInfo = infoParts[0].trim();
+//                String yearRegionGenre = infoParts.length > 1 ? infoParts[1].trim() : "";
+//
+//                // 解析导演和演员
+//                String director = directorInfo.replace("导演:", "").split("主演:")[0].trim();
+//                String actors = directorInfo.contains("主演:") ?
+//                        directorInfo.split("主演:")[1].trim() : "";
+//
+//                // 解析年份/地区/类型
+//                String[] details = yearRegionGenre.split("/");
+//                String year = details.length > 0 ? details[0].trim() : "";
+//                String region = details.length > 1 ? details[1].trim() : "";
+//                String genres = details.length > 2 ? details[2].trim() : "";
+//
+//                // 进入详情页获取完整简介
+//                String detailUrl = movie.select(".hd a").attr("abs:href");
+//                Document detailDoc = Jsoup.connect(detailUrl)
+//                        .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+//                        .timeout(10000)
+//                        .get();
+//
+//                String description = detailDoc.select("span[property=v:summary]").text()
+//                        .replaceAll("\\s+", " ")
+//                        .trim();
+//
+////                // 处理图片上传
+////                String minioPath = minioUtils.uploadCoverToMinio(coverUrl);
+////                String imgUrl = "https://your-minio-domain/" + minioPath;
+//
+////                // 构建Movie对象
+////                Movie movieEntity = new Movie();
+////                movieEntity.setTitle(title);
+////                movieEntity.setDirector(director);
+////                movieEntity.setActors(actors);
+////                movieEntity.setYear(year);
+////                movieEntity.setRegion(region);
+////                movieEntity.setGenres(genres);
+////                movieEntity.setRating(Float.parseFloat(rating));
+////                movieEntity.setRatingCount(Integer.parseInt(ratingCount));
+////                movieEntity.setIntroduction(inq);
+////                movieEntity.setDescription(description);
+////                movieEntity.setCoverImg(imgUrl);
+////
+////                // 数据库插入
+////                movieMapper.insertMovie(movieEntity);
+//                System.out.println("【" + (start / 25 + 1) + "】：title:" + title + "img:" + imgUrl + "rating:" + rating + "inq:" + inq + "director:" + director + "actors:" + actors + "year:" + year + "region:" + region + "genres:" + genres + "ratingCount:" + ratingCount + "description:" + description);
+//            }
+//            Thread.sleep(2000); // 防止请求过快
+//        }
     }
 
     @Test
     void bookTop250Test() throws Exception {
-        // 循环10次处理分页 (0,25,50,...,225)
+//        循环10次处理分页 (0,25,50,...,225)
 //        for (int start = 100; start < 250; start += 25) {
 //            String url = "https://book.douban.com/top250?start=" + start;
 //            Document doc = Jsoup.connect(url)
