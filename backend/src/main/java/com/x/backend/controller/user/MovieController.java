@@ -5,6 +5,7 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
+import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
 import com.x.backend.service.user.MovieService;
 import jakarta.annotation.Resource;
@@ -32,4 +33,13 @@ public class MovieController {
         return movieService.getAllMoves(pageSize);
     }
 
+    @PostMapping("/insert/rating-comment")
+    public ResultEntity<String> insertRatingComment(@RequestBody InsertRatingCommentVO insertRatingCommentVO) {
+        try {
+            return movieService.insertRatingComment(insertRatingCommentVO);
+        } catch (RuntimeException e) {
+            log.error("error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
 }

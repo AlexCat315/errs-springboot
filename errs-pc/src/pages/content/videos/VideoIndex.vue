@@ -5,6 +5,7 @@ import VideoCard from './components/VideoCard.vue';
 import Rating from "./components/Rating.vue"
 
 interface MovieForm {
+    id: number
     name: string;
     director: string;
     actor: string;
@@ -49,6 +50,17 @@ const errorPanleMsg = ref("");
 const isShowLikePanel = ref(false);
 const ShowLikePanel = (value: true) => {
     isShowLikePanel.value = value;
+    showErrorpanle.value = true;
+    errorPanleMsg.value = "评论成功";
+    setTimeout(() => {
+        isShowLikePanel.value = false;
+        showErrorpanle.value = false;
+    }, 2000);
+};
+const movieId = ref(0);
+const ShowLikeVideoPanel = (value: [boolean, number]) => {
+    isShowLikePanel.value = value[0];
+    movieId.value = value[1];
 };
 
 </script>
@@ -57,10 +69,10 @@ const ShowLikePanel = (value: true) => {
     <div ref="scrollContainer" @scroll="handleScroll">
         <p v-show="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div v-show="isShowLikePanel" class="loading-overlay">
-            <Rating @liked="ShowLikePanel" />
+            <Rating :movieId="movieId" @liked="ShowLikePanel" />
         </div>
         <div v-show="!isShowLikePanel" class="recommend-grid">
-            <VideoCard @liked="ShowLikePanel" v-for="movie in movies" :key="movie.name" :movieForm="movie"
+            <VideoCard @liked="ShowLikeVideoPanel" v-for="movie in movies" :key="movie.name" :movieForm="movie"
                 :isRecommended="movie.rating >= 9" style="margin-top: 30px;" />
         </div>
     </div>

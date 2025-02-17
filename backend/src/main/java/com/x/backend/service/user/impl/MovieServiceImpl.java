@@ -8,14 +8,20 @@ import com.x.backend.mapper.user.MovieMapper;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Movie;
 import com.x.backend.pojo.common.PageSize;
+import com.x.backend.pojo.user.dto.movie.InsertRatingCommentDTO;
+import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
 import com.x.backend.service.user.MovieService;
+import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -24,6 +30,8 @@ public class MovieServiceImpl implements MovieService {
 
     @Resource(name = "userMoveMapper")
     private MovieMapper movieMapper;
+    @Resource
+    private JWTUtils<UserAccount> jwtUtils;
 
     @Override
     public ResultEntity<List<MovieResponsesVO>> getAllMoves(PageSize pageSize) {
@@ -56,5 +64,30 @@ public class MovieServiceImpl implements MovieService {
         }
     }
 
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public ResultEntity<String> insertRatingComment(InsertRatingCommentVO insertRatingCommentVO) {
+        InsertRatingCommentDTO insertRatingCommentDTO = new InsertRatingCommentDTO();
+        BeanUtils.copyProperties(insertRatingCommentVO, insertRatingCommentDTO);
+        try {
+            insertRatingCommentDTO.setUserId(jwtUtils.getId());
+            insertRatingCommentDTO.setTimestamp(new Date());
+            int i = movieMapper.insertRatingComment(insertRatingCommentDTO);
+            if (i == 1) {
+                int updateRating = movieMapper.updateRating(insertRatingCommentDTO.getMovieId(), insertRatingCommentDTO.getRating());
+                if (updateRating == 1) {
+                    return ResultEntity.success("Insert rating comment success");
+                } else {
+                    return ResultEntity.failure("Error updating rating");
+                }
+            } else {
+                return ResultEntity.failure("Error inserting rating comment");
+            }
+        } catch (RuntimeException e) {
+            log.error("Error inserting rating comment", e);
+            return ResultEntity.failure("Error inserting rating comment");
+        }
+    }
 
 }
+

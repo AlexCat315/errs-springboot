@@ -459,58 +459,55 @@
     visibility: visible;
     opacity: 1;
 }
-
-
 </style>
 
 <template>
-        <div  class="card">
-            <div  @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="card__view" :style="{ backgroundImage: `url(${movieForm.cover})` }">
-                <div class="background-image"
-                    :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
-                <div class="video-player" :class="{ active: isPlaying }">
-                    <div class="video-container" :class="{ active: isPlaying }">
-                        <video ref="videoPlayer" class="video-js vjs-default-skin" :poster="movieForm.cover"
-                            preload="auto">
-                            <source :src="movieForm.video" type="video/mp4">
-                        </video>
-                    </div>
-                    <div style="pointer-events: none;" class="card__view__data">
-                        <p style="top: -100px;" class="card__view__preview">预览</p>
-                        <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
-                    </div>
+    <div class="card">
+        <div @mouseenter="autoPlayVideo" @mouseleave="pauseVideo" class="card__view"
+            :style="{ backgroundImage: `url(${movieForm.cover})` }">
+            <div class="background-image" :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
+            <div class="video-player" :class="{ active: isPlaying }">
+                <div class="video-container" :class="{ active: isPlaying }">
+                    <video ref="videoPlayer" class="video-js vjs-default-skin" :poster="movieForm.cover" preload="auto">
+                        <source :src="movieForm.video" type="video/mp4">
+                    </video>
                 </div>
-
+                <div style="pointer-events: none;" class="card__view__data">
+                    <p style="top: -100px;" class="card__view__preview">预览</p>
+                    <div class="rating" :class="ratingClass">{{ movieForm.rating.toFixed(1) }}</div>
+                </div>
             </div>
-            <div class="card__content">
-                <div style="display: flex; justify-content: space-between;">
-                    <div style="display: flex;">
-                        <p class="channel__video__name">{{ movieForm.name }}</p>
-                        <div style="margin-top: 30px;" class="channel__subdata">
-                            <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{
-                                formatDate(movieForm.year) }}年</p>
-                            <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价
-                            </p>
-                        </div>
-                    </div>
-                    <Like @click="handleLike" style="margin-top: 6px;margin-right: 15px;" />
-                </div>
-                <div class="channel__data">
-                    <div class="channel__data__text">
-                        <p style="color:#797979;" class="channel__name">导演: {{ movieForm.director }}</p>
-                        <p style="margin-top: -5px;color: #797979;" class="channel__name">主演: {{ movieForm.actor }}</p>
-                        <p class="description">
-                            {{ movieForm.summary }}
+
+        </div>
+        <div class="card__content">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="display: flex;">
+                    <p class="channel__video__name">{{ movieForm.name }}</p>
+                    <div style="margin-top: 30px;" class="channel__subdata">
+                        <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{
+                            formatDate(movieForm.year) }}年</p>
+                        <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价
                         </p>
-                        <div class="tags">
-                            <span :style="{ color: colorsRandom() }" v-for="tag in movieForm.types" :key="tag"
-                                class="tag">{{
-                                    tag }}</span>
-                        </div>
+                    </div>
+                </div>
+                <Like @click="handleLike(movieForm.id)" style="margin-top: 6px;margin-right: 15px;" />
+            </div>
+            <div class="channel__data">
+                <div class="channel__data__text">
+                    <p style="color:#797979;" class="channel__name">导演: {{ movieForm.director }}</p>
+                    <p style="margin-top: -5px;color: #797979;" class="channel__name">主演: {{ movieForm.actor }}</p>
+                    <p class="description">
+                        {{ movieForm.summary }}
+                    </p>
+                    <div class="tags">
+                        <span :style="{ color: colorsRandom() }" v-for="tag in movieForm.types" :key="tag"
+                            class="tag">{{
+                                tag }}</span>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
 </template>
 
@@ -521,6 +518,7 @@ import 'video.js/dist/video-js.css';
 import Like from './Like.vue';
 
 interface MovieForm {
+    id: number,
     name: string;
     director: string;
     actor: string;
@@ -600,15 +598,7 @@ const ratingClass = computed(() => {
     return 'rating-low';
 });
 
-const toggleVideo = () => {
-    if (!player.value) return;
 
-    if (player.value.paused()) {
-        player.value.play();
-    } else {
-        player.value.pause();
-    }
-};
 
 const autoPlayVideo = () => {
     if (!player.value) return;
@@ -651,9 +641,9 @@ const colors = [
 ];
 const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 // 定义一个emit 事件，向父组件传递事件
-const emit = defineEmits(['liked'])
+const emit = defineEmits(['liked']);
 
-const handleLike = () => {
-    emit('liked', true)
+const handleLike = (moveId: number) => {
+    emit('liked', [true, moveId]);
 }
 </script>
