@@ -31,7 +31,7 @@ import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
 
 import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;;
+import cn.hutool.core.util.IdUtil;
 
 @Slf4j
 @RestController("userAccountController")
@@ -60,7 +60,7 @@ public class AccountController {
     }
 
     @GetMapping("/validate/token")
-    public ResultEntity<String> validateToken(@RequestParam String token) {
+    public ResultEntity<String> validateToken() {
         try {
             boolean verifyToken = jwtUtils.verifyToken() && RoleConstants.ROLE_USER.equals(jwtUtils.getRole());
             if (verifyToken) {
@@ -74,7 +74,7 @@ public class AccountController {
 
     @GetMapping("/validate/email")
     public ResultEntity<String> validateEmail(
-            @RequestParam(required = true) String email) {
+            @RequestParam() String email) {
 
         // 1. 检查邮箱是否为空或仅包含空白字符
         if (email.isBlank()) {
