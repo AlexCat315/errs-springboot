@@ -104,7 +104,7 @@ function routerPushForgotPassword() {
 <style scoped>
 .right-card {
   width: 400px;
-  margin-left: 80px;
+  margin-left: 60px;
   margin-top: 60px;
   margin-bottom: 60px;
   z-index: 10;
@@ -119,6 +119,6 @@ function routerPushForgotPassword() {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   /* 卡片阴影 */
   border: 1px solid rgba(255, 255, 255, 0.3);
-  /* 淡白色边框 */
+  margin-right:30px;
 }
 </style>
