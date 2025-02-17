@@ -26,7 +26,7 @@ import java.util.List;
 @RoleSecurity(RoleConstants.ROLE_ADMIN)
 @RestController("adminMoveController")
 @RequestMapping("/api/admin/movie")
-public class MoveController {
+public class MovieController {
 
 
     @Resource(name = "adminMoveService")

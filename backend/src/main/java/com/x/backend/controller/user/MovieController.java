@@ -20,7 +20,7 @@ import java.util.List;
 @RoleSecurity(RoleConstants.ROLE_USER)
 @RestController("userMoveController")
 @RequestMapping("/api/user/movie")
-public class MoveController {
+public class MovieController {
 
 
     @Resource(name = "userMoveService")
