@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import {inject, onMounted, Ref, ref} from "vue";
-import {get_book_detail} from "../../../../../net/book/get_book";
+import { inject, onMounted, Ref, ref } from "vue";
+import { get_book_detail } from "../../../../../net/book/get_book";
 import Like from "./Like.vue";
 import UnLike from "./UnLike.vue";
-import {validate_token} from "../../../../../net/account/validate_token";
-import {validate_like} from "../../../../../net/book/validate_like";
+import { validate_token } from "../../../../../net/account/validate_token";
+import { validate_like } from "../../../../../net/book/validate_like";
 import Star from "./Star.vue";
 import GoLink from "./GoLink.vue";
 import Score from "./Score.vue";
 import StarScore from "./StarScore.vue";
 import Cancel from "./Cancel.vue";
-import {open} from "@tauri-apps/plugin-shell";
-import {insert_score, validate_score} from "../../../../../net/book/score";
+import { open } from "@tauri-apps/plugin-shell";
+import { insert_score, validate_score } from "../../../../../net/book/score";
 import UpdateStar from "./UpdateStar.vue";
 import Comment from "./Comment.vue";
 import EditComment from "./EditComment.vue";
@@ -208,6 +208,17 @@ const updateScore = (value: boolean) => {
     ValidateScore();
     showStarScore.value = value;
 };
+
+const handleCommentSubmitted = (comment: string) => {
+    console.log("Comment submitted:", comment);
+    showErrorpanle.value = true;
+    errorPanleMsg.value = comment;
+    setTimeout(() => {
+        showErrorpanle.value = false;
+        errorPanleMsg.value = '';
+    }, 2000);
+};
+
 </script>
 
 <template>
@@ -215,123 +226,71 @@ const updateScore = (value: boolean) => {
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <!-- Loading 遮罩层 -->
         <div v-if="showLoading" class="loading-overlay">
-            <UpdateStar
-                @update:modelValue="updateScore"
-                style="margin-left: 200px; margin-top: -120px"
-            />
+            <UpdateStar @update:modelValue="updateScore" style="margin-left: 200px; margin-top: -120px" />
         </div>
-        <div
-            :style="{ background: globalTheme === 'dark' ? '#3d3d44' : '#FFF' }"
-            class="top-bar"
-        >
+        <div :style="{ background: globalTheme === 'dark' ? '#3d3d44' : '#FFF' }" class="top-bar">
             <button class="top-button" @click="goBack()">
-                <svg
-                    t="1738767542422"
-                    class="icon"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="4184"
-                    width="18"
-                    height="18"
-                >
+                <svg t="1738767542422" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="4184" width="18" height="18">
                     <path
                         d="M314.257949 511.802956c107.013345 97.707837 211.700314 193.089297 316.387282 288.470757l160.520018 146.561755c23.263771 20.937394 27.916525 44.201164 11.631885 62.812181-18.611017 20.937394-41.874787 18.611017-65.138558-4.652754-162.846395-144.235378-321.040036-290.797134-481.560054-435.032512-9.305508-9.305508-18.611017-16.28464-27.916525-23.263771-20.937394-18.611017-20.937394-48.853919-2.326377-65.138558L602.728706 139.582624c44.201164-41.874787 90.728706-81.423198 134.92987-123.297984 23.263771-20.937394 51.180296-18.611017 65.138558 4.652754 11.631885 18.611017 6.979131 39.54841-13.958262 60.485804C674.846395 186.110166 560.853919 290.797134 444.535065 395.484102c-41.874787 34.895656-83.749575 74.444066-130.277116 116.318854z"
-                        p-id="4185"
-                        :fill="globalTheme === 'dark' ? '#FFF' : '#707070'"
-                    ></path>
+                        p-id="4185" :fill="globalTheme === 'dark' ? '#FFF' : '#707070'"></path>
                 </svg>
             </button>
             <button class="top-button">
-                <svg
-                    t="1738767589842"
-                    class="icon"
-                    viewBox="0 0 1024 1024"
-                    version="1.1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    p-id="5331"
-                    width="20"
-                    height="20"
-                >
+                <svg t="1738767589842" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="5331" width="20" height="20">
                     <path
                         d="M365.604792 262.10044l127.792525-127.793548 0.152473 503.227196c0.004093 11.014868 8.934486 19.943215 19.949354 19.943215 0.002047 0 0.004093 0 0.00614 0 11.016915-0.004093 19.947308-8.937556 19.943215-19.954471l-0.152473-503.100306 127.675868 127.676891c3.89675 3.89675 8.999978 5.843078 14.106276 5.843078 5.104251 0 10.212596-1.948375 14.106276-5.842055 7.79043-7.79043 7.79043-20.422122 0-28.212552L527.85306 72.555479c-3.638877-3.870144-8.791224-6.300496-14.521738-6.300496-0.002047 0-0.004093 0-0.00614 0-0.00614 0-0.01228 0.001023-0.01842 0.001023-0.00614 0-0.01228-0.001023-0.01842-0.001023-5.291516 0-10.364045 2.101871-14.106276 5.842055L337.39224 233.886865c-7.789407 7.79043-7.789407 20.422122 0 28.212552C345.18267 269.89087 357.814362 269.89087 365.604792 262.10044zM782.507924 315.087235 642.713041 315.087235c-11.016915 0-19.949354 8.931416-19.949354 19.949354s8.93244 19.949354 19.949354 19.949354l139.794883 0c38.498826 0 69.821205 31.322379 69.821205 69.821205l0 425.443645c0 38.498826-31.322379 69.821205-69.821205 69.821205L246.009973 920.071999c-38.498826 0-69.821205-31.322379-69.821205-69.821205L176.188768 424.806125c0-38.498826 31.322379-69.821205 69.821205-69.821205l143.936203 0c11.017938 0 19.949354-8.931416 19.949354-19.949354s-8.931416-19.949354-19.949354-19.949354L246.009973 315.086212c-60.499909 0-109.718891 49.220005-109.718891 109.718891l0 425.443645c0 60.499909 49.220005 109.718891 109.718891 109.718891l536.49795 0c60.499909 0 109.718891-49.220005 109.718891-109.718891L892.226814 424.806125C892.227838 364.306216 843.007833 315.087235 782.507924 315.087235z"
-                        :fill="globalTheme === 'dark' ? '#FFF' : '#707070'"
-                        p-id="5332"
-                    ></path>
+                        :fill="globalTheme === 'dark' ? '#FFF' : '#707070'" p-id="5332"></path>
                 </svg>
             </button>
         </div>
 
         <!-- 书籍基本信息卡片 -->
-        <div
-            :style="{ background: globalTheme === 'dark' ? '#3d3d44' : '#FFF' }"
-            class="book-card"
-        >
+        <div :style="{ background: globalTheme === 'dark' ? '#3d3d44' : '#FFF' }" class="book-card">
             <div class="book-cover">
                 <img :src="book.img" alt="cover" />
             </div>
             <div class="book-info">
                 <div class="book-title-top">
-                    <div
-                        style="
+                    <div style="
                             display: flex;
                             align-items: center;
                             justify-content: space-between;
                             width: 100%;
-                        "
-                    >
+                        ">
                         <!-- 左边的元素 -->
                         <div style="display: flex; align-items: center">
-                            <h4
-                                :style="{
-                                    color:
-                                        globalTheme === 'dark'
-                                            ? '#FFF'
-                                            : '#000',
-                                }"
-                                style="
+                            <h4 :style="{
+                                color:
+                                    globalTheme === 'dark'
+                                        ? '#FFF'
+                                        : '#000',
+                            }" style="
                                     margin-right: 10px;
                                     font-size: 18px;
                                     font-weight: bold;
-                                "
-                            >
+                                ">
                                 {{ book.name }}
                             </h4>
-                            <img
-                                :src="imgSrc(book)"
+                            <img :src="imgSrc(book)"
                                 class="book_rating_item_label_number_image book_rating_item_label_ListItem"
-                                style="height: 22px; margin-right: 10px"
-                            />
+                                style="height: 22px; margin-right: 10px" />
                         </div>
 
                         <!-- 右边的元素 -->
                         <div style="display: flex; align-items: center">
-                            <div
-                                v-if="!showStarScore"
-                                style="display: flex; align-items: center"
-                            >
+                            <div v-if="!showStarScore" style="display: flex; align-items: center">
                                 <Like v-if="!showLike" @click="addLike()" />
                                 <UnLike v-if="showLike" @click="cancelLike()" />
-                                <GoLink
-                                    @click="openLink()"
-                                    style="height: 40px; transform: scale(0.85)"
-                                />
-                                <Score
-                                    v-if="scoreMessage === '评价'"
-                                    @click="showStarScore = true"
-                                    :score="scoreMessage"
-                                    style="height: 40px; transform: scale(0.7)"
-                                />
-                                <Score
-                                    @click="showEvaluated()"
-                                    v-if="scoreMessage === '已评价'"
-                                    :score="scoreMessage"
-                                    style="height: 40px; transform: scale(0.7)"
-                                />
+                                <GoLink @click="openLink()" style="height: 40px; transform: scale(0.85)" />
+                                <Score v-if="scoreMessage === '评价'" @click="showStarScore = true" :score="scoreMessage"
+                                    style="height: 40px; transform: scale(0.7)" />
+                                <Score @click="showEvaluated()" v-if="scoreMessage === '已评价'" :score="scoreMessage"
+                                    style="height: 40px; transform: scale(0.7)" />
                             </div>
-                            <div
-                                v-if="showStarScore"
-                                style="
+                            <div v-if="showStarScore" style="
                                     display: flex;
                                     align-items: center;
                                     background-color: #fff;
@@ -340,62 +299,40 @@ const updateScore = (value: boolean) => {
                                     height: 38px;
                                     margin-top: 4px;
                                     padding-bottom: 4px;
-                                "
-                            >
-                                <StarScore
-                                    @update:modelValue="handleRatingChange"
-                                    style="transform: scale(0.7)"
-                                />
-                                <Cancel
-                                    @click="showStarScore = false"
-                                    style="
+                                ">
+                                <StarScore @update:modelValue="handleRatingChange" style="transform: scale(0.7)" />
+                                <Cancel @click="showStarScore = false" style="
                                         margin-left: -15px;
                                         margin-top: 8px;
                                         margin-right: 10px;
-                                    "
-                                />
+                                    " />
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <p
-                    :style="{
-                        color: globalTheme === 'dark' ? '#8f8f8f' : ' #555',
-                    }"
-                    class="author"
-                >
+                <p :style="{
+                    color: globalTheme === 'dark' ? '#8f8f8f' : ' #555',
+                }" class="author">
                     {{ book.author }}
                 </p>
-                <p
-                    :style="{
-                        color: globalTheme === 'dark' ? '#8f8f8f' : ' #555',
-                    }"
-                    class="description"
-                >
+                <p :style="{
+                    color: globalTheme === 'dark' ? '#8f8f8f' : ' #555',
+                }" class="description">
                     {{ book.description }}
                 </p>
                 <div style="display: flex; margin-bottom: 10px">
                     <Star :score="book.rating" style="margin-top: 10px" />
                     <div class="rating">
-                        <span
-                            :style="{
-                                color:
-                                    globalTheme === 'dark' ? '#FFF' : 'black',
-                            }"
-                            class="rating-score"
-                            >{{ book.rating }}分</span
-                        >
-                        <span class="rating-count"
-                            >{{ book.users }} 人评价</span
-                        >
+                        <span :style="{
+                            color:
+                                globalTheme === 'dark' ? '#FFF' : 'black',
+                        }" class="rating-score">{{ book.rating }}分</span>
+                        <span class="rating-count">{{ book.users }} 人评价</span>
                     </div>
-                    <div
-                        :style="{
-                            color: globalTheme === 'dark' ? '#FFF' : 'black',
-                        }"
-                        class="recommend"
-                    >
+                    <div :style="{
+                        color: globalTheme === 'dark' ? '#FFF' : 'black',
+                    }" class="recommend">
                         <span>推荐指数：</span>
                         <span>{{ book.recommend }}%</span>
                     </div>
@@ -404,19 +341,16 @@ const updateScore = (value: boolean) => {
         </div>
 
         <!-- 书籍评论 -->
-        <div
-            :style="{
-                background: globalTheme === 'dark' ? '#141111' : '#fff',
-            }"
-            class="comment-card"
-        >
+        <div :style="{
+            background: globalTheme === 'dark' ? '#141111' : '#fff',
+        }" class="comment-card">
             <Comment class="comment-comment" />
             <Comment class="comment-comment" />
             <LookAll />
         </div>
 
         <div style="display: flex">
-            <EditComment />
+            <EditComment @commentSubmitted="handleCommentSubmitted" :book_id="book.id" />
         </div>
     </div>
 </template>
@@ -453,6 +387,7 @@ const updateScore = (value: boolean) => {
     margin: 20px auto;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 .comment-card {
     display: flex;
     background-color: #fff;
@@ -463,6 +398,7 @@ const updateScore = (value: boolean) => {
     margin: 20px auto;
     font-family: Arial, Helvetica, sans-serif;
 }
+
 .comment-comment {
     margin: 20px;
 }
@@ -533,6 +469,7 @@ h3 {
     color: #888;
     font-size: 0.9rem;
 }
+
 .recommend {
     margin-left: 10px;
 }
@@ -542,9 +479,11 @@ h3 {
     font-weight: 500;
     margin-top: -2px;
 }
+
 .book-title-top {
     display: flex;
 }
+
 .book_rating_item_label_number_image.book_rating_item_label_ListItem {
     height: 22px;
 }
@@ -555,6 +494,7 @@ h3 {
     flex-shrink: 0;
     margin-left: 8px;
 }
+
 @keyframes moveUp {
     0% {
         transform: translateY(0);
@@ -564,6 +504,7 @@ h3 {
         transform: translateY(-20px);
     }
 }
+
 .error-msg {
     background-color: rgba(0, 0, 0, 0.7);
     color: #fff;
@@ -586,9 +527,12 @@ h3 {
     font-size: 13px;
     border-radius: 8px;
 }
+
 :disabledscore {
-    pointer-events: none; /* 禁止鼠标事件 */
-    cursor: not-allowed; /* 改变鼠标指针样式 */
+    pointer-events: none;
+    /* 禁止鼠标事件 */
+    cursor: not-allowed;
+    /* 改变鼠标指针样式 */
     opacity: 0.6;
 }
 

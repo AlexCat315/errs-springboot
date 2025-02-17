@@ -270,6 +270,7 @@
                 }"
                 style="width: 98%"
                 placeholder="撰写您的想法💡"
+                v-model="comment"
             ></textarea>
             <div>
                 <div class="formatting">
@@ -406,7 +407,7 @@
                             ></path>
                         </svg>
                     </button>
-                    <button type="submit" class="send" title="Send">
+                    <button @click="subComment" type="submit" class="send" title="Send">
                         <svg
                             fill="none"
                             viewBox="0 0 24 24"
@@ -437,7 +438,32 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject,ref } from "vue";
+import { insert_book_comment } from "../../../../net/book/insert";
 
 const globalTheme = inject<string>("globalTheme");
+const poros = defineProps({
+    book_id: Number,
+})
+
+const comment = ref("");
+
+const subComment = async () => {
+    insert_book_comment(poros.book_id, comment.value, () => {
+        console.log("Comment submitted successfully");
+        handleSubmitted("评论成功！");
+          comment.value = '';
+    }, () => {
+        console.log("Error submitting comment");
+        handleSubmitted("评论失败！");
+    })
+}
+
+// 定义一个emit 事件，向父组件传递事件
+const emit = defineEmits(['commentSubmitted'])
+
+const handleSubmitted = (value: string) => {
+    emit('commentSubmitted', value)
+}
+
 </script>

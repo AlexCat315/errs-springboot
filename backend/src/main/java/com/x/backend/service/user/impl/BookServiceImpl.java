@@ -3,14 +3,17 @@ package com.x.backend.service.user.impl;
 import com.x.backend.mapper.user.BookMapper;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
+import com.x.backend.pojo.user.dto.book.CommentDTO;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.book.CommentVO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
 import com.x.backend.service.user.BookService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -158,6 +161,22 @@ public class BookServiceImpl implements BookService {
             }
         } catch (RuntimeException e) {
             log.error("score error", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void insertComment(CommentVO commentVO) {
+        try {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(commentVO, commentDTO);
+            commentDTO.setUserId((jwtUtils.getId()));
+            int i = bookMapper.insertComment(commentDTO);
+            if (i != 1) {
+                throw new RuntimeException("评论失败");
+            }
+        } catch (RuntimeException e) {
+            log.error("insertComment error", e);
             throw new RuntimeException(e);
         }
     }

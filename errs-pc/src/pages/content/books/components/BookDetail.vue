@@ -208,6 +208,17 @@ const updateScore = (value: boolean) => {
     ValidateScore();
     showStarScore.value = value;
 };
+
+const handleCommentSubmitted = (comment: string) => {
+    console.log("Comment submitted:", comment);
+    showErrorpanle.value = true;
+    errorPanleMsg.value = comment;
+    setTimeout(() => {
+        showErrorpanle.value = false;
+        errorPanleMsg.value = '';
+    }, 2000);
+};
+
 </script>
 
 <template>
@@ -416,7 +427,7 @@ const updateScore = (value: boolean) => {
         </div>
 
         <div style="display: flex">
-            <EditComment />
+            <EditComment @commentSubmitted="handleCommentSubmitted" :book_id="book.id" />
         </div>
     </div>
 </template>

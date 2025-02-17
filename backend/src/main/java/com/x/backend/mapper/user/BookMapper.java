@@ -1,6 +1,7 @@
 package com.x.backend.mapper.user;
 
 import com.x.backend.pojo.common.Book;
+import com.x.backend.pojo.user.dto.book.CommentDTO;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.dto.book.UpdateBookRatingDTO;
@@ -29,4 +30,6 @@ public interface BookMapper {
     Boolean validateLike(IsLikeBook isLike);
 
     Boolean validateScore(ScoreDTO scoreDTO);
+
+    int insertComment(CommentDTO commentDTO);
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 @Slf4j
 @RestController("userGameController")
+@RoleSecurity(RoleConstants.ROLE_USER)
 @RequestMapping("/api/user/game")
 public class GameController {
 
@@ -23,7 +24,7 @@ public class GameController {
     }
 
     @GetMapping("/get/top50")
-    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+
     public ResultEntity<List<GameResponsesVO>> getTop50(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据
@@ -35,7 +36,7 @@ public class GameController {
     }
 
     @GetMapping("/get/highest-rated")
-    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    @RoleSecurity(RoleConstants.ROLE_USER)
     public ResultEntity<List<GameResponsesVO>> getHighestRated(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据
@@ -47,7 +48,7 @@ public class GameController {
     }
 
     @GetMapping("/get/most-reviewed")
-    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    @RoleSecurity(RoleConstants.ROLE_USER)
     public ResultEntity<List<GameResponsesVO>> getMostReviewed(@RequestParam(defaultValue = "0") int start) {
         try {
             int size = 10;  // 每页 10 条数据
@@ -70,7 +71,7 @@ public class GameController {
     }
 
     @PostMapping("/get/state/favorites_game")
-    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    @RoleSecurity(RoleConstants.ROLE_USER)
     public ResultEntity<Boolean> getStateFavoritesGame(@RequestParam(name = "game_id") Integer gameId) {
         try {
             return ResultEntity.success(gameService.getStateFavoritesGame(gameId));

@@ -1,5 +1,7 @@
 package com.x.backend.controller.user;
 
+import com.x.backend.annotation.RoleSecurity;
+import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.user.vo.request.song.UpdateSongScoreUsersVO;
@@ -18,6 +20,7 @@ import java.util.List;
 @Slf4j
 @RestController("userSongController")
 @RequestMapping("/api/user/song")
+@RoleSecurity(RoleConstants.ROLE_USER)
 public class SongController {
 
     @Resource(name = "userSongService")

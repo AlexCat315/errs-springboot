@@ -4,6 +4,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
+import com.x.backend.pojo.user.vo.request.book.CommentVO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
 import jakarta.validation.Valid;
 
@@ -27,4 +28,6 @@ public interface BookService {
     ResultEntity<Boolean> validateScore(ScoreDTO scoreDTO);
 
     void updateScore( ScoreVo scoreVo);
+
+    void insertComment(@Valid CommentVO commentVO);
 }
