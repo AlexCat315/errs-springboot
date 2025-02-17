@@ -509,7 +509,7 @@
     <div ref="scrollContainer" @scroll="handleScroll" class="game">
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div v-if="isShowLikePanel" class="loading-overlay">
-           <Rating />
+            <Rating />
         </div>
 
         <div v-if="!isShowLikePanel" class="card">
@@ -530,15 +530,17 @@
                 </div>
             </div>
             <div class="card__content">
-                <div style="display: flex;">
-                    <p class="channel__video__name">{{ movieForm.name }}</p>
-                    <div style="margin-top: 30px;" class="channel__subdata">
-                        <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{
-                            formatDate(movieForm.year)
-                            }}年</p>
-                        <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价</p>
+                <div style="display: flex; justify-content: space-between;">
+                    <div style="display: flex;">
+                        <p class="channel__video__name">{{ movieForm.name }}</p>
+                        <div style="margin-top: 30px;" class="channel__subdata">
+                            <p style="margin-top: -16px;margin-left: 10px;" class="channel__date">{{
+                                formatDate(movieForm.year) }}年</p>
+                            <p style="margin-top: -16px;" class="channel__views">{{ formatViews(movieForm.users) }}人评价
+                            </p>
+                        </div>
                     </div>
-                    <Like @click.stop="ShowLikePanel()" style="margin-left: 25px;margin-top: 6px;" />
+                    <Like @click.stop="ShowLikePanel()" style="margin-top: 6px;margin-right: 15px;" />
                 </div>
                 <div class="channel__data">
                     <div class="channel__data__text">
@@ -556,7 +558,7 @@
                 </div>
             </div>
         </div>
- 
+
     </div>
 </template>
 
