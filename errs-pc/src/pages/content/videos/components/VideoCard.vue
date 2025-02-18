@@ -464,7 +464,7 @@
 <template>
     <div class="card">
           <!-- @mouseleave="pauseVideo"  -->
-        <div @mouseenter="autoPlayVideo"  class="card__view"
+        <div @mouseenter="autoPlayVideo"  @mouseleave="pauseVideo" class="card__view"
             :style="{ backgroundImage: `url(${movieForm.cover})` }">
             <div class="background-image" :style="{ backgroundImage: `url(${movieForm.cover})` }"></div>
             <div class="video-player" :class="{ active: isPlaying }">

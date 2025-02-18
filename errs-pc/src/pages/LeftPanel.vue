@@ -41,6 +41,7 @@ const globalSelect = inject("globalSelect");
 const selectIndex = ref(globalSelect.value);
 const globalTheme = inject("globalTheme");
 const selectTheme = ref(globalTheme);
+const globalSearch = inject('globalSearch');
 
 const selectItem = (key) => {
     globalSelect.value = key;
@@ -67,6 +68,8 @@ const props = defineProps({
 
 const searchFun = (value) => {
     searchValue.value = value;
+    globalSelect.value = 6;
+    globalSearch.value = value;
 };
 </script>
 
@@ -80,17 +83,11 @@ const searchFun = (value) => {
         "
     >
         <Search
-            v-if="globalTheme === 'light'"
-            background-color="#fff"
+
             style="margin-top: 30px"
             @update:search="searchFun"
         />
-        <Search
-            v-if="globalTheme === 'dark'"
-            background-color="#403e3d"
-            style="margin-top: 30px"
-            @update:search="searchFun"
-        />
+
 
         <div
             :style="{

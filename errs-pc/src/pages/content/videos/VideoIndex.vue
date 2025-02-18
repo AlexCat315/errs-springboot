@@ -48,7 +48,7 @@ const showErrorpanle = ref(false);
 const errorPanleMsg = ref("");
 // 展示喜欢面板
 const isShowLikePanel = ref(false);
-const ShowLikePanel = (value: true) => {
+const ShowLikePanel = (value: boolean) => {
     isShowLikePanel.value = value;
     showErrorpanle.value = true;
     errorPanleMsg.value = "评论成功";
@@ -63,13 +63,17 @@ const ShowLikeVideoPanel = (value: [boolean, number]) => {
     movieId.value = value[1];
 };
 
+const handleCancel = (value: boolean) => {
+    isShowLikePanel.value = value;
+};
+
 </script>
 
 <template>
     <div ref="scrollContainer" @scroll="handleScroll">
         <p v-show="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div v-show="isShowLikePanel" class="loading-overlay">
-            <Rating :movieId="movieId" @liked="ShowLikePanel" />
+            <Rating :movieId="movieId" @cancel="handleCancel" @liked="ShowLikePanel" />
         </div>
         <div v-show="!isShowLikePanel" class="recommend-grid">
             <VideoCard @liked="ShowLikeVideoPanel" v-for="movie in movies" :key="movie.name" :movieForm="movie"

@@ -9,7 +9,8 @@ const globalSelect = ref(1);
 
 // 提供全局变量
 provide("globalSelect", globalSelect);
-
+const globalSearch = ref("");
+provide("globalSearch", globalSearch);
 // 定义一个颜色主题全局变量
 const globalTheme = ref("");
 const theme = ref(localStorage.getItem("theme"));

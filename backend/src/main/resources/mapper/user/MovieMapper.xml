@@ -19,5 +19,19 @@
         ORDER BY rating DESC
         LIMIT #{start}, #{size}
     </select>
+    <select id="searchMovies" resultType="com.x.backend.pojo.common.Movie">
+        SELECT *
+        FROM movie
+        WHERE name LIKE CONCAT('%', #{SearchText}, '%')
+        OR director LIKE CONCAT('%', #{SearchText}, '%')
+        OR actor LIKE CONCAT('%', #{SearchText}, '%')
+        OR types LIKE CONCAT('%', #{SearchText}, '%')
+        OR rating LIKE CONCAT('%', #{SearchText}, '%')
+        OR year LIKE CONCAT('%', #{SearchText}, '%')
+        OR language LIKE CONCAT('%', #{SearchText}, '%')
+        OR summary LIKE CONCAT('%', #{SearchText}, '%')
+        ORDER BY rating DESC
+        LIMIT #{start}, #{size}
+    </select>
 
 </mapper>

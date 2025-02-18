@@ -6,6 +6,7 @@ import Games from "./content/Games.vue";
 import Books from "./content/Books.vue";
 import Videos from "./content/Videos.vue";
 import Music from "./content/Music.vue";
+import Search from "./content/Search.vue";
 
 // 接收全局状态
 const globalSelect = inject("globalSelect");
@@ -18,6 +19,7 @@ const componentMap = {
     3: Books,
     4: Music,
     5: Videos,
+    6: Search,
     7: Setting,
 };
 

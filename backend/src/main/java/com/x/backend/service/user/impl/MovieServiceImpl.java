@@ -12,6 +12,7 @@ import com.x.backend.pojo.user.dto.movie.InsertRatingCommentDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
+import com.x.backend.pojo.user.vo.responses.movie.SearchVO;
 import com.x.backend.service.user.MovieService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
@@ -89,5 +90,35 @@ public class MovieServiceImpl implements MovieService {
         }
     }
 
+    @Override
+    public ResultEntity<List<MovieResponsesVO>> searchMovies(SearchVO searchVO) {
+        try {
+            searchVO.setStart((searchVO.getPage() - 1) * searchVO.getSize());
+            List<Movie> movies = movieMapper.searchMovies(searchVO);
+            List<MovieResponsesVO> movieResponsesVOS = new ArrayList<>();
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+            // 循环遍历 movies，将 Movie 对象转换为 MovieResponsesVO 对象
+            for (Movie movie : movies) {
+                List<String> types = null;
+                MovieResponsesVO movieResponsesVO = new MovieResponsesVO();
+                BeanUtils.copyProperties(movie, movieResponsesVO);
+                try {
+                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<List<String>>() {
+                    });
+                } catch (JsonProcessingException e) {
+                    log.error("Error parsing gameCategories JSON", e);
+                    throw new RuntimeException("Error parsing gameCategories JSON", e);
+                }
+                movieResponsesVO.setTypes(types);
+                movieResponsesVOS.add(movieResponsesVO);
+            }
+            return ResultEntity.success(movieResponsesVOS);
+
+        } catch (RuntimeException e) {
+            log.error("Error searching movies", e);
+            return ResultEntity.failure("Error searching movies");
+        }
+    }
 }
 
