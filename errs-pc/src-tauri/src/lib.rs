@@ -7,40 +7,39 @@ use crate::utils::img_utils::{conflate_img, get_img_names};
 use crate::utils::theme_utils::get_system_theme;
 use tauri::Manager;
 use tauri_plugin_autostart::MacosLauncher;
-use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_autostart::init(
-            MacosLauncher::LaunchAgent,       // macOS 启动方式
-            Some(vec!["--flag1", "--flag2"]), // 可选：传递给应用程序的参数
+            MacosLauncher::LaunchAgent,
+            Some(vec!["--flag1", "--flag2"]),
         ))
         .plugin(tauri_plugin_store::Builder::new().build())
         .setup(|app| {
             let window = app.get_window("main").unwrap();
 
-            // macOS 上启用 Vibrancy 效果
+            // macOS 模糊特效
             #[cfg(target_os = "macos")]
-            apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, None)
-                .expect("Unsupported platform! 'apply_vibrancy' is only supported on macOS");
+            {
+                use window_vibrancy::{apply_vibrancy, NSVisualEffectMaterial};
+                apply_vibrancy(&window, NSVisualEffectMaterial::HudWindow, None, None)
+                    .expect("macOS vibrancy failed");
+            }
 
-            // Windows 上启用 Blur 效果
+            // Windows 模糊特效
             #[cfg(target_os = "windows")]
-            apply_blur(&window, Some((18, 18, 18, 125)))
-                .expect("Unsupported platform! 'apply_blur' is only supported on Windows");
-
-            // Linux 上启用 Blur 效果
-            #[cfg(target_os = "linux")]
-            apply_blur(&window, Some((18, 18, 18, 125)))
-                .expect("Unsupported platform! 'apply_blur' is only supported on Linux");
+            {
+                use window_vibrancy::apply_blur;
+                apply_blur(&window, Some((18, 18, 18, 125)))
+                    .expect("Windows blur failed");
+            }
 
             Ok(())
         })
         .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_opener::init())
-        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             get_request,
             post_request,

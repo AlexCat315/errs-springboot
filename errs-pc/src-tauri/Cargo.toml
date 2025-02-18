@@ -1,8 +1,8 @@
 [package]
-name = "errs-pc"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "RevoCat"
+version = "0.1.1"
+description = "RevoCat is a PC app that recommends games, books, and music!"
+authors = ["alexcat315"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -32,4 +32,7 @@ dark-light = "2.0.0"
 tauri-plugin-shell = "2"
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-autostart = "2"
-
+# tauri-plugin-window-vibrancy = "0.4.0"  # Windows/macOS特效支持
+tauri-plugin-store = { version = "2.0.0-rc.4" }
+tauri-plugin-http = { version = "2.0.0-rc.6" }            # HTTP客户端
+tauri-plugin-opener = "2.2.5"           # 外部打开

@@ -34,7 +34,8 @@
       "icons/icon_16x16@2x.png",
       "icons/icon_512x512@1x.png",
       "icons/icon_512x512@2x.png",
-      "icons/icon_64.png"
+      "icons/icon_64.png",
+      "icons/icon.ico"
     ]
   }
 }
