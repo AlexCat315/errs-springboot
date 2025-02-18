@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
-import {onBeforeMount, onBeforeUnmount, onMounted, provide, ref} from "vue";
-import {callConflateImg} from "./script/callConflateImg";
+import { onBeforeMount, onBeforeUnmount, onMounted, provide, ref } from "vue";
+import { callConflateImg } from "./script/callConflateImg";
 import RightPanel from "./pages/RightPanel.vue";
-import {get_system_theme} from "./util/Theme";
+import { get_system_theme } from "./util/Theme";
 // 定义全局变量
 const globalSelect = ref(1);
 
@@ -29,13 +29,8 @@ if (theme) {
         }
     }
 } else {
-    get_system_theme().then((isDark) => {
-        if (isDark) {
-            globalTheme.value = "dark";
-        } else {
-            globalTheme.value = "light";
-        }
-    });
+    globalTheme.value = "light";
+    localStorage.setItem("theme", "light");
 }
 // 定时器
 setInterval(() => {
@@ -81,9 +76,9 @@ const observeLayoutChanges = () => {
 
 let layoutObserver: ResizeObserver | null = null;
 
-onBeforeMount(() => {
-    callConflateImg();
-});
+// onBeforeMount(() => {
+//     callConflateImg();
+// });
 onMounted(() => {
     updateRightPanelOffset(); // 初始化距离
     layoutObserver = observeLayoutChanges(); // 开启布局变化监听
@@ -103,13 +98,10 @@ onBeforeUnmount(() => {
             <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />
         </div>
         <!-- 右侧内容 -->
-        <div
-            :style="{
-                '--background-color':
-                    selectTheme === 'light' ? '#FFF' : 'black',
-            }"
-            class="right-panel"
-        >
+        <div :style="{
+            '--background-color':
+                selectTheme === 'light' ? '#FFF' : 'black',
+        }" class="right-panel">
             <RightPanel />
         </div>
     </div>

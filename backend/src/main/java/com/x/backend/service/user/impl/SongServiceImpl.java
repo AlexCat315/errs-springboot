@@ -9,6 +9,7 @@ import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
 import com.x.backend.pojo.user.dto.song.UpdateSongScoreUserDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
+import com.x.backend.pojo.user.vo.request.song.SearchSongVO;
 import com.x.backend.pojo.user.vo.request.song.UpdateSongScoreUsersVO;
 import com.x.backend.pojo.user.vo.responses.song.SongVO;
 import com.x.backend.service.user.SongService;
@@ -135,5 +136,33 @@ public class SongServiceImpl implements SongService {
         }
     }
 
+    @Override
+    public ResultEntity<List<SongVO>> search(SearchSongVO searchSongVO) {
+        List<SongVO> songVOS = new ArrayList<>();
+        searchSongVO.setStart((searchSongVO.getPage() - 1) * searchSongVO.getSize());
+        try {
+            List<Song> songs = songMapper.search(searchSongVO);
+
+            // 创建 ObjectMapper 实例
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            for (Song song : songs) {
+                SongVO songVO = new SongVO();
+                BeanUtils.copyProperties(song, songVO);
+                // 将string类型的artist转换为List<String>
+                List<String> songTags = objectMapper.readValue(song.getTags(), new TypeReference<>() {
+                });
+                songVO.setTags(songTags);
+                songVOS.add(songVO);
+            }
+        } catch (JsonProcessingException e) {
+            log.error("JsonProcessingException", e);
+            throw new RuntimeException(e);
+        } catch (RuntimeException e) {
+            log.error("RuntimeException", e);
+            throw e;
+        }
+        return ResultEntity.success(songVOS);
+    }
 
 }

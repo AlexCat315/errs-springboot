@@ -1,10 +1,10 @@
-package com.x.backend.pojo.user.vo.responses.movie;
+package com.x.backend.pojo.user.vo.request.game;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class SearchVO {
+public class SearchGameVO {
     @NotNull
     private int size = 10;
     @NotNull

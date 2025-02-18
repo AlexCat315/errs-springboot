@@ -9,6 +9,7 @@ import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.book.CommentVO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
+import com.x.backend.pojo.user.vo.request.book.SearchBookVO;
 import com.x.backend.service.user.BookService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
@@ -179,5 +180,16 @@ public class BookServiceImpl implements BookService {
             log.error("insertComment error", e);
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Book> searchBook(SearchBookVO searchBookVO) {
+        try {
+            return bookMapper.searchBook(searchBookVO);
+        } catch (RuntimeException e) {
+            log.error("searchBook error", e);
+            throw new RuntimeException(e);
+        }
+
     }
 }

@@ -4,6 +4,7 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
+import com.x.backend.pojo.user.vo.request.song.SearchSongVO;
 import com.x.backend.pojo.user.vo.request.song.UpdateSongScoreUsersVO;
 import com.x.backend.pojo.user.vo.responses.song.SongVO;
 import com.x.backend.service.user.SongService;
@@ -67,6 +68,16 @@ public class SongController {
             return songService.getIsLike(id);
         } catch (RuntimeException e) {
             log.error("get is like error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/get/search")
+    public ResultEntity<List<SongVO>> search(@RequestBody SearchSongVO searchSongVO) {
+        try {
+            return songService.search(searchSongVO);
+        } catch (RuntimeException e) {
+            log.error("search songs error: {}", e.getMessage());
             return ResultEntity.failure(e.getMessage());
         }
     }

@@ -72,4 +72,15 @@
         where g_id = #{gameId}
     </select>
 
+    <select id="searchGame" resultMap="Game">
+        SELECT *
+        FROM games
+        WHERE game_name LIKE CONCAT('%', #{SearchText}, '%')
+          OR game_developer LIKE CONCAT('%', #{SearchText}, '%')
+          OR game_categories LIKE CONCAT('%', #{SearchText}, '%')
+          OR game_platforms LIKE CONCAT('%', #{SearchText}, '%')
+        ORDER BY game_score DESC
+        LIMIT #{start}, #{size}
+    </select>
+
 </mapper>

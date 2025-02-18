@@ -16,3 +16,27 @@ export function get_state_favorites_game(
     },
   );
 }
+
+export function get_games_search(
+  page: number,
+  size: number,
+  searchText: string,
+  success: Function,
+  failure: Function,
+) {
+  Post(
+    `/api/user/game/get/search`,
+    {
+      page: page,
+      size: size,
+      searchText: searchText,
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+  );
+}
+

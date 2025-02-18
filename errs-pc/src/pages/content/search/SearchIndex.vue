@@ -2,6 +2,9 @@
 import { ref, inject } from 'vue';
 import VideoList from './video/components/VideoList.vue';
 import Rating from "../videos/components/Rating.vue"
+import BookList from './book/BookList.vue';
+import MusicList from './music/MusicList.vue';
+import GamesList from './games/GamesList.vue';
 
 const globalTheme = inject<string>("globalTheme");
 
@@ -85,7 +88,9 @@ const handleCancel = () => {
                 </div>
             </div>
             <VideoList class="list" @update:modelValue="updateMovieValue" v-if="currentTab === ListType.MOVIE" />
-
+            <BookList class="list" v-if="currentTab === ListType.BOOK" />
+            <MusicList class="list" v-if="currentTab === ListType.MUSIC" />
+            <GamesList class="list" v-if="currentTab === ListType.GAMES" />
         </div>
     </div>
 </template>
@@ -111,5 +116,40 @@ const handleCancel = () => {
     padding-left: 10px;
     padding-right: 10px;
     font-family: Arial, Helvetica, sans-serif;
+    max-width: 100%;
+}
+
+
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+
+.error-msg {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
 }
 </style>

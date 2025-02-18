@@ -6,6 +6,7 @@ import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.vo.request.book.CommentVO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
+import com.x.backend.pojo.user.vo.request.book.SearchBookVO;
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -30,4 +31,6 @@ public interface BookService {
     void updateScore( ScoreVo scoreVo);
 
     void insertComment(@Valid CommentVO commentVO);
+
+    List<Book> searchBook(SearchBookVO searchBookVO);
 }

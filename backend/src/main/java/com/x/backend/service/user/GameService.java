@@ -2,6 +2,7 @@ package com.x.backend.service.user;
 
 
 import com.x.backend.pojo.user.vo.request.game.GameRantingCommentVO;
+import com.x.backend.pojo.user.vo.request.game.SearchGameVO;
 import com.x.backend.pojo.user.vo.responses.game.GameResponsesVO;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface GameService {
     void deleteFavoritesGame(Integer gameId);
 
     Boolean getStateFavoritesGame(Integer gameId);
+
+    List<GameResponsesVO> searchGame(SearchGameVO searchGameVO);
 }

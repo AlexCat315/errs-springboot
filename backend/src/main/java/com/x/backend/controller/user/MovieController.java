@@ -7,7 +7,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
-import com.x.backend.pojo.user.vo.responses.movie.SearchVO;
+import com.x.backend.pojo.user.vo.request.movie.SearchMovieVO;
 import com.x.backend.service.user.MovieService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +37,8 @@ public class MovieController {
 
     @PostMapping("/get/search")
     @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
-    public ResultEntity<List<MovieResponsesVO>> searchMovies(@RequestBody SearchVO searchVO) {
-        return movieService.searchMovies(searchVO);
+    public ResultEntity<List<MovieResponsesVO>> searchMovies(@RequestBody SearchMovieVO searchMovieVO) {
+        return movieService.searchMovies(searchMovieVO);
     }
 
     @PostMapping("/insert/rating-comment")

@@ -4,6 +4,7 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.user.vo.request.game.GameRantingCommentVO;
+import com.x.backend.pojo.user.vo.request.game.SearchGameVO;
 import com.x.backend.pojo.user.vo.responses.game.GameResponsesVO;
 import com.x.backend.service.user.GameService;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +107,16 @@ public class GameController {
         }
     }
 
+    @PostMapping("/get/search")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<List<GameResponsesVO>> searchGame(@RequestBody SearchGameVO searchGameVO) {
+        try {
+            return ResultEntity.success(gameService.searchGame(searchGameVO));
+        } catch (RuntimeException e) {
+            log.error("/get/search发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
 
     @RequestMapping("/test")
     public ResultEntity<String> test() {

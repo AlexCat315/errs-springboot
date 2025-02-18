@@ -12,7 +12,7 @@ import com.x.backend.pojo.user.dto.movie.InsertRatingCommentDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
-import com.x.backend.pojo.user.vo.responses.movie.SearchVO;
+import com.x.backend.pojo.user.vo.request.movie.SearchMovieVO;
 import com.x.backend.service.user.MovieService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
@@ -91,10 +91,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public ResultEntity<List<MovieResponsesVO>> searchMovies(SearchVO searchVO) {
+    public ResultEntity<List<MovieResponsesVO>> searchMovies(SearchMovieVO searchMovieVO) {
         try {
-            searchVO.setStart((searchVO.getPage() - 1) * searchVO.getSize());
-            List<Movie> movies = movieMapper.searchMovies(searchVO);
+            searchMovieVO.setStart((searchMovieVO.getPage() - 1) * searchMovieVO.getSize());
+            List<Movie> movies = movieMapper.searchMovies(searchMovieVO);
             List<MovieResponsesVO> movieResponsesVOS = new ArrayList<>();
             // 创建 ObjectMapper 实例
             ObjectMapper objectMapper = new ObjectMapper();

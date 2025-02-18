@@ -4,6 +4,7 @@ package com.x.backend.mapper.user;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
 import com.x.backend.pojo.user.dto.song.UpdateSongScoreUserDTO;
+import com.x.backend.pojo.user.vo.request.song.SearchSongVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -28,4 +29,5 @@ public interface SongMapper {
 
     Integer isSongLiked(@Param("accountId") Integer accountId, @Param("songId") Long id);
 
+    List<Song> search(SearchSongVO searchSongVO);
 }

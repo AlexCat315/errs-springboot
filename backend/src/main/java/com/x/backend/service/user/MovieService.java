@@ -4,7 +4,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.user.vo.request.movie.InsertRatingCommentVO;
 import com.x.backend.pojo.user.vo.responses.movie.MovieResponsesVO;
-import com.x.backend.pojo.user.vo.responses.movie.SearchVO;
+import com.x.backend.pojo.user.vo.request.movie.SearchMovieVO;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface MovieService {
 
     ResultEntity<String> insertRatingComment(InsertRatingCommentVO insertRatingCommentVO);
 
-    ResultEntity<List<MovieResponsesVO>> searchMovies(SearchVO searchVO);
+    ResultEntity<List<MovieResponsesVO>> searchMovies(SearchMovieVO searchMovieVO);
 }

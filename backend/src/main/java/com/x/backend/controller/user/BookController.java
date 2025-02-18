@@ -10,6 +10,7 @@ import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.book.CommentVO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
+import com.x.backend.pojo.user.vo.request.book.SearchBookVO;
 import com.x.backend.service.user.BookService;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
@@ -155,6 +156,17 @@ public class BookController {
             return ResultEntity.success();
         } catch (RuntimeException e) {
             log.error("book/insertComment发生错误:{}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/get/search")
+    @RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
+    public ResultEntity<List<Book>> searchBook(@RequestBody SearchBookVO searchBookVO) {
+        try {
+            return ResultEntity.success(bookService.searchBook(searchBookVO));
+        } catch (RuntimeException e) {
+            log.error("book/get/search发生错误:{}", e.getMessage());
             return ResultEntity.failure(e.getMessage());
         }
     }

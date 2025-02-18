@@ -50,5 +50,15 @@
     <select id="isSongLiked" resultType="java.lang.Integer">
         SELECT COUNT(*) FROM song_like WHERE song_id = #{songId} AND account_id = #{accountId}
     </select>
+    <select id="search" resultMap="SongResultMap">
+        SELECT * From song
+        WHERE artist LIKE CONCAT('%', #{SearchText}, '%')
+        OR name LIKE CONCAT('%', #{SearchText}, '%')
+        OR score LIKE CONCAT('%', #{SearchText}, '%')
+        OR tags LIKE CONCAT('%', #{SearchText}, '%')
+        OR users LIKE CONCAT('%', #{SearchText}, '%')
+        ORDER BY score DESC
+        LIMIT #{start}, #{size}
+    </select>
 
 </mapper>

@@ -4,6 +4,7 @@ package com.x.backend.mapper.user;
 import com.x.backend.pojo.common.Game;
 import com.x.backend.pojo.user.dto.game.FavoritesGameDTO;
 import com.x.backend.pojo.user.dto.game.GameRantingCommentDTO;
+import com.x.backend.pojo.user.vo.request.game.SearchGameVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -29,4 +30,6 @@ public interface GameMapper {
     Integer deleteFavoritesGame(FavoritesGameDTO favoritesGameDTO);
 
     int getStateFavoritesGame(FavoritesGameDTO favoritesGameDTO);
+
+    List<Game> searchGame(SearchGameVO searchGameVO);
 }

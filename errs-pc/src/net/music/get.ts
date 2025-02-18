@@ -56,3 +56,25 @@ export function get_music_is_like(
 }
 
 
+export function get_music_search(
+  page: number,
+  size: number,
+  searchText: string,
+  success: Function,
+  failure: Function,
+) {
+  Post(
+    `/api/user/song/get/search`,
+    {
+      page: page,
+      size: size,
+      searchText: searchText
+    },
+    (data: any) => {
+      success(data);
+    },
+    (message: string) => {
+      failure(message);
+    },
+  );
+}

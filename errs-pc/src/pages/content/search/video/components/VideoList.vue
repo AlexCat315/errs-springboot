@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref, inject, Ref } from "vue";
+import { onMounted, ref, inject, Ref,watch } from "vue";
 import { get_move_search } from "../../../../../net/movie/get"; // 修改为电影接口
 import Like from "./Like.vue";
 
@@ -46,6 +46,8 @@ onMounted(() => {
     fetchMovies();
 });
 
+
+
 const currentPage = ref(1);
 const scrollContainer = ref<HTMLElement | null>(null);
 const globalSearch = inject("globalSearch") as Ref<string>;
@@ -54,7 +56,9 @@ if (!globalSearch) {
 }
 
 const fetchMovies = (page = 1, size = 10) => {
-
+  if (globalSearch.value === '') {
+    return;
+  }
     get_move_search(
         page,
         size,
@@ -81,6 +85,14 @@ const fetchMovies = (page = 1, size = 10) => {
         () => { }
     );
 };
+watch(() => globalSearch.value, () => {
+  console.log('globalSearch changed', globalSearch.value);
+    currentPage.value = 1;
+    moviesList.value = [];
+    if (globalSearch.value !== '') {
+        fetchMovies();
+    }
+});
 
 const handleScroll = () => {
     const container = scrollContainer.value;

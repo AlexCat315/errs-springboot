@@ -6,6 +6,7 @@ import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.dto.book.UpdateBookRatingDTO;
 import com.x.backend.pojo.user.vo.request.book.ScoreVo;
+import com.x.backend.pojo.user.vo.request.book.SearchBookVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -32,4 +33,6 @@ public interface BookMapper {
     Boolean validateScore(ScoreDTO scoreDTO);
 
     int insertComment(CommentDTO commentDTO);
+
+    List<Book> searchBook(SearchBookVO searchBookVO);
 }
