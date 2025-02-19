@@ -7,6 +7,11 @@
         <result property="password" column="password"/>
         <result property="isBanned" column="is_banned"/>
     </resultMap>
+    <update id="updateLastLoginTime">
+        update account
+        set last_login_time = now()
+        where a_id = #{aId}
+    </update>
     <select id="login" resultMap="getAccountInfoMap">
         select a_id, role, password, is_banned
         from account

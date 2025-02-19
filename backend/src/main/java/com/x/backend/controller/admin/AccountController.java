@@ -69,6 +69,7 @@ public class AccountController {
                 return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_DISABLED);
             }
             String jwt = jwtUtils.createJWT(adminAccount, 7);
+            accountService.updateLastLoginTime(adminAccount.getAId());
             if (loginVo.getRememberMe()) {
                 return ResultEntity.success("localStorage_" + jwt);
             } else {

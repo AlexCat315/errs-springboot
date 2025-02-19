@@ -71,16 +71,7 @@ watch(globalSelect, (newValue, oldValue) => {
             tag.value = "用户管理 - 数据视图";
             break;
         case "2-2":
-            tag.value = "用户管理 - 添加信息";
-            break;
-        case "2-3":
-            tag.value = "用户管理 - 删除信息";
-            break;
-        case "2-4":
-            tag.value = "用户管理 - 修改信息";
-            break;
-        case "2-5":
-            tag.value = "用户管理 - 智能搜索";
+            tag.value = "用户管理 - 多维管理";
             break;
         case "3-1":
             tag.value = "游戏管理 - 基本信息";
@@ -154,7 +145,7 @@ const tag = ref("");
                             line-height: 60px;
                             text-align: center;
                         ">
-                        <img alt="logo" src="../assets/img/logo.png" style="
+                        <img alt="logo" src="../assets/img/icon.png" style="
                                 width: 30px;
                                 position: relative;
                                 top: 5px;

@@ -18,4 +18,5 @@ public interface AccountMapper {
 
     void forgotPassword(ForgotPasswordDTO forgotPasswordDTO);
 
+    Integer updateLastLoginTime(Integer aId);
 }

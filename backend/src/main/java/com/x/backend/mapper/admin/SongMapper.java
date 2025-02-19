@@ -21,4 +21,6 @@ public interface SongMapper {
     Song getSongInfoById(Long songId);
 
     Integer deleteSongInfo(Long songId);
+
+    Integer update(Song song);
 }

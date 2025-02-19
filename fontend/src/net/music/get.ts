@@ -38,3 +38,19 @@ export function get_music_info_all(
     failure,
   );
 }
+
+
+
+export function get_music_info_by_id(
+  musicId: number,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/song/get/info/by/id?musicId=${musicId}`,
+    {
+    },
+    success,
+    failure,
+  );
+}

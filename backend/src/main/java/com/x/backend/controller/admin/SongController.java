@@ -2,6 +2,7 @@ package com.x.backend.controller.admin;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.pojo.ResultEntity;
@@ -75,6 +76,81 @@ public class SongController {
         }
     }
 
+    @Transactional
+    @PostMapping("/update")
+    public ResultEntity<String> updateSong(@RequestParam("id") Long id,
+                                           @RequestParam("name") String name,
+                                           @RequestParam("artist") String artist,
+                                           @RequestParam(value = "audio", required = false) MultipartFile audio,
+                                           @RequestParam(value = "cover", required = false) MultipartFile cover,
+                                           @RequestParam("score") Double score,
+                                           @RequestParam("tags") List<String> tags,
+                                           @RequestParam("users") Integer users) throws Exception {
+        try {
+            // 获取现有歌曲信息
+            Song song = songService.getSongInfoById(id);
+            if (song == null) {
+                return ResultEntity.failure("歌曲不存在");
+            }
+
+            // 更新基本信息
+            song.setName(name);
+            song.setArtist(artist);
+            song.setScore(score);
+
+            // 如果有新的音频文件，则更新
+            if (audio != null && !audio.isEmpty()) {
+                String uploadAudioUrlFile = minioUtils.pubUploadFile(audio);
+                uploadAudioUrlFile = pubHandlerUrl + uploadAudioUrlFile;
+                // 删除原有文件
+                String oldAudioUrl = song.getAudioUrl();
+                if (oldAudioUrl != null && oldAudioUrl.startsWith(pubHandlerUrl)) {
+                    String oldFileName = oldAudioUrl.substring(pubHandlerUrl.length());
+                    try {
+                        minioUtils.pubDeleteFile(oldFileName);
+                    } catch (Exception e) {
+                        log.error("删除原音频文件失败: {}", e.getMessage());
+                    }
+                }
+                song.setAudioUrl(uploadAudioUrlFile);
+            }
+
+            // 如果有新的封面图片，则更新
+            if (cover != null && !cover.isEmpty()) {
+                String uploadCoverUrlFile = pubHandlerUrl + minioUtils.pubUploadFile(cover);
+                // 删除原有文件
+                String oldCoverUrl = song.getCoverUrl();
+                if (oldCoverUrl != null && oldCoverUrl.startsWith(pubHandlerUrl)) {
+                    String oldFileName = oldCoverUrl.substring(pubHandlerUrl.length());
+                    try {
+                        minioUtils.pubDeleteFile(oldFileName);
+                    } catch (Exception e) {
+                        log.error("删除原封面文件失败: {}", e.getMessage());
+                    }
+                }
+                song.setCoverUrl(uploadCoverUrlFile);
+            }
+
+            // 更新标签
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                song.setTags(objectMapper.writeValueAsString(tags));
+            } catch (JsonProcessingException e) {
+                log.error("转换标签为JSON字符串时发生错误: {}", e.getMessage(), e);
+                return ResultEntity.failure("标签格式转换失败");
+            }
+
+            song.setUsers(users);
+
+            // 保存更新
+            songService.update(song);
+            return ResultEntity.success("更新歌曲成功");
+        } catch (Exception e) {
+            log.error("更新歌曲失败: {}", e.getMessage(), e);
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
     @PostMapping("/get/search")
     public ResultEntity<List<SongVO>> search(@RequestBody SearchSongVO searchSongVO) {
         try {
@@ -113,6 +189,37 @@ public class SongController {
         } catch (RuntimeException e) {
             log.error("RuntimeException", e);
             throw e;
+        }
+    }
+
+
+    @PostMapping("/get/info/by/id")
+    public ResultEntity<SongVO> getSongInfoById(@RequestParam("musicId") Long songId) {
+        try {
+            Song song = songService.getSongInfoById(songId);
+            if (song == null) {
+                return ResultEntity.failure("歌曲不存在");
+            }
+            SongVO songVO = new SongVO();
+            songVO.setId(song.getId());
+            songVO.setName(song.getName());
+            songVO.setArtist(song.getArtist());
+            songVO.setScore(song.getScore());
+            songVO.setAudioUrl(song.getAudioUrl());
+            songVO.setCoverUrl(song.getCoverUrl());
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                songVO.setTags(objectMapper.readValue(song.getTags(), new TypeReference<>() {
+                }));
+            } catch (JsonProcessingException e) {
+                log.error("JsonProcessingException", e);
+                throw new RuntimeException(e);
+            }
+            songVO.setUsers(song.getUsers());
+            return ResultEntity.success(songVO);
+        } catch (RuntimeException e) {
+            log.error("get song info error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
         }
     }
 

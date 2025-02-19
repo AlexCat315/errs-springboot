@@ -34,4 +34,6 @@ public interface AccountMapper {
     AdminAccount findAccountByName(String username);
 
     AdminAccount findById(Integer id);
+
+    Integer updateLastLoginTime(Integer aId);
 }

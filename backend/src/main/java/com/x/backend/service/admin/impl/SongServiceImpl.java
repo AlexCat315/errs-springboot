@@ -110,4 +110,10 @@ public class SongServiceImpl implements SongService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void update(Song song) {
+      Integer i =  songMapper.update(song);
+    }
 }

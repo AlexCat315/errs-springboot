@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 public class Account {
-    private Integer aId; 
+    private Integer aId;
     private String username;
     private String password;
     private String email;
@@ -17,4 +17,6 @@ public class Account {
 
     // 是否封禁
     private Boolean isBanned; // true:封禁 false:未封禁
+
+    private Date lastLoginTime;
 }

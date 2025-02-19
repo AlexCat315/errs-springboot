@@ -18,4 +18,7 @@ public interface SongService {
     Song getSongInfoById(Long songId);
 
     void deleteSongInfo(Long songId);
+
+
+    void update(Song song);
 }

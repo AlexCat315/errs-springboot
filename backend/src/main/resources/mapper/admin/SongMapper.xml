@@ -17,6 +17,17 @@
         INSERT INTO song (name, artist, cover_url, audio_url, score, tags, users)
         VALUES (#{name}, #{artist}, #{coverUrl}, #{audioUrl}, #{score}, #{tags}, #{users})
     </insert>
+    <update id="update">
+        update song
+        set name      = #{name},
+            artist    = #{artist},
+            cover_url = #{coverUrl},
+            audio_url = #{audioUrl},
+            score     = #{score},
+            tags      = #{tags},
+            users     = #{users}
+        WHERE id = #{id}
+    </update>
     <delete id="deleteSongInfo">
         DELETE
         FROM song

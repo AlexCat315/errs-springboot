@@ -157,4 +157,11 @@ public class AccountServiceImpl implements AccountService {
         return null;
     }
 
+    @Override
+    public void updateLastLoginTime(Integer aId) {
+        Integer i = accountMapper.updateLastLoginTime(aId);
+        if (i != 1) {
+            throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

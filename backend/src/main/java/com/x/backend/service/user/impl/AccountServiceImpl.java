@@ -73,6 +73,10 @@ public class AccountServiceImpl implements AccountService {
         if (!Objects.equals(userAccount.getRole(), RoleConstants.ROLE_USER)) {
             return ResultEntity.failure(HttpCodeConstants.FORBIDDEN, HttpMessageConstants.ACCOUNT_NOT_ALLOWED_LOGIN);
         }
+        Integer i = accountMapper.updateLastLoginTime(userAccount.getAId());
+        if (i != 1) {
+           return ResultEntity.serverError();
+        }
         String jwt = jwtUtils.createJWT(userAccount, 7);
         return ResultEntity.success(jwt);
     }

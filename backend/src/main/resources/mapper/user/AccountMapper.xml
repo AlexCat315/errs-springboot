@@ -42,4 +42,9 @@
         set password = #{password}
         where email = #{email}
     </update>
+    <update id="updateLastLoginTime">
+        update account
+        set last_login_time = now()
+        where a_id = #{aId}
+    </update>
 </mapper>
