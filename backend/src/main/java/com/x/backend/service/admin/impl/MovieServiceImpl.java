@@ -2,7 +2,6 @@ package com.x.backend.service.admin.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.admin.MovieMapper;
 import com.x.backend.pojo.ResultEntity;
@@ -52,11 +51,11 @@ public class MovieServiceImpl implements MovieService {
             ObjectMapper objectMapper = new ObjectMapper();
             // 循环遍历 movies，将 Movie 对象转换为 MovieResponsesVO 对象
             for (Movie movie : movies) {
-                List<String> types = null;
+                List<String> types;
                 MovieResponsesVO movieResponsesVO = new MovieResponsesVO();
                 BeanUtils.copyProperties(movie, movieResponsesVO);
                 try {
-                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<List<String>>() {
+                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<>() {
                     });
                 } catch (JsonProcessingException e) {
                     log.error("Error parsing gameCategories JSON", e);
@@ -84,9 +83,9 @@ public class MovieServiceImpl implements MovieService {
             MovieResponsesVO movieResponsesVO = new MovieResponsesVO();
             BeanUtils.copyProperties(movie, movieResponsesVO);
             ObjectMapper objectMapper = new ObjectMapper();
-            List<String> types = null;
+            List<String> types;
             try {
-                types = objectMapper.readValue(movie.getTypes(), new TypeReference<List<String>>() {
+                types = objectMapper.readValue(movie.getTypes(), new TypeReference<>() {
                 });
             } catch (JsonProcessingException e) {
                 log.error("Error parsing gameCategories JSON", e);
@@ -135,11 +134,11 @@ public class MovieServiceImpl implements MovieService {
             List<MovieResponsesVO> movieResponsesVOS = new ArrayList<>();
             ObjectMapper objectMapper = new ObjectMapper();
             for (Movie movie : movies) {
-                List<String> types = null;
+                List<String> types;
                 MovieResponsesVO movieResponsesVO = new MovieResponsesVO();
                 BeanUtils.copyProperties(movie, movieResponsesVO);
                 try {
-                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<List<String>>() {
+                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<>() {
                     });
                     movieResponsesVO.setTypes(types);
                     movieResponsesVOS.add(movieResponsesVO);
