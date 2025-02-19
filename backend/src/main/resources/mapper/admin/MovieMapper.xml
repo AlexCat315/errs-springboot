@@ -44,4 +44,16 @@
         FROM movie
         WHERE id = #{id}
     </select>
+    <select id="getMovieInfoSearch" resultType="com.x.backend.pojo.common.Movie">
+        SELECT *
+        FROM movie
+        WHERE name LIKE concat('%', #{SearchText}, '%')
+           OR director LIKE concat('%', #{SearchText}, '%')
+           OR actor LIKE concat('%', #{SearchText}, '%')
+           OR types LIKE concat('%', #{SearchText}, '%')
+           OR language LIKE concat('%', #{SearchText}, '%')
+           OR summary LIKE concat('%', #{SearchText}, '%')
+        ORDER BY rating DESC
+        LIMIT #{start}, #{size}
+    </select>
 </mapper>

@@ -4,10 +4,12 @@ import {verifyToken} from "./net/token.ts";
 
 // 定义全局变量
 const globalSelect = ref("1");
+const globalSearch = ref("");
 
 // 提供全局变量
 provide('globalSelect', globalSelect);
-
+// 提供全局变量搜索
+provide("globalSearch", globalSearch);
 // 全局定时器
 // 定时器用于验证token
 const verifyTimer = setInterval(() => {

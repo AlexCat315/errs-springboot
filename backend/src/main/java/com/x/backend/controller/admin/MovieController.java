@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.admin.vo.request.movie.SearchMovieVO;
 import com.x.backend.pojo.admin.vo.responses.movie.MovieResponsesVO;
 import com.x.backend.pojo.common.Movie;
 import com.x.backend.pojo.common.PageSize;
@@ -233,6 +234,21 @@ public class MovieController {
         } catch (Exception e) {
             log.error("delete movie info error: {}", e.getMessage(), e);
             return ResultEntity.failure("delete movie info error");
+        }
+    }
+
+    @PostMapping("/get/info/search")
+    public ResultEntity<List<MovieResponsesVO>> getMovieInfoSearch(@RequestBody SearchMovieVO searchMovieVO) {
+        try {
+            // 获取电影信息
+            List<MovieResponsesVO> movieResponsesVOList = movieService.getMovieInfoSearch(searchMovieVO);
+            if (movieResponsesVOList == null) {
+                return ResultEntity.failure("Movie not found");
+            }
+            return ResultEntity.success(movieResponsesVOList);
+        } catch (Exception e) {
+            log.error("get movie info search error: {}", e.getMessage(), e);
+            return ResultEntity.failure("get movie info search error");
         }
     }
 

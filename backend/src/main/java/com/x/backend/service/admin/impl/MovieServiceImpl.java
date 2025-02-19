@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.mapper.admin.MovieMapper;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.admin.vo.request.movie.SearchMovieVO;
 import com.x.backend.pojo.common.Movie;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.admin.vo.responses.movie.MovieResponsesVO;
@@ -124,5 +125,34 @@ public class MovieServiceImpl implements MovieService {
         if (i != 1) {
             throw new RuntimeException("delete movie failed");
         }
+    }
+
+    @Override
+    public List<MovieResponsesVO> getMovieInfoSearch(SearchMovieVO searchMovieVO) {
+        try {
+            searchMovieVO.setStart((searchMovieVO.getPage() - 1) * searchMovieVO.getSize());
+            List<Movie> movies = movieMapper.getMovieInfoSearch(searchMovieVO);
+            List<MovieResponsesVO> movieResponsesVOS = new ArrayList<>();
+            ObjectMapper objectMapper = new ObjectMapper();
+            for (Movie movie : movies) {
+                List<String> types = null;
+                MovieResponsesVO movieResponsesVO = new MovieResponsesVO();
+                BeanUtils.copyProperties(movie, movieResponsesVO);
+                try {
+                    types = objectMapper.readValue(movie.getTypes(), new TypeReference<List<String>>() {
+                    });
+                    movieResponsesVO.setTypes(types);
+                    movieResponsesVOS.add(movieResponsesVO);
+                }catch (JsonProcessingException e){
+                    log.error("Error parsing gameCategories JSON", e);
+                    throw new RuntimeException("Error parsing gameCategories JSON", e);
+                }
+            }
+            return movieResponsesVOS;
+        } catch (Exception e) {
+            log.error("Error getting movie by id", e);
+            return List.of();
+        }
+
     }
 }

@@ -8,15 +8,15 @@ export async function get_movie_info_by_id(
   post(`/api/admin/movie/get/info/by/id?id=${movie_id}`, {}, success, failure);
 }
 
-export function get_game_info_by_seach(
-  searchText: string,
+export function get_movie_info_by_seach(
   page: number,
   size: number,
+  searchText: string,
   success: Function,
   failure = defaultFailure,
 ) {
   post(
-    '/api/admin/game/get/info/search',
+    '/api/admin/movie/get/info/search',
     {
       searchText: searchText,
       page: page,
