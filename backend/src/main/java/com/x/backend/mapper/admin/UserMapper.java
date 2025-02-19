@@ -1,5 +1,6 @@
 package com.x.backend.mapper.admin;
 
+import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
@@ -14,4 +15,12 @@ public interface UserMapper {
     List<Account> getAll(PageSize pageSize);
 
     Integer updateUserRole(UpdateUserRoleVO updateUserRoleVO);
+
+    Integer resetPassword(Account account);
+
+    Integer updateBanned(Account account);
+
+    Account getAccountById(Integer id);
+
+    List<Account> searchInfo(SearchAccountVO searchAccountVO);
 }

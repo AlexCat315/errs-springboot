@@ -1,6 +1,7 @@
 package com.x.backend.service.admin.impl;
 
 import com.x.backend.mapper.admin.UserMapper;
+import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
@@ -29,6 +30,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUserRole(UpdateUserRoleVO updateUserRoleVO) {
-      Integer i =  userMapper.updateUserRole(updateUserRoleVO);
+        Integer i = userMapper.updateUserRole(updateUserRoleVO);
     }
+
+    @Override
+    public void resetPassword(Account account) {
+        Integer i = userMapper.resetPassword(account);
+        if (i != 1) {
+            throw new RuntimeException("重置密码失败");
+        }
+    }
+
+    @Override
+    public void updateBanned(Account account) {
+        Integer i = userMapper.updateBanned(account);
+        if (i != 1)
+            throw new RuntimeException("更新封禁状态失败");
+    }
+
+    @Override
+    public Account getAccountById(Integer id) {
+        return userMapper.getAccountById(id);
+    }
+
+    @Override
+    public List<Account> searchInfo(SearchAccountVO searchAccountVO) {
+        try {
+            return userMapper.searchInfo(searchAccountVO);
+        } catch (RuntimeException e) {
+            log.error("RuntimeException{}", e.getMessage(), e);
+            throw new RuntimeException("搜索失败");
+        }
+    }
+
 }

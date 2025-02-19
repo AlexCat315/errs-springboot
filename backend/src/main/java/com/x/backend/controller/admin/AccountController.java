@@ -240,6 +240,17 @@ public class AccountController {
         try {
             boolean verifyToken = jwtUtils.verifyToken() && RoleConstants.ROLE_ADMIN.equals(jwtUtils.getRole());
             if (verifyToken) {
+                Integer id = jwtUtils.getId();
+                // 查询账户封禁状态
+                AdminAccount adminAccount = accountService.findById(id);
+                if (adminAccount != null && adminAccount.getIsBanned()) {
+                    // 拉黑此token
+                    String jwt = jwtUtils.getToken();
+                    Long expireTime = jwtUtils.getExpireTime();
+                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+                    return ResultEntity.failure(HttpMessageConstants.ACCOUNT_DISABLED);
+
+                }
                 return ResultEntity.success();
             }
             return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);

@@ -16,9 +16,32 @@
         set role = #{role}
         where a_id = #{userId}
     </update>
+    <update id="resetPassword">
+        update account
+        set password = #{password}
+        where a_id = #{aId}
+    </update>
+    <update id="updateBanned">
+        update account
+        set is_banned = #{isBanned}
+        where a_id = #{aId}
+    </update>
     <select id="getAll" resultMap="Account">
         select *
         from account
+        LIMIT #{start}, #{size}
+    </select>
+    <select id="getAccountById" resultMap="Account">
+        select *
+        from account
+        where a_id = #{id}
+    </select>
+    <select id="searchInfo" resultMap="Account">
+        select *
+        from account
+        where username like CONCAT('%', #{SearchText}, '%')
+           or email like CONCAT('%', #{SearchText}, '%')
+           OR role like CONCAT('%', #{SearchText}, '%')
         LIMIT #{start}, #{size}
     </select>
 </mapper>

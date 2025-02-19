@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch, inject, Ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { get_user_info_all } from "../../../net/user/get"
-import { update_user_role } from "../../../net/user/update"
+import { get_user_info_all, get_user_info_search } from "../../../net/user/get"
+import { update_user_role, update_user_password, update_user_unbanned, update_user_banned } from "../../../net/user/update"
 import { h } from 'vue'
 interface User {
     aid: number
@@ -12,6 +12,10 @@ interface User {
     lastLoginTime: string
     role: string,
     status: string
+}
+const globalSearch = inject("globalSearch") as Ref<string>;
+if (!globalSearch) {
+    throw new Error("globalSearch is not provided");
 }
 
 const users = ref<User[]>([])
@@ -36,12 +40,33 @@ const getUsers = async () => {
 }
 
 const resetPassword = async (userId: number) => {
+    console.log(userId)
     try {
-        await ElMessageBox.confirm('确定要重置该用户的密码吗?', '提示', {
-            type: 'warning'
+        // 修改确认框样式
+        await ElMessageBox.confirm('确定要重置该用户的密码吗?默认123456', '提示', {
+            type: 'warning',
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            customClass: 'custom-message-box', // 自定义类名
+            center: true, // 内容居中
+            roundButton: true, // 圆角按钮
+            buttonSize: 'default', // 按钮大小
+            confirmButtonClass: 'confirm-button', // 确认按钮自定义类名
+            cancelButtonClass: 'cancel-button', // 取消按钮自定义类名
+            distinguishCancelAndClose: true // 区分取消与关闭
         })
-        // Call API to reset password
-        ElMessage.success('密码重置成功')
+
+        await update_user_password(userId, (data: any) => {
+            // 修改成功提示样式
+            ElMessage({
+                message: '密码重置成功',
+                type: 'success',
+                duration: 2000, // 显示时间
+                showClose: true, // 显示关闭按钮
+                center: true, // 文字居中
+                customClass: 'custom-message' // 自定义类名
+            })
+        })
     } catch {
         // User cancelled
     }
@@ -53,9 +78,19 @@ const toggleBan = async (user: User) => {
         await ElMessageBox.confirm(`确定要${action}该用户吗?`, '提示', {
             type: 'warning'
         })
-        // Call API to toggle ban status
-        user.isBanned = !user.isBanned
-        ElMessage.success(`${action}成功`)
+
+        if (action === '封禁') {
+            await update_user_banned(user.aid, (data) => {
+                user.isBanned = true
+                ElMessage.success(`${action}成功`)
+            })
+        } else {
+            await update_user_unbanned(user.aid, (data) => {
+                user.isBanned = false
+                ElMessage.success(`${action}成功`)
+            })
+        }
+
     } catch {
         // User cancelled
     }
@@ -90,6 +125,17 @@ const changeRole = async (user: User, newRole: string) => {
 onMounted(() => {
     getUsers()
 })
+
+// 监听search变化
+watch(globalSearch, (newValue) => {
+    if (newValue === '' || newValue === undefined || newValue === null) {
+        getUsers()
+    } else {
+        get_user_info_search(1, 10, newValue, (data: any) => {
+            users.value = data
+        })
+    }
+})
 </script>
 
 <template>
@@ -117,7 +163,7 @@ onMounted(() => {
             <el-table-column prop="lastLoginTime" width="200" label="最后登录时间" />
             <el-table-column label="操作" width="350">
                 <template #default="{ row }">
-                    <el-button size="small" @click="resetPassword(row.aId)">
+                    <el-button size="small" @click="resetPassword(row.aid)">
                         重置密码
                     </el-button>
                     <el-button size="small" :type="!row.isBanned ? 'danger' : 'primary'" @click="toggleBan(row)">
@@ -140,5 +186,39 @@ onMounted(() => {
 
 h2 {
     margin-bottom: 20px;
+}
+
+.custom-message-box {
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.custom-message-box .el-message-box__header {
+    padding: 15px 20px;
+}
+
+.custom-message-box .el-message-box__content {
+    padding: 20px;
+    font-size: 16px;
+}
+
+/* 确认按钮样式 */
+.confirm-button {
+    background-color: #409EFF;
+    color: white;
+}
+
+/* 取消按钮样式 */
+.cancel-button {
+    border: 1px solid #DCDFE6;
+    color: #606266;
+}
+
+/* 成功提示消息样式 */
+.custom-message {
+    min-width: 300px;
+    padding: 12px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
 }
 </style>

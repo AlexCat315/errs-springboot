@@ -8,15 +8,20 @@ import com.x.backend.constants.RoleConstants;
 import com.x.backend.constructor.PathExcludeConstructor;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
+import com.x.backend.service.admin.AccountService;
 import com.x.backend.util.JWTUtils;
+import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
@@ -42,11 +47,17 @@ public class AccessFilter extends OncePerRequestFilter {
     @Resource
     private ApplicationContext applicationContext;
 
+    @Resource(name = "adminAccountService")
+    private AccountService accountService;
+
+    @Resource
+    private TimeUtils timeUtils;
+
     @Override
     protected void doFilterInternal(
-        @NotNull HttpServletRequest request,
-        @NotNull HttpServletResponse response,
-        @NotNull FilterChain chain
+            @NotNull HttpServletRequest request,
+            @NotNull HttpServletResponse response,
+            @NotNull FilterChain chain
     ) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
@@ -58,25 +69,25 @@ public class AccessFilter extends OncePerRequestFilter {
             if (!hasPermission) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 response
-                    .getWriter()
-                    .write(
-                        ResultEntity.failure(
-                            HttpCodeConstants.FORBIDDEN,
-                            HttpMessageConstants.FORBIDDEN
-                        ).toJSONString()
-                    );
+                        .getWriter()
+                        .write(
+                                ResultEntity.failure(
+                                        HttpCodeConstants.FORBIDDEN,
+                                        HttpMessageConstants.FORBIDDEN
+                                ).toJSONString()
+                        );
                 return;
             }
         } catch (RuntimeException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response
-                .getWriter()
-                .write(
-                    ResultEntity.failure(
-                        HttpCodeConstants.UNAUTHORIZED,
-                        HttpMessageConstants.UNAUTHORIZED
-                    ).toJSONString()
-                );
+                    .getWriter()
+                    .write(
+                            ResultEntity.failure(
+                                    HttpCodeConstants.UNAUTHORIZED,
+                                    HttpMessageConstants.UNAUTHORIZED
+                            ).toJSONString()
+                    );
             return;
         }
         chain.doFilter(request, response);
@@ -106,13 +117,13 @@ public class AccessFilter extends OncePerRequestFilter {
             // 管理员权限
             String role = jwtUtils.getRole();
             return (
-                role != null && role.equalsIgnoreCase(RoleConstants.ROLE_ADMIN)
+                    role != null && role.equalsIgnoreCase(RoleConstants.ROLE_ADMIN)
             );
         } else if (url.startsWith("/api/user")) {
             // 用户权限
             String role = jwtUtils.getRole();
             return (
-                role != null && role.equalsIgnoreCase(RoleConstants.ROLE_USER)
+                    role != null && role.equalsIgnoreCase(RoleConstants.ROLE_USER)
             );
         }
         return true;
@@ -130,23 +141,44 @@ public class AccessFilter extends OncePerRequestFilter {
         int id = jwtUtils.getId();
         String jwt = jwtUtils.getToken();
         String value = redisTemplate.opsForValue().get(id + "_" + jwt);
-        return BlockConstants.REDIS_LOGOUT_BLOCK.equals(value);
+        boolean isBlack = BlockConstants.REDIS_LOGOUT_BLOCK.equals(value);
+        if (!isBlack) {
+            // 从数据库查询此用户是否被封禁
+            if (Boolean.TRUE.equals(accountService.findById(id).getIsBanned())) {
+                redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, 7L, TimeUnit.DAYS);
+                return true;
+            } else {
+                // 判断数据库中权限和token是否一致
+                if (
+                        !Objects.equals(
+                                jwtUtils.getRole(),
+                                accountService.findById(id).getRole()
+                        )
+                ) {
+                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, 7L, TimeUnit.DAYS);
+                    return true;
+                }
+                return false;
+            }
+        } else {
+            return true;
+        }
     }
 
     private boolean checkAnnotationOnMethodOrClassIsRole(
-        HttpServletRequest request
+            HttpServletRequest request
     ) {
         try {
             // Get the Spring HandlerMapping bean
             RequestMappingHandlerMapping handlerMapping =
-                applicationContext.getBean(
-                    "requestMappingHandlerMapping",
-                    RequestMappingHandlerMapping.class
-                );
+                    applicationContext.getBean(
+                            "requestMappingHandlerMapping",
+                            RequestMappingHandlerMapping.class
+                    );
 
             // Get the handler for the request
             Object handler = Objects.requireNonNull(
-                handlerMapping.getHandler(request)
+                    handlerMapping.getHandler(request)
             ).getHandler();
 
             // Proceed if the handler is a HandlerMethod
@@ -156,31 +188,31 @@ public class AccessFilter extends OncePerRequestFilter {
 
                 // Check if the method has the RoleSecurity annotation
                 RoleSecurity roleSecurity = method.getAnnotation(
-                    RoleSecurity.class
+                        RoleSecurity.class
                 );
                 if (cheekRole(roleSecurity)) return true;
 
                 // If the method doesn't have the annotation, check the class level annotation
                 Class<?> controllerClass = method.getDeclaringClass();
                 roleSecurity = controllerClass.getAnnotation(
-                    RoleSecurity.class
+                        RoleSecurity.class
                 );
                 if (cheekRole(roleSecurity)) return true;
             }
         } catch (RuntimeException e) {
             // Log runtime exceptions
             log.error(
-                "Error checking annotation on method or class for request: {}",
-                request.getRequestURI(),
-                e
+                    "Error checking annotation on method or class for request: {}",
+                    request.getRequestURI(),
+                    e
             );
             return false; // Return false or handle as needed
         } catch (Exception e) {
             // Catch other exceptions and rethrow as a runtime exception
             log.error(
-                "Unexpected error checking annotation on method or class for request: {}",
-                request.getRequestURI(),
-                e
+                    "Unexpected error checking annotation on method or class for request: {}",
+                    request.getRequestURI(),
+                    e
             );
             throw new RuntimeException(e);
         }
@@ -194,15 +226,15 @@ public class AccessFilter extends OncePerRequestFilter {
 
             // 判断用户是否有权限
             if (
-                (requiredRoles.length == 1 && requiredRoles[0].equals("*")) ||
-                requiredRoles[0].equals(RoleConstants.ROLE_ANONYMOUS)
+                    (requiredRoles.length == 1 && requiredRoles[0].equals("*")) ||
+                            requiredRoles[0].equals(RoleConstants.ROLE_ANONYMOUS)
             ) {
                 return true;
             }
             for (String requiredRole : requiredRoles) {
                 if (
-                    requiredRole.equals("*") ||
-                    requiredRole.equals(RoleConstants.ROLE_ANONYMOUS)
+                        requiredRole.equals("*") ||
+                                requiredRole.equals(RoleConstants.ROLE_ANONYMOUS)
                 ) { // 允许所有角色访问
                     return true;
                 }
