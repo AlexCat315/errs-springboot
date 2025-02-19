@@ -149,7 +149,7 @@
                     {{ song.artist }}
                 </p>
             </div>
-            <Rating :score="song.score" :users="song.users" style="margin-left:auto" />
+            <Rating :score="song.score" :users="song.users" style="margin-left:auto;margin-top: 0px;" />
             <Delete @click.stop="sendMessage(song)" style="margin-top: 25px;margin-left: 10px;" />
         </div>
     </div>
