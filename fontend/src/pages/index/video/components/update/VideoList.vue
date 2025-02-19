@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { get_movie_info_all } from "../../../../../net/movie/get"; // 修改为电影接口
+import { onMounted, ref, inject, watch, Ref } from "vue";
+import { get_movie_info_all,get_movie_info_by_seach } from "../../../../../net/movie/get"; // 修改为电影接口
 import Edit from "./Edit.vue";
 
 // 定义 Movie 类型
@@ -16,6 +16,11 @@ interface Movie {
     types: string[];
     cover: string;
     users: number;
+}
+
+const globalSearch = inject<Ref<string>>("globalSearch");
+if (!globalSearch) {
+    throw new Error("globalSearch is not provided");
 }
 
 const moviesList = ref<Movie[]>([]);
@@ -45,6 +50,35 @@ const colorsRandom = () => colors[Math.floor(Math.random() * colors.length)];
 onMounted(() => {
     fetchMovies();
 });
+
+watch(globalSearch, (newValue) => {
+    searchMovie(newValue);
+});
+
+const searchMovie = (query: string) => {
+    if (query === '') {
+        fetchMovies();
+    } else {
+        get_movie_info_by_seach(
+            1,
+            10,
+            query,
+            (data: any) => {
+                console.log(data);
+                const newMovies = data.map((movie: any) => ({
+                    ...movie,
+                    users: formatNumber(movie.users),
+                    rating: parseFloat(movie.rating.toFixed(1)),
+                    year: new Date(movie.year).toLocaleDateString()
+                }));
+
+                moviesList.value = newMovies;
+            },
+            () => { }
+        );
+    }
+};
+
 
 const currentPage = ref(1);
 const scrollContainer = ref<HTMLElement | null>(null);
@@ -116,7 +150,7 @@ const showRatingCard = (movieId: number) => {
                                         color: #666;
                                     ">{{ item.year }}</span>
                             </div>
-                           
+
                         </div>
 
                         <!-- 评分和主创 -->
@@ -133,8 +167,8 @@ const showRatingCard = (movieId: number) => {
                             </div>
 
                             <div style="margin-left: 20px; color: #666;display: flex;">
-                                <span style="font-size: 13px;min-width: 70px;" >导演：{{ item.director }}</span>
-                                <span  class="actor"  style="">主演：{{ item.actor }}</span>
+                                <span style="font-size: 13px;min-width: 70px;">导演：{{ item.director }}</span>
+                                <span class="actor" style="">主演：{{ item.actor }}</span>
                             </div>
                         </div>
 
@@ -400,7 +434,8 @@ input {
     margin-left: 15px;
     margin-right: 40px;
 }
-.actor{
+
+.actor {
     color: #666;
     font-size: 1.2rem;
     display: -webkit-box;
