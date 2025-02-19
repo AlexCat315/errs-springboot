@@ -18,4 +18,6 @@ public interface MovieService {
     void updateMovieInfo(Movie movie);
 
     Movie selectById(Integer id);
+
+    void deleteMovieInfo(Integer id);
 }

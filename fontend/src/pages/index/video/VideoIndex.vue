@@ -4,6 +4,7 @@ import { onMounted, Ref } from "vue";
 import { inject } from "vue";
 import AddInfo from "./AddInfo.vue";
 import UpdateIndex from "./UpdateIndex.vue";
+import DeleteIndex from "./DeleteIndex.vue";
 
 const globalSelect = inject<Ref<string>>("globalSelect");
 if (!globalSelect) {
@@ -36,6 +37,7 @@ onMounted(() => {
     </div>
     <AddInfo v-if="globalSelect === '5-2'" />
     <UpdateIndex v-if="globalSelect === '5-4'" />
+    <DeleteIndex v-if="globalSelect === '5-3'" />
 </template>
 
 <style scoped></style>

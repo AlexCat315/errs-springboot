@@ -117,4 +117,12 @@ public class MovieServiceImpl implements MovieService {
     public Movie selectById(Integer id) {
         return movieMapper.selectById(id);
     }
+
+    @Override
+    public void deleteMovieInfo(Integer id) {
+        Integer i = movieMapper.deleteMovieInfo(id);
+        if (i != 1) {
+            throw new RuntimeException("delete movie failed");
+        }
+    }
 }

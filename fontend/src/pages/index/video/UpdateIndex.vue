@@ -1,8 +1,8 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
-import UpdateInfo from './components/UpdateInfo.vue';
-import VideoList from './components/VideoList.vue';
+import UpdateInfo from './components/update/UpdateInfo.vue';
+import VideoList from './components/update/VideoList.vue';
 
 const showUpdateFrom = ref(false)
 const movieId = ref(0)
@@ -19,7 +19,7 @@ const showUpdateList = (value: boolean) => {
 <template>
     <div>
         <VideoList @update:modelValue="updateModelValue" v-if="!showUpdateFrom" />
-        <UpdateInfo @update:modelValue="showUpdateList" :movieId="movieId" v-if="showUpdateFrom" style="transform: scale(0.9);margin-top: -40px;" />
+        <UpdateInfo  @update:modelValue="showUpdateList" :movieId="movieId" v-if="showUpdateFrom" style="transform: scale(0.9);margin-top: -40px;" />
     </div>
 </template>
 

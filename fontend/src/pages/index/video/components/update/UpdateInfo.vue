@@ -122,10 +122,10 @@
 import { ref, reactive } from "vue";
 import type { FormInstance, FormRules, UploadFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { postFormData, defaultFailure } from "../../../../net/post"; // 导入封装方法
+import { postFormData, defaultFailure } from "../../../../../net/post"; // 导入封装方法
 import { ElMessage } from "element-plus";
 import { onMounted } from "vue";
-import { get_movie_info_by_id } from "../../../../net/movie/get";
+import { get_movie_info_by_id } from "../../../../../net/movie/get";
 
 interface MovieForm {
     name: string;

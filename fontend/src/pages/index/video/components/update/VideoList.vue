@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { get_movie_info_all } from "../../../../net/movie/get"; // 修改为电影接口
+import { get_movie_info_all } from "../../../../../net/movie/get"; // 修改为电影接口
 import Edit from "./Edit.vue";
 
 // 定义 Movie 类型

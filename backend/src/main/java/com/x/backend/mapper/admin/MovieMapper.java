@@ -20,4 +20,6 @@ public interface MovieMapper {
     Integer updateMovie(Movie movie);
 
     Movie selectById(Integer id);
+
+    Integer deleteMovieInfo(Integer id);
 }
