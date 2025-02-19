@@ -8,6 +8,7 @@ import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.vo.request.game.GameCreateRequest;
 import com.x.backend.pojo.admin.vo.request.game.SearchVO;
 import com.x.backend.pojo.admin.vo.responses.game.GameResponsesVO;
+import com.x.backend.pojo.common.Game;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.service.admin.GameService;
 import com.x.backend.util.MinioUtils;
@@ -164,6 +165,30 @@ public class GameController {
         }
         return ResultEntity.failure("上传文件失败");
     }
+
+    @Transactional(rollbackFor = Exception.class)
+    @PostMapping("delete/by/id")
+    public ResultEntity<String> deleteGameInfo(@RequestParam("gameId") Integer gameId) {
+        try {
+            Game game = gameService.selectById(gameId);
+            if (game == null) {
+                return ResultEntity.failure("Game not found");
+            }
+            gameService.deleteGameInfo(gameId);
+            if (game.getGameImageUrl() != null && !game.getGameImageUrl().isEmpty()) {
+                minioUtils.pubDeleteFile(game.getGameImageUrl().replace(pubHandlerUrl, ""));
+                return ResultEntity.success("delete game info success");
+            } else {
+                throw new RuntimeException("Game image url is empty");
+            }
+        } catch (RuntimeException e) {
+            log.error("删除游戏信息失败", e);
+            return ResultEntity.failure(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @RequestMapping("/test")
     public ResultEntity<String> test() {

@@ -201,4 +201,28 @@ public class GameServiceImpl implements GameService {
             throw new RuntimeException("更新 Game 数据失败");
         }
     }
+
+    @Override
+    public Game selectById(Integer gameId) {
+        try {
+            return gameMapper.selectById(gameId);
+        } catch (Exception e) {
+            log.error("Error selecting game by ID: {}", gameId, e);
+            throw new RuntimeException("Error selecting game by ID: " + gameId, e);
+        }
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void deleteGameInfo(Integer gameId) {
+        try {
+            Integer i = gameMapper.deleteGameInfo(gameId);
+            if (i != 1) {
+                throw new RuntimeException("删除失败");
+            }
+        } catch (RuntimeException e) {
+            log.error("删除失败:{}", e.getMessage(), e);
+            throw e;
+        }
+    }
 }

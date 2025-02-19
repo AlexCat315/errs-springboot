@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from "vue";
-import { get_game_info_by_seach } from "../../../../net/game/get";
-import Edit from "./Edit.vue";
+import { get_game_info_by_seach } from "../../../../../net/game/get";
+import Delete from "./Delete.vue";
 
 // 定义 Game 类型
 interface Game {
@@ -114,12 +114,11 @@ const handleScroll = () => {
         fetchGames(currentPage.value);
     }
 };
-const gameID = ref();
-// 定义向父组件传递事件
+
 const emit = defineEmits(['update:modelValue']);
 
-const showRatingCard = (gameId: number) => {
-  emit('update:modelValue', gameId);
+const showDeleteCard = (game: Game) => {
+  emit('update:modelValue', game);
 };
 
 
@@ -341,8 +340,8 @@ const showRatingCard = (gameId: number) => {
                     </div>
 
                     <div style="display: flex">
-                        <Edit
-                            @click="showRatingCard(item.id)"
+                        <Delete
+                            @click="showDeleteCard(item)"
                             style="margin-right: 10px; margin-top: 10px"
                         />
                     </div>

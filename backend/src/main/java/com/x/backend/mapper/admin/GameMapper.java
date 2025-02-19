@@ -24,4 +24,8 @@ public interface GameMapper {
     String getGameImageUrl(Integer gameId);
 
     int updateGame(Game game);
+
+    Game selectById(Integer gameId);
+
+    Integer deleteGameInfo(Integer gameId);
 }

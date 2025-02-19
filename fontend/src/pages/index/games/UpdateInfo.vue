@@ -3,11 +3,11 @@ import { ref } from "vue";
 import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装的方法
 import { ElMessage, type DropdownInstance, type TagProps } from "element-plus";
 import Search from "./components/Seach.vue";
-import Cancel from "./components/Cancel.vue";
-import SearchGame from "./components/SeachGame.vue";
-import GameCard from "./components/GameCard.vue";
-import GameCardSmart from "./components/GameCardSmart.vue";
-import CancelUpdatePanel from "./components/CancelUpdatePanel.vue";
+import Cancel from "./components/update/Cancel.vue";
+import SearchGame from "./components/update/SeachGame.vue";
+import GameCard from "./components/update/GameCard.vue";
+import GameCardSmart from "./components/update/GameCardSmart.vue";
+import CancelUpdatePanel from "./components/update/CancelUpdatePanel.vue";
 import { watch } from "vue";
 import { get_game_info_by_id } from "../../../net/game/get";
 const gameID = ref<number>(0);

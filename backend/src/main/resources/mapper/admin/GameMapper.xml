@@ -21,6 +21,11 @@
             game_image_url   = #{gameImageUrl}
         WHERE id = #{id}
     </update>
+    <delete id="deleteGameInfo">
+        DELETE
+        from games
+        WHERE id = #{gameId}
+    </delete>
 
 
     <resultMap id="Game" type="com.x.backend.pojo.common.Game">
@@ -62,6 +67,11 @@
     </select>
     <select id="getGameImageUrl" resultType="java.lang.String">
         SELECT game_image_url
+        FROM games
+        WHERE id = #{gameId}
+    </select>
+    <select id="selectById" resultType="com.x.backend.pojo.common.Game">
+        SELECT *
         FROM games
         WHERE id = #{gameId}
     </select>
