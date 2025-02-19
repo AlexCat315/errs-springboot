@@ -6,7 +6,6 @@ import SearchGame from "./components/delete/SeachGame.vue";
 import GameCard from "./components/delete/GameCard.vue";
 import GameCardSmart from "./components/delete/GameCardSmart.vue";
 import DeleteCard from "./components/delete/DeleteCard.vue";
-import { ro } from "element-plus/es/locale";
 
 // 定义 Game 类型
 interface Game {

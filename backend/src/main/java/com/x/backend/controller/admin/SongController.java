@@ -5,7 +5,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
+import com.x.backend.pojo.admin.vo.request.song.SearchSongVO;
+import com.x.backend.pojo.admin.vo.responses.song.SongVO;
 import com.x.backend.service.admin.SongService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
@@ -30,7 +33,6 @@ public class SongController {
     private MinioUtils minioUtils;
     @Value("${minio.handler-pub-url}")
     private String pubHandlerUrl;
-
 
 
     @Transactional
@@ -73,5 +75,45 @@ public class SongController {
         }
     }
 
+    @PostMapping("/get/search")
+    public ResultEntity<List<SongVO>> search(@RequestBody SearchSongVO searchSongVO) {
+        try {
+            return songService.search(searchSongVO);
+        } catch (RuntimeException e) {
+            log.error("search songs error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    @PostMapping("/get/info/all")
+    public ResultEntity<List<SongVO>> getAll(@RequestBody PageSize pageSize) {
+        try {
+            return songService.getAll(pageSize);
+        } catch (RuntimeException e) {
+            log.error("get all songs error: {}", e.getMessage());
+            return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @PostMapping("/delete/by/id")
+    public ResultEntity<String> deleteSongInfo(@RequestParam("musicId") Long songId) {
+        try {
+            Song song = songService.getSongInfoById(songId);
+            songService.deleteSongInfo(songId);
+            try {
+                minioUtils.pubDeleteFile(song.getCoverUrl().replace(pubHandlerUrl, ""));
+                minioUtils.pubDeleteFile(song.getAudioUrl().replace(pubHandlerUrl, ""));
+            } catch (Exception e) {
+                log.error("删除歌曲信息失败", e);
+                throw new RuntimeException(e);
+            }
+            return ResultEntity.success("删除成功");
+        } catch (RuntimeException e) {
+            log.error("RuntimeException", e);
+            throw e;
+        }
+    }
 
 }

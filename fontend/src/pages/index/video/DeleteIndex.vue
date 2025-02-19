@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { ref } from 'vue';
 import VideoList from './components/delete/VideoList.vue';
 import DeleteCard from './components/delete/DeleteCard.vue';
