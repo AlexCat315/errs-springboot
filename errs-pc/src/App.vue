@@ -13,7 +13,7 @@ const globalSearch = ref("");
 provide("globalSearch", globalSearch);
 // 定义一个颜色主题全局变量
 const globalTheme = ref("");
-const theme = ref(localStorage.getItem("theme"));
+const theme = ref("");
 
 // 定时器
 setInterval(() => {
@@ -58,26 +58,32 @@ const observeLayoutChanges = () => {
 };
 
 let layoutObserver: ResizeObserver | null = null;
+const themeRefech = ref(true);
 
-onBeforeMount(() => {
-  if (theme) {
-      if (theme.value === "system") {
-          get_system_theme().then((isDark) => {
-              if (isDark) {
-                  globalTheme.value = "dark";
-              } else {
-                  globalTheme.value = "light";
-              }
-          });
-      } else {
-          if (typeof theme.value === "string") {
-              globalTheme.value = theme.value;
-          }
-      }
-  } else {
-      globalTheme.value = "light";
-      localStorage.setItem("theme", "light");
-  }
+onMounted(() => {
+    theme.value = localStorage.getItem("theme");
+    console.log("theme", theme.value);
+    if (theme !== null && theme.value !== undefined && theme.value !== null && theme.value !== '') {
+        if (theme.value === "system") {
+            get_system_theme().then((isDark) => {
+                if (isDark) {
+                    globalTheme.value = "dark";
+                } else {
+                    globalTheme.value = "light";
+                }
+            });
+        } else {
+            globalTheme.value = theme.value;
+        }
+    } else {
+
+        globalTheme.value = "light";
+        localStorage.setItem("theme", "light");
+        themeRefech.value = false;
+        setTimeout(() => {
+            themeRefech.value = true;
+        }, 10);
+    }
 });
 onMounted(() => {
     updateRightPanelOffset(); // 初始化距离
@@ -92,7 +98,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="page" style="display: flex">
+    <div v-if="themeRefech" class="page" style="display: flex">
         <!-- 左侧菜单栏 -->
         <div class="left-panel">
             <LeftPanel id="left-panel" :distance-to-left="rightPanelOffset" />

@@ -5,7 +5,8 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/index',
+            name: 'home',
+            component: () => import('../pages/Home.vue'),
         },
         {
             path: '/login',
@@ -36,7 +37,7 @@ router.beforeEach((to, from, next) => {
     if (!token) {
       token = sessionStorage.getItem('token') !== null;
     }
-    if (!token && to.name !== 'login' && to.name!=='register' && to.name!== 'forgot-password') {
+    if (!token && to.name !== 'login' && to.name!=='register' && to.name!== 'forgot-password' && to.name !== 'home') {
         // 如果未登录，且目标不是登录页，跳转到登录页
         next({ name: 'login' });
     } else if (token && to.name === 'login') {
