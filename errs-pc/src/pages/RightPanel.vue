@@ -7,6 +7,7 @@ import Books from "./content/Books.vue";
 import Videos from "./content/Videos.vue";
 import Music from "./content/Music.vue";
 import Search from "./content/Search.vue";
+import RevoCatAI from "./content/RevoCatAI.vue";
 
 // 接收全局状态
 const globalSelect = inject("globalSelect");
@@ -21,6 +22,7 @@ const componentMap = {
     5: Videos,
     6: Search,
     7: Setting,
+    8: RevoCatAI,
 };
 
 // 动态选择组件
@@ -33,7 +35,7 @@ provide("currentIndex", currentIndex);
 
 <template>
     <transition name="fade-scale" mode="out-in">
-        <component :is="currentComponent" :key="selectMenu" />
+        <component  :is="currentComponent" :key="selectMenu" />
     </transition>
 </template>
 

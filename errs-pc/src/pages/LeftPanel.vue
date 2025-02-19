@@ -28,6 +28,11 @@ const menuItems = [
         name: "电影",
         icon: new URL("../assets/icons/视频.svg", import.meta.url).href,
     },
+    {
+        key: 8,
+        name: "RevoCat AI",
+        icon: new URL("../assets/icons/icon.png", import.meta.url).href,
+    },
 ];
 
 const bottomMenuItems = [

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import LeftPanel from "./pages/LeftPanel.vue";
 import { onBeforeMount, onBeforeUnmount, onMounted, provide, ref } from "vue";
-import { callConflateImg } from "./script/callConflateImg";
 import RightPanel from "./pages/RightPanel.vue";
 import { get_system_theme } from "./util/Theme";
 // 定义全局变量
@@ -117,7 +116,7 @@ onBeforeUnmount(() => {
 .page {
     position: relative;
     display: flex;
-    height: 100vh;
+    height: 100%;
 }
 
 * {

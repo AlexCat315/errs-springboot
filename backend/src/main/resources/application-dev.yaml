@@ -18,6 +18,14 @@ minio:
   handler-url: https://www.alexcat.it.com/minio-api/-errs/
   handler-pub-url: https://www.alexcat.it.com/minio-api/public-errs/
 spring:
+  ai:
+    openai:
+      api-key: sk-618a06603baf40e39aefdaf3e536536b
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-chat
+
   servlet:
     multipart:
       enabled: true
@@ -91,6 +99,10 @@ logging:
     org:
       springframework: INFO
       mybatis: TRACE
+
+AI:
+  deepseek:
+    api-key: sk-618a06603baf40e39aefdaf3e536536b
 
 
 
