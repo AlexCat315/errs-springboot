@@ -24,10 +24,7 @@ watch(searchText, (newValue, oldValue) => {
 });
 
 const searchTextClick = () => {
-    if (searchText.value !== "") {
-        globalSearch.value = searchText.value;
-        console.log("searchText", searchText.value);
-    }
+    globalSearch.value = searchText.value;
 };
 
 function handleClick(event: MouseEvent) { // 明确事件类型

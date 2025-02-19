@@ -19,7 +19,6 @@ const searchTextClick = () => {
 
 const globalSelect = inject<{ value: string }>("globalSelect");
 function handleClick(event: any) {
-     globalSelect!.value = "4-5";
     event.stopPropagation(); // 阻止事件传播
 }
 </script>
