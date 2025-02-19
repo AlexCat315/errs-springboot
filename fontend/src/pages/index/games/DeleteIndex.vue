@@ -6,6 +6,7 @@ import SearchGame from "./components/delete/SeachGame.vue";
 import GameCard from "./components/delete/GameCard.vue";
 import GameCardSmart from "./components/delete/GameCardSmart.vue";
 import DeleteCard from "./components/delete/DeleteCard.vue";
+import { ro } from "element-plus/es/locale";
 
 // 定义 Game 类型
 interface Game {
@@ -46,10 +47,23 @@ const disableDeleteCard = (value: boolean) => {
     showDeleteCard.value = value;
 };
 
+const showErrorpanle = ref(false)
+const errorPanleMsg = ref("")
+const deleteSuccess = (value: boolean) => {
+    showDeleteCard.value = value;
+    game.value = null;
+    showErrorpanle.value = true;
+    errorPanleMsg.value = "删除成功";
+    setTimeout(() => {
+        showErrorpanle.value = false;
+    }, 2000);
+}
+
 </script>
 
 <template>
     <div>
+        <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <div>
             <Search @click="
                 showSeach = true;
@@ -67,7 +81,8 @@ const disableDeleteCard = (value: boolean) => {
         </div>
 
         <GameCardSmart @update:modelValue="handleGameCardSmartUpdate" v-if="!showGameCardPanel && !showDeleteCard" />
-        <DeleteCard style="margin-left: 35%;" :game="game" @update:modelValue="disableDeleteCard" v-if="showDeleteCard" />
+        <DeleteCard style="margin-left: 35%;" :game="game" @delete:success="deleteSuccess"
+            @update:modelValue="disableDeleteCard" v-if="showDeleteCard" />
     </div>
 </template>
 
@@ -245,5 +260,38 @@ input[type="number"]::-webkit-inner-spin-button {
 .date-input::-webkit-calendar-picker-indicator {
     filter: invert(0.5);
     cursor: pointer;
+}
+
+@keyframes moveUp {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-20px);
+    }
+}
+
+.error-msg {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 150px;
+    height: 30px;
+    /* 建议显式设置高度 */
+    display: flex;
+    /* 启用 Flex 布局 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    font-family: Arial, Helvetica, sans-serif;
+    position: fixed;
+    z-index: 4;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 30px;
+    animation: moveUp 0.4s ease-in-out forwards;
+    font-size: 13px;
+    border-radius: 8px;
 }
 </style>

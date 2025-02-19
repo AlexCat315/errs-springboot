@@ -6,5 +6,5 @@ export async function delete_game_by_id(
   success: Function,
   failure = defaultFailure,
 ) {
-  post(`/api/admin/movie/delete/by/id?gameId=${game_id}`, {}, success, failure);
+  post(`/api/admin/game/delete/by/id?gameId=${game_id}`, {}, success, failure);
 }

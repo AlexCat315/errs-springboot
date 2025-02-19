@@ -70,7 +70,8 @@
         FROM games
         WHERE id = #{gameId}
     </select>
-    <select id="selectById" resultType="com.x.backend.pojo.common.Game">
+
+    <select id="selectById" resultMap="Game">
         SELECT *
         FROM games
         WHERE id = #{gameId}

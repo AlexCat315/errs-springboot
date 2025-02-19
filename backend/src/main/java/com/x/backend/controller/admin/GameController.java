@@ -166,7 +166,7 @@ public class GameController {
         return ResultEntity.failure("上传文件失败");
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = RuntimeException.class)
     @PostMapping("delete/by/id")
     public ResultEntity<String> deleteGameInfo(@RequestParam("gameId") Integer gameId) {
         try {
