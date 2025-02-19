@@ -4,6 +4,7 @@ import { onMounted, Ref } from "vue";
 import { inject } from "vue";
 import { ref } from "vue";
 import MDMIndex from "./MDMIndex.vue";
+import DataMap from "./DataMap.vue";
 
 const globalSelect = inject<Ref<string>>("globalSelect");
 if (!globalSelect) {
@@ -30,7 +31,7 @@ onMounted(() => {
             </el-menu-item>
         </el-menu>
 
-
+        <DataMap />
         <MDMIndex v-if="globalSelect === '2-2'" />
     </div>
 </template>
