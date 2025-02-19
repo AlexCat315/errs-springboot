@@ -213,6 +213,7 @@ public class MovieController {
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @PostMapping("/delete/by/id")
     public ResultEntity<String> deleteMovieInfo(@RequestParam("id") Integer id) {
         try {
@@ -227,10 +228,16 @@ public class MovieController {
             // 删除视频文件
             if (movie.getVideo() != null) {
                 minioUtils.pubDeleteFile(movie.getVideo().replace(pubHandlerUrl, ""));
-                return ResultEntity.success("delete movie info success");
+                if (movie.getCover() != null) {
+                    minioUtils.pubDeleteFile(movie.getCover().replace(pubHandlerUrl, ""));
+                    return ResultEntity.success("delete movie info success");
+                } else {
+                    return ResultEntity.failure("delete movie info error");
+                }
             } else {
                 return ResultEntity.failure("delete movie info error");
             }
+
         } catch (Exception e) {
             log.error("delete movie info error: {}", e.getMessage(), e);
             return ResultEntity.failure("delete movie info error");
