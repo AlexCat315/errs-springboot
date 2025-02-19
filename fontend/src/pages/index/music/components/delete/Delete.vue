@@ -68,9 +68,6 @@
     transform: scale(1.2);
 }
 
-.btn:hover>.icon path {
-    fill: red;
-}
 
 .btn:hover::after {
     visibility: visible;
