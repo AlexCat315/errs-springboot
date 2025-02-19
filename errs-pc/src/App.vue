@@ -14,24 +14,7 @@ provide("globalSearch", globalSearch);
 // 定义一个颜色主题全局变量
 const globalTheme = ref("");
 const theme = ref(localStorage.getItem("theme"));
-if (theme) {
-    if (theme.value === "system") {
-        get_system_theme().then((isDark) => {
-            if (isDark) {
-                globalTheme.value = "dark";
-            } else {
-                globalTheme.value = "light";
-            }
-        });
-    } else {
-        if (typeof theme.value === "string") {
-            globalTheme.value = theme.value;
-        }
-    }
-} else {
-    globalTheme.value = "light";
-    localStorage.setItem("theme", "light");
-}
+
 // 定时器
 setInterval(() => {
     const theme = ref(localStorage.getItem("theme"));
@@ -76,9 +59,26 @@ const observeLayoutChanges = () => {
 
 let layoutObserver: ResizeObserver | null = null;
 
-// onBeforeMount(() => {
-//     callConflateImg();
-// });
+onBeforeMount(() => {
+  if (theme) {
+      if (theme.value === "system") {
+          get_system_theme().then((isDark) => {
+              if (isDark) {
+                  globalTheme.value = "dark";
+              } else {
+                  globalTheme.value = "light";
+              }
+          });
+      } else {
+          if (typeof theme.value === "string") {
+              globalTheme.value = theme.value;
+          }
+      }
+  } else {
+      globalTheme.value = "light";
+      localStorage.setItem("theme", "light");
+  }
+});
 onMounted(() => {
     updateRightPanelOffset(); // 初始化距离
     layoutObserver = observeLayoutChanges(); // 开启布局变化监听
