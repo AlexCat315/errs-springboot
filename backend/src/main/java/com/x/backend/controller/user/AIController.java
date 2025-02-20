@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
+import com.x.backend.pojo.common.Account;
+import com.x.backend.util.EncryptUtils;
+import com.x.backend.util.JWTUtils;
+import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -46,12 +49,17 @@ public class AIController {
 
     @Value("${AI.deepseek.api-key}")
     private String API_KEY;
-
+    @Resource
+    private JWTUtils<Account> jwtUtils;
+    @Resource
+    private RedisTemplate<String, String> redisTemplate;
 
     @GetMapping("/chat")
     public ResponseEntity<Map<String, String>> chat(
             @RequestParam @NotBlank(message = "问题不能为空") String question) {
+
         try (CloseableHttpClient client = HttpClients.createDefault()) {
+            limitAccessCount();
             // 构建请求
             HttpPost request = new HttpPost(API_URL);
             request.setHeader("Content-Type", "application/json");
@@ -113,6 +121,7 @@ public class AIController {
 
         return ResponseEntity.ok().body(outputStream -> {
             try (CloseableHttpClient client = HttpClients.createDefault()) {
+                limitAccessCount();
                 HttpPost request = new HttpPost(API_URL);
                 request.setHeader("Content-Type", "application/json");
                 request.setHeader("Authorization", "Bearer " + API_KEY);
@@ -168,5 +177,37 @@ public class AIController {
                 outputStream.flush();
             }
         });
+    }
+
+
+    private void limitAccessCount() {
+        String userId = String.valueOf(jwtUtils.getId()); // 获取用户ID
+        String redisKey = userId + "_ai_limit"; // Redis key
+
+        // 获取当前时间
+        long currentTime = System.currentTimeMillis();
+
+        // 获取今天零点的时间戳
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        long todayStartTime = calendar.getTimeInMillis();
+
+        // 获取今天的访问次数
+        Long count = redisTemplate.opsForZSet().count(redisKey, todayStartTime, currentTime);
+
+        // 如果访问次数超过限制，则抛出异常
+        if (count != null && count >= 10) {
+            throw new RuntimeException("今日访问次数已达上限（10次），请明天再试");
+        }
+
+        // 将当前访问记录添加到Redis中
+        redisTemplate.opsForZSet().add(redisKey, String.valueOf(currentTime), currentTime);
+
+        // 设置key的过期时间（例如2天后过期，以确保数据不会永久存储）
+        calendar.add(Calendar.DATE, 2);
+        redisTemplate.expireAt(redisKey, calendar.getTime());
     }
 }
