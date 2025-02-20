@@ -31,7 +31,7 @@ onMounted(() => {
             </el-menu-item>
         </el-menu>
 
-        <DataMap />
+        <DataMap v-if="globalSelect === '2-1'" />
         <MDMIndex v-if="globalSelect === '2-2'" />
     </div>
 </template>

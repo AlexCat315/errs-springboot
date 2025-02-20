@@ -8,10 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,25 +25,18 @@ public class DownloadController {
     private final MinioUtils minioUtils;
 
     @GetMapping("/{osType}")
-    public void downloadFile(@PathVariable String osType, HttpServletResponse response) {
+    public void downloadFile(@PathVariable String osType, @RequestParam(value = "filename", required = false) String filenameFromParam, HttpServletResponse response) {
         try {
             // 确定文件名和存储类型
-            String filename;
-
-            filename = switch (osType.toLowerCase()) {
-                case "windows" -> "RevoCat-Windows-v0.1.1.exe";
-                case "macos" -> "RevoCat-macOS-v0.1.1.dmg";
-                case "linux" -> "RevoCat-Linux-v0.1.1.AppImage";
-                default -> throw new RuntimeException("Unsupported OS type");
-            };
+            String filename = getString(osType, filenameFromParam);
 
             // 获取文件流
             InputStream fileStream = minioUtils.pubDownloadFile(filename);
-
+            long fileSize = minioUtils.getFileSize(filename); // 新增方法获取文件大小
             // 设置响应头
             response.setContentType("application/octet-stream");
             response.setHeader("Content-Disposition", "attachment; filename=\"" + filename + "\"");
-
+            response.setContentLengthLong(fileSize); // 关键：添加文件大小
             // 流式传输
             try (OutputStream os = response.getOutputStream()) {
                 IOUtils.copy(fileStream, os);
@@ -69,5 +60,23 @@ public class DownloadController {
                 log.error("写入错误信息失败", ex);
             }
         }
+    }
+
+    @NotNull
+    private static String getString(String osType, String filenameFromParam) {
+        String filename;
+
+        filename = switch (osType.toLowerCase()) {
+            case "windows" -> "RevoCat-Windows-v0.1.1.exe";
+            case "macos" -> "RevoCat-macos-0.1.1.zip";
+            case "linux" -> "RevoCat-Linux-v0.1.1.AppImage";
+            default -> throw new RuntimeException("Unsupported OS type");
+        };
+
+        // 如果从参数中获取了文件名，则使用它（主要用于iframe方法）
+        if (filenameFromParam != null && !filenameFromParam.isEmpty()) {
+            filename = filenameFromParam;
+        }
+        return filename;
     }
 }

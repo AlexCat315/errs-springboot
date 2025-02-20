@@ -6,6 +6,7 @@ import { ref } from "vue";
 import AddInfo from "./components/AddInfo.vue";
 import DeleteInfo from "./components/delete/MusicList.vue";
 import UpdateInfo from "./components/update/MusicList.vue";
+import DataMap from "./components/DataMap.vue";
 
 const globalSelect = inject<Ref<string>>("globalSelect");
 if (!globalSelect) {
@@ -34,6 +35,7 @@ onMounted(() => {
                 </el-menu-item>
             </el-menu>
         </div>
+        <DataMap />
         <AddInfo v-if="globalSelect === '4-2'" />
         <DeleteInfo v-if="globalSelect === '4-3'" />
         <UpdateInfo v-if="globalSelect === '4-4'" />

@@ -211,4 +211,14 @@ public class MinioUtils {
     public StatObjectResponse privGetFileStat(String fileName) throws Exception {
         return getFileStat(fileName, "private");
     }
+
+    public long getFileSize(String filename) throws Exception {
+        StatObjectResponse stat = minioClient.statObject(
+                StatObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(filename)
+                        .build()
+        );
+        return stat.size();
+    }
 }

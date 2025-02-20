@@ -26,10 +26,8 @@
 
                 <el-form-item label="封面图片" prop="img">
                     <div class="preview-container">
-                        <el-upload class="cover-uploader"
-                                  :show-file-list="false"
-                                  :auto-upload="false"
-                                  :on-change="handleCoverChange">
+                        <el-upload class="cover-uploader" :show-file-list="false" :auto-upload="false"
+                            :on-change="handleCoverChange">
                             <img v-if="bookForm.img" :src="bookForm.img" class="cover-preview" />
                             <el-icon v-else class="cover-uploader-icon">
                                 <Plus />
@@ -49,33 +47,15 @@
                 <div style="display: flex">
                     <el-form-item label="评分" prop="rating">
                         <div style="display: flex; align-items: center">
-                            <el-rate
-                                v-model="bookForm.rating"
-                                :max="5"
-                                :allow-half="true"
-                                show-score
-                                @change="handleRateChange"
-                            />
-                            <el-input-number
-                                v-model="bookForm.rating"
-                                :min="0"
-                                :max="5"
-                                :step="0.1"
-                                :precision="1"
-                                style="margin-left: 20px"
-                                @change="handleInputChange"
-                            />
+                            <el-rate v-model="bookForm.rating" :max="5" :allow-half="true" show-score
+                                @change="handleRateChange" />
+                            <el-input-number v-model="bookForm.rating" :min="0" :max="5" :step="0.1" :precision="1"
+                                style="margin-left: 20px" @change="handleInputChange" />
                         </div>
                     </el-form-item>
 
                     <el-form-item style="margin-left: 70px" label="推荐度" prop="recommend">
-                        <el-input-number
-                            v-model="bookForm.recommend"
-                            :min="0"
-                            :max="1"
-                            :step="0.1"
-                            :precision="1"
-                        />
+                        <el-input-number v-model="bookForm.recommend" :min="0" :max="1" :step="0.1" :precision="1" />
                     </el-form-item>
                 </div>
 
@@ -88,10 +68,12 @@
                         提交
                     </el-button>
                     <el-button v-if="buttonLoadingState" style="width: 98%" type="primary" loading>
-                        提交中...  <!-- Added text for loading state -->
+                        提交中... <!-- Added text for loading state -->
                     </el-button>
                     <el-button style="width: 98%; margin-top: 20px; margin-left: -1px" @click="resetForm">重置</el-button>
-                    <el-button style="width: 98%; margin-top: 10px; margin-left: -1px" @click="$emit('cancel')">取消</el-button> <!-- Corrected event name -->
+                    <el-button style="width: 98%; margin-top: 10px; margin-left: -1px"
+                        @click="$emit('cancel')">取消</el-button>
+                    <!-- Corrected event name -->
                 </el-form-item>
             </el-form>
         </el-card>
@@ -178,13 +160,13 @@ const handleRateChange = (value: number) => {
 };
 
 const handleInputChange = (value: number) => {
-     // Keep input value within range
+    // Keep input value within range
     const boundedValue = Math.max(0, Math.min(5, value));
     bookForm.rating = parseFloat(boundedValue.toFixed(1));
 };
 
 // Define emits
-const emit = defineEmits(['cancel', 'update:modelValue','delete:success']);
+const emit = defineEmits(['cancel', 'update:modelValue', 'delete:success']);
 
 
 const submitForm = async () => {
@@ -201,20 +183,20 @@ const submitForm = async () => {
         formData.append("description", bookForm.description);
         formData.append("introduction", bookForm.introduction);
         if (bookForm.cover) {
-          formData.append("img", bookForm.cover);
+            formData.append("img", bookForm.cover);
         } else if (bookForm.img && typeof bookForm.img === 'string' && bookForm.img.startsWith('http')) {
-        
+
         }
 
         formData.append("rating", (bookForm.rating * 2).toString());
         formData.append("recommend", (bookForm.recommend * 100).toString());
         formData.append("users", bookForm.users.toString());
         if (bookForm.id) {  // IMPORTANT: Include the ID for updates!
-          formData.append("id", bookForm.id.toString());
+            formData.append("id", bookForm.id.toString());
         }
 
         postFormData(
-          `/api/admin/book/${bookForm.id ? 'update' : 'create'}`,   // DYNAMIC endpoint
+            `/api/admin/book/${bookForm.id ? 'update' : 'create'}`,   // DYNAMIC endpoint
             formData,
             () => {
                 ElMessage.success(bookForm.id ? "书籍修改成功" : "书籍上传成功");
@@ -243,7 +225,7 @@ const resetForm = () => {
         formRef.value.resetFields();
     }
     // showFileReset(); // Removed, as resetFields covers this
-     isShowFile.value = false;
+    isShowFile.value = false;
     setTimeout(() => {
         isShowFile.value = true;
     }, 10);
@@ -275,18 +257,18 @@ const props = defineProps({
 
 // Use watch to update the form when the 'book' prop changes
 watch(() => props.book, (newBook) => {
-  if (newBook) {
-    bookForm.id = newBook.id; // VERY IMPORTANT:  Keep the ID
-    bookForm.name = newBook.name;
-    bookForm.author = newBook.author;
-    bookForm.description = newBook.description;
-    bookForm.introduction = newBook.introduction;
-    bookForm.img = newBook.img;
-    bookForm.rating = newBook.rating;
-    bookForm.recommend = newBook.recommend;
-    bookForm.users = newBook.users;
-    bookForm.cover = null; // Reset cover on prop change.  Important!
-  }
+    if (newBook) {
+        bookForm.id = newBook.id; // VERY IMPORTANT:  Keep the ID
+        bookForm.name = newBook.name;
+        bookForm.author = newBook.author;
+        bookForm.description = newBook.description;
+        bookForm.introduction = newBook.introduction;
+        bookForm.img = newBook.img;
+        bookForm.rating = newBook.rating;
+        bookForm.recommend = newBook.recommend;
+        bookForm.users = newBook.users;
+        bookForm.cover = null; // Reset cover on prop change.  Important!
+    }
 }, { immediate: true, deep: true }); // immediate: true to run on initial load
 
 </script>

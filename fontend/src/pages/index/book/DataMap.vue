@@ -20,19 +20,19 @@ const lineData = ref({
   },
   series: [
     {
-      name: '新增玩家',
+      name: '新增书籍',
       type: 'line',
-      data: [120, 220, 180, 280, 260, 320, 400]
+      data: [12, 22, 18, 28, 26, 32, 40]
     },
     {
-      name: '流失玩家',
+      name: '下架书籍',
       type: 'line',
-      data: [10, 30, 20, 50, 30, 60, 40]
+      data: [1, 3, 2, 5, 3, 6, 4]
     },
     {
-      name: '活跃玩家',
+      name: '修改书籍',
       type: 'line',
-      data: [40, 60, 90, 50, 70, 80, 100]
+      data: [4, 6, 9, 5, 7, 8, 10]
     }
   ]
 })
@@ -47,13 +47,13 @@ const pieData = ref({
   },
   series: [
     {
-      name: '游戏类型',
+      name: '书籍类型',
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 60, name: 'RPG' },
-        { value: 30, name: 'MOBA' },
-        { value: 10, name: 'FPS' }
+        { value: 60, name: '小说' },
+        { value: 30, name: '传记' },
+        { value: 10, name: '历史' }
       ]
     }
   ]
@@ -62,7 +62,7 @@ const pieData = ref({
 const barData = ref({
   xAxis: {
     type: 'category',
-    data: ['RPG', 'MOBA', 'FPS'],
+    data: ['小说', '传记', '历史'],
   },
   yAxis: {
     type: 'value'
@@ -80,20 +80,20 @@ const barData = ref({
 
 <template>
   <div class="dashboard-container">
-    <h2>游戏数据统计</h2>
+    <h2>用户数据统计</h2>
 
     <div class="chart-container">
-      <h3>玩家数量变化趋势</h3>
+      <h3>用户数量变化趋势</h3>
       <v-chart :option="lineData" class="chart" />
     </div>
 
     <div class="chart-container">
-      <h3>游戏类型分布</h3>
+      <h3>用户类型分布</h3>
       <v-chart :option="pieData" class="chart" />
     </div>
 
       <div class="chart-container">
-          <h3>各类型游戏总数</h3>
+          <h3>各类型用户总数</h3>
           <v-chart :option="barData" class="chart"/>
       </div>
   </div>
