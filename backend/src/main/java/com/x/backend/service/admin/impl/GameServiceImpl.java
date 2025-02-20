@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -38,6 +39,7 @@ public class GameServiceImpl implements GameService {
         game.setGameDeveloper(request.getGameDeveloper());
         game.setReleaseDate(request.getReleaseDate());
         game.setGameDescription(request.getGameDescription());
+        game.setCreateTime(new Date());
 
         // 使用 Jackson 将 List 转换为 JSON 字符串
         ObjectMapper objectMapper = new ObjectMapper();

@@ -2,6 +2,7 @@ package com.x.backend.pojo.admin.vo.responses.song;
 
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -26,4 +27,5 @@ public class SongVO {
     private Integer likeUsers;
 
     private Integer dontLikeUsers;
+    private Date createTime;
 }

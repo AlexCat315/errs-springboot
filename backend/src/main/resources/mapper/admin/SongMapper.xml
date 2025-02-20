@@ -14,8 +14,8 @@
     </resultMap>
 
     <insert id="save">
-        INSERT INTO song (name, artist, cover_url, audio_url, score, tags, users)
-        VALUES (#{name}, #{artist}, #{coverUrl}, #{audioUrl}, #{score}, #{tags}, #{users})
+        INSERT INTO song (name, artist, cover_url, audio_url, score, tags, users, create_time)
+        VALUES (#{name}, #{artist}, #{coverUrl}, #{audioUrl}, #{score}, #{tags}, #{users},#{createTime})
     </insert>
     <update id="update">
         update song

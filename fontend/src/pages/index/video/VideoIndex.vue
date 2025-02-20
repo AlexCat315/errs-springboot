@@ -5,6 +5,7 @@ import { inject } from "vue";
 import AddInfo from "./AddInfo.vue";
 import UpdateIndex from "./UpdateIndex.vue";
 import DeleteIndex from "./DeleteIndex.vue";
+import DataMap from "./DataMap.vue";
 
 const globalSelect = inject<Ref<string>>("globalSelect");
 if (!globalSelect) {
@@ -24,6 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
+<div>
     <div>
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
             <el-menu-item index="1">数据视图</el-menu-item>
@@ -35,9 +37,12 @@ onMounted(() => {
             </el-menu-item>
         </el-menu>
     </div>
+    <DataMap v-if="globalSelect === '5-1'" />
     <AddInfo v-if="globalSelect === '5-2'" />
     <UpdateIndex v-if="globalSelect === '5-4'" />
     <DeleteIndex v-if="globalSelect === '5-3'" />
+    </div>
+
 </template>
 
 <style scoped></style>

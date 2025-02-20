@@ -1,6 +1,8 @@
 package com.x.backend.controller.admin;
 
 
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -58,6 +61,7 @@ public class SongController {
             song.setAudioUrl(uploadAudioUrlFile);
             song.setCoverUrl(uploadCoverUrlFile);
             song.setScore(score);
+            song.setCreateTime(new Date());
             // 使用 Jackson 将 List 转换为 JSON 字符串
             ObjectMapper objectMapper = new ObjectMapper();
             try {

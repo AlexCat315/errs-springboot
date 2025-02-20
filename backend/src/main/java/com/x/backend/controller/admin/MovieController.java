@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -72,6 +73,7 @@ public class MovieController {
             movie.setLanguage(language);
             movie.setSummary(summary);
             movie.setUsers(users);
+            movie.setCreateTime(new Date());
             // 使用 Jackson 将 List 转换为 JSON 字符串
             ObjectMapper objectMapper = new ObjectMapper();
             try {

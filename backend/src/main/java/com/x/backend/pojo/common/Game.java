@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 public class Game  implements Serializable {
@@ -17,5 +18,6 @@ public class Game  implements Serializable {
     private String gamePlatforms;
     private String gameImageUrl;
     private Integer gameUsers;
+    private Date createTime;
 }
 

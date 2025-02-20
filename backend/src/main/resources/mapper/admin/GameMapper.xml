@@ -4,9 +4,9 @@
 
     <insert id="insertGame">
         INSERT INTO games (game_name, game_score, game_developer, release_date, game_description, game_categories,
-                           game_platforms, game_image_url)
+                           game_platforms, game_image_url,create_time)
         VALUES (#{gameName}, #{gameScore}, #{gameDeveloper}, #{releaseDate}, #{gameDescription}, #{gameCategories},
-                #{gamePlatforms}, #{gameImageUrl})
+                #{gamePlatforms}, #{gameImageUrl},#{createTime})
     </insert>
 
     <update id="updateGame">

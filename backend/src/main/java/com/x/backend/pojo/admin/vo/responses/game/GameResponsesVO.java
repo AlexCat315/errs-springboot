@@ -4,6 +4,7 @@ package com.x.backend.pojo.admin.vo.responses.game;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -18,4 +19,6 @@ public class GameResponsesVO {
     private List<String> gamePlatforms;
     private String gameImageUrl;
     private Integer gameUsers;
+
+    private Date createTime;
 }

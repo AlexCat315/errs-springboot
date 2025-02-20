@@ -3,9 +3,9 @@
 <mapper namespace="com.x.backend.mapper.admin.MovieMapper">
 
     <insert id="createMove">
-        INSERT INTO movie (name, director, actor, types, cover, year, language, rating, users, summary, video)
+        INSERT INTO movie (name, director, actor, types, cover, year, language, rating, users, summary, video,create_time)
         VALUES (#{name}, #{director}, #{actor}, #{types}, #{cover}, #{year}, #{language}, #{rating}, #{users},
-                #{summary}, #{video})
+                #{summary}, #{video},#{createTime})
     </insert>
     <update id="updateMovie">
         UPDATE movie
