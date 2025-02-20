@@ -44,6 +44,7 @@ watch(globalSearch, (newValue) => {
 });
 
 const searchBook = (query: string) => {
+    console.log(query);
     if (query === '') {
         fetchBooks();
     } else {

@@ -4,8 +4,8 @@ import { defaultFailure, post } from "../post.js";
 
 export function get_book_info_by_search(
   searchText: string,
-  page:number,
-  size:number,
+  page: number,
+  size: number,
   success: Function,
   failure = defaultFailure,
 ) {
@@ -22,8 +22,8 @@ export function get_book_info_by_search(
 }
 
 export function get_book_info_all(
-  page:number,
-  size:number,
+  page: number,
+  size: number,
   success: Function,
   failure = defaultFailure,
 ) {

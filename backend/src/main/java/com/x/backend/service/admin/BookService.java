@@ -7,7 +7,7 @@ import com.x.backend.pojo.common.PageSize;
 import java.util.List;
 
 public interface BookService {
-    List<Book> getAllGameInfo(PageSize pageSize);
+    List<Book> getAllBookInfo(PageSize pageSize);
 
     List<Book> getInfoBySearch(SearchVO searchVO);
 

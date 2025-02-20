@@ -68,7 +68,7 @@
         or description like CONCAT('%', #{searchText}, '%')
         or introduction like CONCAT('%', #{searchText}, '%')
         ORDER BY rating DESC
-        LIMIT #{start} ,#{size}
+        LIMIT #{star} ,#{size}
     </select>
     <select id="getBookById" resultType="com.x.backend.pojo.common.Book">
         select *

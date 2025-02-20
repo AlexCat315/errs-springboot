@@ -127,9 +127,9 @@ public class BookController {
     }
 
     @PostMapping("/get/info/all")
-    public ResultEntity<List<Book>> getAllGameInfo(@RequestBody PageSize pageSize) {
+    public ResultEntity<List<Book>> getAllBookInfo(@RequestBody PageSize pageSize) {
         try {
-            return ResultEntity.success(bookService.getAllGameInfo(pageSize));
+            return ResultEntity.success(bookService.getAllBookInfo(pageSize));
         } catch (RuntimeException e) {
             log.error("获取游戏信息失败", e);
             return ResultEntity.failure(e.getMessage());
@@ -141,7 +141,7 @@ public class BookController {
         try {
             return ResultEntity.success(bookService.getInfoBySearch(searchVO));
         } catch (RuntimeException e) {
-            log.error("搜索游戏信息失败", e);
+            log.error("搜索书籍信息失败", e);
             return ResultEntity.failure(e.getMessage());
         }
     }
@@ -152,7 +152,7 @@ public class BookController {
             bookService.deleteInfo(id);
             return ResultEntity.success("删除成功");
         } catch (RuntimeException e) {
-            log.error("删除游戏信息失败", e);
+            log.error("删除书籍信息失败", e);
             return ResultEntity.failure(e.getMessage());
         }
     }

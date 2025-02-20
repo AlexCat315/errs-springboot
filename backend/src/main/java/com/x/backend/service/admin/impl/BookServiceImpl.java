@@ -22,7 +22,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    public List<Book> getAllGameInfo(PageSize pageSize) {
+    public List<Book> getAllBookInfo(PageSize pageSize) {
         try {
             pageSize.setStart((pageSize.getPage() - 1) * pageSize.getSize());
             return bookMapper.getAllGameInfo(pageSize);
@@ -34,7 +34,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> getInfoBySearch(SearchVO searchVO) {
-        searchVO.setPage((searchVO.getPage() - 1) * searchVO.getSize());
+        searchVO.setStar((searchVO.getPage() - 1) * searchVO.getSize());
         try {
             return bookMapper.getInfoBySearch(searchVO);
         } catch (RuntimeException e) {
