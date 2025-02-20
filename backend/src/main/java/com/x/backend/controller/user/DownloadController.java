@@ -1,6 +1,8 @@
 package com.x.backend.controller.user;
 
 
+import com.x.backend.annotation.RoleSecurity;
+import com.x.backend.constants.RoleConstants;
 import com.x.backend.util.MinioUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.io.OutputStream;
 @RestController
 @RequestMapping("/api/download")
 @RequiredArgsConstructor // Lombok注解，自动注入构造函数
+@RoleSecurity(RoleConstants.ROLE_ANONYMOUS)
 public class DownloadController {
 
     private final MinioUtils minioUtils;
