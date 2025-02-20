@@ -31,6 +31,18 @@
         SET users = users - 1
         WHERE id = #{bId};
     </update>
+    <update id="update">
+        UPDATE book
+        SET name         = #{name},
+            author       = #{author},
+            description  = #{description},
+            introduction = #{introduction},
+            img          = #{img},
+            recommend    = #{recommend},
+            users        = #{users},
+            rating       = #{rating}
+        where id = #{id}
+    </update>
     <delete id="deleteBookScore">
         DELETE
         FROM book_score
@@ -57,5 +69,10 @@
         or introduction like CONCAT('%', #{searchText}, '%')
         ORDER BY rating DESC
         LIMIT #{start} ,#{size}
+    </select>
+    <select id="getBookById" resultType="com.x.backend.pojo.common.Book">
+        select *
+        from book
+        where id = #{id}
     </select>
 </mapper>

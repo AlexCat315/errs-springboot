@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted, ref, inject, Ref, watch } from "vue";
 import { get_book_info_all, get_book_info_by_search } from "../../../../../net/book/get"; // 修改为书籍接口
-import Delete from "./Delete.vue";
+import Edit from "./Edit.vue";
 
 // 定义 Book 类型
 interface Book {
@@ -109,7 +109,7 @@ const handleScroll = () => {
 
 const emit = defineEmits(['update:modelValue']);
 
-const showDeleteCard = (book: Book) => {
+const showEditCard = (book: Book) => {
     emit('update:modelValue', book);
 };
 </script>
@@ -173,7 +173,7 @@ const showDeleteCard = (book: Book) => {
                     </div>
 
                     <div style="display: flex">
-                        <Delete @click="showDeleteCard(item)" style="margin-right: 10px; margin-top: 10px" />
+                        <Edit @click="showEditCard(item)" style="margin-right: 10px; margin-top: 10px" />
                     </div>
                 </div>
             </div>

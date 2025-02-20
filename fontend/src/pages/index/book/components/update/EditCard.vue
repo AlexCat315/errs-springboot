@@ -1,10 +1,9 @@
-
 <template>
     <div class="upload-form-container">
         <el-card class="form-card">
             <template #header>
                 <div class="card-header">
-                    <h2>上传书籍信息</h2>
+                    <h2>修改书籍信息</h2>
                 </div>
             </template>
 
@@ -27,8 +26,8 @@
 
                 <el-form-item label="封面图片" prop="img">
                     <div class="preview-container">
-                        <el-upload class="cover-uploader" 
-                                  :show-file-list="false" 
+                        <el-upload class="cover-uploader"
+                                  :show-file-list="false"
                                   :auto-upload="false"
                                   :on-change="handleCoverChange">
                             <img v-if="bookForm.img" :src="bookForm.img" class="cover-preview" />
@@ -37,44 +36,45 @@
                             </el-icon>
                         </el-upload>
 
-                        <div v-if="bookForm.img" class="preview-box">
+                        <!--  Removed redundant preview-box, using el-upload's built-in preview -->
+                        <!--  <div v-if="bookForm.img" class="preview-box">
                             <img :src="bookForm.img" class="preview-image" />
                             <div class="preview-info">
                                 <p>封面预览</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </el-form-item>
 
                 <div style="display: flex">
                     <el-form-item label="评分" prop="rating">
                         <div style="display: flex; align-items: center">
-                            <el-rate 
-                                v-model="bookForm.rating" 
-                                :max="5" 
-                                :allow-half="true" 
+                            <el-rate
+                                v-model="bookForm.rating"
+                                :max="5"
+                                :allow-half="true"
                                 show-score
-                                @change="handleRateChange" 
+                                @change="handleRateChange"
                             />
-                            <el-input-number 
-                                v-model="bookForm.rating" 
-                                :min="0" 
-                                :max="5" 
-                                :step="0.1"  
-                                :precision="1"  
-                                style="margin-left: 20px" 
-                                @change="handleInputChange" 
+                            <el-input-number
+                                v-model="bookForm.rating"
+                                :min="0"
+                                :max="5"
+                                :step="0.1"
+                                :precision="1"
+                                style="margin-left: 20px"
+                                @change="handleInputChange"
                             />
                         </div>
                     </el-form-item>
 
                     <el-form-item style="margin-left: 70px" label="推荐度" prop="recommend">
-                        <el-input-number 
-                            v-model="bookForm.recommend" 
-                            :min="0" 
-                            :max="1" 
+                        <el-input-number
+                            v-model="bookForm.recommend"
+                            :min="0"
+                            :max="1"
                             :step="0.1"
-                            :precision="1" 
+                            :precision="1"
                         />
                     </el-form-item>
                 </div>
@@ -88,9 +88,10 @@
                         提交
                     </el-button>
                     <el-button v-if="buttonLoadingState" style="width: 98%" type="primary" loading>
-                        <!-- 加载动画保持不变 -->
+                        提交中...  <!-- Added text for loading state -->
                     </el-button>
                     <el-button style="width: 98%; margin-top: 20px; margin-left: -1px" @click="resetForm">重置</el-button>
+                    <el-button style="width: 98%; margin-top: 10px; margin-left: -1px" @click="$emit('cancel')">取消</el-button> <!-- Corrected event name -->
                 </el-form-item>
             </el-form>
         </el-card>
@@ -98,13 +99,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, PropType, watch } from "vue"; // Added watch
 import type { FormInstance, FormRules, UploadFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
-import { postFormData, defaultFailure } from "../../../net/post";
-import {ElMessage} from "element-plus";
+import { postFormData, defaultFailure } from "../../../../../net/post";
+import { ElMessage } from "element-plus";
 
 interface BookForm {
+    id?: number; // Added id, since it's an update
     name: string;
     author: string;
     description: string;
@@ -118,7 +120,7 @@ interface BookForm {
 
 const formRef = ref<FormInstance>();
 const buttonLoadingState = ref(false);
-const isShowFile = ref(true);
+const isShowFile = ref(true);  // Not strictly necessary, but keep for consistency
 
 const bookForm = reactive<BookForm>({
     name: "",
@@ -136,7 +138,12 @@ const rules = reactive<FormRules<BookForm>>({
     name: [{ required: true, message: "请输入书籍名称", trigger: "blur" }],
     author: [{ required: true, message: "请输入作者", trigger: "blur" }],
     description: [{ required: true, message: "请输入编辑评语", trigger: "blur" }],
-    img: [{ required: true, message: "请上传封面图片", trigger: "change" }],
+    img: [{ required: false, message: "请上传封面图片", trigger: "change" }], // Make img optional for updates
+    introduction: [{ required: false, message: "请输入书籍简介", trigger: "blur" }],
+    rating: [{ required: false, type: 'number', message: "请输入评分", trigger: "blur" }],  // Added type checking
+    recommend: [{ required: false, type: 'number', message: "请输入推荐度", trigger: "blur" }], // Added type checking
+    users: [{ required: false, type: 'number', message: "请输入用户评价数", trigger: "blur" }], // Added type checking
+
 });
 
 const handleCoverChange = (uploadFile: UploadFile) => {
@@ -148,12 +155,12 @@ const handleCoverChange = (uploadFile: UploadFile) => {
 
     if (!isImage) {
         ElMessage.error("封面文件必须是图片格式!");
-        showFileReset();
+        // showFileReset(); // Removed unnecessary reset
         return;
     }
     if (!isLt4M) {
         ElMessage.error("封面图片大小不能超过 4MB!");
-        showFileReset();
+        // showFileReset(); // Removed unnecessary reset
         return;
     }
 
@@ -161,7 +168,7 @@ const handleCoverChange = (uploadFile: UploadFile) => {
     const reader = new FileReader();
     reader.onload = (e) => {
         bookForm.img = e.target?.result as string;
-        formRef.value?.validateField("img");
+        // formRef.value?.validateField("img"); // Not needed here
     };
     reader.readAsDataURL(file);
 };
@@ -171,10 +178,14 @@ const handleRateChange = (value: number) => {
 };
 
 const handleInputChange = (value: number) => {
-    if (value < 0) bookForm.rating = 0;
-    if (value > 5) bookForm.rating = 5;
-    bookForm.rating = parseFloat(value.toFixed(1));
+     // Keep input value within range
+    const boundedValue = Math.max(0, Math.min(5, value));
+    bookForm.rating = parseFloat(boundedValue.toFixed(1));
 };
+
+// Define emits
+const emit = defineEmits(['cancel', 'update:modelValue','delete:success']);
+
 
 const submitForm = async () => {
     if (!formRef.value) return;
@@ -189,20 +200,30 @@ const submitForm = async () => {
         formData.append("author", bookForm.author);
         formData.append("description", bookForm.description);
         formData.append("introduction", bookForm.introduction);
-        if (bookForm.cover) formData.append("img", bookForm.cover);
+        if (bookForm.cover) {
+          formData.append("img", bookForm.cover);
+        } else if (bookForm.img && typeof bookForm.img === 'string' && bookForm.img.startsWith('http')) {
+        
+        }
+
         formData.append("rating", (bookForm.rating * 2).toString());
         formData.append("recommend", (bookForm.recommend * 100).toString());
         formData.append("users", bookForm.users.toString());
+        if (bookForm.id) {  // IMPORTANT: Include the ID for updates!
+          formData.append("id", bookForm.id.toString());
+        }
 
         postFormData(
-            "/api/admin/book/create", // 修改为书籍接口
+          `/api/admin/book/${bookForm.id ? 'update' : 'create'}`,   // DYNAMIC endpoint
             formData,
             () => {
-                ElMessage.success("书籍上传成功");
+                ElMessage.success(bookForm.id ? "书籍修改成功" : "书籍上传成功");
                 setTimeout(() => {
-                    resetForm();
+                    //resetForm(); // Don't reset on success, we want to keep the data.
                     buttonLoadingState.value = false;
+                    emit('delete:success', false)
                 }, 1400);
+
             },
             (message: string, code: number, url: string) => {
                 defaultFailure(message, code, url);
@@ -213,24 +234,63 @@ const submitForm = async () => {
         );
     } catch (error) {
         buttonLoadingState.value = false;
+        console.error("Submission error:", error); // More detailed error logging
     }
 };
 
 const resetForm = () => {
-    formRef.value.resetFields();
-    bookForm.img = '';
-    bookForm.cover = null;
-    isShowFile.value = false;
+    if (formRef.value) {
+        formRef.value.resetFields();
+    }
+    // showFileReset(); // Removed, as resetFields covers this
+     isShowFile.value = false;
     setTimeout(() => {
         isShowFile.value = true;
     }, 10);
 };
 
-const showFileReset = () => {
-    bookForm.img = '';
-    bookForm.cover = null;
-};
+// const showFileReset = () => { // Not needed, handled by resetFields
+//     bookForm.img = '';
+//     bookForm.cover = null;
+// };
+
+// Define Book type (consistent with parent)
+interface Book {
+    id: number;
+    name: string;
+    author: string;
+    description: string;
+    rating: number;
+    users: number;
+    img: string;
+    introduction: string;
+    recommend: number;
+}
+const props = defineProps({
+    book: {
+        type: Object as PropType<Book>,
+        required: true
+    }
+});
+
+// Use watch to update the form when the 'book' prop changes
+watch(() => props.book, (newBook) => {
+  if (newBook) {
+    bookForm.id = newBook.id; // VERY IMPORTANT:  Keep the ID
+    bookForm.name = newBook.name;
+    bookForm.author = newBook.author;
+    bookForm.description = newBook.description;
+    bookForm.introduction = newBook.introduction;
+    bookForm.img = newBook.img;
+    bookForm.rating = newBook.rating;
+    bookForm.recommend = newBook.recommend;
+    bookForm.users = newBook.users;
+    bookForm.cover = null; // Reset cover on prop change.  Important!
+  }
+}, { immediate: true, deep: true }); // immediate: true to run on initial load
+
 </script>
+
 
 
 <style scoped>

@@ -72,5 +72,15 @@ public class BookServiceImpl implements BookService {
             throw new RuntimeException("创建游戏信息失败");
         }
     }
+
+    @Override
+    public Book getBookById(Long id) {
+        return bookMapper.getBookById(id);
+    }
+
+    @Override
+    public void updateBook(Book existingBook) {
+        bookMapper.update(existingBook);
+    }
 }
 

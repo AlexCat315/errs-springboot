@@ -28,4 +28,8 @@ public interface BookMapper {
     List<Book> getInfoBySearch(SearchVO searchVO);
 
     Integer deleteInfo(Long id);
+
+    Book getBookById(Long id);
+
+    Integer update(Book existingBook);
 }

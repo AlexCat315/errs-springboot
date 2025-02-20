@@ -112,7 +112,7 @@ button {
                     此项操作不可逆，请谨慎操作。
                 </p>
                 <p class="message">
-                    确定删除《{{ props.game.gameName }}》吗?这将删除所有相关数据。
+                    确定删除《{{ props.game!.gameName }}》吗?这将删除所有相关数据。
                 </p>
             </div>
             <div class="actions">
@@ -144,7 +144,7 @@ interface Game {
 
 const props = defineProps({
     game: {
-        type: Object as PropType<Game>,
+        type: Object as PropType<Game | null>,
         required: true
     }
 });
@@ -156,7 +156,7 @@ const showGameListCard = () => {
 };
 
 const deleteGameByID = async () => {
-    await delete_game_by_id(props.game.id, () => {
+    await delete_game_by_id(props.game!.id, () => {
         emit('delete:success', false);
     });
 };
