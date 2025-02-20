@@ -1,8 +1,6 @@
 package com.x.backend.pojo.user.dto.game;
 
 import lombok.Data;
-
-import java.time.LocalDate;
 import java.util.Date;
 
 @Data

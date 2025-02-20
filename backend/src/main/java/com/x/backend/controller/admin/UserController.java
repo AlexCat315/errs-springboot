@@ -11,7 +11,6 @@ import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
-import com.x.backend.service.admin.EmailService;
 import com.x.backend.service.admin.UserService;
 import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;

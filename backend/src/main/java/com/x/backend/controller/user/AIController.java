@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.common.Account;
-import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import jakarta.validation.constraints.NotBlank;
@@ -31,8 +30,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -43,8 +40,6 @@ import java.util.stream.Collectors;
 public class AIController {
 
     private static final String API_URL = "https://api.deepseek.com/chat/completions";
-    private static final int SSE_TIMEOUT = 180_000; // 3分钟超时
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Value("${AI.deepseek.api-key}")
@@ -90,6 +85,7 @@ public class AIController {
                 }
 
                 // 读取响应
+                @SuppressWarnings("resource")
                 String responseContent = new BufferedReader(
                         new InputStreamReader(response.getEntity().getContent(), StandardCharsets.UTF_8))
                         .lines()

@@ -6,7 +6,6 @@ import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.service.admin.BookService;
 import jakarta.annotation.Resource;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

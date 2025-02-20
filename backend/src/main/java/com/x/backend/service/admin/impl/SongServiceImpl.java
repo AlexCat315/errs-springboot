@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +26,6 @@ public class SongServiceImpl implements SongService {
 
     @Resource(name = "adminSongMapper")
     private SongMapper songMapper;
-
 
     @Override
     public void save(Song song) {
@@ -114,6 +111,9 @@ public class SongServiceImpl implements SongService {
     @Transactional(rollbackFor = RuntimeException.class)
     @Override
     public void update(Song song) {
-      Integer i =  songMapper.update(song);
+        Integer i = songMapper.update(song);
+        if (i != 1) {
+            throw new RuntimeException("更新歌曲失败");
+        }
     }
 }

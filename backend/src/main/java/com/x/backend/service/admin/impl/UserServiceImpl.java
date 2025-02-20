@@ -31,6 +31,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserRole(UpdateUserRoleVO updateUserRoleVO) {
         Integer i = userMapper.updateUserRole(updateUserRoleVO);
+        if (i != 1) {
+            throw new RuntimeException("更新用户角色失败");
+        }
     }
 
     @Override

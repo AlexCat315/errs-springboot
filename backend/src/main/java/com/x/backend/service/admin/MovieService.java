@@ -5,7 +5,6 @@ import com.x.backend.pojo.admin.vo.request.movie.SearchMovieVO;
 import com.x.backend.pojo.admin.vo.responses.movie.MovieResponsesVO;
 import com.x.backend.pojo.common.Movie;
 import com.x.backend.pojo.common.PageSize;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 

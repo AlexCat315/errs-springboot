@@ -84,9 +84,9 @@ onMounted(() => {
   window.addEventListener('wheel', wheelListener, { passive: false })
 })
 onUnmounted(() => {
-    if (wheelListener) {
-        window.removeEventListener('wheel', wheelListener);
-    }
+  if (wheelListener) {
+    window.removeEventListener('wheel', wheelListener);
+  }
 })
 
 // 推荐类型数据（支持电影、音乐、书籍、游戏）
@@ -207,12 +207,8 @@ const sectionGradients = ref([
   <main class="scroll-container">
     <!-- 导航指示器 -->
     <div class="nav-dots">
-      <div
-        v-for="(_, index) in sections"
-        :key="index"
-        :class="['dot', { active: activeSection === index }]"
-        @click="scrollToSection(index)"
-      ></div>
+      <div v-for="(_, index) in sections" :key="index" :class="['dot', { active: activeSection === index }]"
+        @click="scrollToSection(index)"></div>
     </div>
 
     <!-- 首屏 Hero -->
@@ -232,12 +228,8 @@ const sectionGradients = ref([
       <div class="section-content">
         <h2>核心功能</h2>
         <div class="features-grid">
-          <div
-            v-for="(feat, index) in features"
-            :key="index"
-            class="feature-card"
-            :style="{ backgroundColor: feat.bg }"
-          >
+          <div v-for="(feat, index) in features" :key="index" class="feature-card"
+            :style="{ backgroundColor: feat.bg }">
             <div class="animated-icon">
               <img :src="feat.icon" :alt="feat.title">
             </div>
@@ -253,12 +245,8 @@ const sectionGradients = ref([
       <div class="section-content">
         <h2>支持推荐类型</h2>
         <div class="media-grid">
-          <div
-            v-for="(media, index) in mediaTypes"
-            :key="index"
-            class="media-card"
-            :style="{ '--hover-color': media.color }"
-          >
+          <div v-for="(media, index) in mediaTypes" :key="index" class="media-card"
+            :style="{ '--hover-color': media.color }">
             <img :src="media.icon" :alt="media.type">
             <h3>{{ media.type }}</h3>
             <ul>
@@ -273,7 +261,8 @@ const sectionGradients = ref([
     <section id="ai" class="full-screen ai-section" :style="{ background: sectionGradients[3] }">
       <div class="section-content ai-content">
         <div class="ai-demo">
-        <img src="src/assets/img/home/ai-demo.gif" alt="AI 演示">        </div>
+          <img src="src/assets/img/home/ai-demo.gif" alt="AI 演示">
+        </div>
         <div class="ai-description">
           <h2>DeepSeek AI 深度集成</h2>
           <ul>
@@ -291,11 +280,7 @@ const sectionGradients = ref([
       <div class="section-content">
         <h2>应用界面预览</h2>
         <div class="gallery">
-          <div
-            v-for="(screen, index) in screenshots"
-            :key="index"
-            class="screenshot-item"
-          >
+          <div v-for="(screen, index) in screenshots" :key="index" class="screenshot-item">
             <img :src="screen.img" :alt="screen.title" class="screenshot-img">
             <div class="screenshot-info">
               <h3>{{ screen.title }}</h3>
@@ -311,18 +296,14 @@ const sectionGradients = ref([
       <div class="section-content">
         <h2>立即体验</h2>
         <div class="download-grid">
-        <a
-          v-for="(item, index) in downloads"
-          :key="index"
-          class="download-card"
-          @click.prevent="handleDownload(item.osType)"
-        >
-          <img :src="item.icon" :alt="item.os">
-          <div class="os-info">
-            <span>{{ item.os }}</span>
-            <small>最新版本 v0.1.1</small>
-          </div>
-        </a>
+          <a v-for="(item, index) in downloads" :key="index" class="download-card"
+            @click.prevent="handleDownload(item.osType)">
+            <img :src="item.icon" :alt="item.os">
+            <div class="os-info">
+              <span>{{ item.os }}</span>
+              <small>最新版本 v0.1.1</small>
+            </div>
+          </a>
         </div>
       </div>
     </section>
@@ -346,9 +327,12 @@ const sectionGradients = ref([
   padding: 4rem;
   box-sizing: border-box;
   position: relative;
-  color: #fff; /* 默认文字颜色改为白色 */
-  background-size: 200% 200%; /* Larger background size for animation */
-  transition: background 0.8s ease; /* Keep transition for other background changes if needed, and increase duration for smoother transition */
+  color: #fff;
+  /* 默认文字颜色改为白色 */
+  background-size: 200% 200%;
+  /* Larger background size for animation */
+  transition: background 0.8s ease;
+  /* Keep transition for other background changes if needed, and increase duration for smoother transition */
 }
 
 
@@ -360,15 +344,17 @@ const sectionGradients = ref([
   transform: translateY(-50%);
   z-index: 100;
 }
+
 .dot {
   width: 12px;
   height: 12px;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   margin: 1rem 0;
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
 .dot.active {
   background: #fff;
   transform: scale(1.4);
@@ -376,9 +362,17 @@ const sectionGradients = ref([
 
 /* 通用内容动效 */
 @keyframes fadeInSlide {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+
 .section-content {
   animation: fadeInSlide 1s ease-out;
   text-align: center;
@@ -393,17 +387,21 @@ const sectionGradients = ref([
   color: #fff;
   position: relative;
 }
+
 .logo {
   font-size: 4.5rem;
   animation: float 3s ease-in-out infinite;
 }
+
 .logo span {
   color: #ff7f50;
 }
+
 .slogan {
   font-size: 1.5rem;
   margin-top: 1rem;
 }
+
 .scroll-hint {
   margin-top: 3rem;
   display: flex;
@@ -411,6 +409,7 @@ const sectionGradients = ref([
   align-items: center;
   gap: 0.5rem;
 }
+
 .mouse {
   width: 24px;
   height: 40px;
@@ -418,6 +417,7 @@ const sectionGradients = ref([
   border-radius: 12px;
   position: relative;
 }
+
 .mouse::after {
   content: '';
   position: absolute;
@@ -433,35 +433,54 @@ const sectionGradients = ref([
 
 /* LOGO 浮动动画 */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
 }
 
 /* 鼠标滚动动画 */
 @keyframes scroll {
-  0% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(10px); }
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 }
 
 /* 功能特性 Section */
 .features-section {
-  color: #fff; /* 文字颜色为白色 */
+  color: #fff;
+  /* 文字颜色为白色 */
 }
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
+
 .feature-card {
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* 阴影颜色调整 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* 阴影颜色调整 */
   transition: transform 0.3s ease;
 }
+
 .feature-card:hover {
   transform: translateY(-10px);
 }
+
 .animated-icon img {
   width: 64px;
   height: 64px;
@@ -470,24 +489,31 @@ const sectionGradients = ref([
 
 /* 推荐类型 Section */
 .types-section {
-  color: #fff; /* 文字颜色为白色 */
+  color: #fff;
+  /* 文字颜色为白色 */
 }
+
 .media-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
 }
+
 .media-card {
   padding: 1.5rem;
   border-radius: 12px;
-  background: #212121; /* 深色卡片背景 */
+  background: #212121;
+  /* 深色卡片背景 */
   transition: transform 0.3s, box-shadow 0.3s;
 }
+
 .media-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5); /* 阴影颜色调整 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  /* 阴影颜色调整 */
 }
+
 .media-card img {
   width: 48px;
   height: 48px;
@@ -501,6 +527,7 @@ const sectionGradients = ref([
   align-items: center;
   justify-content: center;
 }
+
 .ai-content {
   display: flex;
   flex-wrap: wrap;
@@ -508,15 +535,18 @@ const sectionGradients = ref([
   justify-content: center;
   gap: 2rem;
 }
+
 .ai-demo img {
   width: 300px;
   border-radius: 12px;
 }
+
 .ai-description ul {
   list-style: none;
   padding: 0;
   text-align: left;
 }
+
 .ai-description li {
   margin: 0.5rem 0;
   font-size: 1.1rem;
@@ -540,13 +570,14 @@ const sectionGradients = ref([
   overflow: hidden;
   border-radius: 16px;
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   perspective: 1000px;
 }
 
 .screenshot-item:hover {
   transform: scale(1.08) rotateY(2deg);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); /* 阴影颜色调整 */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  /* 阴影颜色调整 */
 }
 
 .screenshot-img {
@@ -565,7 +596,8 @@ const sectionGradients = ref([
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.7); /* 略微调整透明度 */
+  background: rgba(0, 0, 0, 0.7);
+  /* 略微调整透明度 */
   color: #fff;
   padding: 1rem;
   transform: translateY(100%);
@@ -582,6 +614,7 @@ const sectionGradients = ref([
 .download-section {
   color: #fff;
 }
+
 .download-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -589,8 +622,9 @@ const sectionGradients = ref([
   margin-top: 2rem;
   justify-items: center;
 }
+
 .download-card {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border-radius: 15px;
   padding: 2rem;
@@ -601,21 +635,25 @@ const sectionGradients = ref([
   flex-direction: column;
   align-items: center;
 }
+
 .download-card:hover {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   transform: scale(1.05);
   /* 鼠标设为手型 */
   cursor: pointer;
 }
+
 .download-card img {
   width: 48px;
   height: 48px;
   margin-bottom: 1rem;
 }
+
 .os-info span {
   font-size: 1.2rem;
   font-weight: bold;
 }
+
 .os-info small {
   font-size: 0.9rem;
   opacity: 0.8;
@@ -628,39 +666,47 @@ const sectionGradients = ref([
     height: auto;
     min-height: 100vh;
   }
+
   .logo {
     font-size: 3rem;
   }
+
   .features-grid,
   .media-grid,
   .download-grid,
   .gallery {
     grid-template-columns: 1fr;
   }
+
   .ai-content {
     flex-direction: column;
   }
 }
+
 /* 截图预览 Section */
 .screenshots-section {
   padding: 4rem 2rem;
 }
+
 .gallery {
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   margin-top: 2rem;
 }
+
 .screenshot-item {
   border-radius: 16px;
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1),
-              box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
+
 .screenshot-img {
   border-radius: 16px;
 }
 
 @media screen and (min-width: 768px) {
-     img[alt="AI 演示"] {
-       width: 700px; /* 在大屏幕上设置固定宽度为 700px */
-     }
-   }
+  img[alt="AI 演示"] {
+    width: 700px;
+    /* 在大屏幕上设置固定宽度为 700px */
+  }
+}
 </style>

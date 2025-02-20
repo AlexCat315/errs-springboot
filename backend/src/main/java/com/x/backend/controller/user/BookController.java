@@ -4,7 +4,6 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Book;
-import com.x.backend.pojo.user.dto.book.CommentDTO;
 import com.x.backend.pojo.user.dto.book.IsLikeBook;
 import com.x.backend.pojo.user.dto.book.ScoreDTO;
 import com.x.backend.pojo.user.entity.UserAccount;
@@ -16,7 +15,6 @@ import com.x.backend.util.JWTUtils;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

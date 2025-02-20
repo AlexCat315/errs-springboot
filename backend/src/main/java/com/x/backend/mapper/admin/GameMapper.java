@@ -1,7 +1,6 @@
 package com.x.backend.mapper.admin;
 
 import com.x.backend.pojo.admin.dto.game.SearchDTO;
-import com.x.backend.pojo.admin.vo.request.game.SearchVO;
 import com.x.backend.pojo.common.Game;
 import com.x.backend.pojo.common.PageSize;
 import org.apache.ibatis.annotations.Mapper;

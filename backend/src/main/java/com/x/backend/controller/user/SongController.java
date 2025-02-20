@@ -8,11 +8,8 @@ import com.x.backend.pojo.user.vo.request.song.SearchSongVO;
 import com.x.backend.pojo.user.vo.request.song.UpdateSongScoreUsersVO;
 import com.x.backend.pojo.user.vo.responses.song.SongVO;
 import com.x.backend.service.user.SongService;
-import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

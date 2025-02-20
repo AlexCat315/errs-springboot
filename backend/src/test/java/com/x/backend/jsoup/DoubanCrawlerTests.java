@@ -1,21 +1,10 @@
 package com.x.backend.jsoup;
 
 import com.x.backend.mapper.admin.BookMapper;
-import com.x.backend.pojo.common.Book;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @SpringBootTest
