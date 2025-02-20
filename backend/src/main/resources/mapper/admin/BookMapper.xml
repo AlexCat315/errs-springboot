@@ -4,8 +4,8 @@
 
     <!-- insertBook -->
     <insert id="insertBook">
-        insert into book(name, author, description, rating, users, img, introduction)
-        values (#{name}, #{author}, #{description}, #{rating}, #{users}, #{img}, #{introduction})
+        insert into book(name, author, description, rating, users, img, introduction, create_time,recommend)
+        values (#{name}, #{author}, #{description}, #{rating}, #{users}, #{img}, #{introduction},#{createTime},#{recommend})
     </insert>
 
     <!--  给书籍评分  -->
@@ -37,4 +37,25 @@
         WHERE b_id = #{bId}
           and a_id = #{aId};
     </delete>
+    <delete id="deleteInfo">
+        DELETE
+        FROM book
+        WHERE id = #{id};
+    </delete>
+    <select id="getAllGameInfo" resultType="com.x.backend.pojo.common.Book">
+        select *
+        from book
+        ORDER BY rating DESC
+        LIMIT #{start} ,#{size}
+    </select>
+    <select id="getInfoBySearch" resultType="com.x.backend.pojo.common.Book">
+        select *
+        from book
+        where name like CONCAT('%', #{searchText}, '%')
+        or author like CONCAT('%', #{searchText}, '%')
+        or description like CONCAT('%', #{searchText}, '%')
+        or introduction like CONCAT('%', #{searchText}, '%')
+        ORDER BY rating DESC
+        LIMIT #{start} ,#{size}
+    </select>
 </mapper>
