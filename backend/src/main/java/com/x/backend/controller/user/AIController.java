@@ -59,7 +59,7 @@ public class AIController {
             @RequestParam @NotBlank(message = "问题不能为空") String question) {
 
         try (CloseableHttpClient client = HttpClients.createDefault()) {
-            limitAccessCount();
+
             // 构建请求
             HttpPost request = new HttpPost(API_URL);
             request.setHeader("Content-Type", "application/json");
@@ -106,6 +106,7 @@ public class AIController {
                 // 返回结果
                 Map<String, String> result = new HashMap<>();
                 result.put("answer", answer);
+                limitAccessCount();
                 return ResponseEntity.ok(result);
             }
         } catch (Exception e) {
@@ -134,7 +135,7 @@ public class AIController {
                 ArrayNode messages = objectMapper.createArrayNode();
                 messages.add(objectMapper.createObjectNode()
                         .put("role", "system")
-                        .put("content", "You are a helpful assistant specialized in recommending entertainment content."));
+                        .put("content", "您是一位乐于助人的助手，专门推荐娱乐内容。在接下来的回答中请回答中文，回答要求尽可能符合markdown格式。"));
                 messages.add(objectMapper.createObjectNode()
                         .put("role", "user")
                         .put("content", question));
@@ -170,6 +171,7 @@ public class AIController {
                         }
                     }
                 }
+                limitAccessCount();
             } catch (Exception e) {
                 log.error("Chat stream error", e);
                 String errorMessage = "data: {\"error\": \"" + e.getMessage() + "\"}\n\n";
