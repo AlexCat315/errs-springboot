@@ -1,6 +1,6 @@
 <script setup>
-import {onBeforeUnmount, provide, ref} from 'vue';
-import {verifyToken} from "./net/token.ts";
+import { onBeforeUnmount, provide, ref } from 'vue';
+import { verifyToken } from "./net/token.ts";
 
 // 定义全局变量
 const globalSelect = ref("1");
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 <template>
   <router-view v-slot="{ Component }">
     <transition name="scale" mode="out-in">
-      <component :is="Component"/>
+      <component :is="Component" />
     </transition>
   </router-view>
 </template>
@@ -64,7 +64,9 @@ body,
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-.scale-enter-active, .scale-leave-active {
+
+.scale-enter-active,
+.scale-leave-active {
   transition: transform 0.5s, opacity 0.5s;
 }
 

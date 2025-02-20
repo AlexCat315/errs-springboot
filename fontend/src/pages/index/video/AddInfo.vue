@@ -67,26 +67,14 @@
                     </el-form-item>
                 </div>
                 <div style="display: flex">
-                <el-form-item label="评分" prop="rating">
-                    <div style="display: flex; align-items: center">
-                        <el-rate 
-                            v-model="movieForm.rating" 
-                            :max="5" 
-                            :allow-half="true" 
-                            show-score
-                            @change="handleRateChange" 
-                        />
-                        <el-input-number 
-                            v-model="movieForm.rating" 
-                            :min="0" 
-                            :max="5" 
-                            :step="0.1"  
-                            :precision="1"  
-                            style="margin-left: 20px" 
-                            @change="handleInputChange" 
-                        />
-                    </div>
-                </el-form-item>
+                    <el-form-item label="评分" prop="rating">
+                        <div style="display: flex; align-items: center">
+                            <el-rate v-model="movieForm.rating" :max="5" :allow-half="true" show-score
+                                @change="handleRateChange" />
+                            <el-input-number v-model="movieForm.rating" :min="0" :max="5" :step="0.1" :precision="1"
+                                style="margin-left: 20px" @change="handleInputChange" />
+                        </div>
+                    </el-form-item>
                     <el-form-item style="margin-left: 70px" label="评价人数" prop="users">
                         <el-input-number v-model="movieForm.users" :min="0" />
                     </el-form-item>
@@ -136,6 +124,7 @@ import type { FormInstance, FormRules, UploadFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { postFormData, defaultFailure } from "../../../net/post"; // 导入封装方法
 import { ElMessage } from "element-plus";
+import { throws } from "assert";
 
 interface MovieForm {
     name: string;
@@ -290,7 +279,9 @@ const submitForm = async () => {
 
 const isUploadVisible = ref(true);
 const resetForm = () => {
-
+    if (formRef.value === undefined) {
+        throw new Error("formRef is undefined");
+    }
     formRef.value.resetFields();
     showFileReset();
     // 隐藏组件
