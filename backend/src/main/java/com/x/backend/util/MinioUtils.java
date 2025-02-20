@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
@@ -184,5 +185,30 @@ public class MinioUtils {
             throw new RuntimeException("该访问性不合法");
         }
     }
+    // 新增方法：获取文件元数据
+    public StatObjectResponse getFileStat(String fileName, String accessibility) throws Exception {
+        try {
+            return minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket(accessibility.equals("public") ? pubBucketName : bucketName)
+                            .object(fileName)
+                            .build()
+            );
+        } catch (ErrorResponseException e) {
+            if (e.errorResponse().code().equals("NoSuchKey")) {
+                throw new FileNotFoundException("文件不存在: " + fileName);
+            }
+            throw e;
+        }
+    }
 
+    // 公共版本方法
+    public StatObjectResponse pubGetFileStat(String fileName) throws Exception {
+        return getFileStat(fileName, "public");
+    }
+
+    // 私有版本方法
+    public StatObjectResponse privGetFileStat(String fileName) throws Exception {
+        return getFileStat(fileName, "private");
+    }
 }

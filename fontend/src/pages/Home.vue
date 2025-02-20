@@ -30,6 +30,7 @@ const scrollToSection = (index) => {
   })
 }
 
+
 // 动态图标及功能特性（保留原有逻辑，并增加动效）
 const platformIcons = ref([
   'src/assets/img/home/windows.png',
@@ -75,13 +76,13 @@ onUnmounted(() => {
 const mediaTypes = ref([
   {
     type: '电影',
-    icon: 'src/assets/img/home/movie.png',
+    icon: 'src/assets/img/home/电影.png',
     examples: ['肖申克的救赎', '星际穿越', '霸王别姬'],
     color: '#ff6b6b'
   },
   {
     type: '音乐',
-    icon: 'src/assets/img/home/music.png',
+    icon: 'src/assets/img/home/音乐.png',
     examples: ['古典交响乐', '独立摇滚', '电子音乐'],
     color: '#4ecdc4'
   },
@@ -93,7 +94,7 @@ const mediaTypes = ref([
   },
   {
     type: '游戏',
-    icon: 'src/assets/img/home/game.png',
+    icon: 'src/assets/img/home/游戏.png',
     examples: ['塞尔达传说', '原神', '巫师3'],
     color: '#96ceb4'
   }
@@ -135,15 +136,67 @@ const screenshots = ref([
     img: 'src/assets/img/home/show/电影.png',
     title: '电影展示',
     desc: '最热门的电影推荐'
+  },
+  {
+    img: 'src/assets/img/home/show/搜索.png',
+    title: '搜索',
+    desc: '智慧赋能，探索无限可能'
+  },
+  {
+    img: 'src/assets/img/home/show/设置.png',
+    title: '设置',
+    desc: '一键设置，轻松定制'
+  },
+])
+const downloads = ref([
+  { 
+    os: 'Windows', 
+    osType: 'windows',
+    icon: 'src/assets/img/home/windows.png'
+  },
+  { 
+    os: 'macOS', 
+    osType: 'macos',
+    icon: 'src/assets/img/home/macOS.png'
+  },
+  { 
+    os: 'Linux', 
+    osType: 'linux',
+    icon: 'src/assets/img/home/linux.png'
   }
 ])
+const handleDownload = async (osType) => {
+  try {
+    const response = await fetch(`/api/download/${osType}`)
+    
+    if (!response.ok) {
+      const error = await response.text()
+      throw new Error(error)
+    }
 
-// 下载选项
-const downloads = ref([
-  { os: 'Windows', icon: 'src/assets/img/home/windows.png', link: '#' },
-  { os: 'macOS', icon: 'src/assets/img/home/macOS.png', link: '#' },
-  { os: 'Linux', icon: 'src/assets/img/home/linux.png', link: '#' }
-])
+    const blob = await response.blob()
+    const url = URL.createObjectURL(blob)
+    
+    // 自动提取文件名
+    const disposition = response.headers.get('Content-Disposition')
+    const filename = disposition?.split('filename=')[1]?.replace(/"/g, '') || `RevoCat-${osType}`
+    
+    // 创建隐藏的下载链接
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    
+    // 清理资源
+    URL.revokeObjectURL(url)
+    document.body.removeChild(link)
+    
+  } catch (error) {
+    alert(`下载失败: ${error.message}`)
+    console.error('下载错误:', error)
+  }
+}
 </script>
 
 <template>
@@ -216,7 +269,7 @@ const downloads = ref([
     <section id="ai" class="full-screen ai-section">
       <div class="section-content ai-content">
         <div class="ai-demo">
-          <img src="src/assets/img/home/ai-demo.gif" alt="AI 演示">
+          <img style="width: 700px; height: auto;" src="src/assets/img/home/ai-demo.gif" alt="AI 演示">
         </div>
         <div class="ai-description">
           <h2>DeepSeek AI 深度集成</h2>
@@ -230,7 +283,7 @@ const downloads = ref([
       </div>
     </section>
 
-    <!-- 应用界面截图 -->
+    <!-- 截图预览 Section（应用界面预览） -->
     <section id="screenshots" class="full-screen screenshots-section">
       <div class="section-content">
         <h2>应用界面预览</h2>
@@ -255,18 +308,18 @@ const downloads = ref([
       <div class="section-content">
         <h2>立即体验</h2>
         <div class="download-grid">
-          <a 
-            v-for="(item, index) in downloads"
-            :key="index"
-            :href="item.link"
-            class="download-card"
-          >
-            <img :src="item.icon" :alt="item.os">
-            <div class="os-info">
-              <span>{{ item.os }}</span>
-              <small>最新版本 v1.2.0</small>
-            </div>
-          </a>
+        <a 
+          v-for="(item, index) in downloads"
+          :key="index"
+          class="download-card"
+          @click.prevent="handleDownload(item.osType)"
+        >
+          <img :src="item.icon" :alt="item.os">
+          <div class="os-info">
+            <span>{{ item.os }}</span>
+            <small>最新版本 v0.1.1</small>
+          </div>
+        </a>
         </div>
       </div>
     </section>
@@ -569,4 +622,61 @@ const downloads = ref([
     flex-direction: column;
   }
 }
+/* 截图预览 Section */
+.screenshots-section {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  padding: 4rem 2rem;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.screenshot-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), 
+              box-shadow 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  perspective: 1000px;
+}
+
+.screenshot-item:hover {
+  transform: scale(1.08) rotateY(2deg);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.screenshot-img {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  transition: transform 0.4s ease;
+}
+
+.screenshot-item:hover .screenshot-img {
+  transform: scale(1.05);
+}
+
+.screenshot-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  padding: 1rem;
+  transform: translateY(100%);
+  transition: transform 0.4s ease;
+  backdrop-filter: blur(4px);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.screenshot-item:hover .screenshot-info {
+  transform: translateY(0);
+}
+
 </style>

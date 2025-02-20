@@ -104,6 +104,10 @@ AI:
   deepseek:
     api-key: sk-618a06603baf40e39aefdaf3e536536b
 
+download:
+  speed-limit: 512000    # 500KB/s (500*1024)
+  buffer-size: 8192      # 8KB缓冲区
+
 
 
 
