@@ -115,14 +115,14 @@ public class AccountController {
             boolean result = registerVo.getCode().equals(redisCode);
             if (result) {
                 if (registerVo.getPassword().equals(registerVo.getRepeatPassword())) {
-                    return  creatAccount(registerVo);
+                    return creatAccount(registerVo);
                 }
                 return ResultEntity.failure(HttpMessageConstants.PASSWORD_NOT_MATCH);
             } else {
                 return ResultEntity.failure(HttpMessageConstants.VERIFICATION_CODE_EXPIRED);
             }
         } catch (DuplicateKeyException e) {
-           return  creatAccount(registerVo);
+            return creatAccount(registerVo);
         } catch (Exception exception) {
             return ResultEntity.serverError();
         }
@@ -181,7 +181,8 @@ public class AccountController {
             Integer id = jwtUtils.getId(jwt);
             Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
-            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                    timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
             return ResultEntity.failure(e.getMessage());

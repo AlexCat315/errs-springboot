@@ -58,14 +58,14 @@ const toAppVerify = async () => {
   showQRCode.value = true;
   showAppVerify.value = true;
   await nextTick();
-  generateQRCode();
+  generateQRCode(); // Call the correct function name
 };
 
 const toWeChatVerify = async () => {
   showQRCode.value = true;
   showWeChatVerify.value = true;
   await nextTick();
-  generateQRCode();
+  generateQRCode(); // Call the correct function name
 };
 
 const qrcodeCanvas = ref<HTMLCanvasElement | null>(null);
@@ -79,25 +79,131 @@ const qrOptions = ref({
   },
 });
 
-const generateQRCode = () => {
-  if (qrcodeCanvas.value) {
-    text.value = "https://example.com"; // 使用固定的URL
-    QRCode.toCanvas(
-      qrcodeCanvas.value,
-      text.value,
-      qrOptions.value,
-      (error) => {
-        if (error) {
-          errorMessage.value = "Failed to generate QR code: " + error.message;
-        } else {
-          errorMessage.value = "";
-        }
-      }
-    );
-  } else {
-    errorMessage.value = "Canvas not found.";
+import { invoke } from "@tauri-apps/api/core";
+const getMacAddress = async () => {
+  try {
+    const macAddress = await invoke<string>('get_mac_address');
+
+    // 添加有效性验证
+    const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
+    if (!macRegex.test(macAddress)) {
+      throw new Error('Invalid MAC address format');
+    }
+
+    console.log("Valid MAC Address:", macAddress);
+    return macAddress;
+  } catch (error) {
+    console.error('Failed to get MAC:', error);
+
+    // 生产环境建议的降级处理
+    return navigator.userAgentData?.platform || 'unknown-device';
   }
 };
+
+// 生成二维码
+const generateQRCode = async () => {
+  const macId = await getMacAddress();
+  console.log("获取到的macId:", macId); // 打印 macId 以便检查
+
+  if (!macId) {
+    errorMessage.value = "获取MAC地址失败，无法生成二维码。"; // 显示错误信息
+    showMessage.value = true;
+    messageInfo.value = errorMessage.value;
+    messageType.value = "error";
+    setTimeout(() => {
+      showMessage.value = false;
+    }, 3000);
+    return; // 停止后续操作
+  }
+
+  try {
+    const response = await fetch(`http://127.0.0.1:12345/api/wx/getWechatQtCode?mac_id=${macId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ mac_id: macId })
+    });
+
+    if (!response.ok) { // 检查 response.ok (状态码 2xx 表示成功)
+      const errorData = await response.json(); // 尝试解析错误响应 JSON
+      console.error("获取二维码失败，服务器返回错误:", errorData);
+      errorMessage.value = `二维码获取失败: ${response.status} ${response.statusText} - ${errorData.error || '请查看控制台详细错误信息'}`;
+      showMessage.value = true;
+      messageInfo.value = errorMessage.value;
+      messageType.value = "error";
+      setTimeout(() => {
+        showMessage.value = false;
+      }, 3000);
+      return; // 停止后续操作
+    }
+
+    const data = await response.json();
+    console.log("二维码接口返回数据:", data.url);
+    console.log("二维码接口返回数据:", data);
+
+    if (data && data.url && qrcodeCanvas.value) { // 确保 data, data.url 和 canvas 存在
+      QRCode.toCanvas(qrcodeCanvas.value, data.url);
+      startPolling(macId); // 开始轮询
+    } else {
+      errorMessage.value = "二维码数据解析失败，无法生成二维码。"; // 显示错误信息
+      showMessage.value = true;
+      messageInfo.value = errorMessage.value;
+      messageType.value = "error";
+      setTimeout(() => {
+        showMessage.value = false;
+      }, 3000);
+      console.error("二维码数据结构不正确或 canvas 不存在", data);
+    }
+
+  } catch (error) {
+    console.error("请求二维码接口出错:", error);
+    errorMessage.value = "请求二维码接口时发生错误，请检查网络或稍后重试。";
+    showMessage.value = true;
+    messageInfo.value = errorMessage.value;
+    messageType.value = "error";
+    setTimeout(() => {
+      showMessage.value = false;
+    }, 3000);
+  }
+};
+
+// 轮询检查状态
+const startPolling = (macId) => {
+  const poll = setInterval(async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:12345/api/wx/checkLoginStatus?mac_id=${macId}`);
+      const result = await response.json();
+      console.log("result:{}", result);
+
+      if (result.code === 200) {  // 200 代表成功
+        console.log("登录成功，用户信息：", result.data);
+        handleLoginSuccess(result.data); // 处理登录成功（存储Token或跳转）
+        clearInterval(poll); // 停止轮询
+        showError("登录成功");
+        globalShowSetting.value = true;
+      } else {
+        console.warn("登录状态:", result.message);
+        if (result.code === 400) {
+          showError("请重新扫码或使用其他方式登录");
+        } else if (result.code === 500) {
+          showError("服务器错误，请稍后再试");
+        }
+      }
+    } catch (error) {
+      console.error("请求失败:", error);
+      showError("网络错误，请检查连接");
+      clearInterval(poll);
+    }
+  }, 2000); // 每2秒轮询一次
+};
+
+// 处理成功登录
+const handleLoginSuccess = (userData) => {
+  localStorage.setItem("token", userData); // 假设 data 是 Token，存储到本地
+
+};
+
 const toLogin = () => {
   showAppVerify.value = false;
   showQRCode.value = false;
@@ -119,6 +225,15 @@ const showForgot = () => {
   }
 };
 
+// Example showError function - you can adapt it to your needs
+const showError = (message: string) => {
+  showMessage.value = true;
+  messageInfo.value = message;
+  messageType.value = "error";
+  setTimeout(() => {
+    showMessage.value = false;
+  }, 2000);
+};
 
 
 </script>

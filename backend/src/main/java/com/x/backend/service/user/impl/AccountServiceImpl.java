@@ -149,4 +149,12 @@ public class AccountServiceImpl implements AccountService {
         accountMapper.forgotPassword(forgotPasswordDTO);
     }
 
+    @Override
+    public Account getByUsername(String openid) {
+        return accountMapper.findAccountByUsername(openid);
+    }
+
+
+    
+
 }

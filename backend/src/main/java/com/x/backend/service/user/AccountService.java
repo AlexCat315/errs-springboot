@@ -14,4 +14,5 @@ public interface AccountService {
     ResultEntity<String> register(Account account);
     void sendCodeForgotPassword(String email);
     void forgotPassword(ForgotPassowrdVo forgotPassowrdVo);
+    Account getByUsername(String openid);
 }
