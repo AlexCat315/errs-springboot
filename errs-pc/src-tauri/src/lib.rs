@@ -5,7 +5,7 @@ use crate::http_client::{get_request, post_request};
 use crate::utils::gpu_utils::set_gpu_acceleration;
 use crate::utils::img_utils::{conflate_img, get_img_names};
 use crate::utils::theme_utils::get_system_theme;
-use crate::utils::mac_utils::get_mac_address;
+use crate::utils::mac_utils::get_one_address;
 use tauri::Manager;
 use tauri_plugin_autostart::MacosLauncher;
 
@@ -49,7 +49,7 @@ pub fn run() {
             get_img_names,
             get_system_theme,
             set_gpu_acceleration,
-            get_mac_address
+            get_one_address
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

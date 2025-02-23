@@ -14,6 +14,11 @@ provide("globalSearch", globalSearch);
 const globalTheme = ref("");
 const theme = ref("");
 
+const baseDevUrl = "http://localhost:12345";
+const baseProdUrl = "https://www.alexcat.it.com";
+const globalBaseUrl = ref(baseDevUrl);
+provide("globalBaseUrl", globalBaseUrl);
+
 // 定时器
 setInterval(() => {
     const theme = ref(localStorage.getItem("theme"));

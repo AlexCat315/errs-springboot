@@ -9,4 +9,6 @@ const app = createApp(App)
 app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
-axios.defaults.baseURL='http://127.0.0.1:12345'
+const baseDevUrl = "http://127.0.0.1:12345"
+const baseProdUrl = "https://www.alexcat.it.com"
+axios.defaults.baseURL = baseDevUrl

@@ -6,15 +6,12 @@ import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Account;
-import com.x.backend.pojo.user.entity.UserAccount;
 import com.x.backend.pojo.user.vo.request.account.LoginVo;
 import com.x.backend.service.user.AccountService;
 import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
 import com.x.backend.util.TimeUtils;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.http.HttpUtil; // 引入 HttpUtil  (为了 HttpClientUtil.httpGet, 假设是hutool的)
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;

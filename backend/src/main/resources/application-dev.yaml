@@ -114,4 +114,4 @@ wechat:
   token: sk-9321232324chsjjww1234567890
   app-id: wx983f2f7a111280fc
   app-secret:  0eb801ae864510d2266443a93f25c8ad 
-  redirect_uri: https://5a3dc9dcf271478e8a35b7273633aa83.loophole.site/api/wx/callback
+  redirect_uri: https://45a72ab7598bf11db6c52e29c3878a01.loophole.site/api/wx/callback

@@ -1,12 +1,15 @@
 package com.x.backend.jsoup;
 
 import com.x.backend.mapper.admin.BookMapper;
+import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
+@Slf4j
 @SpringBootTest
 public class DoubanCrawlerTests {
 
@@ -14,6 +17,12 @@ public class DoubanCrawlerTests {
     private MinioUtils minioUtils;
     @Resource(name = "adminBookMapper")
     private BookMapper bookMapper;
+    @Resource
+    private EncryptUtils encryptUtils;
+    @Test
+    void tset() throws Exception {
+       log.error("{}", encryptUtils.encryptPassword("chenyike203315.."));
+    }
 
     @Test
     void movieTop250Test() throws Exception {

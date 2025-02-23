@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
-
-const baseUrl = "http://127.0.0.1:12345";
+const baseDevUrl = "http://localhost:12345";
+const baseProdUrl = "https://www.alexcat.it.com";
+const baseUrl = baseProdUrl;
 
 function accessHeader() {
   if (

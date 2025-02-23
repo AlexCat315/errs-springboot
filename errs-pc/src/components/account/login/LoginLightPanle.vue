@@ -7,6 +7,10 @@ import QRCode from "qrcode";
 
 const globalShowSetting = inject<Ref<boolean>>("globalShowSetting");
 const globalSelect = inject<Ref<number>>("globalSelect");
+const baseDevUrl = "http://localhost:12345";
+const baseProdUrl = "https://www.alexcat.it.com";
+const baseUrl = baseProdUrl;
+
 
 const loginForm = ref({
   username: "",
@@ -80,29 +84,47 @@ const qrOptions = ref({
 });
 
 import { invoke } from "@tauri-apps/api/core";
-const getMacAddress = async () => {
+const generateDeviceId = async () => {
   try {
-    const macAddress = await invoke<string>('get_mac_address');
+    // 硬件层特征
+    const mac = await invoke<string>('get_mac_address');
+    const macHash = await hashData(mac);
+    
+    // 软件层特征
+    const osFingerprint = [
+      navigator.platform,
+      navigator.userAgent,
+      screen.availWidth,
+      screen.availHeight,
+      navigator.hardwareConcurrency
+    ].join('|');
+    
+    // 混合哈希
+    const finalHash = await hashData(macHash + osFingerprint);
+    return finalHash.slice(0, 16); // 返回16位HEX
 
-    // 添加有效性验证
-    const macRegex = /^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/;
-    if (!macRegex.test(macAddress)) {
-      throw new Error('Invalid MAC address format');
-    }
-
-    console.log("Valid MAC Address:", macAddress);
-    return macAddress;
   } catch (error) {
-    console.error('Failed to get MAC:', error);
-
-    // 生产环境建议的降级处理
-    return navigator.userAgentData?.platform || 'unknown-device';
+    // 降级方案
+    return hashData(JSON.stringify({
+      platform: navigator.platform,
+      ua: navigator.userAgent,
+      ts: Date.now()
+    })).then(h => h.slice(0, 16));
   }
+};
+
+// 通用哈希工具
+const hashData = async (data: string) => {
+  const encoder = new TextEncoder();
+  const buffer = await crypto.subtle.digest('SHA-256', encoder.encode(data));
+  return Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
 };
 
 // 生成二维码
 const generateQRCode = async () => {
-  const macId = await getMacAddress();
+  const macId = await generateDeviceId();
   console.log("获取到的macId:", macId); // 打印 macId 以便检查
 
   if (!macId) {
@@ -117,7 +139,7 @@ const generateQRCode = async () => {
   }
 
   try {
-    const response = await fetch(`http://127.0.0.1:12345/api/wx/getWechatQtCode?mac_id=${macId}`, {
+    const response = await fetch(`${baseUrl}/api/wx/getWechatQtCode?mac_id=${macId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -47,9 +47,9 @@ const scrollToSection = (index) => {
 
 // 动态图标及功能特性（保留原有逻辑，并增加动效）
 const platformIcons = ref([
-  'src/assets/img/home/windows.png',
-  'src/assets/img/home/macOS.png',
-  'src/assets/img/home/linux.png'
+  '/assets/img/home/windows.png',
+  '/assets/img/home/macos.png',
+  '/assets/img/home/linux.png'
 ])
 const features = ref([
   {
@@ -62,13 +62,13 @@ const features = ref([
   {
     title: '智能推荐',
     desc: '接入深度推理 AI 模型 DeepSeek，提供精准的个性化推荐',
-    icon: 'src/assets/img/home/deepseek.png',
+    icon: '/assets/img/home/deepseek.png',
     bg: '#212121' // 黑色背景
   },
   {
     title: '多类型评分',
     desc: '支持电影、书籍、音乐等文娱内容评分',
-    icon: 'src/assets/img/home/评分.png',
+    icon: '/assets/img/home/评分.png',
     bg: '#212121' // 黑色背景
   }
 ])
@@ -93,25 +93,25 @@ onUnmounted(() => {
 const mediaTypes = ref([
   {
     type: '电影',
-    icon: 'src/assets/img/home/电影.png',
+    icon: '/assets/img/home/电影.png',
     examples: ['肖申克的救赎', '星际穿越', '霸王别姬'],
     color: '#ff6b6b'
   },
   {
     type: '音乐',
-    icon: 'src/assets/img/home/音乐.png',
+    icon: '/assets/img/home/音乐.png',
     examples: ['古典交响乐', '独立摇滚', '电子音乐'],
     color: '#4ecdc4'
   },
   {
     type: '书籍',
-    icon: 'src/assets/img/home/book.png',
+    icon: '/assets/img/home/book.png',
     examples: ['百年孤独', '三体', '人类简史'],
     color: '#45b7d1'
   },
   {
     type: '游戏',
-    icon: 'src/assets/img/home/游戏.png',
+    icon: '/assets/img/home/游戏.png',
     examples: ['塞尔达传说', '原神', '巫师3'],
     color: '#96ceb4'
   }
@@ -120,71 +120,72 @@ const mediaTypes = ref([
 // 截图预览数据
 const screenshots = ref([
   {
-    img: 'src/assets/img/home/show/探索.png',
+    img: '/assets/img/home/show/探索.png',
     title: '个性化推荐页面',
     desc: '智能内容推荐'
   },
   {
-    img: 'src/assets/img/home/show/rating.png',
+    img: '/assets/img/home/show/rating.png',
     title: '评分详情界面',
     desc: '直观的评分体系与评论系统'
   },
   {
-    img: 'src/assets/img/home/show/ReovAi.png',
+    img: '/assets/img/home/show/ReovAi.png',
     title: 'AI 问答展示',
     desc: '最好的 AI，最优的答案'
   },
   {
-    img: 'src/assets/img/home/show/游戏.png',
+    img: '/assets/img/home/show/游戏.png',
     title: '游戏展示',
     desc: '最热门的游戏推荐'
   },
   {
-    img: 'src/assets/img/home/show/音乐.png',
+    img: '/assets/img/home/show/音乐.png',
     title: '音乐展示',
     desc: '最热门的音乐推荐'
   },
   {
-    img: 'src/assets/img/home/show/Book.png',
+    img: '/assets/img/home/show/Book.png',
     title: '书籍展示',
     desc: '最热门的书籍推荐'
   },
   {
-    img: 'src/assets/img/home/show/电影.png',
+    img: '/assets/img/home/show/电影.png',
     title: '电影展示',
     desc: '最热门的电影推荐'
   },
   {
-    img: 'src/assets/img/home/show/搜索.png',
+    img: '/assets/img/home/show/搜索.png',
     title: '搜索',
     desc: '智慧赋能，探索无限可能'
   },
   {
-    img: 'src/assets/img/home/show/设置.png',
+    img: '/assets/img/home/show/设置.png',
     title: '设置',
     desc: '一键设置，轻松定制'
   },
 ])
+
 const downloads = ref([
   {
     os: 'Windows',
     osType: 'windows',
-    icon: 'src/assets/img/home/windows.png'
+    icon: '/assets/img/home/windows.png',
   },
   {
     os: 'macOS',
     osType: 'macos',
-    icon: 'src/assets/img/home/macOS.png'
+    icon: '/assets/img/home/macos.png',
   },
   {
     os: 'Linux',
     osType: 'linux',
-    icon: 'src/assets/img/home/linux.png'
+    icon: '/assets/img/home/linux.png',
   }
 ])
 const handleDownload = (osType) => {
   // 直接创建链接触发下载
-  const url = `http://localhost:12345/api/download/${osType}`;
+  const url = `https://www.alexcat.it.com/api/download/${osType}`;
   const link = document.createElement('a');
   link.href = url;
   link.style.display = 'none';
@@ -261,7 +262,7 @@ const sectionGradients = ref([
     <section id="ai" class="full-screen ai-section" :style="{ background: sectionGradients[3] }">
       <div class="section-content ai-content">
         <div class="ai-demo">
-          <img src="src/assets/img/home/ai-demo.gif" alt="AI 演示">
+          <img src="/assets/img/home/ai-demo.gif" alt="AI 演示">
         </div>
         <div class="ai-description">
           <h2>DeepSeek AI 深度集成</h2>

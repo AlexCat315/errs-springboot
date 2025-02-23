@@ -36,7 +36,7 @@ tauri-plugin-autostart = "2"
 tauri-plugin-store = { version = "2.0.0-rc.4" }
 tauri-plugin-http = { version = "2.0.0-rc.6" }            # HTTP客户端
 tauri-plugin-opener = "2.2.5"           # 外部打开
-pnet = "0.34"
-sysinfo = "0.31.0"          # 系统信息采集
 md5 = "0.7.0"               # MD5 哈希计算
+sha2 = "0.10.8"     # 哈希算法库
 serde = { version = "1.0", features = ["derive"] }  # 序列化支持
+get_if_addrs = "0.5.3"

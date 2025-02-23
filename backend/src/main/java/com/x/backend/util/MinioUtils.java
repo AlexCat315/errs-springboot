@@ -134,7 +134,12 @@ public class MinioUtils {
     }
 
     public InputStream pubDownloadFile(String fileName) throws Exception {
-        return downloadFile(fileName, "public");
+        try {
+            return downloadFile(fileName, "public");
+        }catch (MinioException e) {
+            log.error("MinIO 下载失败", e);
+            throw new RuntimeException("文件下载失败: " + e.getMessage(), e);
+        }
     }
 
     private InputStream downloadFile(String fileName, String accessibility) throws Exception {
@@ -215,7 +220,7 @@ public class MinioUtils {
     public long getFileSize(String filename) throws Exception {
         StatObjectResponse stat = minioClient.statObject(
                 StatObjectArgs.builder()
-                        .bucket(bucketName)
+                        .bucket(pubBucketName)
                         .object(filename)
                         .build()
         );

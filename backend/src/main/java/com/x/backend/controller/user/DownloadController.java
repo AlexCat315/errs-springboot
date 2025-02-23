@@ -29,9 +29,12 @@ public class DownloadController {
         try {
             // 确定文件名和存储类型
             String filename = getString(osType, filenameFromParam);
-
+            log.info("尝试下载文件: {}", filename);
             // 获取文件流
             InputStream fileStream = minioUtils.pubDownloadFile(filename);
+            if (fileStream == null) {
+                throw new RuntimeException("文件未找到");
+            }
             long fileSize = minioUtils.getFileSize(filename); // 新增方法获取文件大小
             // 设置响应头
             response.setContentType("application/octet-stream");
@@ -67,8 +70,8 @@ public class DownloadController {
         String filename;
 
         filename = switch (osType.toLowerCase()) {
-            case "windows" -> "RevoCat-Windows-v0.1.1.exe";
-            case "macos" -> "RevoCat-macos-0.1.1.zip";
+            case "windows" -> "RevoCat_0.1.1_x64-setup.exe";
+            case "macos" -> "RevoCat_0.1.1_aarch64.dmg";
             case "linux" -> "RevoCat-Linux-v0.1.1.AppImage";
             default -> throw new RuntimeException("Unsupported OS type");
         };

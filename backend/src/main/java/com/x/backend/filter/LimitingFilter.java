@@ -42,7 +42,7 @@ public class LimitingFilter extends OncePerRequestFilter {
     private FlowUtils flowUtils;
 
     @Override
-    protected void doFilterInternal(@SuppressWarnings("null") @NotNull HttpServletRequest request, @SuppressWarnings("null") @NotNull HttpServletResponse response, @SuppressWarnings("null") @NotNull FilterChain chain) throws IOException, ServletException {
+    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain chain) throws IOException, ServletException {
         String address = getClientIpAddress(request);
         val method = request.getMethod();
         if (!tryCount(address, method))
