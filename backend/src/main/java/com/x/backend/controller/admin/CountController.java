@@ -87,7 +87,7 @@ public class CountController {
     @PostMapping("book/time")
     public ResultEntity<List<Integer>> countBookByTime(@RequestBody TimeCount timeCount) {
         Date startTime = timeCount.getStartTime();
-        Date endTime = timeCount.getEndTime();   
+        Date endTime = timeCount.getEndTime();
         // 调service层，获取对应时间段的图书访问次数
         List<Integer> countList = new ArrayList<>();
         countList = countService.getBookCounts(startTime, endTime);
