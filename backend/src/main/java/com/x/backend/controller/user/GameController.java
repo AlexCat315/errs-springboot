@@ -118,7 +118,7 @@ public class GameController {
         }
     }
 
-    @RequestMapping("/test")
+    @GetMapping("/test")
     public ResultEntity<String> test() {
         return ResultEntity.success("test");
     }
