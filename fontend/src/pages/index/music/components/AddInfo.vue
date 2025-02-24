@@ -260,7 +260,7 @@ const handleAudioChange = (uploadFile: UploadFile) => {
 
     if (!isMP3) {
         ElMessage.error("音频文件必须是 MP3 格式!");
-        songForm.audioUrl = null; // 清空音频链接
+        songForm.audioUrl = ""; // 清空音频链接
         songForm.audio = null; // 清空音频文件
         // 隐藏组件
         isUploadVisible.value = false;
@@ -272,7 +272,7 @@ const handleAudioChange = (uploadFile: UploadFile) => {
     }
     if (!isLt20M) {
         ElMessage.error("音频文件大小不能超过 20MB!");
-        songForm.audioUrl = null; // 清空音频链接
+        songForm.audioUrl = ""; // 清空音频链接
         songForm.audio = null; // 清空音频文件
         // 隐藏组件
         isUploadVisible.value = false;
@@ -335,7 +335,7 @@ const resetForm = () => {
     }
 
     // 重置表单数据
-    songForm.audioUrl = null; // 清空音频链接
+    songForm.audioUrl = ""; // 清空音频链接
     songForm.audio = null; // 清空音频文件
     songForm.coverUrl = ""; // 清空封面链接
     songForm.cover = null; // 清空封面文件
