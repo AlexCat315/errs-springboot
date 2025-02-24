@@ -8,12 +8,16 @@ import VChart from 'vue-echarts'
 
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
-
+const xAxisData: string[] = []
+for (let i = 0; i < 7; i++) {
+  const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
+  xAxisData.push(date.toLocaleDateString())
+}
 // 示例数据
 const lineData = ref({
   xAxis: {
     type: 'category',
-    data: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06', '2023-01-07']
+    data: xAxisData
   },
   yAxis: {
     type: 'value'
@@ -52,7 +56,6 @@ const pieData = ref({
       radius: '50%',
       data: [
         { value: 60, name: '普通用户' },
-        { value: 30, name: 'VIP用户' },
         { value: 10, name: '管理员' }
       ]
     }
@@ -62,13 +65,13 @@ const pieData = ref({
 const barData = ref({
     xAxis: {
         type: 'category',
-        data: ['普通用户', 'VIP用户', '管理员'],
+        data: ['普通用户', '管理员'],
     },
     yAxis: {
         type: 'value'
     },
     series: [{
-        data: [220, 100, 30],
+        data: [220, 100],
         type: 'bar',
         showBackground: true,
         backgroundStyle: {

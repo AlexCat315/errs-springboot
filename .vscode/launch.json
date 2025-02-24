@@ -4,7 +4,7 @@
             "command": "cd fontend && npm run dev" ,
             "name": "Admin npm start dev",
             "request": "launch",
-            "type": "node-terminal"
+            "type": "node-terminal",
         },
         {
             "command": "cd errs-pc && npm run tauri dev" ,
@@ -21,6 +21,6 @@
             "projectName": "backend",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
-        }
+        },
     ]
 }

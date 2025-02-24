@@ -164,6 +164,7 @@ public class MovieController {
             movie.setLanguage(language);
             movie.setSummary(summary);
             movie.setUsers(users);
+            movie.setUpdateTime(new Date());
 
             // 处理类型转换
             ObjectMapper objectMapper = new ObjectMapper();

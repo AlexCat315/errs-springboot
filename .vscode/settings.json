@@ -6,5 +6,6 @@
         "enableCodeCompletionPro": true
     },
     "marscode.enableInlineCommand": true,
-    "java.dependency.packagePresentation": "hierarchical"
+    "java.dependency.packagePresentation": "hierarchical",
+    "maven.view": "flat"
 }

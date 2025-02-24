@@ -35,7 +35,7 @@ onMounted(() => {
                 </el-menu-item>
             </el-menu>
         </div>
-        <DataMap />
+        <DataMap v-if="globalSelect === '4-1'" />
         <AddInfo v-if="globalSelect === '4-2'" />
         <DeleteInfo v-if="globalSelect === '4-3'" />
         <UpdateInfo v-if="globalSelect === '4-4'" />

@@ -9,6 +9,7 @@ import MusicIndex from "./index/music/MusicIndex.vue";
 import AccountIndex from "./index/account/AccountIndex.vue";
 import VideoIndex from "./index/video/VideoIndex.vue";
 import BookIndex from "./index/book/BookIndex.vue";
+import HomeIndex from "./index/home/HomeIndex.vue";
 
 function logout() {
     logoutJS(
@@ -301,6 +302,7 @@ const tag = ref("");
                 </el-header>
 
                 <el-main style="background: #edeef0">
+                    <HomeIndex v-if="globalSelect.startsWith('1')" />
                     <AccountIndex v-if="globalSelect.startsWith('2')" />
                     <GamesIndex v-if="globalSelect.startsWith('3')" />
                     <MusicIndex v-if="globalSelect.startsWith('4')" />

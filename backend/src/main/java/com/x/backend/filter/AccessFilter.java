@@ -57,8 +57,7 @@ public class AccessFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             @NotNull HttpServletRequest request,
             @NotNull HttpServletResponse response,
-            @NotNull FilterChain chain
-    ) throws ServletException, IOException {
+            @NotNull FilterChain chain) throws ServletException, IOException {
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
             chain.doFilter(request, response);
             return;
@@ -73,9 +72,7 @@ public class AccessFilter extends OncePerRequestFilter {
                         .write(
                                 ResultEntity.failure(
                                         HttpCodeConstants.FORBIDDEN,
-                                        HttpMessageConstants.FORBIDDEN
-                                ).toJSONString()
-                        );
+                                        HttpMessageConstants.FORBIDDEN).toJSONString());
                 return;
             }
         } catch (RuntimeException e) {
@@ -85,9 +82,7 @@ public class AccessFilter extends OncePerRequestFilter {
                     .write(
                             ResultEntity.failure(
                                     HttpCodeConstants.UNAUTHORIZED,
-                                    HttpMessageConstants.UNAUTHORIZED
-                            ).toJSONString()
-                    );
+                                    HttpMessageConstants.UNAUTHORIZED).toJSONString());
             return;
         }
         chain.doFilter(request, response);
@@ -101,6 +96,7 @@ public class AccessFilter extends OncePerRequestFilter {
      */
     private Boolean hasPermission(HttpServletRequest request) {
         String url = request.getRequestURI();
+        setUrlCount(url);
         if (pathExcludeConstructor.excludePath(url)) {
             return true;
         }
@@ -116,15 +112,11 @@ public class AccessFilter extends OncePerRequestFilter {
         if (url.startsWith("/api/admin")) {
             // 管理员权限
             String role = jwtUtils.getRole();
-            return (
-                    role != null && role.equalsIgnoreCase(RoleConstants.ROLE_ADMIN)
-            );
+            return (role != null && role.equalsIgnoreCase(RoleConstants.ROLE_ADMIN));
         } else if (url.startsWith("/api/user")) {
             // 用户权限
             String role = jwtUtils.getRole();
-            return (
-                    role != null && role.equalsIgnoreCase(RoleConstants.ROLE_USER)
-            );
+            return (role != null && role.equalsIgnoreCase(RoleConstants.ROLE_USER));
         }
         return true;
     }
@@ -149,13 +141,11 @@ public class AccessFilter extends OncePerRequestFilter {
                 return true;
             } else {
                 // 判断数据库中权限和token是否一致
-                if (
-                        !Objects.equals(
-                                jwtUtils.getRole(),
-                                accountService.findById(id).getRole()
-                        )
-                ) {
-                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, 7L, TimeUnit.DAYS);
+                if (!Objects.equals(
+                        jwtUtils.getRole(),
+                        accountService.findById(id).getRole())) {
+                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, 7L,
+                            TimeUnit.DAYS);
                     return true;
                 }
                 return false;
@@ -166,20 +156,16 @@ public class AccessFilter extends OncePerRequestFilter {
     }
 
     private boolean checkAnnotationOnMethodOrClassIsRole(
-            HttpServletRequest request
-    ) {
+            HttpServletRequest request) {
         try {
             // Get the Spring HandlerMapping bean
-            RequestMappingHandlerMapping handlerMapping =
-                    applicationContext.getBean(
-                            "requestMappingHandlerMapping",
-                            RequestMappingHandlerMapping.class
-                    );
+            RequestMappingHandlerMapping handlerMapping = applicationContext.getBean(
+                    "requestMappingHandlerMapping",
+                    RequestMappingHandlerMapping.class);
 
             // Get the handler for the request
             Object handler = Objects.requireNonNull(
-                    handlerMapping.getHandler(request)
-            ).getHandler();
+                    handlerMapping.getHandler(request)).getHandler();
 
             // Proceed if the handler is a HandlerMethod
             if (handler instanceof HandlerMethod handlerMethod) {
@@ -188,32 +174,30 @@ public class AccessFilter extends OncePerRequestFilter {
 
                 // Check if the method has the RoleSecurity annotation
                 RoleSecurity roleSecurity = method.getAnnotation(
-                        RoleSecurity.class
-                );
-                if (cheekRole(roleSecurity)) return true;
+                        RoleSecurity.class);
+                if (cheekRole(roleSecurity))
+                    return true;
 
                 // If the method doesn't have the annotation, check the class level annotation
                 Class<?> controllerClass = method.getDeclaringClass();
                 roleSecurity = controllerClass.getAnnotation(
-                        RoleSecurity.class
-                );
-                if (cheekRole(roleSecurity)) return true;
+                        RoleSecurity.class);
+                if (cheekRole(roleSecurity))
+                    return true;
             }
         } catch (RuntimeException e) {
             // Log runtime exceptions
             log.error(
                     "Error checking annotation on method or class for request: {}",
                     request.getRequestURI(),
-                    e
-            );
+                    e);
             return false; // Return false or handle as needed
         } catch (Exception e) {
             // Catch other exceptions and rethrow as a runtime exception
             log.error(
                     "Unexpected error checking annotation on method or class for request: {}",
                     request.getRequestURI(),
-                    e
-            );
+                    e);
             throw new RuntimeException(e);
         }
         return false;
@@ -225,17 +209,13 @@ public class AccessFilter extends OncePerRequestFilter {
             String[] requiredRoles = roleSecurity.value();
 
             // 判断用户是否有权限
-            if (
-                    (requiredRoles.length == 1 && requiredRoles[0].equals("*")) ||
-                            requiredRoles[0].equals(RoleConstants.ROLE_ANONYMOUS)
-            ) {
+            if ((requiredRoles.length == 1 && requiredRoles[0].equals("*")) ||
+                    requiredRoles[0].equals(RoleConstants.ROLE_ANONYMOUS)) {
                 return true;
             }
             for (String requiredRole : requiredRoles) {
-                if (
-                        requiredRole.equals("*") ||
-                                requiredRole.equals(RoleConstants.ROLE_ANONYMOUS)
-                ) { // 允许所有角色访问
+                if (requiredRole.equals("*") ||
+                        requiredRole.equals(RoleConstants.ROLE_ANONYMOUS)) { // 允许所有角色访问
                     return true;
                 }
             }
@@ -250,5 +230,33 @@ public class AccessFilter extends OncePerRequestFilter {
             }
         }
         return false;
+    }
+
+    private void setUrlCount(String url) {
+        // 在Redis中保存改URL访问量
+        // 如果URL路径是以/api/song 开头，则表面该URL是歌曲相关的，保存请求歌曲的访问量
+        if (url.startsWith("/api/user/song")) {
+            redisTemplate.opsForValue().increment("song_access_count", 1);
+        } else if (url.startsWith("/api/user/movie")) {
+            redisTemplate.opsForValue().increment("movie_access_count", 1);
+        } else if (url.startsWith("/api/user/ai")) {
+            redisTemplate.opsForValue().increment("ai_access_count", 1);
+        } else if (url.startsWith("/api/user/book")) {
+            redisTemplate.opsForValue().increment("book_access_count", 1);
+        } else if (url.startsWith("/api/user/game")) {
+            redisTemplate.opsForValue().increment("game_access_count", 1);
+        } else if (url.startsWith("/api/admin/song")) {
+            redisTemplate.opsForValue().increment("song_access_count", 1);
+        } else if (url.startsWith("/api/admin/movie")) {
+            redisTemplate.opsForValue().increment("movie_access_count", 1);
+        } else if (url.startsWith("/api/admin/book")) {
+            redisTemplate.opsForValue().increment("book_access_count", 1);
+        } else if (url.startsWith("/api/admin/game")) {
+            redisTemplate.opsForValue().increment("game_access_count", 1);
+        } else {
+            if (url.startsWith("/api/user/account/validate-token") || url.startsWith("/api/admin/account/validate-token"))
+            redisTemplate.opsForValue().increment("other_access_count", 1);
+        }
+        redisTemplate.opsForValue().increment("all_access_count", 1);
     }
 }

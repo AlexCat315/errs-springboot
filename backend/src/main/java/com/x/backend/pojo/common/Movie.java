@@ -19,5 +19,6 @@ public class Movie {
     private Long users; // 评分人数
     private String summary; // 简介
     private String  video; // 视频地址
-    private Date createTime;
+    private Date createTime; //createTime
+    private Date updateTime; //updateTime
 }

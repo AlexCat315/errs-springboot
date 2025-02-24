@@ -1,19 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { use } from 'echarts/core'
 import { LineChart, PieChart, BarChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
+import { on } from 'events'
+import { getALl } from '../../../../net/admin-home/get'
 
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
-
+const xAxisData: string[] = []
+for (let i = 0; i < 7; i++) {
+  const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
+  xAxisData.push(date.toLocaleDateString())
+}
 // 示例数据
 const lineData = ref({
   xAxis: {
     type: 'category',
-    data: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06', '2023-01-07']
+    data: xAxisData,
   },
   yAxis: {
     type: 'value'
@@ -51,9 +57,9 @@ const pieData = ref({
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 60, name: '流行' },
-        { value: 30, name: '摇滚' },
-        { value: 10, name: '古典' }
+        { value: 120, name: '流行' },
+        { value: 53, name: '摇滚' },
+        { value: 45, name: '古典' }
       ]
     }
   ]
@@ -68,7 +74,7 @@ const barData = ref({
     type: 'value'
   },
   series: [{
-    data: [220, 100, 30],
+    data: [202, 106, 37],
     type: 'bar',
     showBackground: true,
     backgroundStyle: {
@@ -76,6 +82,12 @@ const barData = ref({
     }
   }]
 })
+
+// onMounted(() => {
+//   getALl((data: any) => {
+//     lineData.value.series[0].data = data.songCount.add
+//   })
+// })
 </script>
 
 <template>
@@ -92,10 +104,10 @@ const barData = ref({
       <v-chart :option="pieData" class="chart" />
     </div>
 
-      <div class="chart-container">
-          <h3>各类型音乐总数</h3>
-          <v-chart :option="barData" class="chart"/>
-      </div>
+    <div class="chart-container">
+      <h3>各类型音乐总数</h3>
+      <v-chart :option="barData" class="chart" />
+    </div>
   </div>
 </template>
 

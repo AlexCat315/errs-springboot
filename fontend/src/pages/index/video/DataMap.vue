@@ -1,19 +1,48 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { use } from 'echarts/core'
 import { LineChart, PieChart, BarChart } from 'echarts/charts'
-import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
+import { GridComponent, TooltipComponent, LegendComponent, TitleComponent, DataZoomComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
+import { ElDatePicker } from 'element-plus'
 
 // 注册 ECharts 组件
-use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
+use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent,
+ LegendComponent, TitleComponent, DataZoomComponent, CanvasRenderer])
 
-// 示例数据
+// 日期范围
+const dateRange = ref([new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toString(), new Date().toString()])
+
+const xAxisData: string[] = []
+for (let i = 0; i < 7; i++) {
+  const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000)
+  xAxisData.push(date.toLocaleDateString())
+}
+// 定义接口
+interface MovieStats {
+  date: string;
+  added: number;
+  deleted: number;
+  modified: number;
+}
+
+interface MovieTypeStats {
+  type: string;
+  count: number;
+}
+
+// 数据状态
+const loading = ref(true)
+const refreshInterval = ref<number | null>(null)
+
+// 生成时间数据从当前是前7天到今天
+const dates = [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toString(), new Date().toString()]
+
 const lineData = ref({
   xAxis: {
     type: 'category',
-    data: ['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04', '2023-01-05', '2023-01-06', '2023-01-07']
+    data: xAxisData,
   },
   yAxis: {
     type: 'value'
@@ -42,9 +71,9 @@ const pieData = ref({
     trigger: 'item'
   },
   legend: {
-        orient: 'vertical',
-        left: 'left'
-    },
+    orient: 'vertical',
+    left: 'left'
+  },
   series: [
     {
       name: '电影类型',
@@ -55,34 +84,44 @@ const pieData = ref({
         { value: 30, name: '喜剧片' },
         { value: 20, name: '爱情片' },
         { value: 10, name: '科幻片' },
-        { value: 5, name: '恐怖片'}
+        { value: 5, name: '恐怖片' }
       ]
     }
   ]
 })
 
 const barData = ref({
-    xAxis: {
-        type: 'category',
-        data: ['动作片', '喜剧片', '爱情片', '科幻片', '恐怖片'],
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [120, 200, 150, 80, 70],
-        type: 'bar',
-        showBackground: true,
-        backgroundStyle: {
-            color: 'rgba(180, 180, 180, 0.2)'
-        }
-    }]
+  xAxis: {
+    type: 'category',
+    data: ['动作片', '喜剧片', '爱情片', '科幻片', '恐怖片'],
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [{
+    data: [120, 200, 150, 80, 70],
+    type: 'bar',
+    showBackground: true,
+    backgroundStyle: {
+      color: 'rgba(180, 180, 180, 0.2)'
+    }
+  }]
 })
+
 </script>
 
 <template>
   <div class="dashboard-container">
-    <h2>电影数据统计</h2>
+    <div class="header">
+      <h2>电影数据统计</h2>
+      <el-date-picker
+        v-model="dateRange"
+        type="daterange"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+      />
+    </div>
 
     <div class="chart-container">
       <h3>电影数量变化趋势</h3>
@@ -94,10 +133,10 @@ const barData = ref({
       <v-chart :option="pieData" class="chart" />
     </div>
 
-      <div class="chart-container">
-          <h3>各类型电影总数</h3>
-          <v-chart :option="barData" class="chart"/>
-      </div>
+    <div class="chart-container">
+      <h3>各类型电影总数</h3>
+      <v-chart :option="barData" class="chart" />
+    </div>
   </div>
 </template>
 
@@ -129,4 +168,3 @@ h3 {
   height: 400px;
 }
 </style>
-```

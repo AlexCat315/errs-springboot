@@ -19,7 +19,8 @@
             rating   = #{rating},
             users    = #{users},
             summary  = #{summary},
-            video    = #{video}
+            video    = #{video},
+            update_time = #{updateTime}
         WHERE id = #{id}
     </update>
     <delete id="deleteMovieInfo">
