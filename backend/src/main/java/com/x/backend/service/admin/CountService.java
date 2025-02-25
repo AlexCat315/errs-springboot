@@ -2,8 +2,6 @@ package com.x.backend.service.admin;
 import java.util.Date;
 import java.util.List;
 
-import com.x.backend.pojo.common.BookTypeCount;
-import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.pojo.common.TypeCount;
 
 public interface CountService {

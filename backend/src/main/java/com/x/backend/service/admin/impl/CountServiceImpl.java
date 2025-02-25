@@ -6,8 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.x.backend.mapper.admin.CountMapper;
-import com.x.backend.pojo.common.BookTypeCount;
-import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.pojo.common.TypeCount;
 import com.x.backend.service.admin.CountService;
 
