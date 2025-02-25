@@ -254,7 +254,7 @@ public class AccessFilter extends OncePerRequestFilter {
         } else if (url.startsWith("/api/admin/game")) {
             redisTemplate.opsForValue().increment("game_access_count", 1);
         } else {
-            if (url.startsWith("/api/user/account/validate-token") || url.startsWith("/api/admin/account/validate-token"))
+            if (!(url.startsWith("/api/user/account/validate-token") || url.startsWith("/api/admin/account/validate-token")))
             redisTemplate.opsForValue().increment("other_access_count", 1);
         }
         redisTemplate.opsForValue().increment("all_access_count", 1);
