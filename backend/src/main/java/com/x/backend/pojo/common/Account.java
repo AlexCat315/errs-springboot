@@ -19,4 +19,6 @@ public class Account {
     private Boolean isBanned; // true:封禁 false:未封禁
 
     private Date lastLoginTime;
+
+    private String userUrl;
 }

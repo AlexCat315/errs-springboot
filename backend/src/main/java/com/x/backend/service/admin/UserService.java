@@ -19,4 +19,6 @@ public interface UserService {
     Account getAccountById(Integer id);
 
     List<Account> searchInfo(SearchAccountVO searchAccountVO);
+
+    void updateImgUrl(Account account);
 }

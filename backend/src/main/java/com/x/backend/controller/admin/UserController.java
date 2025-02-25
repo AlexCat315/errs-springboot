@@ -1,6 +1,5 @@
 package com.x.backend.controller.admin;
 
-
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.BlockConstants;
 import com.x.backend.constants.HttpMessageConstants;
@@ -11,24 +10,28 @@ import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
+import com.x.backend.service.admin.AccountService;
 import com.x.backend.service.admin.UserService;
 import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
 import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import com.x.backend.util.MinioUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
-@RoleSecurity(value = {"admin"})
+@RoleSecurity(value = { "admin" })
 @RestController("adminUserController")
 @RequestMapping("/api/admin/user")
 public class UserController {
-
 
     @Resource(name = "adminUserService")
     private UserService userService;
@@ -40,6 +43,13 @@ public class UserController {
     private RedisTemplate<String, String> redisTemplate;
     @Resource
     private TimeUtils timeUtils;
+    @Resource(name = "adminAccountService")
+    private AccountService accountService;
+    @Resource
+    private MinioUtils minioUtils;
+
+    @Value("${minio.handler-pub-url}")
+    private String pubHandlerUrl;
 
     // 获取account的信息
     @PostMapping("/get/info/all")
@@ -54,7 +64,6 @@ public class UserController {
 
     }
 
-
     @PostMapping("/update/user/role")
     public ResultEntity<String> updateUserRole(@RequestBody UpdateUserRoleVO updateUserRoleVO) {
         try {
@@ -63,7 +72,8 @@ public class UserController {
             String jwt = jwtUtils.getToken();
             Long expireTime = jwtUtils.getExpireTime();
             Integer id = jwtUtils.getId();
-            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                    timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success("更新成功");
         } catch (RuntimeException e) {
             log.error("RuntimeException{}", e.getMessage(), e);
@@ -109,7 +119,8 @@ public class UserController {
                     // 拉黑此token
                     String jwt = jwtUtils.getToken();
                     Long expireTime = jwtUtils.getExpireTime();
-                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                            timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
                     return ResultEntity.failure(HttpMessageConstants.ACCOUNT_DISABLED);
                 }
             }
@@ -145,6 +156,46 @@ public class UserController {
         } catch (RuntimeException e) {
             log.error("RuntimeException{}", e.getMessage(), e);
             return ResultEntity.serverError();
+        }
+    }
+
+    @PostMapping("/get/info")
+    public ResultEntity<AdminAccount> getInfo() {
+        try {
+            Integer id = jwtUtils.getId();
+            AdminAccount adminAccount = accountService.findById(id);
+            if (adminAccount == null) {
+                return ResultEntity.failure(HttpMessageConstants.LOGIN_EXPIRED);
+            }
+            adminAccount.setPassword("null");
+            return ResultEntity.success(adminAccount);
+        } catch (Exception e) {
+            log.error("get info error: {}", e.getMessage());
+            return ResultEntity.serverError();
+        }
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @PostMapping("/update/user/img")
+    public ResultEntity<String> updateUserImg(@RequestParam("img") MultipartFile img) {
+        try {
+            // 上传封面图片到 MinIO
+            String uploadImgUrlFile = minioUtils.pubUploadFile(img);
+            uploadImgUrlFile = pubHandlerUrl + uploadImgUrlFile;
+            // 更新用户头像
+            Integer id = jwtUtils.getId();
+            AdminAccount adminAccount = accountService.findById(id);
+            if (adminAccount != null && adminAccount.getUserUrl() != null && !adminAccount.getUserUrl().isEmpty()) {
+                minioUtils.pubDeleteFile(adminAccount.getUserUrl().replace(pubHandlerUrl, ""));
+            }
+            Account account = new Account();
+            account.setAId(id);
+            account.setUserUrl(uploadImgUrlFile);
+            userService.updateImgUrl(account);
+            return ResultEntity.success(uploadImgUrlFile);
+        } catch (Exception e) {
+            log.error("create book error: {}", e.getMessage(), e); // 详细记录异常堆栈
+            return ResultEntity.failure(e.getMessage());
         }
     }
 

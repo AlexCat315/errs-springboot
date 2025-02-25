@@ -2,7 +2,7 @@
 import { logoutJS } from "../net/account/logout.js";
 import router from "../router/router.js";
 import { ElMessage } from "element-plus";
-import { inject, ref, watch } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { Expand, Fold, House, User } from "@element-plus/icons-vue";
 import GamesIndex from "./index/games/GamesIndex.vue";
 import MusicIndex from "./index/music/MusicIndex.vue";
@@ -10,6 +10,8 @@ import AccountIndex from "./index/account/AccountIndex.vue";
 import VideoIndex from "./index/video/VideoIndex.vue";
 import BookIndex from "./index/book/BookIndex.vue";
 import HomeIndex from "./index/home/HomeIndex.vue";
+import UserIndex from "./index/user/UserIndex.vue";
+import { get_account_info } from "../net/account/get";
 
 function logout() {
     logoutJS(
@@ -138,12 +140,23 @@ watch(globalSelect, (newValue, oldValue) => {
         case "6-4":
             tag.value = "图书管理 - 修改信息";
             break;
+        case "7":
+            tag.value = "个人中心";
+            break;
     }
 });
 const toMyInfo = () => {
-    selectIndex.value = "5";
+    selectIndex.value = "7";
 };
 const tag = ref("");
+
+const userImg = ref("")
+onMounted(() => {
+    get_account_info((data) => {
+        userImg.value = data.userUrl;
+    }
+    )
+})
 </script>
 
 <template>
@@ -289,7 +302,11 @@ const tag = ref("");
                         <span class="tag">{{ tag }}</span>
                     </div>
                     <el-dropdown style="width: 70px; cursor: pointer">
-                        <el-button :icon="User" circle style="margin-top: 10px" />
+                        <el-button circle
+                            style="margin-top: 10px; padding: 0; overflow: hidden; width: 40px; height: 40px;">
+                            <img :src="userImg"
+                                style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" />
+                        </el-button>
 
                         <template #dropdown>
                             <el-dropdown-menu>
@@ -307,6 +324,7 @@ const tag = ref("");
                     <MusicIndex v-if="globalSelect.startsWith('4')" />
                     <VideoIndex v-if="globalSelect.startsWith('5')" />
                     <BookIndex v-if="globalSelect.startsWith('6')" />
+                    <UserIndex v-if="globalSelect.startsWith('7')" />
                 </el-main>
             </el-container>
         </el-container>

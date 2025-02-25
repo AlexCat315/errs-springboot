@@ -23,4 +23,6 @@ public interface UserMapper {
     Account getAccountById(Integer id);
 
     List<Account> searchInfo(SearchAccountVO searchAccountVO);
+
+    void updateImgUrl(Account account);
 }

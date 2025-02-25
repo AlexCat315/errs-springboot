@@ -66,4 +66,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public void updateImgUrl(Account account) {
+        userMapper.updateImgUrl(account);
+    }
+
 }

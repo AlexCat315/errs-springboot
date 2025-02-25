@@ -44,9 +44,11 @@
         <result property="role" column="role"/>
         <result property="password" column="password"/>
         <result property="isBanned" column="is_banned"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="userUrl" column="user_img"/>
     </resultMap>
     <select id="findById" resultMap="findAccountInfoMap">
-        select a_id, username, email, role, password, is_banned
+        select a_id, username, email, role, password, is_banned, created_at, user_img
         from account
         where a_id = #{aId}
     </select>

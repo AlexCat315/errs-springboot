@@ -16,14 +16,19 @@ import com.x.backend.service.admin.AccountService;
 import com.x.backend.service.admin.EmailService;
 import com.x.backend.util.EncryptUtils;
 import com.x.backend.util.JWTUtils;
+import com.x.backend.util.MinioUtils;
 import com.x.backend.util.RandomCodeGeneratorUtils;
 import com.x.backend.util.TimeUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -51,6 +56,10 @@ public class AccountController {
     private TimeUtils timeUtils;
     @Resource
     private EncryptUtils encryptUtils;
+    @Resource
+    private MinioUtils minioUtils;
+    @Value("${minio.handler-pub-url}")
+    private String pubHandlerUrl;
 
     @PostMapping("/login")
     public ResultEntity<String> login(@RequestBody LoginVo loginVo) {
@@ -225,7 +234,8 @@ public class AccountController {
             Integer id = jwtUtils.getId(jwt);
             Long expireTime = jwtUtils.getExpireTime(); // 过期时间(ms)
             // 向Redis中保存该用户的token，为黑名单
-            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+            redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                    timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
             return ResultEntity.success();
         } catch (Exception e) {
             return ResultEntity.failure(e.getMessage());
@@ -247,7 +257,8 @@ public class AccountController {
                     // 拉黑此token
                     String jwt = jwtUtils.getToken();
                     Long expireTime = jwtUtils.getExpireTime();
-                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+                    redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                            timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
                     return ResultEntity.failure(HttpMessageConstants.ACCOUNT_DISABLED);
 
                 }
@@ -290,7 +301,8 @@ public class AccountController {
                 // 续签token
                 String newJwt = jwtUtils.createJWT(adminAccount, 7);
                 // 向Redis中保存该用户的token，为黑名单
-                redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK, timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
+                redisTemplate.opsForValue().set(id + "_" + jwt, BlockConstants.REDIS_LOGOUT_BLOCK,
+                        timeUtils.timestamp2Millis(expireTime), TimeUnit.MILLISECONDS);
                 return ResultEntity.success("localStorage_" + newJwt);
             } else {
                 return ResultEntity.failure(HttpMessageConstants.ACCOUNT_NO_NEED_RENEW);
@@ -299,8 +311,6 @@ public class AccountController {
             log.error("refresh token error: {}", e.getMessage());
             return ResultEntity.serverError();
         }
-
     }
 
-
-}
+ }

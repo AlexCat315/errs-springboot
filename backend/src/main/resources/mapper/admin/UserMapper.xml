@@ -44,4 +44,13 @@
            OR role like CONCAT('%', #{SearchText}, '%')
         LIMIT #{start}, #{size}
     </select>
-</mapper>
+
+    <!-- updateImgUrl --> 
+
+    <update id="updateImgUrl">
+        update account
+        set user_img = #{userUrl}
+        where a_id = #{aId}
+    </update>
+    
+    </mapper>
