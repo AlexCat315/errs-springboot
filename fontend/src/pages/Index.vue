@@ -294,7 +294,6 @@ const tag = ref("");
                         <template #dropdown>
                             <el-dropdown-menu>
                                 <el-dropdown-item @click="toMyInfo()">个人信息</el-dropdown-item>
-                                <el-dropdown-item @click="toMyInfo()">修改密码</el-dropdown-item>
                                 <el-dropdown-item @click="logout()">退出登录</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
