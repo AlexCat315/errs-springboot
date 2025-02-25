@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { use } from 'echarts/core'
 import { LineChart, PieChart, BarChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
+import { getGamesTypeCount } from '../../../net/game/get'
 
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
@@ -83,6 +84,21 @@ const barData = ref({
     }
   }]
 })
+
+onMounted(() => {
+  getGamesTypeCount((data: any) => {
+
+    pieData.value.series[0].data = data.map((item: any) => ({
+        value: item.count,
+        name: item.type
+      }));
+      // 更新 barData
+      barData.value.xAxis.data = data.map((item: any) => item.type); // 设置横轴分类
+      barData.value.series[0].data = data.map((item: any) => item.count); // 设置柱状图数据
+  })
+
+})
+
 </script>
 
 <template>
@@ -99,10 +115,10 @@ const barData = ref({
       <v-chart :option="pieData" class="chart" />
     </div>
 
-      <div class="chart-container">
-          <h3>各类型游戏总数</h3>
-          <v-chart :option="barData" class="chart"/>
-      </div>
+    <div class="chart-container">
+      <h3>各类型游戏总数</h3>
+      <v-chart :option="barData" class="chart" />
+    </div>
   </div>
 </template>
 

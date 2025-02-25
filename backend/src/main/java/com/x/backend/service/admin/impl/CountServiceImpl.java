@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.x.backend.mapper.admin.CountMapper;
 import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.SongTypeCount;
+import com.x.backend.pojo.common.TypeCount;
 import com.x.backend.service.admin.CountService;
 
 import jakarta.annotation.Resource;
@@ -83,8 +84,8 @@ public class CountServiceImpl implements CountService {
     }
 
     @Override
-    public List<SongTypeCount> getSongTypeCounts() {
-        List<SongTypeCount> songTypeCounts = countMapper.getSongTypeCounts();
+    public List<TypeCount> getSongTypeCounts() {
+        List<TypeCount> songTypeCounts = countMapper.getSongTypeCounts();
         return songTypeCounts;
     }
 
@@ -119,8 +120,13 @@ public class CountServiceImpl implements CountService {
 	}
 
     @Override
-    public List<BookTypeCount> getBookTypeCounts() {
+    public List<TypeCount> getBookTypeCounts() {
         return countMapper.getBookTypeCounts();
     }
+
+	@Override
+	public List<TypeCount> getGamesTypeCounts() {
+		  return countMapper.getGamesTypeCounts();
+	}
 
 }

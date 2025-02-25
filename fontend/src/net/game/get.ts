@@ -43,3 +43,17 @@ export function get_game_info_all(
     failure,
   );
 }
+
+
+export function getGamesTypeCount(
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/count/games/type/all`,
+    {
+    },
+    success,
+    failure,
+  );
+}

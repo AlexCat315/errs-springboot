@@ -94,4 +94,14 @@
        JSON_TABLE(book.type, '$[*]' COLUMNS(type VARCHAR(255) PATH '$')) AS jt
        GROUP BY jt.type;
         </select>
+
+        <!-- getGamesTypeCounts -->
+
+        <select id="getGamesTypeCounts">
+          SELECT jt.type AS type, COUNT(*) AS count
+          FROM games,
+          JSON_TABLE(games.game_categories, '$[*]' COLUMNS(type VARCHAR(255) PATH '$')) AS jt
+          GROUP BY jt.type;
+        </select>
+
 </mapper>

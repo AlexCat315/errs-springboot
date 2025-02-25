@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.SongTypeCount;
+import com.x.backend.pojo.common.TypeCount;
 
 @Mapper
 @Component("adminCountMapper")
@@ -69,7 +70,7 @@ public interface CountMapper {
     @Select("SELECT count FROM song_delete_count WHERE date BETWEEN #{startTime} AND #{endTime} ORDER BY date ASC")
     List<Integer> getSongDeleteCounts(Date startTime, Date endTime);
 
-    List<SongTypeCount> getSongTypeCounts();
+    List<TypeCount> getSongTypeCounts();
 
     void addInsertBookCount(Date date, int count);
 
@@ -86,5 +87,7 @@ public interface CountMapper {
     @Select("SELECT count FROM book_delete_count WHERE date BETWEEN #{startTime} AND #{endTime} ORDER BY date ASC")
     List<Integer> getBookDeleteCounts(Date startTime, Date endTime);
 
-    List<BookTypeCount> getBookTypeCounts();
+    List<TypeCount> getBookTypeCounts();
+
+    List<TypeCount> getGamesTypeCounts();
 }

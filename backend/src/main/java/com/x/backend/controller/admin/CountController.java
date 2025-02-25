@@ -10,6 +10,7 @@ import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.Count;
 import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.pojo.common.TimeCount;
+import com.x.backend.pojo.common.TypeCount;
 import com.x.backend.service.admin.CountService;
 
 import jakarta.annotation.Resource;
@@ -157,8 +158,8 @@ public class CountController {
     }
 
     @PostMapping("/song/type/all")
-    public ResultEntity<List<SongTypeCount>> countSongType() {
-        List<SongTypeCount> countList = countService.getSongTypeCounts();
+    public ResultEntity<List<TypeCount>> countSongType() {
+        List<TypeCount> countList = countService.getSongTypeCounts();
         return ResultEntity.success(countList);
     }
 
@@ -194,8 +195,13 @@ public class CountController {
     }
 
     @PostMapping("/book/type/all")
-    public ResultEntity<List<BookTypeCount>> countBookType() {
-        List<BookTypeCount> countList = countService.getBookTypeCounts();
+    public ResultEntity<List<TypeCount>> countBookType() {
+        List<TypeCount> countList = countService.getBookTypeCounts();
+        return ResultEntity.success(countList);
+    }
+    @PostMapping("/games/type/all")
+    public ResultEntity<List<TypeCount>> countGamesType() {
+        List<TypeCount> countList = countService.getGamesTypeCounts();
         return ResultEntity.success(countList);
     }
 

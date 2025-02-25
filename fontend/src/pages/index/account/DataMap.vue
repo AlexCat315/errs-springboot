@@ -71,7 +71,7 @@ const barData = ref({
         type: 'value'
     },
     series: [{
-        data: [220, 100],
+        data: [3, 1],
         type: 'bar',
         showBackground: true,
         backgroundStyle: {

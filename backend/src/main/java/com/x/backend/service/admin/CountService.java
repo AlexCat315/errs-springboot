@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.SongTypeCount;
+import com.x.backend.pojo.common.TypeCount;
 
 public interface CountService {
     List<Integer> getAllCounts(Date startTime, Date endTime);
@@ -32,7 +33,7 @@ public interface CountService {
 
     List<Integer> getSongDeleteCounts(Date startTime, Date endTime);
 
-    List<SongTypeCount> getSongTypeCounts();
+    List<TypeCount> getSongTypeCounts();
 
     void addInsertBookCount(Date date, int count);
 
@@ -46,5 +47,7 @@ public interface CountService {
 
     List<Integer> getBookDeleteCounts(Date startTime, Date endTime);
 
-    List<BookTypeCount> getBookTypeCounts();
+    List<TypeCount> getBookTypeCounts();
+
+    List<TypeCount> getGamesTypeCounts();
 }
