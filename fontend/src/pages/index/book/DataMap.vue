@@ -80,20 +80,20 @@ const barData = ref({
 
 <template>
   <div class="dashboard-container">
-    <h2>用户数据统计</h2>
+    <h2>书籍数据统计</h2>
 
     <div class="chart-container">
-      <h3>用户数量变化趋势</h3>
+      <h3>书籍数量变化趋势</h3>
       <v-chart :option="lineData" class="chart" />
     </div>
 
     <div class="chart-container">
-      <h3>用户类型分布</h3>
+      <h3>书籍类型分布</h3>
       <v-chart :option="pieData" class="chart" />
     </div>
 
       <div class="chart-container">
-          <h3>各类型用户总数</h3>
+          <h3>各类型书籍总数</h3>
           <v-chart :option="barData" class="chart"/>
       </div>
   </div>

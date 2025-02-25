@@ -5,8 +5,8 @@ import { LineChart, PieChart, BarChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
-import { on } from 'events'
 import { getALl } from '../../../../net/admin-home/get'
+import { getDeleteCount, getInsertCount, getSongTypeCount, getUpdateCount } from '../../../../net/music/get'
 
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
@@ -17,6 +17,9 @@ for (let i = 0; i < 7; i++) {
 }
 // 示例数据
 const lineData = ref({
+  tooltip: {
+    trigger: 'item'
+  },
   xAxis: {
     type: 'category',
     data: xAxisData,
@@ -66,6 +69,9 @@ const pieData = ref({
 })
 
 const barData = ref({
+  tooltip: {
+    trigger: 'item'
+  },
   xAxis: {
     type: 'category',
     data: ['流行', '摇滚', '古典'],
@@ -83,11 +89,39 @@ const barData = ref({
   }]
 })
 
-// onMounted(() => {
-//   getALl((data: any) => {
-//     lineData.value.series[0].data = data.songCount.add
-//   })
-// })
+onMounted(() => {
+  getInsertCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[0].data = data
+    });
+  getUpdateCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[1].data = data
+    });
+
+  getDeleteCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[2].data = data
+    });
+
+  getSongTypeCount(
+    (data: any) => {
+      pieData.value.series[0].data = data.map((item: any) => ({
+        value: item.count,
+        name: item.type
+      }));
+      // 更新 barData
+      barData.value.xAxis.data = data.map((item: any) => item.type); // 设置横轴分类
+      barData.value.series[0].data = data.map((item: any) => item.count); // 设置柱状图数据
+    }
+  )
+})
 </script>
 
 <template>

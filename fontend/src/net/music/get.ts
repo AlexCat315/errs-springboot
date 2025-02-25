@@ -53,3 +53,71 @@ export function get_music_info_by_id(
     failure,
   );
 }
+
+
+
+export function getInsertCount(
+  startTime: Date,
+  endTime: Date,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/count/song/insert/number`,
+    {
+      startTime: startTime,
+      endTime: endTime,
+    },
+    success,
+    failure,
+  );
+}
+
+
+export function getUpdateCount(
+  startTime: Date,
+  endTime: Date,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/count/song/update/number`,
+    {
+      startTime: startTime,
+      endTime: endTime,
+    },
+    success,
+    failure,
+  );
+}
+
+export function getDeleteCount(
+  startTime: Date,
+  endTime: Date,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/count/song/delete/number`,
+    {
+      startTime: startTime,
+      endTime: endTime,
+    },
+    success,
+    failure,
+  );
+}
+
+
+export function getSongTypeCount(
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/count/song/type/all`,
+    {
+    },
+    success,
+    failure,
+  );
+}

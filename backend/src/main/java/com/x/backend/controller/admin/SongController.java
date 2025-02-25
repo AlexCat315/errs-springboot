@@ -1,7 +1,5 @@
 package com.x.backend.controller.admin;
 
-
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +9,7 @@ import com.x.backend.pojo.common.PageSize;
 import com.x.backend.pojo.common.Song;
 import com.x.backend.pojo.admin.vo.request.song.SearchSongVO;
 import com.x.backend.pojo.admin.vo.responses.song.SongVO;
+import com.x.backend.service.admin.CountService;
 import com.x.backend.service.admin.SongService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
@@ -36,6 +35,8 @@ public class SongController {
     private MinioUtils minioUtils;
     @Value("${minio.handler-pub-url}")
     private String pubHandlerUrl;
+    @Resource(name = "adminCountService")
+    private CountService countService;
 
 
     @Transactional
@@ -72,6 +73,7 @@ public class SongController {
 
             song.setUsers(users);
             songService.save(song);
+            countService.addInsertSongCount(new Date(),1);
             return ResultEntity.success("create song success");
         } catch (RuntimeException e) {
             log.error("create song error: {}", e.getMessage());
@@ -147,6 +149,7 @@ public class SongController {
 
             // 保存更新
             songService.update(song);
+            countService.addUpdateSongCount(new Date(),1);
             return ResultEntity.success("更新歌曲成功");
         } catch (Exception e) {
             log.error("更新歌曲失败: {}", e.getMessage(), e);
@@ -188,6 +191,7 @@ public class SongController {
                 log.error("删除歌曲信息失败", e);
                 throw new RuntimeException(e);
             }
+            countService.addDeleteSongCount(new Date(),1);
             return ResultEntity.success("删除成功");
         } catch (RuntimeException e) {
             log.error("RuntimeException", e);

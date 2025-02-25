@@ -2,41 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x.backend.mapper.admin.CountMapper">
 
-    <!-- insertAllCount -->
+  <!-- insertAllCount -->
 
-    <insert id="insertAllCount">
+  <insert id="insertAllCount">
       insert into all_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
 
-    <!-- insertSongCount -->
+  <!-- insertSongCount -->
 
-    <insert id="insertSongCount">
+  <insert id="insertSongCount">
           insert into song_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
 
-    <!-- insertBookCount -->
+  <!-- insertBookCount -->
 
-    <insert id="insertBookCount">
+  <insert id="insertBookCount">
           insert into book_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
 
-    <!-- insertMovieCount -->
+  <!-- insertMovieCount -->
 
-    <insert id="insertMovieCount">
+  <insert id="insertMovieCount">
           insert into movie_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
 
-    <!-- getAllCounts -->
+  <!-- getAllCounts -->
 
-    <!-- insertOtherCount -->
+  <!-- insertOtherCount -->
 
-    <insert id="insertOtherCount">
+  <insert id="insertOtherCount">
           insert into other_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
 
-    <!-- insertAiCount -->
+  <!-- insertAiCount -->
 
-    <insert id="insertAiCount">
+  <insert id="insertAiCount">
           insert into ai_count(count,date) values(#{count},#{date})
-    </insert>
+  </insert>
+
+  <!-- addInsertSongCount -->
+
+  <insert id="addInsertSongCount">
+        insert into song_insert_count(count,date) values(#{count},#{date})
+  </insert>
+
+  <!-- addUpdateSongCount -->
+
+  <insert id="addUpdateSongCount">
+        insert into song_update_count(count,date) values(#{count},#{date})
+  </insert>
+
+  <!-- addDeleteSongCount -->
+
+  <insert id="addDeleteSongCount">
+        insert into song_delete_count(count,date) values(#{count},#{date})
+  </insert>
+
+  <!-- getSongTypeCounts -->
+
+  <select id="getSongTypeCounts">
+     SELECT tag AS type, COUNT(*) AS count
+     FROM song,
+     JSON_TABLE(tags, '$[*]' COLUMNS(tag VARCHAR(255) PATH '$')) AS jt
+     GROUP BY tag;
+
+  </select>
+
 </mapper>

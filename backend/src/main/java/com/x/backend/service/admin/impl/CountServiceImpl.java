@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.x.backend.mapper.admin.CountMapper;
+import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.service.admin.CountService;
 
 import jakarta.annotation.Resource;
@@ -49,5 +50,43 @@ public class CountServiceImpl implements CountService {
     public List<Integer> getAiCounts(Date startTime, Date endTime) {
         return countMapper.getAiCounts(startTime, endTime);
     }
+
+    @Override
+    public void addInsertSongCount(Date date, int count) {
+        countMapper.addInsertSongCount(date, count);
+    }
+
+    @Override
+    public void addUpdateSongCount(Date date, int count) {
+        countMapper.addUpdateSongCount(date, count);
+    }
+
+    @Override
+    public void addDeleteSongCount(Date date, int count) {
+        countMapper.addDeleteSongCount(date, count);
+    }
+
+    @Override
+    public List<Integer> getSongInsertCounts(Date startTime, Date endTime) {
+        return countMapper.getSongInsertCounts(startTime, endTime);
+    }
+
+    @Override
+    public List<Integer> getSongUpdateCounts(Date startTime, Date endTime) {
+        return countMapper.getSongUpdateCounts(startTime, endTime);
+    }
+
+    @Override
+    public List<Integer> getSongDeleteCounts(Date startTime, Date endTime) {
+        return countMapper.getSongDeleteCounts(startTime, endTime);
+    }
+
+    @Override
+    public List<SongTypeCount> getSongTypeCounts() {
+        List<SongTypeCount>        songTypeCounts = countMapper.getSongTypeCounts();
+        return songTypeCounts;
+    }
+
+    
 
 }

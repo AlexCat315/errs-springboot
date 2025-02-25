@@ -7,6 +7,7 @@ import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.common.Count;
+import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.pojo.common.TimeCount;
 import com.x.backend.service.admin.CountService;
 
@@ -121,6 +122,42 @@ public class CountController {
         // 调service层，获取对应时间段的AI访问次数
         List<Integer> countList = new ArrayList<>();
         countList = countService.getAiCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/song/insert/number")
+    public ResultEntity<List<Integer>> SongInsertNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getSongInsertCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/song/update/number")
+    public ResultEntity<List<Integer>> SongUpdateNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getSongUpdateCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/song/delete/number")
+    public ResultEntity<List<Integer>> SongDeleteNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getSongDeleteCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/song/type/all")
+    public ResultEntity<List<SongTypeCount>> countSongType() {
+        List<SongTypeCount> countList = countService.getSongTypeCounts();
         return ResultEntity.success(countList);
     }
 
