@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
+import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.SongTypeCount;
 
 @Mapper
@@ -69,4 +70,21 @@ public interface CountMapper {
     List<Integer> getSongDeleteCounts(Date startTime, Date endTime);
 
     List<SongTypeCount> getSongTypeCounts();
+
+    void addInsertBookCount(Date date, int count);
+
+    void addUpdateBookCount(Date date, int count);
+
+    void addDeleteBookCount(Date date, int count);
+
+    @Select("SELECT count FROM book_insert_count WHERE date BETWEEN #{startTime} AND #{endTime} ORDER BY date ASC")
+    List<Integer> getBookInsertCounts(Date startTime, Date endTime);
+
+    @Select("SELECT count FROM book_update_count WHERE date BETWEEN #{startTime} AND #{endTime} ORDER BY date ASC")
+    List<Integer> getBookUpdateCounts(Date startTime, Date endTime);
+
+    @Select("SELECT count FROM book_delete_count WHERE date BETWEEN #{startTime} AND #{endTime} ORDER BY date ASC")
+    List<Integer> getBookDeleteCounts(Date startTime, Date endTime);
+
+    List<BookTypeCount> getBookTypeCounts();
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.x.backend.mapper.admin.CountMapper;
+import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.service.admin.CountService;
 
@@ -43,7 +44,7 @@ public class CountServiceImpl implements CountService {
 
     @Override
     public List<Integer> getOtherCounts(Date startTime, Date endTime) {
-       return countMapper.getOtherCounts(startTime, endTime);
+        return countMapper.getOtherCounts(startTime, endTime);
     }
 
     @Override
@@ -83,10 +84,43 @@ public class CountServiceImpl implements CountService {
 
     @Override
     public List<SongTypeCount> getSongTypeCounts() {
-        List<SongTypeCount>        songTypeCounts = countMapper.getSongTypeCounts();
+        List<SongTypeCount> songTypeCounts = countMapper.getSongTypeCounts();
         return songTypeCounts;
     }
 
-    
+    @Override
+    public void addInsertBookCount(Date date, int count) {
+        countMapper.addInsertBookCount(date, count);
+    }
+
+    @Override
+    public void addUpdateBookCount(Date date, int count) {
+        countMapper.addUpdateBookCount(date, count);
+    }
+
+    @Override
+    public void addDeleteBookCount(Date date, int count) {
+        countMapper.addDeleteBookCount(date, count);
+    }
+
+	@Override
+	public List<Integer> getBookInsertCounts(Date startTime, Date endTime) {
+		return countMapper.getBookInsertCounts(startTime, endTime);
+	}
+
+	@Override
+	public List<Integer> getBookUpdateCounts(Date startTime, Date endTime) {
+		return countMapper.getBookUpdateCounts(startTime, endTime);
+	}
+
+	@Override
+	public List<Integer> getBookDeleteCounts(Date startTime, Date endTime) {
+		return countMapper.getBookDeleteCounts(startTime, endTime);
+	}
+
+    @Override
+    public List<BookTypeCount> getBookTypeCounts() {
+        return countMapper.getBookTypeCounts();
+    }
 
 }

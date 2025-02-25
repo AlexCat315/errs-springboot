@@ -6,6 +6,7 @@ import com.x.backend.pojo.admin.vo.request.book.SearchVO;
 import com.x.backend.pojo.common.Book;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.service.admin.BookService;
+import com.x.backend.service.admin.CountService;
 import com.x.backend.util.MinioUtils;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class BookController {
 
     @Resource(name = "adminBookService")
     private BookService bookService;
+    @Resource(name = "adminCountService")
+    private CountService countService;
 
     @Resource
     private MinioUtils minioUtils;
@@ -60,8 +63,9 @@ public class BookController {
             book.setRating(Float.parseFloat(rating.toString()));
             book.setRecommend(recommend);
             book.setUsers(users);
-            book.setCreateTime(new Date()); // 假设 Book 实体有 createTime 字段
-            bookService.createBook(book); // 假设 BookService 有 createBook 方法
+            book.setCreateTime(new Date()); // Book 实体有 createTime 字段
+            bookService.createBook(book); // BookService 有 createBook 方法
+            countService.addInsertBookCount(new Date(), 1); 
             return ResultEntity.success("create book success");
         } catch (Exception e) {
             log.error("create book error: {}", e.getMessage(), e);  // 详细记录异常堆栈
@@ -111,7 +115,8 @@ public class BookController {
             }
 
             // 4. 保存更新后的书籍
-            bookService.updateBook(existingBook);  // 假设 bookService 有 updateBook 方法
+            bookService.updateBook(existingBook); 
+            countService.addUpdateBookCount(new Date(), 1);  // 增加书籍插入次数
             return ResultEntity.success("Book updated successfully.");
 
         } catch (Exception e) {
@@ -150,6 +155,7 @@ public class BookController {
     public ResultEntity<String> deleteInfo(@RequestParam Long id) {
         try {
             bookService.deleteInfo(id);
+            countService.addDeleteBookCount(new Date(), 1);  // 增加书籍删除次数
             return ResultEntity.success("删除成功");
         } catch (RuntimeException e) {
             log.error("删除书籍信息失败", e);

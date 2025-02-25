@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { use } from 'echarts/core'
 import { LineChart, PieChart, BarChart } from 'echarts/charts'
 import { GridComponent, TooltipComponent, LegendComponent, TitleComponent } from 'echarts/components'
 import { CanvasRenderer } from 'echarts/renderers'
 import VChart from 'vue-echarts'
+import { getBookTypeCount, getDeleteCount, getInsertCount, getUpdateCount } from '../../../net/book/get'
 
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
@@ -76,6 +77,41 @@ const barData = ref({
     }
   }]
 })
+
+onMounted(() => {
+  getInsertCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[0].data = data
+    });
+  getUpdateCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[1].data = data
+    });
+
+  getDeleteCount(
+    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    new Date(),
+    (data: any) => {
+      lineData.value.series[2].data = data
+    });
+
+
+  getBookTypeCount(
+    (data: any) => {
+      pieData.value.series[0].data = data.map((item: any) => ({
+        value: item.count,
+        name: item.type
+      }));
+      // 更新 barData
+      barData.value.xAxis.data = data.map((item: any) => item.type); // 设置横轴分类
+      barData.value.series[0].data = data.map((item: any) => item.count); // 设置柱状图数据
+    }
+  )
+})
 </script>
 
 <template>
@@ -92,10 +128,10 @@ const barData = ref({
       <v-chart :option="pieData" class="chart" />
     </div>
 
-      <div class="chart-container">
-          <h3>各类型书籍总数</h3>
-          <v-chart :option="barData" class="chart"/>
-      </div>
+    <div class="chart-container">
+      <h3>各类型书籍总数</h3>
+      <v-chart :option="barData" class="chart" />
+    </div>
   </div>
 </template>
 

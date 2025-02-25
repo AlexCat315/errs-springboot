@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.x.backend.annotation.RoleSecurity;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
+import com.x.backend.pojo.common.BookTypeCount;
 import com.x.backend.pojo.common.Count;
 import com.x.backend.pojo.common.SongTypeCount;
 import com.x.backend.pojo.common.TimeCount;
@@ -126,7 +127,7 @@ public class CountController {
     }
 
     @PostMapping("/song/insert/number")
-    public ResultEntity<List<Integer>> SongInsertNumber(@RequestBody TimeCount timeCount) {
+    public ResultEntity<List<Integer>> songInsertNumber(@RequestBody TimeCount timeCount) {
         Date startTime = timeCount.getStartTime();
         Date endTime = timeCount.getEndTime();
         // 调service层，获取对应时间段的AI访问次数
@@ -136,7 +137,7 @@ public class CountController {
     }
 
     @PostMapping("/song/update/number")
-    public ResultEntity<List<Integer>> SongUpdateNumber(@RequestBody TimeCount timeCount) {
+    public ResultEntity<List<Integer>> songUpdateNumber(@RequestBody TimeCount timeCount) {
         Date startTime = timeCount.getStartTime();
         Date endTime = timeCount.getEndTime();
         // 调service层，获取对应时间段的AI访问次数
@@ -146,7 +147,7 @@ public class CountController {
     }
 
     @PostMapping("/song/delete/number")
-    public ResultEntity<List<Integer>> SongDeleteNumber(@RequestBody TimeCount timeCount) {
+    public ResultEntity<List<Integer>> songDeleteNumber(@RequestBody TimeCount timeCount) {
         Date startTime = timeCount.getStartTime();
         Date endTime = timeCount.getEndTime();
         // 调service层，获取对应时间段的AI访问次数
@@ -158,6 +159,43 @@ public class CountController {
     @PostMapping("/song/type/all")
     public ResultEntity<List<SongTypeCount>> countSongType() {
         List<SongTypeCount> countList = countService.getSongTypeCounts();
+        return ResultEntity.success(countList);
+    }
+
+
+    @PostMapping("/book/insert/number")
+    public ResultEntity<List<Integer>> bookInsertNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getBookInsertCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/book/update/number")
+    public ResultEntity<List<Integer>> bookUpdateNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getBookUpdateCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/book/delete/number")
+    public ResultEntity<List<Integer>> bookDeleteNumber(@RequestBody TimeCount timeCount) {
+        Date startTime = timeCount.getStartTime();
+        Date endTime = timeCount.getEndTime();
+        // 调service层，获取对应时间段的AI访问次数
+        List<Integer> countList = new ArrayList<>();
+        countList = countService.getBookDeleteCounts(startTime, endTime);
+        return ResultEntity.success(countList);
+    }
+
+    @PostMapping("/book/type/all")
+    public ResultEntity<List<BookTypeCount>> countBookType() {
+        List<BookTypeCount> countList = countService.getBookTypeCounts();
         return ResultEntity.success(countList);
     }
 
