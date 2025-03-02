@@ -36,7 +36,7 @@ const lineData = ref({
         {
             name: '总访问量', // Changed series name
             type: 'line',
-            data: [150, 200, 180, 220, 250, 280, 300] // Example website visit data
+            data: [150, 200, 180, 220, 0, 0, 0] // Example website visit data
         }
     ]
 })
@@ -120,18 +120,18 @@ onMounted(() => {
         (error) => {
             console.error(error)
         }
-    )
+    );
     getlineDataAll(
         new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
         new Date(),
         (data: any) => {
-            console.log(data)
+            console.log(data);
             lineData.value.series[0].data = data;
         },
         (error) => {
             console.error(error)
         }
-    )
+    );
 
 })
 </script>

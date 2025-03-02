@@ -52,4 +52,12 @@
         from account
         where a_id = #{aId}
     </select>
+
+    <!-- updateBanned -->
+
+    <update id="updateBanned">
+        update account
+        set is_banned = #{isBanned}
+        where a_id = #{aId}
+    </update>
 </mapper>

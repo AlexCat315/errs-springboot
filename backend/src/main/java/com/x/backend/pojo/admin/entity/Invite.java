@@ -18,4 +18,6 @@ public class Invite implements Serializable {
     private Integer status;
     // 处理时间
     private Date handleTime;
+    // 处理结果
+    private String result;
 }

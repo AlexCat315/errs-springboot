@@ -173,7 +173,7 @@ onMounted(() => {
 
         <!-- 用户信息展示 -->
         <div class="user-info">
-            <h1 class="text-center mb-4">用户中心</h1> <!-- 居中标题 -->
+            <h1 class="text-center mb-4">用户信息</h1> <!-- 居中标题 -->
             <div class="avatar-section">
                 <img :src="avatarPreview || user.avatar" alt="" class="avatar" />
                 <div class="avatar-actions">

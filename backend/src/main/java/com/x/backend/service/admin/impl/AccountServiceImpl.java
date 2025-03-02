@@ -164,4 +164,10 @@ public class AccountServiceImpl implements AccountService {
             throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Override
+    public void updateBanned(int userId, boolean b) {
+        // 调mapper方法
+        accountMapper.updateBanned(userId, b);
+    }
 }

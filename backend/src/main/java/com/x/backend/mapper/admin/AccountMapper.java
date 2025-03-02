@@ -4,7 +4,10 @@ import com.x.backend.pojo.admin.dto.FindInviteCodeDTO;
 import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.entity.Invite;
+
+
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Component;
@@ -36,4 +39,6 @@ public interface AccountMapper {
     AdminAccount findById(Integer id);
 
     Integer updateLastLoginTime(Integer aId);
+
+    void updateBanned(@Param("aId") int aId,@Param("isBanned") boolean isBanned);
 }

@@ -106,7 +106,7 @@ onMounted(() => {
     <h2>游戏数据统计</h2>
 
     <div class="chart-container">
-      <h3>玩家数量变化趋势</h3>
+      <h3>游戏数量变化趋势</h3>
       <v-chart :option="lineData" class="chart" />
     </div>
 

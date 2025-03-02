@@ -104,4 +104,198 @@
           GROUP BY jt.type;
         </select>
 
+        <!-- getAllCounts -->
+
+        <select id="getAllCounts">
+          WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN all_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getSongCounts -->
+
+        <select id="getSongCounts">
+                 WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN song_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getMovieCounts -->
+
+        <select id="getMovieCounts">
+               WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN movie_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getBookCounts -->
+
+        <select id="getBookCounts">
+         WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN book_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getGameCounts -->
+
+        <select id="getGameCounts">
+         WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN game_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getOtherCounts -->
+
+        <select id="getOtherCounts">
+        WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN outher_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getAiCounts -->
+
+        <select id="getAiCounts">
+        WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN ai_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getSongInsertCounts -->
+
+        <select id="getSongInsertCounts">
+          WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN song_insert_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getSongUpdateCounts -->
+
+        <select id="getSongUpdateCounts">
+        WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN song_update_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getSongDeleteCounts -->
+
+        <select id="getSongDeleteCounts">
+        WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN song_delete_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getBookInsertCounts -->
+
+        <select id="getBookInsertCounts">
+         WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN book_insert_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getBookUpdateCounts -->
+
+        <select id="getBookUpdateCounts">
+ WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN book_update_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
+
+        <!-- getBookDeleteCounts -->
+
+        <select id="getBookDeleteCounts">
+         WITH RECURSIVE DateRange AS (
+          SELECT CAST(#{startTime} AS DATE) AS date
+          UNION ALL
+          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+         )
+         SELECT IFNULL(ac.count, 0) AS count
+        FROM DateRange dr
+        LEFT JOIN book_delete_count ac ON dr.date = ac.date
+        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        ORDER BY dr.date ASC;
+        </select>
 </mapper>

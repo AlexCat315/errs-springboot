@@ -6,6 +6,8 @@ import com.x.backend.constants.HttpMessageConstants;
 import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.entity.AdminAccount;
+import com.x.backend.pojo.admin.entity.Invite;
+import com.x.backend.pojo.admin.vo.request.user.ReviewVO;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
@@ -24,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -196,6 +199,28 @@ public class UserController {
         } catch (Exception e) {
             log.error("create book error: {}", e.getMessage(), e); // 详细记录异常堆栈
             return ResultEntity.failure(e.getMessage());
+        }
+    }
+
+    // 用户审核
+    @PostMapping("/update/user/review")
+    public ResultEntity<String> updateUserReview(@RequestBody ReviewVO reviewVO) {
+        try {
+            Integer inviteId = jwtUtils.getId();
+            Invite invite = userService.getInviteByUserId(reviewVO.getUserId(), inviteId);
+            Date date = new Date();
+            if (invite != null && invite.getStatus() == 0) {
+                invite.setStatus(1);
+                invite.setResult(reviewVO.getResult());
+                invite.setHandleTime(date);
+                userService.updateInviteStatus(invite);
+                accountService.updateBanned(reviewVO.getUserId(), true);
+                return ResultEntity.success("审核成功");
+            }
+            return ResultEntity.failure("审核失败，请稍后再试");
+        } catch (RuntimeException exception) {
+            log.info("update user review error: {}", exception.getMessage(), exception);
+            return ResultEntity.failure(exception.getMessage());
         }
     }
 

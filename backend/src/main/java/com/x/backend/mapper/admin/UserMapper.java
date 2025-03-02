@@ -1,10 +1,12 @@
 package com.x.backend.mapper.admin;
 
+import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,4 +27,8 @@ public interface UserMapper {
     List<Account> searchInfo(SearchAccountVO searchAccountVO);
 
     void updateImgUrl(Account account);
+
+    Invite getInviteByUserId(@Param("id") Integer id, @Param("inviteId") Integer inviteId);
+
+    Integer updateInviteStatus(Invite invite);
 }

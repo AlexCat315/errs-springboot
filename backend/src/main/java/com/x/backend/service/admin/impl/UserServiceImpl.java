@@ -1,6 +1,7 @@
 package com.x.backend.service.admin.impl;
 
 import com.x.backend.mapper.admin.UserMapper;
+import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
@@ -9,6 +10,7 @@ import com.x.backend.service.admin.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -69,6 +71,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateImgUrl(Account account) {
         userMapper.updateImgUrl(account);
+    }
+
+    @Override
+    public Invite getInviteByUserId(Integer id, Integer inviteId) {
+        return userMapper.getInviteByUserId(id, inviteId);
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateInviteStatus(Invite invite) {
+        Integer i = userMapper.updateInviteStatus(invite);
+        if (i != 1) {
+            throw new RuntimeException("更新邀请状态失败");
+        }
     }
 
 }

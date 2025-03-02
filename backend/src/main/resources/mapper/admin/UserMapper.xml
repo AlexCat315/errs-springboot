@@ -45,12 +45,27 @@
         LIMIT #{start}, #{size}
     </select>
 
-    <!-- updateImgUrl --> 
+    <!-- updateImgUrl -->
 
     <update id="updateImgUrl">
         update account
         set user_img = #{userUrl}
         where a_id = #{aId}
     </update>
-    
-    </mapper>
+
+    <!-- getInviteByUserId -->
+
+    <select id="getInviteByUserId">
+         select * 
+         from invite_code 
+         where a_id = #{id} and invite_id = #{inviteId}
+    </select>
+
+    <!-- updateInviteStatus -->
+
+    <update id="updateInviteStatus">
+        update invite_code
+        set status = #{status},resut = #{result},handle_time = #{handleTime}
+        where a_id = #{aId} and invite_id = #{inviteId}
+    </update>
+</mapper>

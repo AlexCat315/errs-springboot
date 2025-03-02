@@ -27,4 +27,6 @@ public interface AccountService {
     AdminAccount findById(Integer id);
 
     void updateLastLoginTime(Integer aId);
+
+    void updateBanned(int userId, boolean b);
 }
