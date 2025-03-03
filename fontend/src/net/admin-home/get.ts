@@ -57,3 +57,22 @@ export function getReviewHistoryLists(
     failure,
   )
 }
+
+export function updateUserReview(
+  userId:number,
+  status:number,
+  result:string,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/user/update/user/review`,
+    {
+      userId: userId,
+      status: status,
+      result: result,
+    },
+    success,
+    failure,
+  )
+}

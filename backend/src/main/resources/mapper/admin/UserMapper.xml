@@ -57,17 +57,18 @@
 
     <select id="getInviteByUserId">
          select * 
-         from invite_code 
-         where a_id = #{id} and invite_id = #{inviteId}
+         from invite
+         where a_id = #{id} and invited_id = #{inviteId}
     </select>
 
     <!-- updateInviteStatus -->
 
     <update id="updateInviteStatus">
-        update invite_code
-        set status = #{status},resut = #{result},handle_time = #{handleTime}
-        where a_id = #{aId} and invite_id = #{inviteId}
+    UPDATE invite
+    SET status = #{status}, result = #{result}, handle_time = #{handleTime}
+    WHERE a_id = #{aId} AND invited_id = #{invitedId}
     </update>
+
 
     <!-- getInviteListByUserId -->
 

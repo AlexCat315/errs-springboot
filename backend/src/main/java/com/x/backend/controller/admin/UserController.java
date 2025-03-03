@@ -211,11 +211,15 @@ public class UserController {
             Invite invite = userService.getInviteByUserId(reviewVO.getUserId(), inviteId);
             Date date = new Date();
             if (invite != null && invite.getStatus() == 0) {
-                invite.setStatus(1);
+                invite.setAId(reviewVO.getUserId());
+                invite.setStatus(reviewVO.getStatus());
                 invite.setResult(reviewVO.getResult());
+                invite.setInvitedId(inviteId);
                 invite.setHandleTime(date);
                 userService.updateInviteStatus(invite);
-                accountService.updateBanned(reviewVO.getUserId(), true);
+                if (reviewVO.getStatus() == 1) {
+                    accountService.updateBanned(reviewVO.getUserId(), false);
+                }
                 return ResultEntity.success("审核成功");
             }
             return ResultEntity.failure("审核失败，请稍后再试");
@@ -247,6 +251,5 @@ public class UserController {
             return ResultEntity.failure(exception.getMessage());
         }
     }
-
 
 }

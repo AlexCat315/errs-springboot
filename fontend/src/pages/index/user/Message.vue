@@ -2,7 +2,8 @@
 import { ref, onMounted } from 'vue';
 import Tooltip from './Tooltip.vue';
 import Cancel from './Cancel.vue';
-import { getReviewLists, getReviewHistoryLists } from '../../../net/admin-home/get';
+import { getReviewLists, getReviewHistoryLists, updateUserReview } from '../../../net/admin-home/get';
+import { ElMessage } from 'element-plus';
 
 
 const loading = ref(true);
@@ -29,7 +30,9 @@ onMounted(() => {
     fetchUserAudits();
 });
 const tableData = ref([
-    {  iId:1,
+    {
+        iId: 1,
+        aid: 1,
         date: '2016-05-03',
         name: 'Tom',
         email: 'INVITE123',
@@ -38,7 +41,8 @@ const tableData = ref([
 
 const historyData = ref([
     {
-        iId:1,
+        iId: 1,
+        aid: 1,
         date: '2021-05-03',
         name: 'Tom',
         email: 'INVITE123',
@@ -79,6 +83,7 @@ const getReviewList = () => {
             data.forEach((item: any) => {
                 tableData.value.push({
                     iId: item.iid,
+                    aid: item.aid,
                     date: formatDate(item.inviteTime),
                     name: item.username,
                     email: item.email,
@@ -98,6 +103,7 @@ const getReviewHistoryList = () => {
             data.forEach((item: any) => {
                 historyData.value.push({
                     iId: item.iid,
+                    aid: item.aid,
                     date: formatDate(item.inviteTime),
                     name: item.username,
                     email: item.email,
@@ -112,19 +118,41 @@ const getReviewHistoryList = () => {
     )
 };
 
-const handleAgree = (row:any) => {
-    console.log('同意操作的行数据:', row);
-    // 处理同意操作
+const handleAgree = (row: any) => {
+    updateUserReview(
+        row.aid,
+        1,
+        '通过',
+        (data: any) => {
+            ElMessage.success('操作成功');
+        },
+        (err) => {
+            console.log(err);
+            ElMessage.error('操作失败');
+        }
+    );
 };
 
-const handleReject = (row:any) => {
-    console.log('拒绝操作的行数据:', row);
-    // 处理拒绝操作
+const handleReject = (row: any) => {
+    updateUserReview(
+        row.aid,
+        1,
+        '拒绝',
+        (data: any) => {
+            ElMessage.success('操作成功');
+        },
+        (err) => {
+            console.log(err);
+            ElMessage.error('操作失败');
+        }
+    );
 };
 
 onMounted(() => {
     getReviewList()
 });
+
+
 
 </script>
 
@@ -248,13 +276,18 @@ onMounted(() => {
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <el-table v-if="showHistory" :data="historyData" style="width: 100%" height="250">
+                        <el-table  v-if="showHistory" 
+                        :data="historyData" style="width: 100%" height="250">
                             <el-table-column fixed prop="date" label="注册时间" width="150" />
                             <el-table-column prop="name" label="用户名" width="120" />
                             <el-table-column prop="email" label="邮箱" width="200" />
-                            <el-table-column prop="status" label="审核状态" width="120" />
-                            <el-table-column prop="result" label="审核结果" width="120" />
-                            <el-table-column prop="auditTime" label="审核时间" width="150" />
+                            <el-table-column prop="result" label="审核结果" width="120">
+                                <template #default="scope">
+                                    <span :style="{ color: scope.row.result === '通过' ? '#67c23a' : 'red' }">
+                                        {{ scope.row.result }}
+                                    </span>
+                                </template>
+                            </el-table-column> <el-table-column prop="auditTime" label="审核时间" width="150" />
                         </el-table>
                         <div v-if="tableData.length === 0 && historyData.length === 0" class="empty-state">
                             🗃️ 暂无审核数据
@@ -267,6 +300,12 @@ onMounted(() => {
 </template>
 
 <style scoped>
+.el-table .warning-row {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+.el-table .success-row {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
 /* 整体布局 */
 .user-center {
     max-width: 600px;

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ReviewVO {
     private int userId;
-    private String status;
+    private Integer status;
     private String result;
 
 }
