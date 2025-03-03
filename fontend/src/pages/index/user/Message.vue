@@ -2,27 +2,11 @@
 import { ref, onMounted } from 'vue';
 import Tooltip from './Tooltip.vue';
 import Cancel from './Cancel.vue';
-import {
-    Present
-} from '@element-plus/icons-vue'
-import { getReviewLists ,getReviewHistoryLists} from '../../../net/admin-home/get';
+import { getReviewLists, getReviewHistoryLists } from '../../../net/admin-home/get';
 
-// 模拟数据 - 实际应用中应从后端获取
-interface UserAudit {
-    id: number;
-    username: string;
-    inviteCode: string; // 邀请码
-    status: 'pending' | 'approved' | 'rejected';
-    registrationTime: string;
-    auditTime?: string; // 审核时间 (通过/拒绝时)
-    reason?: string;    // 拒绝原因 (可选)
-}
 
-const userAudits = ref<UserAudit[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
-const currentUser = ref<UserAudit | null>(null); // 假设当前登录的用户信息.  实际中从全局状态或localStorage等获取。
-const showAllUsers = ref(false); // 是否显示所有用户 (管理员权限)
 
 
 const fetchUserAudits = async () => {
@@ -39,34 +23,13 @@ const fetchUserAudits = async () => {
     }
 };
 
-// 模拟管理员操作 (审核)
-const approveUser = (userId: number) => {
-    const userIndex = userAudits.value.findIndex(user => user.id === userId);
-    if (userIndex !== -1) {
-        userAudits.value[userIndex].status = 'approved';
-        userAudits.value[userIndex].auditTime = new Date().toLocaleString();
-        //  这里应该发送API请求到后端，更新数据库
-    }
-};
 
-const rejectUser = (userId: number) => {
-    const userIndex = userAudits.value.findIndex(user => user.id === userId);
-    if (userIndex !== -1) {
-        const reason = prompt("Please enter the reason for rejection:");
-        if (reason) {
-            userAudits.value[userIndex].status = 'rejected';
-            userAudits.value[userIndex].auditTime = new Date().toLocaleString();
-            userAudits.value[userIndex].reason = reason;
-            //  这里应该发送API请求到后端，更新数据库
-        }
-    }
-};
 
 onMounted(() => {
     fetchUserAudits();
 });
 const tableData = ref([
-    {
+    {  iId:1,
         date: '2016-05-03',
         name: 'Tom',
         email: 'INVITE123',
@@ -75,6 +38,7 @@ const tableData = ref([
 
 const historyData = ref([
     {
+        iId:1,
         date: '2021-05-03',
         name: 'Tom',
         email: 'INVITE123',
@@ -84,14 +48,11 @@ const historyData = ref([
     },
 ])
 
-const toggleShowAllUsers = () => {
-    showAllUsers.value = !showAllUsers.value;
-    fetchUserAudits(); // 重新获取数据
-};
+
 
 const isShowLikePanel = ref(false);
 
-const showHistory = ref(true);
+const showHistory = ref(false);
 
 const historyText = () => {
 
@@ -112,11 +73,12 @@ const formatDate = (date: string) => {
 };
 const getReviewList = () => {
     getReviewLists(
-        (data:any) => {
+        (data: any) => {
             console.log(data);
             tableData.value = []
-            data.forEach((item:any) => {
+            data.forEach((item: any) => {
                 tableData.value.push({
+                    iId: item.iid,
                     date: formatDate(item.inviteTime),
                     name: item.username,
                     email: item.email,
@@ -130,11 +92,12 @@ const getReviewList = () => {
 
 const getReviewHistoryList = () => {
     getReviewHistoryLists(
-        (data:any) => {
+        (data: any) => {
             console.log(data);
             historyData.value = []
-            data.forEach((item:any) => {
+            data.forEach((item: any) => {
                 historyData.value.push({
+                    iId: item.iid,
                     date: formatDate(item.inviteTime),
                     name: item.username,
                     email: item.email,
@@ -147,8 +110,21 @@ const getReviewHistoryList = () => {
         (err) => {
         }
     )
-}
+};
 
+const handleAgree = (row:any) => {
+    console.log('同意操作的行数据:', row);
+    // 处理同意操作
+};
+
+const handleReject = (row:any) => {
+    console.log('拒绝操作的行数据:', row);
+    // 处理拒绝操作
+};
+
+onMounted(() => {
+    getReviewList()
+});
 
 </script>
 
@@ -261,12 +237,12 @@ const getReviewHistoryList = () => {
                             <el-table-column fixed prop="date" label="注册时间" width="150" />
                             <el-table-column prop="name" label="用户名" width="120" />
                             <el-table-column prop="email" label="邮箱" width="200" />
-                            <el-table-column  label="操作" width="220" >
+                            <el-table-column label="操作" width="220">
                                 <template #default="scope">
-                                    <el-button size="small" type="success" @click="">
+                                    <el-button size="small" type="success" @click="handleAgree(scope.row)">
                                         同意
                                     </el-button>
-                                    <el-button size="small" type="danger" @click="">
+                                    <el-button size="small" type="danger" @click="handleReject(scope.row)">
                                         拒绝
                                     </el-button>
                                 </template>
