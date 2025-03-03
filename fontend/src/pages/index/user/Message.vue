@@ -4,6 +4,7 @@ import Tooltip from './Tooltip.vue';
 import Cancel from './Cancel.vue';
 import { getReviewLists, getReviewHistoryLists, updateUserReview } from '../../../net/admin-home/get';
 import { ElMessage } from 'element-plus';
+import { get } from 'http';
 
 
 const loading = ref(true);
@@ -125,6 +126,8 @@ const handleAgree = (row: any) => {
         '通过',
         (data: any) => {
             ElMessage.success('操作成功');
+            // 刷新列表
+            getReviewList()
         },
         (err) => {
             console.log(err);
@@ -140,6 +143,8 @@ const handleReject = (row: any) => {
         '拒绝',
         (data: any) => {
             ElMessage.success('操作成功');
+            // 刷新列表
+            getReviewHistoryList();
         },
         (err) => {
             console.log(err);
