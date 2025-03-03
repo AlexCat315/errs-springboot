@@ -25,35 +25,47 @@ public class CountTask {
     @Scheduled(cron = "0 */5 * * * ?")
     public void updateCount() {
         log.info("updateCount start");
-        String allCountString = redisTemplate.opsForValue().get("all_access_count");
-        Integer allCount = allCountString == null ? 0 : Integer.parseInt(allCountString);
-        countMapper.insertAllCount(new Date(), allCount);
-
-        String songCountString = redisTemplate.opsForValue().get("song_access_count");
-        Integer songCount = allCountString == null ? 0 : Integer.parseInt(songCountString);
-        countMapper.insertSongCount(new Date(), songCount);
-
-        String bookCountString = redisTemplate.opsForValue().get("book_access_count");
-        Integer bookCount = allCountString == null ? 0 : Integer.parseInt(bookCountString);
-        countMapper.insertBookCount(new Date(), bookCount);
-
-        String gameCountString = redisTemplate.opsForValue().get("game_access_count");
-        Integer gameCount = allCountString == null ? 0 : Integer.parseInt(gameCountString);
-        countMapper.insertGameCount(new Date(), gameCount);
-
-        String movieCountString = redisTemplate.opsForValue().get("movie_access_count");
-        Integer movieCount = allCountString == null ? 0 : Integer.parseInt(movieCountString);
-        countMapper.insertMovieCount(new Date(), movieCount);
+        final Date now = new Date(); // 统一时间戳
         
-        String outherCountString = redisTemplate.opsForValue().get("outher_access_count");
-        Integer outherCount = allCountString == null ? 0 : Integer.parseInt(outherCountString);
-        countMapper.insertOtherCount(new Date(), outherCount);
-
-        String AiCountString = redisTemplate.opsForValue().get("ai_access_count");
-        Integer AiCount = allCountString == null ? 0 : Integer.parseInt(AiCountString);
-        countMapper.insertAiCount(new Date(), AiCount);
-
+        Integer allCount = getAndResetCount("all_access_count");
+        countMapper.insertAllCount(now, allCount);
+    
+        Integer songCount = getAndResetCount("song_access_count");
+        countMapper.insertSongCount(now, songCount);
+    
+        Integer bookCount = getAndResetCount("book_access_count");
+        countMapper.insertBookCount(now, bookCount);
+    
+        Integer gameCount = getAndResetCount("game_access_count");
+        countMapper.insertGameCount(now, gameCount);
+    
+        Integer movieCount = getAndResetCount("movie_access_count");
+        countMapper.insertMovieCount(now, movieCount);
+    
+        Integer otherCount = getAndResetCount("outher_access_count"); 
+        countMapper.insertOtherCount(now, otherCount);
+    
+        Integer aiCount = getAndResetCount("ai_access_count");
+        countMapper.insertAiCount(now, aiCount);
+    
         log.info("updateCount end");
+    }
+    
+    // 使用原子操作获取并重置计数器
+    private Integer getAndResetCount(String key) {
+        // 原子性操作：获取旧值并设置为0
+        String value = redisTemplate.opsForValue().getAndSet(key, "0");
+        
+        // 处理可能的null或空值
+        if (value == null || value.isEmpty()) {
+            return 0;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            log.error("Invalid number format for key: {}", key, e);
+            return 0;
+        }
     }
 
 }

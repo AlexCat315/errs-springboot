@@ -20,8 +20,7 @@ public interface CountMapper {
 
     void insertBookCount(Date date, int count);
 
-    @Insert("insert into game_count (date, game_count) values (#{date}, #{gameCount})")
-    void insertGameCount(Date date, Integer gameCount);
+    void insertGameCount(@Param("date") Date date, @Param("count") Integer gameCount);
 
     void insertMovieCount(Date date, Integer movieCount);
 
@@ -49,9 +48,7 @@ public interface CountMapper {
 
     void addDeleteSongCount(Date date, int count);
 
-
     List<Integer> getSongInsertCounts(Date startTime, Date endTime);
-
 
     List<Integer> getSongUpdateCounts(Date startTime, Date endTime);
 
