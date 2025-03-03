@@ -22,7 +22,7 @@ public class CountTask {
     private RedisTemplate<String, String> redisTemplate;
 
     @Transactional(rollbackFor = RuntimeException.class)
-    @Scheduled(cron = "0 */30 * * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     public void updateCount() {
         log.info("updateCount start");
         String allCountString = redisTemplate.opsForValue().get("all_access_count");
