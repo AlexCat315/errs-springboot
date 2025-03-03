@@ -71,7 +71,24 @@
 
     <!-- getInviteListByUserId -->
 
-    <select id="getInviteListByUserId">
-         select * from invite  i join account a on a.a_id  = i.invited_id WHERE i.a_id = #{inviteId}
+    <resultMap id="InviteVO" type="com.x.backend.pojo.admin.vo.request.user.InviteVO">
+        <result property="iId" column="i_id"/>
+        <result property="aId" column="a_id"/>
+        <result property="username" column="username"/>
+        <result property="inviteTime" column="invite_time"/>
+        <result property="inviteCode" column="invite_code"/>
+        <result property="status" column="status"/>
+        <result property="result" column="result"/>
+        <result property="handleTime" column="handle_time"/>
+        <result property="email" column="email"/>
+    </resultMap>
+    <select id="getInviteListByUserId" resultMap="InviteVO">
+    select * from invite  i join account a on a.a_id  = i.a_id  WHERE i.invited_id  = #{inviteId} and i.status = 0  
+    </select>
+
+    <!-- getInviteHistoryListByUserId -->
+
+    <select id="getInviteHistoryListByUserId" resultMap="InviteVO">
+        select * from invite  i join account a on a.a_id  = i.a_id  WHERE i.invited_id  = #{inviteId} and i.status = 1  
     </select>
 </mapper>

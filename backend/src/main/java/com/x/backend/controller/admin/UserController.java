@@ -237,4 +237,16 @@ public class UserController {
         }
     }
 
+    @PostMapping("/get/user/review/history/list")
+    public ResultEntity<List<InviteVO>> getUserReviewHistoryList() {
+        try {
+            Integer inviteId = jwtUtils.getId();
+            return ResultEntity.success(userService.getInviteHistoryListByUserId(inviteId));
+        } catch (RuntimeException exception) {
+            log.info("get user review list error: {}", exception.getMessage(), exception);
+            return ResultEntity.failure(exception.getMessage());
+        }
+    }
+
+
 }

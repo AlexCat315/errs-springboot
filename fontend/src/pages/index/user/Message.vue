@@ -5,6 +5,7 @@ import Cancel from './Cancel.vue';
 import {
     Present
 } from '@element-plus/icons-vue'
+import { getReviewLists ,getReviewHistoryLists} from '../../../net/admin-home/get';
 
 // 模拟数据 - 实际应用中应从后端获取
 interface UserAudit {
@@ -64,23 +65,24 @@ const rejectUser = (userId: number) => {
 onMounted(() => {
     fetchUserAudits();
 });
-const tableData = [
+const tableData = ref([
     {
         date: '2016-05-03',
         name: 'Tom',
-        code: 'INVITE123',
+        email: 'INVITE123',
     },
-]
-const historyData = [
+])
+
+const historyData = ref([
     {
         date: '2021-05-03',
         name: 'Tom',
-        code: 'INVITE123',
+        email: 'INVITE123',
         status: 'approved',
         result: '注册信息无误',
         auditTime: '2021-05-03 10:00:00',
     },
-]
+])
 
 const toggleShowAllUsers = () => {
     showAllUsers.value = !showAllUsers.value;
@@ -91,13 +93,62 @@ const isShowLikePanel = ref(false);
 
 const showHistory = ref(true);
 
-const historyText = () =>{
-    if(showHistory.value){
+const historyText = () => {
+
+    if (showHistory.value) {
+        getReviewList()
         return '待审核'
-    }else{
+    } else {
+        getReviewHistoryList()
         return '历史记录'
     }
 };
+// 处理时间格式 将yyyy-MM-dd HH:mm:ss 转化为 yyyy-MM-dd
+const formatDate = (date: string) => {
+    const year = date.slice(0, 4);
+    const month = date.slice(5, 7);
+    const day = date.slice(8, 10);
+    return `${year}-${month}-${day}`;
+};
+const getReviewList = () => {
+    getReviewLists(
+        (data:any) => {
+            console.log(data);
+            tableData.value = []
+            data.forEach((item:any) => {
+                tableData.value.push({
+                    date: formatDate(item.inviteTime),
+                    name: item.username,
+                    email: item.email,
+                })
+            });
+        },
+        (err) => {
+        }
+    )
+}
+
+const getReviewHistoryList = () => {
+    getReviewHistoryLists(
+        (data:any) => {
+            console.log(data);
+            historyData.value = []
+            data.forEach((item:any) => {
+                historyData.value.push({
+                    date: formatDate(item.inviteTime),
+                    name: item.username,
+                    email: item.email,
+                    status: item.status,
+                    result: item.result,
+                    auditTime: item.handleTime,
+                })
+            });
+        },
+        (err) => {
+        }
+    )
+}
+
 
 </script>
 
@@ -209,8 +260,8 @@ const historyText = () =>{
                         <el-table v-if="!showHistory" :data="tableData" style="width: 100%" height="250">
                             <el-table-column fixed prop="date" label="注册时间" width="150" />
                             <el-table-column prop="name" label="用户名" width="120" />
-                            <el-table-column prop="code" label="邀请码" width="120" />
-                            <el-table-column align="right">
+                            <el-table-column prop="email" label="邮箱" width="200" />
+                            <el-table-column  label="操作" width="220" >
                                 <template #default="scope">
                                     <el-button size="small" type="success" @click="">
                                         同意
@@ -221,10 +272,10 @@ const historyText = () =>{
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <el-table v-if="showHistory" :data="tableData" style="width: 100%" height="250">
+                        <el-table v-if="showHistory" :data="historyData" style="width: 100%" height="250">
                             <el-table-column fixed prop="date" label="注册时间" width="150" />
                             <el-table-column prop="name" label="用户名" width="120" />
-                            <el-table-column prop="code" label="邀请码" width="120" />
+                            <el-table-column prop="email" label="邮箱" width="200" />
                             <el-table-column prop="status" label="审核状态" width="120" />
                             <el-table-column prop="result" label="审核结果" width="120" />
                             <el-table-column prop="auditTime" label="审核时间" width="150" />

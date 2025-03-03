@@ -29,4 +29,6 @@ public interface UserService {
     void updateInviteStatus(Invite invite);
 
     List<InviteVO> getInviteListByUserId(Integer inviteId);
+
+    List<InviteVO> getInviteHistoryListByUserId(Integer inviteId);
 }

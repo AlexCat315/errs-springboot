@@ -12,6 +12,8 @@ import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.entity.Invite;
 import com.x.backend.service.admin.AccountService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+@Slf4j
 @Component("adminAccountService")
 @Service("adminAccountService")
 public class AccountServiceImpl implements AccountService {
@@ -95,10 +98,12 @@ public class AccountServiceImpl implements AccountService {
         try {
             Integer result = accountMapper.insert(adminAccount);
             if (result < 1) {
+                log.info("register failed - result: {}", result);
                 throw new RuntimeException(HttpMessageConstants.INTERNAL_SERVER_ERROR);
             }
             return result;
         } catch (RuntimeException e) {
+            log.info("register failed: {}", e.getMessage(), e);
             throw new RuntimeException(HttpMessageConstants.REGISTER_FAILED);
         }
     }
@@ -170,4 +175,5 @@ public class AccountServiceImpl implements AccountService {
         // 调mapper方法
         accountMapper.updateBanned(userId, b);
     }
+
 }

@@ -23,10 +23,7 @@
         insert into invite (a_id, invited_id, invite_time, status)
         values (#{aId}, #{invitedId}, #{inviteTime}, #{status})
     </insert>
-    <insert id="insert">
-        insert into account (username, email, password, role, created_at, vip, is_banned)
-        values (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip}, #{isBanned})
-    </insert>
+
 
     <resultMap id="findInviteCodeMap" type="com.x.backend.pojo.admin.dto.FindInviteCodeDTO">
         <result property="aId" column="a_id"/>
@@ -47,7 +44,7 @@
         <result property="createdAt" column="created_at"/>
         <result property="userUrl" column="user_img"/>
     </resultMap>
-    <select id="findById" resultMap="findAccountInfoMap">
+    <select id="findById" resultMap="findAccountInfoMap" >
         select a_id, username, email, role, password, is_banned, created_at, user_img
         from account
         where a_id = #{aId}
@@ -60,4 +57,6 @@
         set is_banned = #{isBanned}
         where a_id = #{aId}
     </update>
+
+
 </mapper>

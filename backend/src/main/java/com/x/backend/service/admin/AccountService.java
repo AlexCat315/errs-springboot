@@ -29,4 +29,5 @@ public interface AccountService {
     void updateLastLoginTime(Integer aId);
 
     void updateBanned(int userId, boolean b);
+
 }

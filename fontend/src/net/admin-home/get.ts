@@ -29,3 +29,31 @@ export function getlineDataAll(
     failure,
   );
 }
+
+export function getReviewLists(
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/user/get/user/review/list`,
+    {
+
+    },
+    success,
+    failure,
+  )
+}
+
+export function getReviewHistoryLists(
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/user/get/user/review/history/list`,
+    {
+
+    },
+    success,
+    failure,
+  )
+}

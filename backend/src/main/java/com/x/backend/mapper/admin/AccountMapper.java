@@ -5,8 +5,9 @@ import com.x.backend.pojo.admin.dto.ForgotPasswordDTO;
 import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.entity.Invite;
 
-
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -21,7 +22,10 @@ public interface AccountMapper {
     @Select("select a_id from account where email = #{email}")
     Integer findByEmail(String email);
 
-    Integer insert(AdminAccount adminAccount);
+    @Insert("INSERT INTO account (username, email, password, role, created_at, vip, is_banned) " +
+        "VALUES (#{username}, #{email}, #{password}, #{role}, #{createdAt}, #{vip}, #{isBanned})")
+    @Options(useGeneratedKeys=true, keyProperty="aId")
+    int insert(AdminAccount adminAccount);
 
     @Update("update account set password = #{newPassword} where email = #{email}")
     Integer updatePassword(ForgotPasswordDTO forgotPasswordDTO);
@@ -41,4 +45,5 @@ public interface AccountMapper {
     Integer updateLastLoginTime(Integer aId);
 
     void updateBanned(@Param("aId") int aId,@Param("isBanned") boolean isBanned);
+
 }

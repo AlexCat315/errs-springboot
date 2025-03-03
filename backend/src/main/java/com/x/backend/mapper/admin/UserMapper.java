@@ -33,5 +33,7 @@ public interface UserMapper {
 
     Integer updateInviteStatus(Invite invite);
 
-    List<InviteVO> getInviteListByUserId(Integer inviteId);
+    List<InviteVO> getInviteListByUserId(@Param("inviteId")Integer inviteId);
+
+    List<InviteVO> getInviteHistoryListByUserId(Integer inviteId);
 }

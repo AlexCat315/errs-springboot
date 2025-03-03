@@ -93,4 +93,9 @@ public class UserServiceImpl implements UserService {
         return userMapper.getInviteListByUserId(inviteId);
     }
 
+    @Override
+    public List<InviteVO> getInviteHistoryListByUserId(Integer inviteId) {
+        return userMapper.getInviteHistoryListByUserId(inviteId);
+    }
+
 }

@@ -160,12 +160,12 @@ public class AccountController {
         adminAccount.setCreatedAt(new Date());
         adminAccount.setIsBanned(true);
         try {
-            Integer aId = accountService.register(adminAccount);
+            accountService.register(adminAccount);
             // 清除验证码
             redisTemplate.delete(registerVo.getEmail());
             // 向数据库插入邀请信息
             InsertInviteDTO insertInviteDTO = new InsertInviteDTO();
-            insertInviteDTO.setAId(aId);
+            insertInviteDTO.setAId(adminAccount.getAId());
             insertInviteDTO.setInvitedId(inviteID);
             accountService.insertInvite(insertInviteDTO);
             return ResultEntity.success();
@@ -313,4 +313,4 @@ public class AccountController {
         }
     }
 
- }
+}
