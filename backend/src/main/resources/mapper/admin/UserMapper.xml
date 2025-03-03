@@ -68,4 +68,10 @@
         set status = #{status},resut = #{result},handle_time = #{handleTime}
         where a_id = #{aId} and invite_id = #{inviteId}
     </update>
+
+    <!-- getInviteListByUserId -->
+
+    <select id="getInviteListByUserId">
+         select * from invite  i join account a on a.a_id  = i.invited_id WHERE i.a_id = #{inviteId}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.x.backend.service.admin;
 
 import com.x.backend.pojo.admin.entity.Invite;
+import com.x.backend.pojo.admin.vo.request.user.InviteVO;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
@@ -26,4 +27,6 @@ public interface UserService {
     Invite getInviteByUserId(Integer id,Integer inviteId);
 
     void updateInviteStatus(Invite invite);
+
+    List<InviteVO> getInviteListByUserId(Integer inviteId);
 }

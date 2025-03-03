@@ -7,6 +7,7 @@ import com.x.backend.constants.RoleConstants;
 import com.x.backend.pojo.ResultEntity;
 import com.x.backend.pojo.admin.entity.AdminAccount;
 import com.x.backend.pojo.admin.entity.Invite;
+import com.x.backend.pojo.admin.vo.request.user.InviteVO;
 import com.x.backend.pojo.admin.vo.request.user.ReviewVO;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
@@ -220,6 +221,18 @@ public class UserController {
             return ResultEntity.failure("审核失败，请稍后再试");
         } catch (RuntimeException exception) {
             log.info("update user review error: {}", exception.getMessage(), exception);
+            return ResultEntity.failure(exception.getMessage());
+        }
+    }
+
+    // 获取待审核用户列表
+    @PostMapping("/get/user/review/list")
+    public ResultEntity<List<InviteVO>> getUserReviewList() {
+        try {
+            Integer inviteId = jwtUtils.getId();
+            return ResultEntity.success(userService.getInviteListByUserId(inviteId));
+        } catch (RuntimeException exception) {
+            log.info("get user review list error: {}", exception.getMessage(), exception);
             return ResultEntity.failure(exception.getMessage());
         }
     }

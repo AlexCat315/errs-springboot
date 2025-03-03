@@ -2,6 +2,7 @@ package com.x.backend.service.admin.impl;
 
 import com.x.backend.mapper.admin.UserMapper;
 import com.x.backend.pojo.admin.entity.Invite;
+import com.x.backend.pojo.admin.vo.request.user.InviteVO;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
@@ -85,6 +86,11 @@ public class UserServiceImpl implements UserService {
         if (i != 1) {
             throw new RuntimeException("更新邀请状态失败");
         }
+    }
+
+    @Override
+    public List<InviteVO> getInviteListByUserId(Integer inviteId) {
+        return userMapper.getInviteListByUserId(inviteId);
     }
 
 }

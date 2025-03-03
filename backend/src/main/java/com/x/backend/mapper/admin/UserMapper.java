@@ -1,6 +1,7 @@
 package com.x.backend.mapper.admin;
 
 import com.x.backend.pojo.admin.entity.Invite;
+import com.x.backend.pojo.admin.vo.request.user.InviteVO;
 import com.x.backend.pojo.admin.vo.request.user.SearchAccountVO;
 import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
@@ -31,4 +32,6 @@ public interface UserMapper {
     Invite getInviteByUserId(@Param("id") Integer id, @Param("inviteId") Integer inviteId);
 
     Integer updateInviteStatus(Invite invite);
+
+    List<InviteVO> getInviteListByUserId(Integer inviteId);
 }
