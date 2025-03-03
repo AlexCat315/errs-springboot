@@ -217,8 +217,10 @@ public class UserController {
                 invite.setInvitedId(inviteId);
                 invite.setHandleTime(date);
                 userService.updateInviteStatus(invite);
-                if (reviewVO.getStatus() == 1) {
+                if (reviewVO.getResult().equals("通过")) {
                     accountService.updateBanned(reviewVO.getUserId(), false);
+                } else {
+                    accountService.updateBanned(reviewVO.getUserId(), true);
                 }
                 return ResultEntity.success("审核成功");
             }
