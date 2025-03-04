@@ -4,7 +4,6 @@ import Tooltip from './Tooltip.vue';
 import Cancel from './Cancel.vue';
 import { getReviewLists, getReviewHistoryLists, updateUserReview } from '../../../net/admin-home/get';
 import { ElMessage } from 'element-plus';
-import { get } from 'http';
 
 
 const loading = ref(true);

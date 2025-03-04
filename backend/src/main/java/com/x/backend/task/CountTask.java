@@ -42,7 +42,7 @@ public class CountTask {
         Integer movieCount = getAndResetCount("movie_access_count");
         countMapper.insertMovieCount(now, movieCount);
     
-        Integer otherCount = getAndResetCount("outher_access_count"); 
+        Integer otherCount = getAndResetCount("other_access_count"); 
         countMapper.insertOtherCount(now, otherCount);
     
         Integer aiCount = getAndResetCount("ai_access_count");

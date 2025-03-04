@@ -21,7 +21,7 @@ public interface CountMapper {
 
     void insertGameCount(@Param("date") Date date, @Param("count") Integer gameCount);
 
-    void insertMovieCount(Date date, Integer movieCount);
+    void insertMovieCount(@Param("date") Date date,@Param("count") Integer movieCount);
 
     List<Integer> getAllCounts(@Param("startTime") Date startTime, @Param("endTime") Date endTime);
 
@@ -37,9 +37,9 @@ public interface CountMapper {
 
     List<Integer> getAiCounts(Date startTime, Date endTime);
 
-    void insertOtherCount(Date date, Integer outherCount);
+    void insertOtherCount(@Param("date") Date date, @Param("count") Integer otherCount);
 
-    void insertAiCount(Date date, Integer aiCount);
+    void insertAiCount(@Param("date") Date date, @Param("count") Integer aiCount);
 
     void addInsertSongCount(Date date, int count);
 
