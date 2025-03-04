@@ -144,8 +144,8 @@ watch(globalSearch, (newValue) => {
 
         <el-table v-loading="loading" :data="users" border>
             <el-table-column prop="aid" label="ID" width="80" />
-            <el-table-column prop="username" label="用户名" />
-            <el-table-column prop="email" label="邮箱" />
+            <el-table-column prop="username" label="用户名" width="150" />
+            <el-table-column prop="email" label="邮箱" width="200" />
             <el-table-column prop="role" label="权限">
                 <template #default="{ row }">
                     <el-tag :type="row.role === 'admin' ? 'danger' : row.role === 'user' ? 'warning' : 'info'">
