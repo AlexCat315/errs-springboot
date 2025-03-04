@@ -70,4 +70,18 @@ public interface CountMapper {
     List<TypeCount> getBookTypeCounts();
 
     List<TypeCount> getGamesTypeCounts();
+
+    Integer getAllCountSong();
+
+    Integer getAllCountMovie();
+
+    Integer getAllCountAi();
+
+    Integer getAllCountBook();
+
+    Integer getAllCountGame();
+
+    Integer getAllCountOther();
+
+    Integer getAllCountAll();
 }

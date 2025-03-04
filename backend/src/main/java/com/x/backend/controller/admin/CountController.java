@@ -36,20 +36,20 @@ public class CountController {
     @PostMapping("/all")
     public ResultEntity<Count> countNumber() {
         Count count = new Count();
-        String songCount = redisTemplate.opsForValue().get("song_access_count");
-        count.setSongCount(songCount == null ? 0 : Integer.parseInt(songCount));
-        String movieCount = redisTemplate.opsForValue().get("movie_access_count");
-        count.setMovieCount(movieCount == null ? 0 : Integer.parseInt(movieCount));
-        String aiCount = redisTemplate.opsForValue().get("user_access_count");
-        count.setAiCount(aiCount == null ? 0 : Integer.parseInt(aiCount));
-        String bookCount = redisTemplate.opsForValue().get("book_access_count");
-        count.setBookCount(bookCount == null ? 0 : Integer.parseInt(bookCount));
-        String gameCount = redisTemplate.opsForValue().get("game_access_count");
-        count.setGameCount(gameCount == null ? 0 : Integer.parseInt(gameCount));
-        String otherCount = redisTemplate.opsForValue().get("other_access_count");
-        count.setOtherCount(otherCount == null ? 0 : Integer.parseInt(otherCount));
-        String allCount = redisTemplate.opsForValue().get("all_access_count");
-        count.setAllCount(allCount == null ? 0 : Integer.parseInt(allCount));
+        Integer songCount = countService.getAllCountSong();
+        count.setSongCount(songCount == null ? 0 : songCount);
+        Integer movieCount = countService.getAllCountMovie();
+        count.setMovieCount(movieCount == null ? 0 : movieCount);
+        Integer aiCount = countService.getAllCountAi();
+        count.setAiCount(aiCount == null ? 0 : aiCount);
+        Integer bookCount = countService.getAllCountBook();
+        count.setBookCount(bookCount == null ? 0 : bookCount);
+        Integer gameCount = countService.getAllCountGame();
+        count.setGameCount(gameCount == null ? 0 : gameCount);
+        Integer otherCount = countService.getAllCountOther();
+        count.setOtherCount(otherCount == null ? 0 : otherCount);
+        Integer allCount = countService.getAllCountAll();
+        count.setAllCount(allCount == null ? 0 : allCount);
         return ResultEntity.success(count);
     }
 
@@ -161,7 +161,6 @@ public class CountController {
         return ResultEntity.success(countList);
     }
 
-
     @PostMapping("/book/insert/number")
     public ResultEntity<List<Integer>> bookInsertNumber(@RequestBody TimeCount timeCount) {
         Date startTime = timeCount.getStartTime();
@@ -197,6 +196,7 @@ public class CountController {
         List<TypeCount> countList = countService.getBookTypeCounts();
         return ResultEntity.success(countList);
     }
+
     @PostMapping("/games/type/all")
     public ResultEntity<List<TypeCount>> countGamesType() {
         List<TypeCount> countList = countService.getGamesTypeCounts();

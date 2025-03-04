@@ -102,29 +102,64 @@ public class CountServiceImpl implements CountService {
         countMapper.addDeleteBookCount(date, count);
     }
 
-	@Override
-	public List<Integer> getBookInsertCounts(Date startTime, Date endTime) {
-		return countMapper.getBookInsertCounts(startTime, endTime);
-	}
+    @Override
+    public List<Integer> getBookInsertCounts(Date startTime, Date endTime) {
+        return countMapper.getBookInsertCounts(startTime, endTime);
+    }
 
-	@Override
-	public List<Integer> getBookUpdateCounts(Date startTime, Date endTime) {
-		return countMapper.getBookUpdateCounts(startTime, endTime);
-	}
+    @Override
+    public List<Integer> getBookUpdateCounts(Date startTime, Date endTime) {
+        return countMapper.getBookUpdateCounts(startTime, endTime);
+    }
 
-	@Override
-	public List<Integer> getBookDeleteCounts(Date startTime, Date endTime) {
-		return countMapper.getBookDeleteCounts(startTime, endTime);
-	}
+    @Override
+    public List<Integer> getBookDeleteCounts(Date startTime, Date endTime) {
+        return countMapper.getBookDeleteCounts(startTime, endTime);
+    }
 
     @Override
     public List<TypeCount> getBookTypeCounts() {
         return countMapper.getBookTypeCounts();
     }
 
-	@Override
-	public List<TypeCount> getGamesTypeCounts() {
-		  return countMapper.getGamesTypeCounts();
-	}
+    @Override
+    public List<TypeCount> getGamesTypeCounts() {
+        return countMapper.getGamesTypeCounts();
+    }
+
+    @Override
+    public Integer getAllCountSong() {
+        return countMapper.getAllCountSong();
+    }
+
+    @Override
+    public Integer getAllCountMovie() {
+        return countMapper.getAllCountMovie();
+    }
+
+    @Override
+    public Integer getAllCountAi() {
+        return countMapper.getAllCountAi();
+    }
+
+    @Override
+    public Integer getAllCountBook() {
+        return countMapper.getAllCountBook();
+    }
+
+    @Override
+    public Integer getAllCountGame() {
+         return countMapper.getAllCountGame();
+    }
+
+    @Override
+    public Integer getAllCountOther() {
+        return countMapper.getAllCountOther();
+    }
+
+    @Override
+    public Integer getAllCountAll() {
+        return countMapper.getAllCountAll();
+    }
 
 }
