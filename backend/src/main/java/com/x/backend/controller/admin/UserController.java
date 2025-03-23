@@ -254,4 +254,30 @@ public class UserController {
         }
     }
 
+    @PostMapping("/get/invite/code")
+    public ResultEntity<String> getInviteCode() {
+        try {
+            Integer inviteId = jwtUtils.getId();
+            String inviteCode = userService.getInviteCode(inviteId);
+            return ResultEntity.success(inviteCode);
+        } catch (RuntimeException exception) {
+            log.info("get invite code error: {}", exception.getMessage(), exception);
+            return ResultEntity.failure(exception.getMessage());
+        }
+
+    }
+
+    @PostMapping("update/invite/code")
+    public ResultEntity<String> updateInviteCode() {
+        try {
+            Integer inviteId = jwtUtils.getId();
+            userService.updateInviteCode(inviteId);
+            return ResultEntity.success("更新邀请码成功");
+        } catch (RuntimeException exception) {
+            log.info("get invite code error: {}", exception.getMessage(), exception);
+            return ResultEntity.failure(exception.getMessage());
+        }
+
+    }
+
 }

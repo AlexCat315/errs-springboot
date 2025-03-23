@@ -218,6 +218,7 @@ onMounted(() => {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     background-color: #fff;
+    z-index: 9999 !important;
 }
 
 /* 头像部分 */

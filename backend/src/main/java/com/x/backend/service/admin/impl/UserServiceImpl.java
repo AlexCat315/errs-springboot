@@ -8,12 +8,16 @@ import com.x.backend.pojo.admin.vo.request.user.UpdateUserRoleVO;
 import com.x.backend.pojo.common.Account;
 import com.x.backend.pojo.common.PageSize;
 import com.x.backend.service.admin.UserService;
+import com.x.backend.util.RandomCodeGeneratorUtils;
+
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.foreign.Linker.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service("adminUserService")
@@ -21,6 +25,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource(name = "adminUserMapper")
     private UserMapper userMapper;
+    @Resource
+    private RandomCodeGeneratorUtils randomCodeGeneratorUtils;
 
     @Override
     public List<Account> getAll(PageSize pageSize) {
@@ -96,6 +102,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<InviteVO> getInviteHistoryListByUserId(Integer inviteId) {
         return userMapper.getInviteHistoryListByUserId(inviteId);
+    }
+
+    @Override
+    public String getInviteCode(Integer inviteId) {
+        String inviteCode = userMapper.getInviteById(inviteId);
+        Optional.ofNullable(inviteCode).orElseThrow(() -> new RuntimeException("邀请码不存在"));
+        return inviteCode;
+    }
+
+    @Transactional(rollbackFor = RuntimeException.class)
+    @Override
+    public void updateInviteCode(Integer inviteId) {
+        String randomCode = randomCodeGeneratorUtils.generateRandomCode(6);
+        Integer updateResult = userMapper.updateInviteCode(inviteId, randomCode);
+    
+        // 使用 Optional 处理更新结果，如果为空或者不等于 1 则抛出异常
+        Optional.ofNullable(updateResult)
+                .filter(result -> result == 1)
+                .orElseThrow(() -> new RuntimeException("更新邀请码失败"));
     }
 
 }

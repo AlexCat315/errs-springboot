@@ -92,4 +92,16 @@
     <select id="getInviteHistoryListByUserId" resultMap="InviteVO">
         select * from invite  i join account a on a.a_id  = i.a_id  WHERE i.invited_id  = #{inviteId} and i.status = 1  
     </select>
+
+    <!-- getInviteById -->
+
+    <select id="getInviteById">
+     select invite_code from account where a_id = #{id}
+    </select>
+
+    <!-- updateInviteCode -->
+
+    <update id="updateInviteCode">
+     update account set invite_code = #{inviteCode} where a_id = #{id}
+    </update>
 </mapper>

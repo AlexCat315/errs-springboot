@@ -31,4 +31,8 @@ public interface UserService {
     List<InviteVO> getInviteListByUserId(Integer inviteId);
 
     List<InviteVO> getInviteHistoryListByUserId(Integer inviteId);
+
+    String getInviteCode(Integer inviteId);
+
+    void updateInviteCode(Integer inviteId);
 }

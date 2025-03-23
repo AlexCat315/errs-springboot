@@ -76,3 +76,28 @@ export function updateUserReview(
     failure,
   )
 }
+
+export function getInviteCode(success: Function, failure = defaultFailure){
+  post(
+    `/api/admin/user/get/invite/code`,
+    {
+
+    },
+    success,
+    failure,
+    )
+}
+
+export function updateInviteCode(
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/user/update/invite/code`,
+    {
+
+    },
+    success,
+    failure,
+  )
+}
