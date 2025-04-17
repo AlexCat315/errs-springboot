@@ -226,11 +226,17 @@ const resetForm = () => {
     if (formRef.value) {
         formRef.value.resetFields();
     }
-
+    // 通过数据Id获取书籍的评分用户数
+    if (bookForm?.id !== null && bookForm?.id !== undefined) {
+        getBookRatingAndUsersApi(bookForm.id, (data: any) => {
+        console.log("Rating and users data:", data);
+        bookForm.users = data;
+    })
+    }
     isShowFile.value = false;
     setTimeout(() => {
         isShowFile.value = true;
-    }, 10);
+    }, 30);
 };
 
 // const showFileReset = () => { // Not needed, handled by resetFields
