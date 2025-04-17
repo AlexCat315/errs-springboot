@@ -31,11 +31,11 @@ const updateModelValueCancel = () => {  // Simplified cancel handler
      bookFrom.value = null; // Reset bookFrom
 }
 
-const deleteSuccess = (value: boolean) => { // value is always false, not used, no need to change isDeleteCard.value
+const updateSuccess = (value: boolean) => { // value is always false, not used, no need to change isDeleteCard.value
     // isDeleteCard.value = value; // no need 
     bookFrom.value = null;
     showErrorpanle.value = true;
-    errorPanleMsg.value = "删除成功";  // Better message
+    errorPanleMsg.value = "修改成功";  // Better message
     setTimeout(() => {
         showErrorpanle.value = false;
     }, 2000);
@@ -48,7 +48,7 @@ const deleteSuccess = (value: boolean) => { // value is always false, not used, 
         <p v-if="showErrorpanle" class="error-msg">{{ errorPanleMsg }}</p>
         <BookList @update:modelValue="updateModelValue" v-if="!isDeleteCard" />
          <!--  Changed event name to 'cancel' -->
-        <UpdateCard  @delete:success="deleteSuccess" class="delete-card" :book="bookFrom"
+        <UpdateCard  @update:success="updateSuccess" class="delete-card" :book="bookFrom"
             @cancel="updateModelValueCancel" v-if="isDeleteCard" />
     </div>
 </template>

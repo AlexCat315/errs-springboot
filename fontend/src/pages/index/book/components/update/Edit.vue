@@ -30,7 +30,7 @@
 }
 
 .btn::after {
-    content: "删除";
+    content: "修改";
     width: fit-content;
     height: fit-content;
     position: absolute;

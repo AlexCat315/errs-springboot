@@ -81,5 +81,15 @@ public class BookServiceImpl implements BookService {
     public void updateBook(Book existingBook) {
         bookMapper.update(existingBook);
     }
+
+	@Override
+	public Long getBookUsersById(int id) {
+		try {
+			return bookMapper.getBookUsersById(id);
+		} catch (RuntimeException e) {
+			log.error("获取游戏用户失败", e);
+		}
+		return 0L;
+	}
 }
 

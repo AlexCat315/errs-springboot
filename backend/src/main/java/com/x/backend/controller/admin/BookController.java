@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 
+
 @Slf4j
 @RoleSecurity(value = {"admin"})
 @RestController("adminBookController")
@@ -75,7 +76,7 @@ public class BookController {
 
 
     @Transactional(rollbackFor = RuntimeException.class)
-    @PutMapping("/update/{id}")  // 使用 PUT 请求，并在路径中包含书籍 ID
+    @PostMapping("/update/{id}")  //在路径中包含书籍 ID
     public ResultEntity<String> updateBook(@PathVariable("id") Long id,  // 从路径中获取书籍 ID
                                            @RequestParam("name") String name,
                                            @RequestParam("author") String author,
@@ -87,7 +88,7 @@ public class BookController {
                                            @RequestParam("users") Long users) {
         try {
             // 1. 检查书籍是否存在
-            Book existingBook = bookService.getBookById(id);  // 假设 bookService 有 getBookById 方法
+            Book existingBook = bookService.getBookById(id);  // bookService 有 getBookById 方法
             if (existingBook == null) {
                 return ResultEntity.failure("Book with id " + id + " not found.");
             }
@@ -103,15 +104,15 @@ public class BookController {
 
 
             // 3. 处理图片更新 (如果提供了新的图片)
-            if (img != null && !img.isEmpty()) {
+            if (img != null) {
+                String oldImageUrl = existingBook.getImg();
+                if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
+                   minioUtils.pubDeleteFile(oldImageUrl.replace(pubHandlerUrl, "")); // 从 URL 中提取文件名
+                }
                 String uploadImgUrlFile = minioUtils.pubUploadFile(img);
                 uploadImgUrlFile = pubHandlerUrl + uploadImgUrlFile;
                 existingBook.setImg(uploadImgUrlFile);
-
-                 String oldImageUrl = existingBook.getImg();
-                 if (oldImageUrl != null && !oldImageUrl.isEmpty()) {
-                    minioUtils.pubDeleteFile(oldImageUrl.replace(pubHandlerUrl, "")); // 从 URL 中提取文件名
-                 }
+                log.info("update book img: {}", uploadImgUrlFile);              
             }
 
             // 4. 保存更新后的书籍
@@ -162,5 +163,11 @@ public class BookController {
             return ResultEntity.failure(e.getMessage());
         }
     }
+
+    @PostMapping("/get/book/users/{id}")
+    public ResultEntity<Long> getBookUsersById(@PathVariable int id) {
+        return ResultEntity.success(bookService.getBookUsersById(id));
+    }
+    
 
 }

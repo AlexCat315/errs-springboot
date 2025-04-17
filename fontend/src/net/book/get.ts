@@ -104,3 +104,18 @@ export function getBookTypeCount(
     failure,
   );
 }
+
+
+export function getBookRatingAndUsersApi(
+  id: number,
+  success: Function,
+  failure = defaultFailure,
+) {
+  post(
+    `/api/admin/book/get/book/users/${id}`,
+    {
+    },
+    success,
+    failure,
+  );
+}

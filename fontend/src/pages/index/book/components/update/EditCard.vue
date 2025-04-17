@@ -86,6 +86,7 @@ import type { FormInstance, FormRules, UploadFile } from "element-plus";
 import { Plus } from "@element-plus/icons-vue";
 import { postFormData, defaultFailure } from "../../../../../net/post";
 import { ElMessage } from "element-plus";
+import { getBookRatingAndUsersApi } from "../../../../../net/book/get";
 
 interface BookForm {
     id?: number; // Added id, since it's an update
@@ -166,7 +167,7 @@ const handleInputChange = (value: number) => {
 };
 
 // Define emits
-const emit = defineEmits(['cancel', 'update:modelValue', 'delete:success']);
+const emit = defineEmits(['cancel', 'update:modelValue', 'update:success']);
 
 
 const submitForm = async () => {
@@ -196,14 +197,15 @@ const submitForm = async () => {
         }
 
         postFormData(
-            `/api/admin/book/${bookForm.id ? 'update' : 'create'}`,   // DYNAMIC endpoint
+            `/api/admin/book/update/${bookForm.id}`,   // DYNAMIC endpoint
             formData,
             () => {
                 ElMessage.success(bookForm.id ? "书籍修改成功" : "书籍上传成功");
+                emit('cancel')
                 setTimeout(() => {
                     //resetForm(); // Don't reset on success, we want to keep the data.
                     buttonLoadingState.value = false;
-                    emit('delete:success', false)
+                    emit('update:success', false)
                 }, 1400);
 
             },
@@ -224,7 +226,7 @@ const resetForm = () => {
     if (formRef.value) {
         formRef.value.resetFields();
     }
-    // showFileReset(); // Removed, as resetFields covers this
+
     isShowFile.value = false;
     setTimeout(() => {
         isShowFile.value = true;
@@ -250,13 +252,15 @@ interface Book {
 }
 const props = defineProps({
     book: {
-        type: Object as PropType<Book>,
+        type: Object as PropType<Book | null>,
         required: true
     }
 });
 
+
 // Use watch to update the form when the 'book' prop changes
 watch(() => props.book, (newBook) => {
+    console.log("Book prop changed:", newBook);
     if (newBook) {
         bookForm.id = newBook.id; // VERY IMPORTANT:  Keep the ID
         bookForm.name = newBook.name;
@@ -266,10 +270,18 @@ watch(() => props.book, (newBook) => {
         bookForm.img = newBook.img;
         bookForm.rating = newBook.rating;
         bookForm.recommend = newBook.recommend;
-        bookForm.users = newBook.users;
         bookForm.cover = null; // Reset cover on prop change.  Important!
     }
+    // 通过数据Id获取书籍的评分用户数
+    if (newBook?.id !== null && newBook?.id !== undefined) {
+        getBookRatingAndUsersApi(newBook.id, (data: any) => {
+        console.log("Rating and users data:", data);
+        bookForm.users = data;
+    })
+    }
 }, { immediate: true, deep: true }); // immediate: true to run on initial load
+
+
 
 </script>
 

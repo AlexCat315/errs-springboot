@@ -32,4 +32,5 @@ public interface BookMapper {
     Book getBookById(Long id);
 
     Integer update(Book existingBook);
+    Long getBookUsersById(int id);
 }

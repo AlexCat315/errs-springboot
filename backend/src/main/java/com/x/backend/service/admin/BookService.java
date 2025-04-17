@@ -18,4 +18,6 @@ public interface BookService {
     Book getBookById(Long id);
 
     void updateBook(Book existingBook);
+
+    Long getBookUsersById(int id);
 }

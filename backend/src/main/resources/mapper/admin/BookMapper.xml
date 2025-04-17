@@ -75,4 +75,13 @@
         from book
         where id = #{id}
     </select>
+
+    <!-- getBookUsersById -->
+
+    <select id="getBookUsersById">
+        select users 
+        from book
+        where id = #{id}
+    </select>
+
 </mapper>
