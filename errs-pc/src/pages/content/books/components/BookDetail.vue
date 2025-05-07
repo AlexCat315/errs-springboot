@@ -79,7 +79,7 @@ const imgSrc = (book: Book) => {
         return "https://www.alexcat.it.com/minio-api/public-errs/newRatings_850.png";
     } else if (book.recommend >= 80) {
         return "https://www.alexcat.it.com/minio-api/public-errs/newRatings_800.png";
-    } else if (book.recommend >= 70) {
+    } else {
         return "https://www.alexcat.it.com/minio-api/public-errs/newRatings_700.png";
     }
 };

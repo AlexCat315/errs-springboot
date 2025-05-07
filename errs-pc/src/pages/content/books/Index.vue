@@ -22,15 +22,15 @@ if (globalTheme === undefined) {
 const mediaList = [
     {
         type: "image",
-        src: "https://www.alexcat.it.com/minio-api/public-errs/v2-b2a0002ce3b0703e98c29a6db9bc924d_r.jpg",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/OIP.jpg",
     },
     {
         type: "video",
-        src: "https://www.alexcat.it.com/minio-api/public-errs/浮世绘-21323131ddasdsadsa31123.mp4",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/日本浮世绘_艺术分享 本期艺术分享集为‘日本浮世绘’，视频中的图片只是合集的一小部分，图片分为普通jpg和高清的TIF格式，TIF格式图片质量单张超过100MB，笔触清.mp4",
     },
     {
         type: "image",
-        src: "https://www.alexcat.it.com/minio-api/public-errs/2131232133131-maxresdefault.jpg",
+        src: "https://www.alexcat.it.com/minio-api/public-errs/悲惨世界.jpg",
     },
 ] as { type: "video" | "image"; src: string }[];
 
