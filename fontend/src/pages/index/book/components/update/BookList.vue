@@ -74,7 +74,9 @@ const fetchBooks = (page = 1, size = 10) => {
         page,
         size,
         (data: any) => {
+            console.log(data);
             const newBooks = data.map((book: any) => ({
+             
                 ...book,
                 users: formatNumber(book.users),
                 rating: parseFloat(book.rating.toFixed(1))
@@ -110,6 +112,7 @@ const handleScroll = () => {
 const emit = defineEmits(['update:modelValue']);
 
 const showEditCard = (book: Book) => {
+    console.log(book);
     emit('update:modelValue', book);
 };
 </script>

@@ -16,12 +16,12 @@
                     <el-input v-model="bookForm.author" placeholder="请输入作者名称" />
                 </el-form-item>
 
-                <el-form-item label="编辑评语" prop="description">
-                    <el-input v-model="bookForm.description" placeholder="请输入编辑评语" />
+                <el-form-item label="编辑评语" prop="introduction">
+                    <el-input v-model="bookForm.introduction" placeholder="请输入编辑评语" />
                 </el-form-item>
 
-                <el-form-item label="简介" prop="introduction">
-                    <el-input type="textarea" v-model="bookForm.introduction" placeholder="请输入书籍简介" />
+                <el-form-item label="简介" prop="description">
+                    <el-input type="textarea" v-model="bookForm.description" placeholder="请输入书籍简介" />
                 </el-form-item>
 
                 <el-form-item label="封面图片" prop="img">
@@ -55,7 +55,7 @@
                     </el-form-item>
 
                     <el-form-item style="margin-left: 70px" label="推荐度" prop="recommend">
-                        <el-input-number v-model="bookForm.recommend" :min="0" :max="1" :step="0.1" :precision="1" />
+                        <el-input-number v-model="bookForm.recommend" :min="0" :max="1" :step="0.01" :precision="2" />
                     </el-form-item>
                 </div>
 
@@ -112,8 +112,8 @@ const bookForm = reactive<BookForm>({
     introduction: "",
     img: "",
     cover: null,
-    rating: 0,
-    recommend: 0,
+    rating: 0.0,
+    recommend: 0.00,
     users: 0
 });
 
@@ -274,10 +274,11 @@ watch(() => props.book, (newBook) => {
         bookForm.description = newBook.description;
         bookForm.introduction = newBook.introduction;
         bookForm.img = newBook.img;
-        bookForm.rating = newBook.rating;
-        bookForm.recommend = newBook.recommend;
+        bookForm.rating = newBook.rating / 2;
+        bookForm.recommend = newBook.recommend/100;
         bookForm.cover = null; // Reset cover on prop change.  Important!
     }
+    console.log("Book form updated:", bookForm);
     // 通过数据Id获取书籍的评分用户数
     if (newBook?.id !== null && newBook?.id !== undefined) {
         getBookRatingAndUsersApi(newBook.id, (data: any) => {
