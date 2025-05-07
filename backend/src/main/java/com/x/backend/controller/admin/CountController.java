@@ -62,6 +62,7 @@ public class CountController {
         List<Integer> countList = new ArrayList<>();
         // 调service层，获取对应时间段的访问次数
         countList = countService.getAllCounts(startTime, endTime);
+        log.info("时间区间访问次数：{}", countList);
         return ResultEntity.success(countList);
     }
 

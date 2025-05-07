@@ -10,7 +10,7 @@ import { getBookTypeCount, getDeleteCount, getInsertCount, getUpdateCount } from
 // 注册 ECharts 组件
 use([LineChart, PieChart, BarChart, GridComponent, TooltipComponent, LegendComponent, TitleComponent, CanvasRenderer])
 
-// 示例数据
+
 const lineData = ref({
   xAxis: {
     type: 'category',

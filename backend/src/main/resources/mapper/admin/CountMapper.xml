@@ -2,356 +2,420 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x.backend.mapper.admin.CountMapper">
 
-      <!-- insertAllCount -->
+  <!-- insertAllCount -->
 
-      <insert id="insertAllCount">
+  <insert id="insertAllCount">
       insert into all_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- insertSongCount -->
+  <!-- insertSongCount -->
 
-      <insert id="insertSongCount">
+  <insert id="insertSongCount">
           insert into song_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- insertBookCount -->
+  <!-- insertBookCount -->
 
-      <insert id="insertBookCount">
+  <insert id="insertBookCount">
           insert into book_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- insertMovieCount -->
+  <!-- insertMovieCount -->
 
-      <insert id="insertMovieCount">
+  <insert id="insertMovieCount">
           insert into movie_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- getAllCounts -->
+  <!-- getAllCounts -->
 
-      <!-- insertOtherCount -->
+  <!-- insertOtherCount -->
 
-      <insert id="insertOtherCount">
+  <insert id="insertOtherCount">
           insert into other_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- insertAiCount -->
+  <!-- insertAiCount -->
 
-      <insert id="insertAiCount">
+  <insert id="insertAiCount">
           insert into ai_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- addInsertSongCount -->
+  <!-- addInsertSongCount -->
 
-      <insert id="addInsertSongCount">
+  <insert id="addInsertSongCount">
         insert into song_insert_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- addUpdateSongCount -->
+  <!-- addUpdateSongCount -->
 
-      <insert id="addUpdateSongCount">
+  <insert id="addUpdateSongCount">
         insert into song_update_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- addDeleteSongCount -->
+  <!-- addDeleteSongCount -->
 
-      <insert id="addDeleteSongCount">
+  <insert id="addDeleteSongCount">
         insert into song_delete_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- getSongTypeCounts -->
+  <!-- getSongTypeCounts -->
 
-      <select id="getSongTypeCounts">
+  <select id="getSongTypeCounts">
      SELECT tag AS type, COUNT(*) AS count
      FROM song,
      JSON_TABLE(tags, '$[*]' COLUMNS(tag VARCHAR(255) PATH '$')) AS jt
      GROUP BY tag;
-      </select>
+  </select>
 
-      <!-- addInsertBookCount -->
+  <!-- addInsertBookCount -->
 
-      <insert id="addInsertBookCount">
+  <insert id="addInsertBookCount">
       insert into book_insert_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- addUpdateBookCount -->
+  <!-- addUpdateBookCount -->
 
-      <insert id="addUpdateBookCount">
+  <insert id="addUpdateBookCount">
       insert into book_update_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
 
-      <!-- addDeleteBookCount -->
+  <!-- addDeleteBookCount -->
 
-      <insert id="addDeleteBookCount">
+  <insert id="addDeleteBookCount">
       insert into book_delete_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- getBookTypeCounts -->
+  <!-- getBookTypeCounts -->
 
-      <select id="getBookTypeCounts">
+  <select id="getBookTypeCounts">
        SELECT jt.type AS type, COUNT(*) AS count
        FROM book,
        JSON_TABLE(book.type, '$[*]' COLUMNS(type VARCHAR(255) PATH '$')) AS jt
        GROUP BY jt.type;
-      </select>
+  </select>
 
-      <!-- getGamesTypeCounts -->
+  <!-- getGamesTypeCounts -->
 
-      <select id="getGamesTypeCounts">
+  <select id="getGamesTypeCounts">
           SELECT jt.type AS type, COUNT(*) AS count
           FROM games,
           JSON_TABLE(games.game_categories, '$[*]' COLUMNS(type VARCHAR(255) PATH '$')) AS jt
           GROUP BY jt.type;
-      </select>
+  </select>
 
-      <!-- getAllCounts -->
+  <!-- getAllCounts -->
 
-      <select id="getAllCounts">
-          WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN all_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+  <select id="getAllCounts" resultType="java.lang.Integer">
+    WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM all_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getSongCounts -->
+  <!-- getSongCounts -->
 
-      <select id="getSongCounts">
-                 WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN song_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+  <select id="getSongCounts">
+           WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM song_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getMovieCounts -->
+  <!-- getMovieCounts -->
 
-      <select id="getMovieCounts">
-               WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN movie_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+  <select id="getMovieCounts">
+       WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM movie_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getBookCounts -->
+  <!-- getBookCounts -->
 
-      <select id="getBookCounts">
-         WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN book_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+  <select id="getBookCounts">
+       WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM book_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getGameCounts -->
+  <!-- getGameCounts -->
 
-      <select id="getGameCounts">
-         WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN game_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+  <select id="getGameCounts">
+     WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM game_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getOtherCounts -->
+  <!-- getOtherCounts -->
 
-      <select id="getOtherCounts">
+  <select id="getOtherCounts">
+    WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM other_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getAiCounts -->
+
+  <select id="getAiCounts">
+  WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM ai_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getSongInsertCounts -->
+
+  <select id="getSongInsertCounts">
+     WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM song_insert_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getSongUpdateCounts -->
+
+  <select id="getSongUpdateCounts">WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM song_update_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getSongDeleteCounts -->
+
+  <select id="getSongDeleteCounts">
+       WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM song_delete_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getBookInsertCounts -->
+
+  <select id="getBookInsertCounts">
+       WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM book_insert_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getBookUpdateCounts -->
+
+  <select id="getBookUpdateCounts">
+    WITH RECURSIVE DateRange AS (
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM book_update_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
+
+  <!-- getBookDeleteCounts -->
+
+  <select id="getBookDeleteCounts">
         WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN outher_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
+        SELECT CAST(#{startTime} AS DATE) AS date
+        UNION ALL
+        SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
+    ),
+    DailyCounts AS (
+        SELECT date, SUM(count) AS total_count
+        FROM book_delete_count
+        WHERE date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
+        GROUP BY date
+    )
+    SELECT IFNULL(dc.total_count, 0) AS count
+    FROM DateRange dr
+    LEFT JOIN DailyCounts dc ON dr.date = dc.date
+    ORDER BY dr.date ASC;
+  </select>
 
-      <!-- getAiCounts -->
+  <!-- insertGameCount -->
 
-      <select id="getAiCounts">
-        WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN ai_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getSongInsertCounts -->
-
-      <select id="getSongInsertCounts">
-          WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN song_insert_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getSongUpdateCounts -->
-
-      <select id="getSongUpdateCounts">
-        WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN song_update_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getSongDeleteCounts -->
-
-      <select id="getSongDeleteCounts">
-        WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN song_delete_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getBookInsertCounts -->
-
-      <select id="getBookInsertCounts">
-         WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN book_insert_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getBookUpdateCounts -->
-
-      <select id="getBookUpdateCounts">
- WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN book_update_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- getBookDeleteCounts -->
-
-      <select id="getBookDeleteCounts">
-         WITH RECURSIVE DateRange AS (
-          SELECT CAST(#{startTime} AS DATE) AS date
-          UNION ALL
-          SELECT DATE_ADD(date, INTERVAL 1 DAY) FROM DateRange WHERE date  &lt; CAST(#{endTime} AS DATE)
-         )
-         SELECT IFNULL(ac.count, 0) AS count
-        FROM DateRange dr
-        LEFT JOIN book_delete_count ac ON dr.date = ac.date
-        WHERE dr.date BETWEEN CAST(#{startTime} AS DATE) AND CAST(#{endTime} AS DATE)
-        ORDER BY dr.date ASC;
-      </select>
-
-      <!-- insertGameCount -->
-
-      <insert id="insertGameCount">
+  <insert id="insertGameCount">
         insert into game_count(count,date) values(#{count},#{date})
-      </insert>
+  </insert>
 
-      <!-- getAllCountSong -->
+  <!-- getAllCountSong -->
 
-      <select id="getAllCountSong">
+  <select id="getAllCountSong">
               SELECT sum(count) AS count
               FROM song_count;
-      </select>
+  </select>
 
-      <!-- getAllCountMovie -->
+  <!-- getAllCountMovie -->
 
-      <select id="getAllCountMovie">
+  <select id="getAllCountMovie">
               SELECT sum(count) AS count
               FROM movie_count;
-      </select>
+  </select>
 
-      <!-- getAllCountAi -->
+  <!-- getAllCountAi -->
 
-      <select id="getAllCountAi">
+  <select id="getAllCountAi">
               SELECT sum(count) AS count
               FROM ai_count;
-      </select>
+  </select>
 
-      <!-- getAllCountBook -->
+  <!-- getAllCountBook -->
 
-      <select id="getAllCountBook">
+  <select id="getAllCountBook">
               SELECT sum(count) AS count
               FROM book_count;
-      </select>
+  </select>
 
-      <!-- getAllCountGame -->
+  <!-- getAllCountGame -->
 
-      <select id="getAllCountGame">
+  <select id="getAllCountGame">
               SELECT sum(count) AS count
               FROM game_count;
-      </select>
+  </select>
 
-      <!-- getAllCountOther -->
+  <!-- getAllCountOther -->
 
-      <select id="getAllCountOther">
+  <select id="getAllCountOther">
               SELECT sum(count) AS count
               FROM other_count;
-      </select>
+  </select>
 
 
-      <!-- getAllCountAll -->
+  <!-- getAllCountAll -->
 
-      <select id="getAllCountAll">
+  <select id="getAllCountAll">
               SELECT sum(count)AS count
               FROM all_count;
-      </select>
+  </select>
 </mapper>
