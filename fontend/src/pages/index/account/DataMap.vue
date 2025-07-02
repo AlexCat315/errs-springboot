@@ -26,17 +26,17 @@ const lineData = ref({
     {
       name: '新增用户',
       type: 'line',
-      data: [12, 22, 18, 28, 26, 32, 40]
+      data: [0, 0, 1, 0, 0, 0, 0]
     },
     {
       name: '删除用户',
       type: 'line',
-      data: [1, 3, 2, 5, 3, 6, 4]
+      data: [0, 0, 1, 0, 0, 1, 0]
     },
     {
       name: '修改用户',
       type: 'line',
-      data: [4, 6, 9, 5, 7, 8, 10]
+      data: [1, 0, 1, 0, 0, 0, 0]
     }
   ]
 })
@@ -46,38 +46,38 @@ const pieData = ref({
     trigger: 'item'
   },
   legend: {
-        orient: 'vertical',
-        left: 'left'
-    },
+    orient: 'vertical',
+    left: 'left'
+  },
   series: [
     {
       name: '用户类型',
       type: 'pie',
       radius: '50%',
       data: [
-        { value: 60, name: '普通用户' },
-        { value: 10, name: '管理员' }
+        { value: 3, name: '普通用户' },
+        { value: 2, name: '管理员' }
       ]
     }
   ]
 })
 
 const barData = ref({
-    xAxis: {
-        type: 'category',
-        data: ['普通用户', '管理员'],
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [3, 1],
-        type: 'bar',
-        showBackground: true,
-        backgroundStyle: {
-            color: 'rgba(180, 180, 180, 0.2)'
-        }
-    }]
+  xAxis: {
+    type: 'category',
+    data: ['普通用户', '管理员'],
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [{
+    data: [3, 2],
+    type: 'bar',
+    showBackground: true,
+    backgroundStyle: {
+      color: 'rgba(180, 180, 180, 0.2)'
+    }
+  }]
 })
 </script>
 
@@ -95,10 +95,10 @@ const barData = ref({
       <v-chart :option="pieData" class="chart" />
     </div>
 
-      <div class="chart-container">
-          <h3>各类型用户总数</h3>
-          <v-chart :option="barData" class="chart"/>
-      </div>
+    <div class="chart-container">
+      <h3>各类型用户总数</h3>
+      <v-chart :option="barData" class="chart" />
+    </div>
   </div>
 </template>
 

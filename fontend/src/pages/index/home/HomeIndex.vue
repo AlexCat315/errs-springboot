@@ -126,7 +126,7 @@ onMounted(() => {
         new Date(),
         (data: any) => {
             console.log(data);
-            lineData.value.series[0].data = data;
+            lineData.value.series[0].data =  data.slice(1);;
         },
         (error) => {
             console.error(error)

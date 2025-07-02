@@ -83,20 +83,20 @@ onMounted(() => {
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     new Date(),
     (data: any) => {
-      lineData.value.series[0].data = data
+      lineData.value.series[0].data = data.slice(1);
     });
   getUpdateCount(
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     new Date(),
     (data: any) => {
-      lineData.value.series[1].data = data
+      lineData.value.series[1].data = data.slice(1);
     });
 
   getDeleteCount(
     new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     new Date(),
     (data: any) => {
-      lineData.value.series[2].data = data
+      lineData.value.series[2].data = data.slice(1);
     });
 
 
