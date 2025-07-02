@@ -20,7 +20,7 @@ minio:
 spring:
   ai:
     openai:
-      api-key: sk-618a06603baf40e39aefdaf3e536536b
+      api-key: 
       base-url: https://api.deepseek.com
       chat:
         options:
